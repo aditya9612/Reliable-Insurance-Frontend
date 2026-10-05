@@ -1,11 +1,7 @@
-import React from 'react'
+import React from 'react';
 
-const ForgotPassword: React.FC = () => {
-  return (
-    <div style={{ padding: '40px', textAlign: 'center' }}>
-      <h2>Forgot Password</h2>
-    </div>
-  )
-}
+const ForgotPassword = () => {
+  return <div>Forgot Password</div>;
+};
 
-export default ForgotPassword
+export default ForgotPassword;
