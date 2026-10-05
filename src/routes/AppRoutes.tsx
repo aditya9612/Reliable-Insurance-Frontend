@@ -1,13 +1,16 @@
 import React from 'react'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import ProtectedRoute from './ProtectedRoute'
 import AuthLayout from '@layouts/AuthLayout'
-import MainLayout from '@layouts/MainLayout'
+import AdminLayout from '@layouts/AdminLayout'
 
 // Auth pages
 import Login from '@pages/auth/Login'
 import ForgotPassword from '@pages/auth/ForgotPassword'
 import ResetPassword from '@pages/auth/ResetPassword'
+
+// Dashboard
+import Dashboard from '../pages/dashboard/Dashboard'
 
 const AppRoutes = () => {
   return (
@@ -22,8 +25,9 @@ const AppRoutes = () => {
 
         {/* Protected routes */}
         <Route element={<ProtectedRoute />}>
-          <Route element={<MainLayout />}>
-            <Route path="/" element={<div>Dashboard</div>} />
+          <Route element={<AdminLayout />}>
+            <Route path="/" element={<Navigate to="/dashboard" replace />} />
+            <Route path="/dashboard" element={<Dashboard />} />
             {/* Add more protected routes here */}
           </Route>
         </Route>
