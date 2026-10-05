@@ -8,9 +8,10 @@ import {
 
 interface SidebarProps {
     isCollapsed: boolean;
+    setIsCollapsed: (collapsed: boolean) => void;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ isCollapsed }) => {
+const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
     const location = useLocation();
 
     // Group 1 — Main
@@ -102,7 +103,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed }) => {
     const isGroupActive = (children?: NavItem[]) => children?.some(c => isActive(c.path));
 
     return (
-        <aside className={`bg-[#12284A] text-[#8BA4CA] h-full flex flex-col transition-all duration-300 ease-in-out shrink-0 z-20 shadow-xl ${isCollapsed ? 'w-[70px] sm:w-[80px]' : 'w-[260px]'}`}>
+        <aside className={`bg-[#12284A] text-[#8BA4CA] h-full flex flex-col transition-all duration-300 ease-in-out shrink-0 z-20 shadow-xl fixed md:static top-0 left-0 bottom-0 ${isCollapsed ? '-translate-x-full md:translate-x-0 w-[260px] md:w-[70px] lg:w-[80px]' : 'translate-x-0 w-[260px]'}`}>
 
             {/* Header Brand Area */}
             <div className="h-16 flex items-center justify-center bg-[#0b192e] border-b border-[#0A2E5C] shrink-0 overflow-hidden px-4">
@@ -152,6 +153,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed }) => {
                                 ) : (
                                     <NavLink
                                         to={group.path || '#'}
+                                        onClick={() => { if (window.innerWidth < 768) setIsCollapsed(true); }}
                                         className={({ isActive }) => `flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors group border-l-[3px] border-transparent ${isActive ? 'bg-[#0b192e] text-white !border-[#0869D8]' : 'hover:bg-[#0b192e] hover:text-white'}`}
                                         title={isCollapsed ? group.title : ''}
                                     >
@@ -167,6 +169,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed }) => {
                                             <NavLink
                                                 key={child.name}
                                                 to={child.path}
+                                                onClick={() => { if (window.innerWidth < 768) setIsCollapsed(true); }}
                                                 className={({ isActive }) => `px-4 py-1.5 text-[13px] rounded-r-lg transition-colors relative before:absolute before:-left-[1px] before:top-1/2 before:-translate-y-1/2 before:h-[2px] before:w-2 before:bg-[#204a82] ${isActive ? 'text-white font-medium bg-[#0b192e]/50 before:!bg-[#0ea5e9]' : 'text-[#8BA4CA] hover:text-white hover:bg-[#0b192e]/30'}`}
                                             >
                                                 {child.name}
