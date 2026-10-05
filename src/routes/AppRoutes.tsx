@@ -9,7 +9,9 @@ import Login from '@pages/auth/Login'
 import ForgotPassword from '@pages/auth/ForgotPassword'
 import ResetPassword from '@pages/auth/ResetPassword'
 
-const AppRoutes = () => {
+import Dashboard from '@pages/Dashboard'
+
+const AppRoutes: React.FC = () => {
   return (
     <BrowserRouter>
       <Routes>
@@ -23,8 +25,7 @@ const AppRoutes = () => {
         {/* Protected routes */}
         <Route element={<ProtectedRoute />}>
           <Route element={<MainLayout />}>
-            <Route path="/" element={<div>Dashboard</div>} />
-            {/* Add more protected routes here */}
+            <Route path="/" element={<Dashboard />} />
           </Route>
         </Route>
       </Routes>
