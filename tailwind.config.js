@@ -7,6 +7,14 @@ export default {
   theme: {
     extend: {
       colors: {
+        brand: {
+          primary: '#0869D8',
+          secondary: '#0ea5e9',
+          navy: '#12284A',
+          navydark: '#0b192e',
+          lightbg: '#F5FAFF',
+          border: '#D8E1EC',
+        },
         primary: {
           50: '#f0f5ff',
           100: '#dce8ff',
