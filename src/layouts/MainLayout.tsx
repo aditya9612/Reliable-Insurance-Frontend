@@ -1,21 +1,14 @@
 import React from 'react'
 import { Outlet } from 'react-router-dom'
+import HeaderNavbar from '@components/HeaderNavbar'
 
-const MainLayout = () => {
+const MainLayout: React.FC = () => {
   return (
-    <div className="main-layout">
-      {/* Sidebar */}
-      <aside className="sidebar">{/* <Sidebar /> */}</aside>
-
-      <div className="main-content">
-        {/* Navbar */}
-        <header className="navbar">{/* <Navbar /> */}</header>
-
-        {/* Page content */}
-        <main className="page-content">
-          <Outlet />
-        </main>
-      </div>
+    <div className="main-layout" style={{ minHeight: '100vh', backgroundColor: '#dbeafe' }}>
+      <HeaderNavbar />
+      <main className="page-content" style={{ padding: '20px' }}>
+        <Outlet />
+      </main>
     </div>
   )
 }
