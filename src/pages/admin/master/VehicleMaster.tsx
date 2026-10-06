@@ -460,18 +460,18 @@ const VehicleMaster: React.FC = () => {
 
       {/* Clean Modal Form for Add & Edit (Matching BranchMaster) */}
       {showModal && (
-        <div className="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-xl border border-slate-200 shadow-xl w-full max-w-lg overflow-hidden animate-in fade-in zoom-in duration-150">
-            <div className="bg-[#00a896] text-white p-4 flex items-center justify-between">
-              <h2 className="text-lg font-bold">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-3 sm:p-4 overflow-y-auto">
+          <div className="bg-white rounded-2xl border border-slate-200 shadow-2xl w-full max-w-lg my-auto max-h-[90vh] flex flex-col overflow-hidden transform transition-all animate-in fade-in zoom-in-95 duration-200">
+            <div className="bg-[#00a896] text-white p-4 flex items-center justify-between shrink-0">
+              <h2 className="text-base sm:text-lg font-bold truncate">
                 {editingItem ? `Edit ${getTabLabel(activeTab)}` : `Add New ${getTabLabel(activeTab)}`}
               </h2>
-              <button onClick={() => setShowModal(false)} className="text-white/80 hover:text-white">
+              <button onClick={() => setShowModal(false)} className="text-white/80 hover:text-white p-1 rounded-lg shrink-0">
                 <X size={20} />
               </button>
             </div>
 
-            <form onSubmit={handleSaveModalForm} className="p-6 space-y-4">
+            <form onSubmit={handleSaveModalForm} className="p-6 space-y-4 overflow-y-auto custom-scrollbar">
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-1">
                   {getTabLabel(activeTab)} Name

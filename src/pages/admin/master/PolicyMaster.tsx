@@ -930,18 +930,18 @@ const PolicyMaster: React.FC = () => {
 
       {/* Form Modal (Create / Edit) */}
       {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
-          <div className="bg-white rounded-2xl border border-slate-200 shadow-2xl w-full max-w-md overflow-hidden transform transition-all animate-in fade-in zoom-in-95 duration-200">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-3 sm:p-4 overflow-y-auto">
+          <div className="bg-white rounded-2xl border border-slate-200 shadow-2xl w-full max-w-md my-auto max-h-[90vh] flex flex-col overflow-hidden transform transition-all animate-in fade-in zoom-in-95 duration-200">
             {/* Modal Header */}
-            <div className="bg-[#00a896] text-white px-6 py-4 flex items-center justify-between">
-              <h3 className="font-bold text-lg flex items-center gap-2">
+            <div className="bg-[#00a896] text-white px-6 py-4 flex items-center justify-between shrink-0">
+              <h3 className="font-bold text-base sm:text-lg flex items-center gap-2 truncate">
                 <span>
                   » {editingItem ? `Edit ${getTabLabel(activeTab)} Form` : `${getTabLabel(activeTab)} Form`}
                 </span>
               </h3>
               <button
                 onClick={() => { setShowModal(false); setEditingItem(null); }}
-                className="text-white/80 hover:text-white hover:bg-white/20 p-1 rounded-lg transition-colors cursor-pointer"
+                className="text-white/80 hover:text-white hover:bg-white/20 p-1 rounded-lg transition-colors cursor-pointer shrink-0"
               >
                 <X size={20} />
               </button>
@@ -949,7 +949,7 @@ const PolicyMaster: React.FC = () => {
 
             {/* Modal Form Content */}
             {activeTab === 'insuranceCompany' ? (
-              <form onSubmit={handleSaveForm} className="p-6 space-y-4">
+              <form onSubmit={handleSaveForm} className="p-6 space-y-4 overflow-y-auto custom-scrollbar">
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-1.5">Insurance Company</label>
                   <input
@@ -1013,7 +1013,7 @@ const PolicyMaster: React.FC = () => {
                 </div>
               </form>
             ) : (
-              <form onSubmit={handleSaveForm} className="p-6 space-y-4">
+              <form onSubmit={handleSaveForm} className="p-6 space-y-4 overflow-y-auto custom-scrollbar">
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-1.5">{getTabLabel(activeTab)}</label>
                   <input

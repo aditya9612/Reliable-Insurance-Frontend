@@ -16,6 +16,8 @@ import PolicyMaster from '../pages/admin/master/PolicyMaster'
 import VehicleMaster from '../pages/admin/master/VehicleMaster'
 import AccountMaster from '../pages/admin/master/AccountMaster'
 import BusinessMaster from '../pages/admin/master/BusinessMaster'
+import MyPage from '../pages/admin/other_modules/MyPage'
+import MisReports from '../pages/admin/reports_analysis/MisReports'
 
 const AppRoutes = () => {
   return (
@@ -38,6 +40,9 @@ const AppRoutes = () => {
             <Route path="/vehicle-master" element={<VehicleMaster />} />
             <Route path="/account-master" element={<AccountMaster />} />
             <Route path="/operations/business-master" element={<BusinessMaster />} />
+            <Route path="/other/my-page" element={<MyPage />} />
+            <Route path="/reports/mis" element={<MisReports />} />
+            <Route path="/reports" element={<MisReports />} />
           </Route>
         </Route>
       </Routes>
