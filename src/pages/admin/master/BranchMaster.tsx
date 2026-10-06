@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import PageHeader from '../../../components/page-header/PageHeader';
+import UnderlineTabs from '../../../components/tabs/UnderlineTabs';
 import { Edit2, Search, X } from 'lucide-react';
 
 interface BranchType {
@@ -116,11 +118,11 @@ const BranchMaster: React.FC = () => {
         prev.map(b =>
           b.code === editingItem.code
             ? {
-                ...b,
-                name: newBranchName.toUpperCase(),
-                address: newBranchAddress.toUpperCase() || newBranchName.toUpperCase(),
-                type: newBranchType || 'BRANCH'
-              }
+              ...b,
+              name: newBranchName.toUpperCase(),
+              address: newBranchAddress.toUpperCase() || newBranchName.toUpperCase(),
+              type: newBranchType || 'BRANCH'
+            }
             : b
         )
       );
@@ -158,178 +160,162 @@ const BranchMaster: React.FC = () => {
   return (
     <div className="w-full flex flex-col space-y-5">
       {/* Top Bar Header */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
-        <div>
-          <h1 className="text-2xl font-bold text-[#12284A]">Branch Master</h1>
-          <p className="text-sm text-slate-500">Manage branch types and full branch directory</p>
-        </div>
+      <PageHeader
+        title="Branch Master"
+        description="Manage branch types and full branch directory"
+      />
 
-        {/* Tab Selector Buttons (Branch Type / Branch Name) */}
-        <div className="flex items-center gap-2 bg-[#F5FAFF] p-1.5 rounded-lg border border-slate-200 w-full sm:w-auto">
-          <button
-            onClick={() => { setActiveTab('type'); setCurrentPage(1); }}
-            className={`flex-1 sm:flex-initial px-5 py-2 rounded-md font-medium text-sm transition-all duration-200 ${
-              activeTab === 'type'
-                ? 'bg-[#00a896] text-white shadow-md'
-                : 'text-slate-600 hover:text-[#12284A] hover:bg-slate-200/60'
-            }`}
-          >
-            Branch Type
-          </button>
-          <button
-            onClick={() => { setActiveTab('name'); setCurrentPage(1); }}
-            className={`flex-1 sm:flex-initial px-5 py-2 rounded-md font-medium text-sm transition-all duration-200 ${
-              activeTab === 'name'
-                ? 'bg-[#00a896] text-white shadow-md'
-                : 'text-slate-600 hover:text-[#12284A] hover:bg-slate-200/60'
-            }`}
-          >
-            Branch Name
-          </button>
-        </div>
-      </div>
+      <UnderlineTabs
+        tabs={[
+          { id: 'type', label: 'Branch Type' },
+          { id: 'name', label: 'Branch Name' }
+        ]}
+        activeTab={activeTab}
+        onTabChange={(tabId) => { setActiveTab(tabId as 'type' | 'name'); setCurrentPage(1); }}
+      />
 
       {/* Main Full-Width Content Table Card */}
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden flex flex-col w-full">
-        {/* Table Toolbar */}
-        <div className="p-4 bg-slate-50 border-b border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="relative w-full sm:w-80">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
-            <input
-              type="text"
-              placeholder={`Search ${activeTab === 'type' ? 'Branch Type...' : 'Branch Name/Code...'}`}
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#00a896] focus:border-transparent transition-all"
-            />
-          </div>
+      <div key={activeTab} className="tab-transition-wrapper">
+        <div className="bg-white rounded-[12px] border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden flex flex-col w-full">
+          {/* Table Toolbar */}
+          <div className="p-4 bg-white border-b border-brand-border flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="relative w-full sm:w-80">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-brand-primary" size={18} />
+              <input
+                type="text"
+                placeholder={`Search ${activeTab === 'type' ? 'Branch Type...' : 'Branch Name/Code...'}`}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-9 pr-4 py-2 bg-white border border-brand-border rounded-[8px] text-[14px] text-brand-navy placeholder-[#66809F] focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all"
+              />
+            </div>
 
-          <button
-            onClick={handleOpenCreateModal}
-            className="w-full sm:w-auto flex items-center justify-center gap-2 px-5 py-2.5 bg-[#0869D8] hover:bg-[#0654B0] text-white rounded-lg font-medium text-sm shadow-sm transition-all duration-200 cursor-pointer"
-          >
-            <span>Add New {activeTab === 'type' ? 'Branch Type' : 'Branch'}</span>
-          </button>
-        </div>
-
-        {/* Full Width Table View */}
-        <div className="overflow-x-auto w-full">
-          {activeTab === 'type' ? (
-            <table className="w-full text-left border-collapse">
-              <thead>
-                <tr className="bg-[#00a896] text-white text-xs font-semibold uppercase tracking-wider">
-                  <th className="py-3.5 px-6">Sr. No.</th>
-                  <th className="py-3.5 px-6">Branch Type</th>
-                  <th className="py-3.5 px-6 text-right">Action</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-200 text-sm text-slate-700">
-                {(paginatedData as BranchType[]).map((item, idx) => (
-                  <tr key={item.id} className="hover:bg-slate-50/80 transition-colors">
-                    <td className="py-3.5 px-6 font-medium text-slate-500">{(currentPage - 1) * itemsPerPage + idx + 1}</td>
-                    <td className="py-3.5 px-6 font-semibold text-[#12284A]">{item.type}</td>
-                    <td className="py-3.5 px-6 text-right">
-                      <button
-                        onClick={() => handleOpenEditTypeModal(item)}
-                        className="p-1.5 text-[#8BA4CA] hover:text-[#0869D8] hover:bg-slate-100 rounded-md transition-colors cursor-pointer"
-                        title="Edit Branch Type"
-                      >
-                        <Edit2 size={18} strokeWidth={1.5} />
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          ) : (
-            <table className="w-full text-left border-collapse">
-              <thead>
-                <tr className="bg-[#00a896] text-white text-xs font-semibold uppercase tracking-wider">
-                  <th className="py-3.5 px-6">Code</th>
-                  <th className="py-3.5 px-6">Branch Name</th>
-                  <th className="py-3.5 px-6">Address</th>
-                  <th className="py-3.5 px-6">Branch Type</th>
-                  <th className="py-3.5 px-6 text-right">Action</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-200 text-sm text-slate-700">
-                {(paginatedData as Branch[]).map((b) => (
-                  <tr key={b.code} className="hover:bg-slate-50/80 transition-colors">
-                    <td className="py-3.5 px-6 font-mono font-medium text-blue-600">{b.code}</td>
-                    <td className="py-3.5 px-6 font-semibold text-[#12284A]">{b.name}</td>
-                    <td className="py-3.5 px-6 text-slate-600">{b.address}</td>
-                    <td className="py-3.5 px-6">
-                      <span className="inline-block px-2.5 py-1 text-xs font-semibold rounded-full bg-teal-50 text-teal-700 border border-teal-200">
-                        {b.type}
-                      </span>
-                    </td>
-                    <td className="py-3.5 px-6 text-right">
-                      <button
-                        onClick={() => handleOpenEditBranchModal(b)}
-                        className="p-1.5 text-[#8BA4CA] hover:text-[#0869D8] hover:bg-slate-100 rounded-md transition-colors cursor-pointer"
-                        title="Edit Branch"
-                      >
-                        <Edit2 size={18} strokeWidth={1.5} />
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
-        </div>
-
-        {/* Footer Pagination (Matching standard design with Records per page dropdown) */}
-        <div className="p-4 bg-slate-50 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2 text-xs text-slate-600 font-medium">
-            <span>Records per page:</span>
-            <select
-              value={itemsPerPage}
-              onChange={(e) => {
-                setItemsPerPage(Number(e.target.value));
-                setCurrentPage(1);
-              }}
-              className="px-2 py-1 bg-white border border-slate-300 rounded-md text-xs font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#0869D8] cursor-pointer"
-            >
-              <option value={10}>10</option>
-              <option value={20}>20</option>
-              <option value={50}>50</option>
-              <option value={100}>100</option>
-            </select>
-          </div>
-
-          <span className="text-xs text-slate-500 font-medium">
-            Showing {currentData.length === 0 ? 0 : (currentPage - 1) * itemsPerPage + 1} - {Math.min(currentPage * itemsPerPage, currentData.length)} of {currentData.length} records
-          </span>
-
-          <div className="flex items-center gap-1">
             <button
-              onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-              disabled={currentPage === 1}
-              className="w-8 h-8 flex items-center justify-center text-xs font-semibold text-slate-600 bg-white border border-slate-300 rounded-md hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+              onClick={handleOpenCreateModal}
+              className="w-full sm:w-auto flex items-center justify-center gap-2 px-5 py-2.5 bg-brand-primary hover:bg-[#1D4ED8] text-white rounded-[8px] font-semibold text-[14px] shadow-sm transition-all duration-200 cursor-pointer border-none"
             >
-              &lt;
+              <span>Add New {activeTab === 'type' ? 'Branch Type' : 'Branch'}</span>
             </button>
-            {Array.from({ length: totalPages || 1 }, (_, i) => i + 1).map((page) => (
-              <button
-                key={page}
-                onClick={() => setCurrentPage(page)}
-                className={`w-8 h-8 flex items-center justify-center text-xs font-bold rounded-md transition-all ${
-                  currentPage === page
-                    ? 'bg-[#0869D8] text-white shadow-sm'
-                    : 'bg-white text-slate-700 border border-slate-300 hover:bg-slate-100'
-                }`}
+          </div>
+
+          {/* Full Width Table View */}
+          <div className="overflow-x-auto w-full">
+            {activeTab === 'type' ? (
+              <table className="w-full text-left border-collapse table-fixed">
+                <thead>
+                  <tr className="bg-brand-lightbg text-brand-navy text-[14px] font-semibold uppercase border-b border-brand-border">
+                    <th className="py-3 px-6 w-[10%]">SR. NO.</th>
+                    <th className="py-3 px-6 w-[75%]">BRANCH TYPE</th>
+                    <th className="py-3 px-6 text-right w-[15%]">ACTION</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-brand-border text-[14px]">
+                  {(paginatedData as BranchType[]).map((item, idx) => (
+                    <tr key={item.id} className="hover:bg-brand-mainbg h-[52px] transition-colors bg-white">
+                      <td className="py-2 px-6 font-medium text-brand-muted">{(currentPage - 1) * itemsPerPage + idx + 1}</td>
+                      <td className="py-2 px-6 font-medium text-brand-navy">{item.type}</td>
+                      <td className="py-2 px-6 text-right">
+                        <button
+                          onClick={() => handleOpenEditTypeModal(item)}
+                          className="p-1.5 bg-brand-lightbg text-brand-primary hover:bg-[#E2E8F0] rounded-[6px] transition-colors cursor-pointer inline-flex items-center justify-center"
+                          title="Edit Branch Type"
+                        >
+                          <Edit2 size={18} strokeWidth={1.5} />
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            ) : (
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr className="bg-brand-lightbg text-brand-navy text-[14px] font-semibold uppercase border-b border-brand-border">
+                    <th className="py-3 px-6">CODE</th>
+                    <th className="py-3 px-6">BRANCH NAME</th>
+                    <th className="py-3 px-6">ADDRESS</th>
+                    <th className="py-3 px-6">BRANCH TYPE</th>
+                    <th className="py-3 px-6 text-right">ACTION</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-brand-border text-[14px]">
+                  {(paginatedData as Branch[]).map((b) => (
+                    <tr key={b.code} className="hover:bg-brand-mainbg h-[52px] transition-colors bg-white">
+                      <td className="py-2 px-6 font-medium text-brand-primary">{b.code}</td>
+                      <td className="py-2 px-6 font-medium text-brand-navy">{b.name}</td>
+                      <td className="py-2 px-6 text-brand-muted">{b.address}</td>
+                      <td className="py-2 px-6">
+                        <span className="inline-block px-2.5 py-1 text-xs font-semibold rounded-full bg-brand-lightbg text-brand-primary border border-brand-border">
+                          {b.type}
+                        </span>
+                      </td>
+                      <td className="py-2 px-6 text-right">
+                        <button
+                          onClick={() => handleOpenEditBranchModal(b)}
+                          className="p-1.5 bg-brand-lightbg text-brand-primary hover:bg-[#E2E8F0] rounded-[6px] transition-colors cursor-pointer inline-flex items-center justify-center"
+                          title="Edit Branch"
+                        >
+                          <Edit2 size={18} strokeWidth={1.5} />
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
+          </div>
+
+          {/* Footer Pagination */}
+          <div className="p-4 bg-white border-t border-brand-border flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-2 text-sm text-brand-muted font-medium">
+              <span>Records per page:</span>
+              <select
+                value={itemsPerPage}
+                onChange={(e) => {
+                  setItemsPerPage(Number(e.target.value));
+                  setCurrentPage(1);
+                }}
+                className="px-2 py-1 bg-white border border-brand-border rounded-md text-sm font-semibold text-brand-navy focus:outline-none focus:ring-1 focus:ring-brand-primary focus:border-brand-primary cursor-pointer"
               >
-                {page}
+                <option value={10}>10</option>
+                <option value={20}>20</option>
+                <option value={50}>50</option>
+                <option value={100}>100</option>
+              </select>
+            </div>
+
+            <span className="text-sm text-brand-muted font-medium">
+              Showing {currentData.length === 0 ? 0 : (currentPage - 1) * itemsPerPage + 1} - {Math.min(currentPage * itemsPerPage, currentData.length)} of {currentData.length} records
+            </span>
+
+            <div className="flex items-center gap-1">
+              <button
+                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                disabled={currentPage === 1}
+                className="w-8 h-8 flex items-center justify-center text-sm font-semibold text-brand-navy bg-white border border-brand-border rounded-md hover:bg-brand-mainbg disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+              >
+                &lt;
               </button>
-            ))}
-            <button
-              onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-              disabled={currentPage === totalPages || totalPages === 0}
-              className="w-8 h-8 flex items-center justify-center text-xs font-semibold text-slate-600 bg-white border border-slate-300 rounded-md hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
-            >
-              &gt;
-            </button>
+              {Array.from({ length: totalPages || 1 }, (_, i) => i + 1).map((page) => (
+                <button
+                  key={page}
+                  onClick={() => setCurrentPage(page)}
+                  className={`w-8 h-8 flex items-center justify-center text-sm font-semibold rounded-md transition-all ${currentPage === page
+                    ? 'bg-brand-primary text-white shadow-sm'
+                    : 'bg-white text-brand-navy border border-brand-border hover:bg-brand-mainbg'
+                    }`}
+                >
+                  {page}
+                </button>
+              ))}
+              <button
+                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                disabled={currentPage === totalPages || totalPages === 0}
+                className="w-8 h-8 flex items-center justify-center text-sm font-semibold text-brand-navy bg-white border border-brand-border rounded-md hover:bg-brand-mainbg disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+              >
+                &gt;
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -339,8 +325,8 @@ const BranchMaster: React.FC = () => {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-3 sm:p-4 overflow-y-auto">
           <div className="bg-white rounded-2xl border border-slate-200 shadow-2xl w-full max-w-md my-auto max-h-[90vh] flex flex-col overflow-hidden transform transition-all animate-in fade-in zoom-in-95 duration-200">
             {/* Modal Header */}
-            <div className="bg-[#00a896] text-white px-6 py-4 flex items-center justify-between shrink-0">
-              <h3 className="font-bold text-base sm:text-lg flex items-center gap-2 truncate">
+            <div className="bg-brand-navy text-white px-6 py-4 flex items-center justify-between">
+              <h3 className="font-bold text-lg flex items-center gap-2">
                 <span>
                   » {editingItem ? (activeTab === 'type' ? 'Edit Branch Type Form' : 'Edit Branch Master Form') : (activeTab === 'type' ? 'Branch Type Form' : 'Branch Master Form')}
                 </span>
@@ -364,7 +350,7 @@ const BranchMaster: React.FC = () => {
                     placeholder="Enter Branch Type (e.g. HUB, FRANCHISE)"
                     value={newTypeName}
                     onChange={(e) => setNewTypeName(e.target.value)}
-                    className="w-full px-4 py-2.5 border border-slate-300 rounded-lg text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#00a896] focus:border-transparent transition-all"
+                    className="w-full px-4 py-2.5 border border-slate-300 rounded-lg text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-brand-primary focus:border-transparent transition-all"
                   />
                 </div>
 
@@ -378,7 +364,7 @@ const BranchMaster: React.FC = () => {
                   </button>
                   <button
                     type="submit"
-                    className="px-6 py-2 bg-[#0869D8] hover:bg-[#0654B0] text-white font-semibold rounded-lg text-sm shadow-md transition-all cursor-pointer"
+                    className="px-6 py-2 bg-brand-primary hover:bg-[#0654B0] text-white font-semibold rounded-lg text-sm shadow-md transition-all cursor-pointer"
                   >
                     {editingItem ? 'Update' : 'Save'}
                   </button>
@@ -392,7 +378,7 @@ const BranchMaster: React.FC = () => {
                     type="text"
                     disabled
                     value={newBranchCode}
-                    className="w-full px-4 py-2.5 bg-slate-100 border border-slate-300 rounded-lg text-sm text-slate-500 font-mono cursor-not-allowed"
+                    className="w-full px-4 py-2.5 bg-brand-mainbg border border-brand-border rounded-[8px] text-[14px] text-brand-muted font-mono cursor-not-allowed"
                   />
                 </div>
 
@@ -404,7 +390,7 @@ const BranchMaster: React.FC = () => {
                     placeholder="Enter Branch Name"
                     value={newBranchName}
                     onChange={(e) => setNewBranchName(e.target.value)}
-                    className="w-full px-4 py-2.5 border border-slate-300 rounded-lg text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#00a896] focus:border-transparent transition-all"
+                    className="w-full px-4 py-2.5 border border-brand-border rounded-[8px] text-[14px] text-brand-navy placeholder-[#66809F] focus:outline-none focus:ring-1 focus:border-brand-primary focus:ring-brand-primary transition-all"
                   />
                 </div>
 
@@ -415,7 +401,7 @@ const BranchMaster: React.FC = () => {
                     placeholder="Enter Branch Address"
                     value={newBranchAddress}
                     onChange={(e) => setNewBranchAddress(e.target.value)}
-                    className="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#00a896] focus:border-transparent transition-all resize-none"
+                    className="w-full px-4 py-2 border border-brand-border rounded-[8px] text-[14px] text-brand-navy placeholder-[#66809F] focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all resize-none"
                   />
                 </div>
 
@@ -425,7 +411,7 @@ const BranchMaster: React.FC = () => {
                     required
                     value={newBranchType}
                     onChange={(e) => setNewBranchType(e.target.value)}
-                    className="w-full px-4 py-2.5 border border-slate-300 rounded-lg text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#00a896] focus:border-transparent transition-all"
+                    className="w-full px-4 py-2.5 border border-brand-border rounded-[8px] text-[14px] text-brand-navy focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all"
                   >
                     <option value="">--Select Branch Type--</option>
                     {branchTypes.map(t => (
@@ -438,13 +424,13 @@ const BranchMaster: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => { setShowModal(false); setEditingItem(null); }}
-                    className="px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer"
+                    className="px-4 py-2 text-[14px] font-medium text-brand-muted hover:bg-brand-mainbg rounded-[8px] transition-colors cursor-pointer"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
-                    className="px-6 py-2 bg-[#0869D8] hover:bg-[#0654B0] text-white font-semibold rounded-lg text-sm shadow-md transition-all cursor-pointer"
+                    className="px-6 py-2 bg-brand-primary hover:bg-[#1D4ED8] text-white font-semibold rounded-[8px] text-[14px] shadow-sm transition-all cursor-pointer"
                   >
                     {editingItem ? 'Update' : 'Save'}
                   </button>

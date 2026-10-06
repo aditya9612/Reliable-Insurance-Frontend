@@ -3,14 +3,10 @@
 ========================================= */
 
 :root {
-    --primary-blue: #0869D8;
-    --secondary-blue: #187DE8;
-    --dark-navy: #12284A;
-
-    --light-bg: #F5FAFF;
-
-    --border-color: #D8E1EC;
-
+    --primary-blue: #2563EB;
+    --dark-navy: #102A4C;
+    --light-bg: #F4F8FC;
+    --border-color: #DCE6F0;
     --white: #FFFFFF;
 }
 
@@ -100,9 +96,9 @@ body {
 
     background:
         linear-gradient(90deg,
-            rgba(5, 66, 139, 0.94) 0%,
-            rgba(5, 88, 170, 0.82) 48%,
-            rgba(13, 117, 210, 0.55) 100%);
+            rgba(16, 42, 76, 0.94) 0%,
+            rgba(20, 56, 107, 0.82) 48%,
+            rgba(37, 99, 235, 0.55) 100%);
 }
 
 
