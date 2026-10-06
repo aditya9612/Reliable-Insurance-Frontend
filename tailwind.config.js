@@ -8,12 +8,17 @@ export default {
     extend: {
       colors: {
         brand: {
-          primary: '#0869D8',
-          secondary: '#0ea5e9',
-          navy: '#12284A',
-          navydark: '#0b192e',
-          lightbg: '#F5FAFF',
-          border: '#D8E1EC',
+          primary: '#2563EB',
+          navy: '#102A4C',
+          navydark: '#0B203C',
+          lightbg: '#EAF2FF',
+          mainbg: '#F4F8FC',
+          border: '#DCE6F0',
+          text: '#102A4C',
+          muted: '#66809F',
+          success: '#16B364',
+          warning: '#F59E0B',
+          error: '#DC2626'
         },
         primary: {
           50: '#f0f5ff',

@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import PageHeader from '../../../components/page-header/PageHeader';
+import UnderlineTabs from '../../../components/tabs/UnderlineTabs';
 import { Edit2, Trash2, Search, X } from 'lucide-react';
 
 type SubTab =
@@ -350,590 +352,580 @@ const PolicyMaster: React.FC = () => {
   return (
     <div className="w-full flex flex-col space-y-5">
       {/* Header Bar */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
-        <div>
-          <h1 className="text-2xl font-bold text-[#12284A]">Policy Master</h1>
-          <p className="text-sm text-slate-500">Manage insurance policy modes, TDS rates, service charges and master records</p>
-        </div>
-      </div>
+      <PageHeader
+        title="Policy Master"
+        description="Manage insurance policy modes, TDS rates, service charges and master records"
+      />
 
       {/* Horizontal Sub-Tabs List */}
-      <div className="flex items-center gap-1.5 bg-white p-2 rounded-xl border border-slate-200 shadow-sm overflow-x-auto custom-scrollbar">
-        {tabsList.map(tab => (
-          <button
-            key={tab}
-            onClick={() => { setActiveTab(tab); setCurrentPage(1); setSearchQuery(''); }}
-            className={`px-4 py-2 rounded-lg font-medium text-xs sm:text-sm whitespace-nowrap transition-all duration-200 cursor-pointer ${
-              activeTab === tab
-                ? 'bg-[#00a896] text-white shadow-sm'
-                : 'text-slate-600 hover:text-[#12284A] hover:bg-slate-100'
-            }`}
-          >
-            {getTabLabel(tab)}
-          </button>
-        ))}
-      </div>
+      <UnderlineTabs
+        tabs={tabsList.map(tab => ({ id: tab, label: getTabLabel(tab) }))}
+        activeTab={activeTab}
+        onTabChange={(tabId) => { setActiveTab(tabId as SubTab); setCurrentPage(1); setSearchQuery(''); }}
+      />
 
-      {/* SPECIAL CONTENT VIEW: BROKER TDS / AGENT TDS (Image 1) */}
-      {(activeTab === 'brokerTds' || activeTab === 'agentTds') && (
-        <div className="flex flex-col space-y-5 w-full">
-          {/* Top Filter Card (Image 1) */}
-          <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
-              <div className="flex items-center gap-4">
-                <span className="text-sm font-medium text-slate-700">TDS Rate For</span>
-                <div className="flex items-center gap-4 text-sm text-slate-700">
-                  <label className="flex items-center gap-1.5 cursor-pointer">
-                    <input
-                      type="radio"
-                      name="tdsTarget"
-                      checked={tdsTarget === 'Agent'}
-                      onChange={() => setTdsTarget('Agent')}
-                      className="accent-[#0869D8]"
-                    />
-                    <span>Agent</span>
-                  </label>
-                  <label className="flex items-center gap-1.5 cursor-pointer">
-                    <input
-                      type="radio"
-                      name="tdsTarget"
-                      checked={tdsTarget === 'Franchise'}
-                      onChange={() => setTdsTarget('Franchise')}
-                      className="accent-[#0869D8]"
-                    />
-                    <span>Franchise</span>
-                  </label>
-                  <label className="flex items-center gap-1.5 cursor-pointer">
-                    <input
-                      type="radio"
-                      name="tdsTarget"
-                      checked={tdsTarget === 'FranchiseAgent'}
-                      onChange={() => setTdsTarget('FranchiseAgent')}
-                      className="accent-[#0869D8]"
-                    />
-                    <span>Franchise Agent</span>
-                  </label>
+      {/* Tab Content Animated Wrapper */}
+      <div key={activeTab} className="tab-transition-wrapper flex flex-col space-y-5 w-full">
+        {/* SPECIAL CONTENT VIEW: BROKER TDS / AGENT TDS (Image 1) */}
+        {(activeTab === 'brokerTds' || activeTab === 'agentTds') && (
+          <div className="flex flex-col space-y-5 w-full">
+            {/* Top Filter Card (Image 1) */}
+            <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
+                <div className="flex items-center gap-4">
+                  <span className="text-sm font-medium text-slate-700">TDS Rate For</span>
+                  <div className="flex items-center gap-4 text-sm text-slate-700">
+                    <label className="flex items-center gap-1.5 cursor-pointer">
+                      <input
+                        type="radio"
+                        name="tdsTarget"
+                        checked={tdsTarget === 'Agent'}
+                        onChange={() => setTdsTarget('Agent')}
+                        className="accent-[#0869D8]"
+                      />
+                      <span>Agent</span>
+                    </label>
+                    <label className="flex items-center gap-1.5 cursor-pointer">
+                      <input
+                        type="radio"
+                        name="tdsTarget"
+                        checked={tdsTarget === 'Franchise'}
+                        onChange={() => setTdsTarget('Franchise')}
+                        className="accent-[#0869D8]"
+                      />
+                      <span>Franchise</span>
+                    </label>
+                    <label className="flex items-center gap-1.5 cursor-pointer">
+                      <input
+                        type="radio"
+                        name="tdsTarget"
+                        checked={tdsTarget === 'FranchiseAgent'}
+                        onChange={() => setTdsTarget('FranchiseAgent')}
+                        className="accent-[#0869D8]"
+                      />
+                      <span>Franchise Agent</span>
+                    </label>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-medium text-slate-700">Broker</span>
+                  <select
+                    value={selectedBroker}
+                    onChange={(e) => setSelectedBroker(e.target.value)}
+                    className="px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-brand-primary focus:border-brand-primary outline-none"
+                  >
+                    <option value="">--Select Broker--</option>
+                    <option value="broker1">Reliable Brokerage Ltd</option>
+                    <option value="broker2">Apex Insurance Brokers</option>
+                  </select>
                 </div>
               </div>
 
               <div className="flex items-center gap-2">
-                <span className="text-sm font-medium text-slate-700">Broker</span>
-                <select
-                  value={selectedBroker}
-                  onChange={(e) => setSelectedBroker(e.target.value)}
-                  className="px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-[#00a896] outline-none"
+                <button className="px-5 py-2 bg-[#f39c12] hover:bg-[#e08e0b] text-white font-medium text-sm rounded-lg shadow-sm transition-all cursor-pointer">
+                  View
+                </button>
+                <button
+                  onClick={() => { setSelectedBroker(''); setTdsTarget('Agent'); }}
+                  className="px-5 py-2 bg-[#e74c3c] hover:bg-[#c0392b] text-white font-medium text-sm rounded-lg shadow-sm transition-all cursor-pointer"
                 >
-                  <option value="">--Select Broker--</option>
-                  <option value="broker1">Reliable Brokerage Ltd</option>
-                  <option value="broker2">Apex Insurance Brokers</option>
-                </select>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-2">
-              <button className="px-5 py-2 bg-[#f39c12] hover:bg-[#e08e0b] text-white font-medium text-sm rounded-lg shadow-sm transition-all cursor-pointer">
-                View
-              </button>
-              <button
-                onClick={() => { setSelectedBroker(''); setTdsTarget('Agent'); }}
-                className="px-5 py-2 bg-[#e74c3c] hover:bg-[#c0392b] text-white font-medium text-sm rounded-lg shadow-sm transition-all cursor-pointer"
-              >
-                Reset
-              </button>
-            </div>
-          </div>
-
-          {/* Details Form Card (Image 1 Bottom) */}
-          <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden flex flex-col w-full">
-            <div className="bg-[#00a896] text-white px-5 py-3 font-semibold text-sm">
-              » Details
-            </div>
-            <div className="p-5 grid grid-cols-1 sm:grid-cols-4 gap-4 items-end">
-              <div>
-                <label className="block text-xs font-medium text-slate-700 mb-1">Company Name</label>
-                <select
-                  value={tdsDetailsCompany}
-                  onChange={(e) => setTdsDetailsCompany(e.target.value)}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-[#00a896] outline-none"
-                >
-                  <option value="">--Select Company--</option>
-                  {insuranceCompanies.map(c => <option key={c.id} value={c.company}>{c.company}</option>)}
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-xs font-medium text-slate-700 mb-1">Branch Name</label>
-                <select
-                  value={tdsDetailsBranch}
-                  onChange={(e) => setTdsDetailsBranch(e.target.value)}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-[#00a896] outline-none"
-                >
-                  <option value="">--Select Branch--</option>
-                  <option value="BARAMATI">BARAMATI</option>
-                  <option value="MUMBAI">MUMBAI</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-xs font-medium text-slate-700 mb-1">Valid From</label>
-                <input
-                  type="text"
-                  placeholder="DD/MM/YYYY"
-                  value={tdsValidFrom}
-                  onChange={(e) => setTdsValidFrom(e.target.value)}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-[#00a896] outline-none"
-                />
-              </div>
-
-              <div className="flex items-center gap-3">
-                <div className="flex-1">
-                  <label className="block text-xs font-medium text-slate-700 mb-1">TDS Rate(%)</label>
-                  <input
-                    type="text"
-                    placeholder="Rate"
-                    value={tdsRate}
-                    onChange={(e) => setTdsRate(e.target.value)}
-                    className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-[#00a896] outline-none"
-                  />
-                </div>
-                <button className="px-6 py-2 bg-[#0869D8] hover:bg-[#0654B0] text-white font-semibold text-sm rounded-lg shadow-sm transition-all cursor-pointer">
-                  Save
+                  Reset
                 </button>
               </div>
             </div>
-          </div>
-        </div>
-      )}
 
-      {/* SPECIAL CONTENT VIEW: SERVICE CHARGE (Image 2 & 3 Combined Clean Layout) */}
-      {activeTab === 'serviceCharge' && (
-        <div className="flex flex-col space-y-5 w-full">
-          {/* Top Filter Card */}
-          <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
-              <div className="flex items-center gap-4">
-                <span className="text-sm font-medium text-slate-700">Service Charge For</span>
-                <div className="flex items-center gap-4 text-sm text-slate-700">
-                  <label className="flex items-center gap-1.5 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={serviceChargeTargets.agent}
-                      onChange={(e) => setServiceChargeTargets({ ...serviceChargeTargets, agent: e.target.checked })}
-                      className="accent-[#0869D8] rounded"
-                    />
-                    <span>Agent</span>
-                  </label>
-                  <label className="flex items-center gap-1.5 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={serviceChargeTargets.franchise}
-                      onChange={(e) => setServiceChargeTargets({ ...serviceChargeTargets, franchise: e.target.checked })}
-                      className="accent-[#0869D8] rounded"
-                    />
-                    <span>Franchise</span>
-                  </label>
-                  <label className="flex items-center gap-1.5 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={serviceChargeTargets.franchiseAgent}
-                      onChange={(e) => setServiceChargeTargets({ ...serviceChargeTargets, franchiseAgent: e.target.checked })}
-                      className="accent-[#0869D8] rounded"
-                    />
-                    <span>Franchise Agent</span>
-                  </label>
+            {/* Details Form Card (Image 1 Bottom) */}
+            <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden flex flex-col w-full">
+              <div className="bg-brand-navy text-white px-5 py-3 font-semibold text-sm">
+                » Details
+              </div>
+              <div className="p-5 grid grid-cols-1 sm:grid-cols-4 gap-4 items-end">
+                <div>
+                  <label className="block text-xs font-medium text-slate-700 mb-1">Company Name</label>
+                  <select
+                    value={tdsDetailsCompany}
+                    onChange={(e) => setTdsDetailsCompany(e.target.value)}
+                    className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-brand-primary focus:border-brand-primary outline-none"
+                  >
+                    <option value="">--Select Company--</option>
+                    {insuranceCompanies.map(c => <option key={c.id} value={c.company}>{c.company}</option>)}
+                  </select>
                 </div>
-              </div>
 
-              <div className="flex items-center gap-2">
-                <span className="text-sm font-medium text-slate-700">Broker</span>
-                <select
-                  value={selectedBroker}
-                  onChange={(e) => setSelectedBroker(e.target.value)}
-                  className="px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-[#00a896] outline-none"
-                >
-                  <option value="">--Select Broker--</option>
-                  <option value="b1">Reliable Brokerage</option>
-                </select>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-2">
-              <button className="px-5 py-2 bg-[#f39c12] hover:bg-[#e08e0b] text-white font-medium text-sm rounded-lg shadow-sm transition-all cursor-pointer">
-                View
-              </button>
-              <button
-                onClick={() => setSelectedBroker('')}
-                className="px-5 py-2 bg-[#e74c3c] hover:bg-[#c0392b] text-white font-medium text-sm rounded-lg shadow-sm transition-all cursor-pointer"
-              >
-                Reset
-              </button>
-            </div>
-          </div>
-
-          {/* Service Charge Details Card (Image 2 & 3 Clean Combined Layout) */}
-          <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden flex flex-col w-full">
-            <div className="bg-[#00a896] text-white px-5 py-3 font-semibold text-sm">
-              » Service Charge Details
-            </div>
-            <div className="p-5 flex flex-col space-y-4">
-              <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-2">Select Branch Names:</label>
-                <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2 bg-slate-50 p-4 rounded-xl border border-slate-200 max-h-48 overflow-y-auto custom-scrollbar">
-                  {sampleBranchesList.map(b => (
-                    <label key={b} className="flex items-center gap-1.5 text-xs text-slate-700 font-medium cursor-pointer hover:text-blue-600">
-                      <input
-                        type="checkbox"
-                        checked={scSelectedBranches.includes(b)}
-                        onChange={() => handleBranchCheckboxToggle(b)}
-                        className="accent-[#00a896] rounded"
-                      />
-                      <span className="truncate">{b}</span>
-                    </label>
-                  ))}
+                <div>
+                  <label className="block text-xs font-medium text-slate-700 mb-1">Branch Name</label>
+                  <select
+                    value={tdsDetailsBranch}
+                    onChange={(e) => setTdsDetailsBranch(e.target.value)}
+                    className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-brand-primary focus:border-brand-primary outline-none"
+                  >
+                    <option value="">--Select Branch--</option>
+                    <option value="BARAMATI">BARAMATI</option>
+                    <option value="MUMBAI">MUMBAI</option>
+                  </select>
                 </div>
-              </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 items-end pt-2">
                 <div>
                   <label className="block text-xs font-medium text-slate-700 mb-1">Valid From</label>
                   <input
                     type="text"
                     placeholder="DD/MM/YYYY"
-                    value={scValidFrom}
-                    onChange={(e) => setScValidFrom(e.target.value)}
-                    className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-[#00a896] outline-none"
+                    value={tdsValidFrom}
+                    onChange={(e) => setTdsValidFrom(e.target.value)}
+                    className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-brand-primary focus:border-brand-primary outline-none"
                   />
                 </div>
 
-                <div>
-                  <label className="block text-xs font-medium text-slate-700 mb-1">Service Charge(%)</label>
-                  <input
-                    type="text"
-                    value={scRate}
-                    onChange={(e) => setScRate(e.target.value)}
-                    className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-[#00a896] outline-none font-mono"
-                  />
-                </div>
-
-                <div>
-                  <button className="w-full sm:w-auto px-8 py-2 bg-[#0869D8] hover:bg-[#0654B0] text-white font-semibold text-sm rounded-lg shadow-sm transition-all cursor-pointer">
+                <div className="flex items-center gap-3">
+                  <div className="flex-1">
+                    <label className="block text-xs font-medium text-slate-700 mb-1">TDS Rate(%)</label>
+                    <input
+                      type="text"
+                      placeholder="Rate"
+                      value={tdsRate}
+                      onChange={(e) => setTdsRate(e.target.value)}
+                      className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-brand-primary focus:border-brand-primary outline-none"
+                    />
+                  </div>
+                  <button className="px-6 py-2 bg-brand-primary hover:bg-[#0654B0] text-white font-semibold text-sm rounded-lg shadow-sm transition-all cursor-pointer">
                     Save
                   </button>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* SPECIAL CONTENT VIEW: CREDIT MASTER (Image 4) */}
-      {activeTab === 'creditMaster' && (
-        <div className="flex flex-col space-y-5 w-full">
-          <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden flex flex-col w-full">
-            <div className="bg-[#00a896] text-white px-5 py-3 font-semibold text-sm">
-              » Credit Details
-            </div>
-            <div className="p-5 grid grid-cols-1 sm:grid-cols-4 gap-4 items-end">
-              <div>
-                <label className="block text-xs font-medium text-slate-700 mb-1">Commission Grid For</label>
-                <div className="flex items-center gap-4 pt-2 text-sm text-slate-700">
-                  <label className="flex items-center gap-1.5 cursor-pointer">
-                    <input
-                      type="radio"
-                      name="creditCategory"
-                      checked={creditCategory === 'Executive'}
-                      onChange={() => setCreditCategory('Executive')}
-                      className="accent-[#0869D8]"
-                    />
-                    <span>Executive</span>
-                  </label>
-                  <label className="flex items-center gap-1.5 cursor-pointer">
-                    <input
-                      type="radio"
-                      name="creditCategory"
-                      checked={creditCategory === 'Agent'}
-                      onChange={() => setCreditCategory('Agent')}
-                      className="accent-[#0869D8]"
-                    />
-                    <span>Agent</span>
-                  </label>
+        {/* SPECIAL CONTENT VIEW: SERVICE CHARGE (Image 2 & 3 Combined Clean Layout) */}
+        {activeTab === 'serviceCharge' && (
+          <div className="flex flex-col space-y-5 w-full">
+            {/* Top Filter Card */}
+            <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
+                <div className="flex items-center gap-4">
+                  <span className="text-sm font-medium text-slate-700">Service Charge For</span>
+                  <div className="flex items-center gap-4 text-sm text-slate-700">
+                    <label className="flex items-center gap-1.5 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={serviceChargeTargets.agent}
+                        onChange={(e) => setServiceChargeTargets({ ...serviceChargeTargets, agent: e.target.checked })}
+                        className="accent-[#0869D8] rounded"
+                      />
+                      <span>Agent</span>
+                    </label>
+                    <label className="flex items-center gap-1.5 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={serviceChargeTargets.franchise}
+                        onChange={(e) => setServiceChargeTargets({ ...serviceChargeTargets, franchise: e.target.checked })}
+                        className="accent-[#0869D8] rounded"
+                      />
+                      <span>Franchise</span>
+                    </label>
+                    <label className="flex items-center gap-1.5 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={serviceChargeTargets.franchiseAgent}
+                        onChange={(e) => setServiceChargeTargets({ ...serviceChargeTargets, franchiseAgent: e.target.checked })}
+                        className="accent-[#0869D8] rounded"
+                      />
+                      <span>Franchise Agent</span>
+                    </label>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-medium text-slate-700">Broker</span>
+                  <select
+                    value={selectedBroker}
+                    onChange={(e) => setSelectedBroker(e.target.value)}
+                    className="px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-brand-primary focus:border-brand-primary outline-none"
+                  >
+                    <option value="">--Select Broker--</option>
+                    <option value="b1">Reliable Brokerage</option>
+                  </select>
                 </div>
               </div>
 
-              <div>
-                <label className="block text-xs font-medium text-slate-700 mb-1">Executive / Agent</label>
-                <select
-                  value={selectedExecutive}
-                  onChange={(e) => setSelectedExecutive(e.target.value)}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-[#00a896] outline-none"
+              <div className="flex items-center gap-2">
+                <button className="px-5 py-2 bg-[#f39c12] hover:bg-[#e08e0b] text-white font-medium text-sm rounded-lg shadow-sm transition-all cursor-pointer">
+                  View
+                </button>
+                <button
+                  onClick={() => setSelectedBroker('')}
+                  className="px-5 py-2 bg-[#e74c3c] hover:bg-[#c0392b] text-white font-medium text-sm rounded-lg shadow-sm transition-all cursor-pointer"
                 >
-                  <option value="">--Select Sales Executive--</option>
-                  <option value="ex1">Ranjeet Bankar</option>
-                  <option value="ex2">Amit Kumar</option>
-                </select>
+                  Reset
+                </button>
               </div>
+            </div>
 
-              <div>
-                <label className="block text-xs font-medium text-slate-700 mb-1">Credits</label>
+            {/* Service Charge Details Card (Image 2 & 3 Clean Combined Layout) */}
+            <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden flex flex-col w-full">
+              <div className="bg-brand-navy text-white px-5 py-3 font-semibold text-sm">
+                » Service Charge Details
+              </div>
+              <div className="p-5 flex flex-col space-y-4">
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 mb-2">Select Branch Names:</label>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2 bg-slate-50 p-4 rounded-xl border border-slate-200 max-h-48 overflow-y-auto custom-scrollbar">
+                    {sampleBranchesList.map(b => (
+                      <label key={b} className="flex items-center gap-1.5 text-xs text-slate-700 font-medium cursor-pointer hover:text-blue-600">
+                        <input
+                          type="checkbox"
+                          checked={scSelectedBranches.includes(b)}
+                          onChange={() => handleBranchCheckboxToggle(b)}
+                          className="accent-brand-primary rounded"
+                        />
+                        <span className="truncate">{b}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 items-end pt-2">
+                  <div>
+                    <label className="block text-xs font-medium text-slate-700 mb-1">Valid From</label>
+                    <input
+                      type="text"
+                      placeholder="DD/MM/YYYY"
+                      value={scValidFrom}
+                      onChange={(e) => setScValidFrom(e.target.value)}
+                      className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-brand-primary focus:border-brand-primary outline-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-medium text-slate-700 mb-1">Service Charge(%)</label>
+                    <input
+                      type="text"
+                      value={scRate}
+                      onChange={(e) => setScRate(e.target.value)}
+                      className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-brand-primary focus:border-brand-primary outline-none font-mono"
+                    />
+                  </div>
+
+                  <div>
+                    <button className="w-full sm:w-auto px-8 py-2 bg-brand-primary hover:bg-[#0654B0] text-white font-semibold text-sm rounded-lg shadow-sm transition-all cursor-pointer">
+                      Save
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* SPECIAL CONTENT VIEW: CREDIT MASTER (Image 4) */}
+        {activeTab === 'creditMaster' && (
+          <div className="flex flex-col space-y-5 w-full">
+            <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden flex flex-col w-full">
+              <div className="bg-brand-navy text-white px-5 py-3 font-semibold text-sm">
+                » Credit Details
+              </div>
+              <div className="p-5 grid grid-cols-1 sm:grid-cols-4 gap-4 items-end">
+                <div>
+                  <label className="block text-xs font-medium text-slate-700 mb-1">Commission Grid For</label>
+                  <div className="flex items-center gap-4 pt-2 text-sm text-slate-700">
+                    <label className="flex items-center gap-1.5 cursor-pointer">
+                      <input
+                        type="radio"
+                        name="creditCategory"
+                        checked={creditCategory === 'Executive'}
+                        onChange={() => setCreditCategory('Executive')}
+                        className="accent-[#0869D8]"
+                      />
+                      <span>Executive</span>
+                    </label>
+                    <label className="flex items-center gap-1.5 cursor-pointer">
+                      <input
+                        type="radio"
+                        name="creditCategory"
+                        checked={creditCategory === 'Agent'}
+                        onChange={() => setCreditCategory('Agent')}
+                        className="accent-[#0869D8]"
+                      />
+                      <span>Agent</span>
+                    </label>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-medium text-slate-700 mb-1">Executive / Agent</label>
+                  <select
+                    value={selectedExecutive}
+                    onChange={(e) => setSelectedExecutive(e.target.value)}
+                    className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-brand-primary focus:border-brand-primary outline-none"
+                  >
+                    <option value="">--Select Sales Executive--</option>
+                    <option value="ex1">Ranjeet Bankar</option>
+                    <option value="ex2">Amit Kumar</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-medium text-slate-700 mb-1">Credits</label>
+                  <input
+                    type="text"
+                    placeholder="Enter Credits"
+                    value={creditValue}
+                    onChange={(e) => setCreditValue(e.target.value)}
+                    className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-brand-primary focus:border-brand-primary outline-none"
+                  />
+                </div>
+
+                <div>
+                  <button className="w-full sm:w-auto px-8 py-2 bg-brand-primary hover:bg-[#0654B0] text-white font-semibold text-sm rounded-lg shadow-sm transition-all cursor-pointer">
+                    Submit
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white p-8 rounded-xl border border-slate-200 shadow-sm text-center text-slate-500 font-medium">
+              NO DATA FOUND
+            </div>
+          </div>
+        )}
+
+        {/* DEFAULT DIRECTORY TABLES FOR OTHER SUB-TABS (INCLUDING LOCATION MASTER Image 5 WITH DELETE) */}
+        {activeTab !== 'brokerTds' && activeTab !== 'agentTds' && activeTab !== 'serviceCharge' && activeTab !== 'creditMaster' && (
+          <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden flex flex-col w-full">
+            {/* Table Toolbar */}
+            <div className="p-4 bg-slate-50 border-b border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div className="relative w-full sm:w-80">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
                 <input
                   type="text"
-                  placeholder="Enter Credits"
-                  value={creditValue}
-                  onChange={(e) => setCreditValue(e.target.value)}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-[#00a896] outline-none"
+                  placeholder={`Search ${getTabLabel(activeTab)}...`}
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full pl-9 pr-4 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-brand-primary focus:border-brand-primary transition-all"
                 />
               </div>
 
-              <div>
-                <button className="w-full sm:w-auto px-8 py-2 bg-[#0869D8] hover:bg-[#0654B0] text-white font-semibold text-sm rounded-lg shadow-sm transition-all cursor-pointer">
-                  Submit
+              <button
+                onClick={handleOpenCreateModal}
+                className="w-full sm:w-auto flex items-center justify-center px-5 py-2.5 bg-brand-primary hover:bg-[#0654B0] text-white rounded-lg font-medium text-sm shadow-sm transition-all duration-200 cursor-pointer"
+              >
+                <span>Add New {getTabLabel(activeTab)}</span>
+              </button>
+            </div>
+
+            {/* Full Width Table View */}
+            <div className="overflow-x-auto w-full">
+              {activeTab === 'insuranceCompany' ? (
+                <table className="w-full text-left border-collapse">
+                  <thead>
+                    <tr className="bg-brand-lightbg text-brand-navy text-[14px] font-semibold uppercase border-b border-brand-border">
+                      <th className="py-3.5 px-6">Insurance Company</th>
+                      <th className="py-3.5 px-6">Branch Name</th>
+                      <th className="py-3.5 px-6">Branch Code</th>
+                      <th className="py-3.5 px-6">Mail ID</th>
+                      <th className="py-3.5 px-6 text-right">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-200 text-sm text-slate-700">
+                    {(paginatedData as InsuranceCompanyItem[]).map((c) => (
+                      <tr key={c.id} className="hover:bg-brand-mainbg h-[52px] transition-colors bg-white">
+                        <td className="py-3.5 px-6 font-semibold text-[#12284A]">{c.company}</td>
+                        <td className="py-3.5 px-6 text-slate-600">{c.branchName}</td>
+                        <td className="py-3.5 px-6 text-slate-600 font-mono">{c.branchCode}</td>
+                        <td className="py-3.5 px-6 text-blue-600 font-medium">{c.mailId}</td>
+                        <td className="py-3.5 px-6 text-right">
+                          <button
+                            onClick={() => handleOpenEditModal(c)}
+                            className="p-1.5 bg-brand-lightbg text-brand-primary hover:bg-[#E2E8F0] rounded-[6px] transition-colors cursor-pointer inline-flex items-center justify-center"
+                            title="Edit Insurance Company"
+                          >
+                            <Edit2 size={18} strokeWidth={1.5} />
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              ) : activeTab === 'locationMaster' ? (
+                /* LOCATION MASTER TABLE WITH EDIT AND DELETE (Image 5) */
+                <table className="w-full text-left border-collapse">
+                  <thead>
+                    <tr className="bg-brand-lightbg text-brand-navy text-[14px] font-semibold uppercase border-b border-brand-border">
+                      <th className="py-3.5 px-6">LOCATION</th>
+                      <th className="py-3.5 px-6 text-right">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-200 text-sm text-slate-700">
+                    {(paginatedData as LocationItem[]).map((loc) => (
+                      <tr key={loc.id} className="hover:bg-brand-mainbg h-[52px] transition-colors bg-white">
+                        <td className="py-3.5 px-6 font-semibold text-[#12284A]">{loc.location}</td>
+                        <td className="py-3.5 px-6 text-right flex items-center justify-end gap-3">
+                          <button
+                            onClick={() => handleOpenEditModal(loc)}
+                            className="p-1.5 bg-brand-lightbg text-brand-primary hover:bg-[#E2E8F0] rounded-[6px] transition-colors cursor-pointer inline-flex items-center justify-center"
+                            title="Edit Location"
+                          >
+                            <Edit2 size={18} strokeWidth={1.5} />
+                          </button>
+                          <button
+                            onClick={() => handleDeleteItem(loc.id)}
+                            className="p-1.5 bg-[#F4F8FC] text-brand-error hover:bg-[#FEE2E2] rounded-[6px] transition-colors cursor-pointer inline-flex items-center justify-center"
+                            title="Delete Location"
+                          >
+                            <Trash2 size={18} strokeWidth={1.5} />
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              ) : activeTab === 'rto' ? (
+                <table className="w-full text-left border-collapse">
+                  <thead>
+                    <tr className="bg-brand-lightbg text-brand-navy text-[14px] font-semibold uppercase border-b border-brand-border">
+                      <th className="py-3.5 px-6">Location</th>
+                      <th className="py-3.5 px-6">Reg Code</th>
+                      <th className="py-3.5 px-6 text-right w-24">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-200 text-sm text-slate-700">
+                    {(paginatedData as RtoItem[]).map((r) => (
+                      <tr key={r.id} className="hover:bg-brand-mainbg h-[52px] transition-colors bg-white">
+                        <td className="py-3.5 px-6 font-semibold text-[#12284A]">{r.location}</td>
+                        <td className="py-3.5 px-6 font-mono font-medium text-brand-primary">{r.regCode}</td>
+                        <td className="py-3.5 px-6 text-right">
+                          <button
+                            onClick={() => handleOpenEditModal(r)}
+                            className="p-1.5 bg-brand-lightbg text-brand-primary hover:bg-[#E2E8F0] rounded-[6px] transition-colors cursor-pointer inline-flex items-center justify-center"
+                            title="Edit RTO"
+                          >
+                            <Edit2 size={18} strokeWidth={1.5} />
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              ) : activeTab === 'paToOwnerDriver' ? (
+                <table className="w-full text-left border-collapse">
+                  <thead>
+                    <tr className="bg-brand-lightbg text-brand-navy text-[14px] font-semibold uppercase border-b border-brand-border">
+                      <th className="py-3.5 px-6">Insurance Company</th>
+                      <th className="py-3.5 px-6">Rate</th>
+                      <th className="py-3.5 px-6 text-right w-24">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-200 text-sm text-slate-700">
+                    {(paginatedData as PaOwnerDriverItem[]).map((pa) => (
+                      <tr key={pa.id} className="hover:bg-brand-mainbg h-[52px] transition-colors bg-white">
+                        <td className="py-3.5 px-6 font-semibold text-[#12284A]">{pa.company}</td>
+                        <td className="py-3.5 px-6 font-medium text-slate-800">{pa.rate}</td>
+                        <td className="py-3.5 px-6 text-right">
+                          <button
+                            onClick={() => handleOpenEditModal(pa)}
+                            className="p-1.5 bg-brand-lightbg text-brand-primary hover:bg-[#E2E8F0] rounded-[6px] transition-colors cursor-pointer inline-flex items-center justify-center"
+                            title="Edit PA Owner Driver Rate"
+                          >
+                            <Edit2 size={18} strokeWidth={1.5} />
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              ) : (
+                <table className="w-full text-left border-collapse">
+                  <thead>
+                    <tr className="bg-brand-lightbg text-brand-navy text-[14px] font-semibold uppercase border-b border-brand-border">
+                      <th className="py-3.5 px-6 w-24">Sr. No.</th>
+                      <th className="py-3.5 px-6">TYPE</th>
+                      <th className="py-3.5 px-6 text-right w-24">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-200 text-sm text-slate-700">
+                    {(paginatedData as SimpleItem[]).map((item, idx) => (
+                      <tr key={item.id} className="hover:bg-brand-mainbg h-[52px] transition-colors bg-white">
+                        <td className="py-3.5 px-6 font-medium text-slate-500">{(currentPage - 1) * itemsPerPage + idx + 1}</td>
+                        <td className="py-3.5 px-6 font-semibold text-[#12284A]">{item.title}</td>
+                        <td className="py-3.5 px-6 text-right">
+                          <button
+                            onClick={() => handleOpenEditModal(item)}
+                            className="p-1.5 bg-brand-lightbg text-brand-primary hover:bg-[#E2E8F0] rounded-[6px] transition-colors cursor-pointer inline-flex items-center justify-center"
+                            title={`Edit ${getTabLabel(activeTab)}`}
+                          >
+                            <Edit2 size={18} strokeWidth={1.5} />
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+            </div>
+
+            {/* Footer Pagination (Matching standard design with Records per page dropdown) */}
+            <div className="p-4 bg-slate-50 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div className="flex items-center gap-2 text-xs text-slate-600 font-medium">
+                <span>Records per page:</span>
+                <select
+                  value={itemsPerPage}
+                  onChange={(e) => {
+                    setItemsPerPage(Number(e.target.value));
+                    setCurrentPage(1);
+                  }}
+                  className="px-2 py-1 bg-white border border-slate-300 rounded-md text-xs font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-brand-primary cursor-pointer"
+                >
+                  <option value={10}>10</option>
+                  <option value={20}>20</option>
+                  <option value={50}>50</option>
+                  <option value={100}>100</option>
+                </select>
+              </div>
+
+              <span className="text-xs text-slate-500 font-medium">
+                Showing {filteredList.length === 0 ? 0 : (currentPage - 1) * itemsPerPage + 1} - {Math.min(currentPage * itemsPerPage, filteredList.length)} of {filteredList.length} records
+              </span>
+
+              <div className="flex items-center gap-1">
+                <button
+                  onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                  disabled={currentPage === 1}
+                  className="w-8 h-8 flex items-center justify-center text-xs font-semibold text-slate-600 bg-white border border-slate-300 rounded-md hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+                >
+                  &lt;
+                </button>
+                {Array.from({ length: totalPages || 1 }, (_, i) => i + 1).map((page) => (
+                  <button
+                    key={page}
+                    onClick={() => setCurrentPage(page)}
+                    className={`w-8 h-8 flex items-center justify-center text-xs font-bold rounded-md transition-all ${currentPage === page
+                      ? 'bg-brand-primary text-white shadow-sm'
+                      : 'bg-white text-slate-700 border border-slate-300 hover:bg-slate-100'
+                      }`}
+                  >
+                    {page}
+                  </button>
+                ))}
+                <button
+                  onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                  disabled={currentPage === totalPages || totalPages === 0}
+                  className="w-8 h-8 flex items-center justify-center text-xs font-semibold text-slate-600 bg-white border border-slate-300 rounded-md hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+                >
+                  &gt;
                 </button>
               </div>
             </div>
           </div>
-
-          <div className="bg-white p-8 rounded-xl border border-slate-200 shadow-sm text-center text-slate-500 font-medium">
-            NO DATA FOUND
-          </div>
-        </div>
-      )}
-
-      {/* DEFAULT DIRECTORY TABLES FOR OTHER SUB-TABS (INCLUDING LOCATION MASTER Image 5 WITH DELETE) */}
-      {activeTab !== 'brokerTds' && activeTab !== 'agentTds' && activeTab !== 'serviceCharge' && activeTab !== 'creditMaster' && (
-        <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden flex flex-col w-full">
-          {/* Table Toolbar */}
-          <div className="p-4 bg-slate-50 border-b border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div className="relative w-full sm:w-80">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
-              <input
-                type="text"
-                placeholder={`Search ${getTabLabel(activeTab)}...`}
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-9 pr-4 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#00a896] focus:border-transparent transition-all"
-              />
-            </div>
-
-            <button
-              onClick={handleOpenCreateModal}
-              className="w-full sm:w-auto flex items-center justify-center px-5 py-2.5 bg-[#0869D8] hover:bg-[#0654B0] text-white rounded-lg font-medium text-sm shadow-sm transition-all duration-200 cursor-pointer"
-            >
-              <span>Add New {getTabLabel(activeTab)}</span>
-            </button>
-          </div>
-
-          {/* Full Width Table View */}
-          <div className="overflow-x-auto w-full">
-            {activeTab === 'insuranceCompany' ? (
-              <table className="w-full text-left border-collapse">
-                <thead>
-                  <tr className="bg-[#00a896] text-white text-xs font-semibold uppercase tracking-wider">
-                    <th className="py-3.5 px-6">Insurance Company</th>
-                    <th className="py-3.5 px-6">Branch Name</th>
-                    <th className="py-3.5 px-6">Branch Code</th>
-                    <th className="py-3.5 px-6">Mail ID</th>
-                    <th className="py-3.5 px-6 text-right">Action</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-200 text-sm text-slate-700">
-                  {(paginatedData as InsuranceCompanyItem[]).map((c) => (
-                    <tr key={c.id} className="hover:bg-slate-50/80 transition-colors">
-                      <td className="py-3.5 px-6 font-semibold text-[#12284A]">{c.company}</td>
-                      <td className="py-3.5 px-6 text-slate-600">{c.branchName}</td>
-                      <td className="py-3.5 px-6 text-slate-600 font-mono">{c.branchCode}</td>
-                      <td className="py-3.5 px-6 text-blue-600 font-medium">{c.mailId}</td>
-                      <td className="py-3.5 px-6 text-right">
-                        <button
-                          onClick={() => handleOpenEditModal(c)}
-                          className="p-1.5 text-[#8BA4CA] hover:text-[#0869D8] hover:bg-slate-100 rounded-md transition-colors cursor-pointer"
-                          title="Edit Insurance Company"
-                        >
-                          <Edit2 size={18} strokeWidth={1.5} />
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            ) : activeTab === 'locationMaster' ? (
-              /* LOCATION MASTER TABLE WITH EDIT AND DELETE (Image 5) */
-              <table className="w-full text-left border-collapse">
-                <thead>
-                  <tr className="bg-[#00a896] text-white text-xs font-semibold uppercase tracking-wider">
-                    <th className="py-3.5 px-6">LOCATION</th>
-                    <th className="py-3.5 px-6 text-right">Action</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-200 text-sm text-slate-700">
-                  {(paginatedData as LocationItem[]).map((loc) => (
-                    <tr key={loc.id} className="hover:bg-slate-50/80 transition-colors">
-                      <td className="py-3.5 px-6 font-semibold text-[#12284A]">{loc.location}</td>
-                      <td className="py-3.5 px-6 text-right flex items-center justify-end gap-3">
-                        <button
-                          onClick={() => handleOpenEditModal(loc)}
-                          className="p-1.5 text-[#8BA4CA] hover:text-[#0869D8] hover:bg-slate-100 rounded-md transition-colors cursor-pointer"
-                          title="Edit Location"
-                        >
-                          <Edit2 size={18} strokeWidth={1.5} />
-                        </button>
-                        <button
-                          onClick={() => handleDeleteItem(loc.id)}
-                          className="p-1.5 text-[#8BA4CA] hover:text-red-500 hover:bg-slate-100 rounded-md transition-colors cursor-pointer"
-                          title="Delete Location"
-                        >
-                          <Trash2 size={18} strokeWidth={1.5} />
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            ) : activeTab === 'rto' ? (
-              <table className="w-full text-left border-collapse">
-                <thead>
-                  <tr className="bg-[#00a896] text-white text-xs font-semibold uppercase tracking-wider">
-                    <th className="py-3.5 px-6">Location</th>
-                    <th className="py-3.5 px-6">Reg Code</th>
-                    <th className="py-3.5 px-6 text-right w-24">Action</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-200 text-sm text-slate-700">
-                  {(paginatedData as RtoItem[]).map((r) => (
-                    <tr key={r.id} className="hover:bg-slate-50/80 transition-colors">
-                      <td className="py-3.5 px-6 font-semibold text-[#12284A]">{r.location}</td>
-                      <td className="py-3.5 px-6 font-mono font-medium text-teal-700">{r.regCode}</td>
-                      <td className="py-3.5 px-6 text-right">
-                        <button
-                          onClick={() => handleOpenEditModal(r)}
-                          className="p-1.5 text-[#8BA4CA] hover:text-[#0869D8] hover:bg-slate-100 rounded-md transition-colors cursor-pointer"
-                          title="Edit RTO"
-                        >
-                          <Edit2 size={18} strokeWidth={1.5} />
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            ) : activeTab === 'paToOwnerDriver' ? (
-              <table className="w-full text-left border-collapse">
-                <thead>
-                  <tr className="bg-[#00a896] text-white text-xs font-semibold uppercase tracking-wider">
-                    <th className="py-3.5 px-6">Insurance Company</th>
-                    <th className="py-3.5 px-6">Rate</th>
-                    <th className="py-3.5 px-6 text-right w-24">Action</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-200 text-sm text-slate-700">
-                  {(paginatedData as PaOwnerDriverItem[]).map((pa) => (
-                    <tr key={pa.id} className="hover:bg-slate-50/80 transition-colors">
-                      <td className="py-3.5 px-6 font-semibold text-[#12284A]">{pa.company}</td>
-                      <td className="py-3.5 px-6 font-medium text-slate-800">{pa.rate}</td>
-                      <td className="py-3.5 px-6 text-right">
-                        <button
-                          onClick={() => handleOpenEditModal(pa)}
-                          className="p-1.5 text-[#8BA4CA] hover:text-[#0869D8] hover:bg-slate-100 rounded-md transition-colors cursor-pointer"
-                          title="Edit PA Owner Driver Rate"
-                        >
-                          <Edit2 size={18} strokeWidth={1.5} />
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            ) : (
-              <table className="w-full text-left border-collapse">
-                <thead>
-                  <tr className="bg-[#00a896] text-white text-xs font-semibold uppercase tracking-wider">
-                    <th className="py-3.5 px-6 w-24">Sr. No.</th>
-                    <th className="py-3.5 px-6">TYPE</th>
-                    <th className="py-3.5 px-6 text-right w-24">Action</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-200 text-sm text-slate-700">
-                  {(paginatedData as SimpleItem[]).map((item, idx) => (
-                    <tr key={item.id} className="hover:bg-slate-50/80 transition-colors">
-                      <td className="py-3.5 px-6 font-medium text-slate-500">{(currentPage - 1) * itemsPerPage + idx + 1}</td>
-                      <td className="py-3.5 px-6 font-semibold text-[#12284A]">{item.title}</td>
-                      <td className="py-3.5 px-6 text-right">
-                        <button
-                          onClick={() => handleOpenEditModal(item)}
-                          className="p-1.5 text-[#8BA4CA] hover:text-[#0869D8] hover:bg-slate-100 rounded-md transition-colors cursor-pointer"
-                          title={`Edit ${getTabLabel(activeTab)}`}
-                        >
-                          <Edit2 size={18} strokeWidth={1.5} />
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            )}
-          </div>
-
-          {/* Footer Pagination (Matching standard design with Records per page dropdown) */}
-          <div className="p-4 bg-slate-50 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div className="flex items-center gap-2 text-xs text-slate-600 font-medium">
-              <span>Records per page:</span>
-              <select
-                value={itemsPerPage}
-                onChange={(e) => {
-                  setItemsPerPage(Number(e.target.value));
-                  setCurrentPage(1);
-                }}
-                className="px-2 py-1 bg-white border border-slate-300 rounded-md text-xs font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#0869D8] cursor-pointer"
-              >
-                <option value={10}>10</option>
-                <option value={20}>20</option>
-                <option value={50}>50</option>
-                <option value={100}>100</option>
-              </select>
-            </div>
-
-            <span className="text-xs text-slate-500 font-medium">
-              Showing {filteredList.length === 0 ? 0 : (currentPage - 1) * itemsPerPage + 1} - {Math.min(currentPage * itemsPerPage, filteredList.length)} of {filteredList.length} records
-            </span>
-
-            <div className="flex items-center gap-1">
-              <button
-                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-                disabled={currentPage === 1}
-                className="w-8 h-8 flex items-center justify-center text-xs font-semibold text-slate-600 bg-white border border-slate-300 rounded-md hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
-              >
-                &lt;
-              </button>
-              {Array.from({ length: totalPages || 1 }, (_, i) => i + 1).map((page) => (
-                <button
-                  key={page}
-                  onClick={() => setCurrentPage(page)}
-                  className={`w-8 h-8 flex items-center justify-center text-xs font-bold rounded-md transition-all ${
-                    currentPage === page
-                      ? 'bg-[#0869D8] text-white shadow-sm'
-                      : 'bg-white text-slate-700 border border-slate-300 hover:bg-slate-100'
-                  }`}
-                >
-                  {page}
-                </button>
-              ))}
-              <button
-                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-                disabled={currentPage === totalPages || totalPages === 0}
-                className="w-8 h-8 flex items-center justify-center text-xs font-semibold text-slate-600 bg-white border border-slate-300 rounded-md hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
-              >
-                &gt;
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+        )}
+      </div>
 
       {/* Form Modal (Create / Edit) */}
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
           <div className="bg-white rounded-2xl border border-slate-200 shadow-2xl w-full max-w-md overflow-hidden transform transition-all animate-in fade-in zoom-in-95 duration-200">
             {/* Modal Header */}
-            <div className="bg-[#00a896] text-white px-6 py-4 flex items-center justify-between">
+            <div className="bg-brand-navy text-white px-6 py-4 flex items-center justify-between">
               <h3 className="font-bold text-lg flex items-center gap-2">
                 <span>
                   » {editingItem ? `Edit ${getTabLabel(activeTab)} Form` : `${getTabLabel(activeTab)} Form`}
@@ -958,7 +950,7 @@ const PolicyMaster: React.FC = () => {
                     placeholder="Enter Insurance Company Name"
                     value={icCompanyInput}
                     onChange={(e) => setIcCompanyInput(e.target.value)}
-                    className="w-full px-4 py-2.5 border border-slate-300 rounded-lg text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#00a896] transition-all"
+                    className="w-full px-4 py-2.5 border border-slate-300 rounded-lg text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-brand-primary transition-all"
                   />
                 </div>
 
@@ -969,7 +961,7 @@ const PolicyMaster: React.FC = () => {
                     placeholder="Branch Name (e.g. NA)"
                     value={icBranchNameInput}
                     onChange={(e) => setIcBranchNameInput(e.target.value)}
-                    className="w-full px-4 py-2.5 border border-slate-300 rounded-lg text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#00a896] transition-all"
+                    className="w-full px-4 py-2.5 border border-slate-300 rounded-lg text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-brand-primary transition-all"
                   />
                 </div>
 
@@ -980,7 +972,7 @@ const PolicyMaster: React.FC = () => {
                     placeholder="Branch Code"
                     value={icBranchCodeInput}
                     onChange={(e) => setIcBranchCodeInput(e.target.value)}
-                    className="w-full px-4 py-2.5 border border-slate-300 rounded-lg text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#00a896] transition-all font-mono"
+                    className="w-full px-4 py-2.5 border border-slate-300 rounded-lg text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-brand-primary transition-all font-mono"
                   />
                 </div>
 
@@ -992,7 +984,7 @@ const PolicyMaster: React.FC = () => {
                     placeholder="Enter Email Address"
                     value={icMailIdInput}
                     onChange={(e) => setIcMailIdInput(e.target.value)}
-                    className="w-full px-4 py-2.5 border border-slate-300 rounded-lg text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#00a896] transition-all"
+                    className="w-full px-4 py-2.5 border border-slate-300 rounded-lg text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-brand-primary transition-all"
                   />
                 </div>
 
@@ -1006,7 +998,7 @@ const PolicyMaster: React.FC = () => {
                   </button>
                   <button
                     type="submit"
-                    className="px-6 py-2 bg-[#0869D8] hover:bg-[#0654B0] text-white font-semibold rounded-lg text-sm shadow-md transition-all cursor-pointer"
+                    className="px-6 py-2 bg-brand-primary hover:bg-[#0654B0] text-white font-semibold rounded-lg text-sm shadow-md transition-all cursor-pointer"
                   >
                     {editingItem ? 'Update' : 'Save'}
                   </button>
@@ -1022,7 +1014,7 @@ const PolicyMaster: React.FC = () => {
                     placeholder={`Enter ${getTabLabel(activeTab)}`}
                     value={singleTitleInput}
                     onChange={(e) => setSingleTitleInput(e.target.value)}
-                    className="w-full px-4 py-2.5 border border-slate-300 rounded-lg text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#00a896] transition-all"
+                    className="w-full px-4 py-2.5 border border-slate-300 rounded-lg text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-brand-primary transition-all"
                   />
                 </div>
 
@@ -1036,7 +1028,7 @@ const PolicyMaster: React.FC = () => {
                   </button>
                   <button
                     type="submit"
-                    className="px-6 py-2 bg-[#0869D8] hover:bg-[#0654B0] text-white font-semibold rounded-lg text-sm shadow-md transition-all cursor-pointer"
+                    className="px-6 py-2 bg-brand-primary hover:bg-[#0654B0] text-white font-semibold rounded-lg text-sm shadow-md transition-all cursor-pointer"
                   >
                     {editingItem ? 'Update' : 'Save'}
                   </button>

@@ -103,17 +103,17 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
     const isGroupActive = (children?: NavItem[]) => children?.some(c => isActive(c.path));
 
     return (
-        <aside className={`bg-[#12284A] text-[#8BA4CA] h-full flex flex-col transition-all duration-300 ease-in-out shrink-0 z-20 shadow-xl fixed md:static top-0 left-0 bottom-0 ${isCollapsed ? '-translate-x-full md:translate-x-0 w-[260px] md:w-[70px] lg:w-[80px]' : 'translate-x-0 w-[260px]'}`}>
+        <aside className={`bg-brand-navy text-[#B8C7D9] h-full flex flex-col transition-all duration-300 ease-in-out shrink-0 z-20 shadow-xl fixed md:static top-0 left-0 bottom-0 ${isCollapsed ? '-translate-x-full md:translate-x-0 w-[240px] md:w-[70px] lg:w-[80px]' : 'translate-x-0 w-[240px]'}`}>
 
             {/* Header Brand Area */}
-            <div className="h-16 flex items-center justify-center bg-[#0b192e] border-b border-[#0A2E5C] shrink-0 overflow-hidden px-4">
+            <div className="h-16 flex items-center justify-center bg-transparent border-b border-brand-navydark shrink-0 overflow-hidden px-4">
                 {isCollapsed ? (
                     <div
                         className="flex items-center justify-center select-none tracking-tight"
                         style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
                     >
                         <span className="text-white font-bold text-[24px]">R</span>
-                        <span className="text-[#0ea5e9] font-normal text-[24px]">A</span>
+                        <span className="text-brand-primary font-normal text-[24px]">A</span>
                     </div>
                 ) : (
                     <img
@@ -125,7 +125,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
             </div>
 
             {/* Navigation Drawer */}
-            <div className="flex-1 overflow-y-auto overflow-x-hidden py-4 custom-scrollbar">
+            <div className="flex-1 overflow-y-auto overflow-x-hidden py-4 sidebar-scrollbar">
 
                 <nav className="space-y-1.5 px-3">
                     {navGroups.map((group) => {
@@ -139,12 +139,12 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
                                 {hasChildren ? (
                                     <button
                                         onClick={() => toggleGroup(group.title)}
-                                        className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg transition-colors group ${groupActive && isCollapsed ? 'bg-[#0b192e] text-white' : 'hover:bg-[#0b192e] hover:text-white'}`}
+                                        className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg transition-colors group ${groupActive && isCollapsed ? 'bg-brand-navydark text-white' : 'text-[#B8C7D9] hover:bg-brand-navydark hover:text-white'}`}
                                         title={isCollapsed ? group.title : ''}
                                     >
                                         <div className="flex items-center gap-3">
-                                            <Icon size={20} className={groupActive ? 'text-[#0ea5e9]' : 'text-[#6484B0] group-hover:text-[#0ea5e9]'} />
-                                            {!isCollapsed && <span className={`text-sm font-medium ${groupActive ? 'text-white' : ''}`}>{group.title}</span>}
+                                            <Icon size={20} className={groupActive ? 'text-brand-primary' : 'text-[#8FA7C2] group-hover:text-white'} />
+                                            {!isCollapsed && <span className={`text-sm font-medium ${groupActive ? 'text-white' : 'text-[#B8C7D9]'}`}>{group.title}</span>}
                                         </div>
                                         {!isCollapsed && (
                                             <ChevronDown size={16} className={`transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`} />
@@ -154,27 +154,31 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
                                     <NavLink
                                         to={group.path || '#'}
                                         onClick={() => { if (window.innerWidth < 768) setIsCollapsed(true); }}
-                                        className={({ isActive }) => `flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors group border-l-[3px] border-transparent ${isActive ? 'bg-[#0b192e] text-white !border-[#0869D8]' : 'hover:bg-[#0b192e] hover:text-white'}`}
+                                        className={({ isActive }) => `flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors group border-l-[3px] border-transparent ${isActive ? 'bg-brand-navydark text-white !border-brand-primary' : 'text-[#B8C7D9] hover:bg-brand-navydark hover:text-white'}`}
                                         title={isCollapsed ? group.title : ''}
                                     >
-                                        <Icon size={20} className={(group.path && isActive(group.path)) ? 'text-[#0869D8]' : 'text-[#6484B0] group-hover:text-[#0ea5e9]'} />
-                                        {!isCollapsed && <span className="text-sm font-medium">{group.title}</span>}
+                                        <Icon size={20} className={(group.path && isActive(group.path)) ? 'text-brand-primary' : 'text-[#8FA7C2] group-hover:text-white'} />
+                                        {!isCollapsed && <span className={`text-sm font-medium ${group.path && isActive(group.path) ? 'text-white' : 'text-[#B8C7D9]'}`}>{group.title}</span>}
                                     </NavLink>
                                 )}
 
                                 {/* Children Submenu */}
-                                {hasChildren && isExpanded && !isCollapsed && (
-                                    <div className="mt-1 flex flex-col ml-9 border-l border-[#133869] space-y-1 my-1">
-                                        {group.children?.map(child => (
-                                            <NavLink
-                                                key={child.name}
-                                                to={child.path}
-                                                onClick={() => { if (window.innerWidth < 768) setIsCollapsed(true); }}
-                                                className={({ isActive }) => `px-4 py-1.5 text-[13px] rounded-r-lg transition-colors relative before:absolute before:-left-[1px] before:top-1/2 before:-translate-y-1/2 before:h-[2px] before:w-2 before:bg-[#204a82] ${isActive ? 'text-white font-medium bg-[#0b192e]/50 before:!bg-[#0ea5e9]' : 'text-[#8BA4CA] hover:text-white hover:bg-[#0b192e]/30'}`}
-                                            >
-                                                {child.name}
-                                            </NavLink>
-                                        ))}
+                                {hasChildren && !isCollapsed && (
+                                    <div className={`grid transition-all duration-300 ease-in-out ${isExpanded ? 'grid-rows-[1fr] opacity-100 mt-1' : 'grid-rows-[0fr] opacity-0 mt-0'}`}>
+                                        <div className="overflow-hidden">
+                                            <div className="flex flex-col ml-9 border-l border-brand-navydark space-y-1 mb-1">
+                                                {group.children?.map(child => (
+                                                    <NavLink
+                                                        key={child.name}
+                                                        to={child.path}
+                                                        onClick={() => { if (window.innerWidth < 768) setIsCollapsed(true); }}
+                                                        className={({ isActive }) => `px-4 py-1.5 text-[13px] rounded-r-lg transition-colors relative before:absolute before:-left-[1px] before:top-1/2 before:-translate-y-1/2 before:h-[2px] before:w-2 before:bg-brand-navydark ${isActive ? 'text-white font-medium bg-brand-navydark before:!bg-brand-primary' : 'text-[#B8C7D9] hover:text-white hover:bg-brand-navydark'}`}
+                                                    >
+                                                        {child.name}
+                                                    </NavLink>
+                                                ))}
+                                            </div>
+                                        </div>
                                     </div>
                                 )}
                             </div>

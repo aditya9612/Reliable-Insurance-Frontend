@@ -46,7 +46,9 @@ const AdminLayout = () => {
                     toggleSidebar={toggleSidebar}
                 />
                 <main className="admin-content">
-                    <Outlet />
+                    <div key={location.pathname} className="page-transition-wrapper">
+                        <Outlet />
+                    </div>
                 </main>
             </div>
         </div>
