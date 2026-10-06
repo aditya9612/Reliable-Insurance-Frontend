@@ -3,7 +3,7 @@ import AppRoutes from '@routes/AppRoutes'
 import { AuthProvider } from '@context/AuthContext'
 import '@styles/global.css'
 
-const App: React.FC = () => {
+const App = () => {
   return (
     <AuthProvider>
       <AppRoutes />
