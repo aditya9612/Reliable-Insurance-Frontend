@@ -85,7 +85,13 @@ const TopHeader: React.FC<TopHeaderProps> = ({ isCollapsed, toggleSidebar }) => 
                                     <button className="w-full text-left px-3 py-2 text-sm text-brand-navy hover:bg-brand-lightbg rounded-md flex items-center gap-2 cursor-pointer transition-colors">
                                         <Shield size={16} className="text-brand-muted" /> Change Password
                                     </button>
-                                    <button className="w-full text-left px-3 py-2 text-sm text-brand-navy hover:bg-brand-lightbg rounded-md flex items-center gap-2 cursor-pointer transition-colors">
+                                    <button
+                                        onClick={() => {
+                                            setIsDropdownOpen(false);
+                                            navigate('/users/login-history');
+                                        }}
+                                        className="w-full text-left px-3 py-2 text-sm text-brand-navy hover:bg-brand-lightbg rounded-md flex items-center gap-2 cursor-pointer transition-colors"
+                                    >
                                         <History size={16} className="text-brand-muted" /> Login History
                                     </button>
                                     <button className="w-full text-left px-3 py-2 text-sm text-brand-navy hover:bg-brand-lightbg rounded-md flex items-center gap-2 cursor-pointer transition-colors">
