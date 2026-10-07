@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import PageHeader from '../../../components/page-header/PageHeader';
+import UnderlineTabs from '../../../components/tabs/UnderlineTabs';
 import { Calendar, Clock, FileText, Search, X, Edit2, KeyRound } from 'lucide-react';
 
 interface LeaveRequest {
@@ -227,64 +229,35 @@ export const MyPage: React.FC = () => {
   return (
     <div className="w-full flex flex-col space-y-5">
       {/* Top Bar Header */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
-        <div>
-          <h1 className="text-2xl font-bold text-[#12284A]">My Page</h1>
-          <p className="text-sm text-slate-500">Manage password, leave applications, daily schedules & reports</p>
-        </div>
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <PageHeader
+          title="My Page"
+          description="Manage password, leave applications, daily schedules & reports"
+        />
 
-        {/* Change Password Top Button + Tab Selector Group */}
-        <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
-          {/* Seperate Button Above/Beside Tabs */}
-          <button
-            onClick={() => setShowPasswordModal(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-[#0869D8] hover:bg-[#0654B0] text-white rounded-lg font-medium text-sm shadow-sm transition-all duration-200 cursor-pointer"
-          >
-            <KeyRound size={16} />
-            <span>Change Password</span>
-          </button>
-
-          {/* Tab Selector Buttons (Only 3 Tabs: Apply Leave, Todays Leave, Leave Report) */}
-          <div className="flex items-center gap-1 sm:gap-2 bg-[#F5FAFF] p-1.5 rounded-lg border border-slate-200 overflow-x-auto">
-            <button
-              onClick={() => { setActiveTab('apply'); setCurrentPage(1); }}
-              className={`flex items-center gap-1.5 px-4 py-2 rounded-md font-medium text-sm transition-all duration-200 whitespace-nowrap ${
-                activeTab === 'apply'
-                  ? 'bg-[#00a896] text-white shadow-md'
-                  : 'text-slate-600 hover:text-[#12284A] hover:bg-slate-200/60'
-              }`}
-            >
-              <Calendar size={16} />
-              Apply Leave
-            </button>
-            <button
-              onClick={() => { setActiveTab('todays'); setCurrentPage(1); }}
-              className={`flex items-center gap-1.5 px-4 py-2 rounded-md font-medium text-sm transition-all duration-200 whitespace-nowrap ${
-                activeTab === 'todays'
-                  ? 'bg-[#00a896] text-white shadow-md'
-                  : 'text-slate-600 hover:text-[#12284A] hover:bg-slate-200/60'
-              }`}
-            >
-              <Clock size={16} />
-              Todays Leave
-            </button>
-            <button
-              onClick={() => { setActiveTab('report'); setCurrentPage(1); }}
-              className={`flex items-center gap-1.5 px-4 py-2 rounded-md font-medium text-sm transition-all duration-200 whitespace-nowrap ${
-                activeTab === 'report'
-                  ? 'bg-[#00a896] text-white shadow-md'
-                  : 'text-slate-600 hover:text-[#12284A] hover:bg-slate-200/60'
-              }`}
-            >
-              <FileText size={16} />
-              Leave Report
-            </button>
-          </div>
-        </div>
+        {/* Change Password Button */}
+        <button
+          onClick={() => setShowPasswordModal(true)}
+          className="flex items-center gap-2 px-5 py-2.5 bg-brand-primary hover:bg-[#1D4ED8] text-white rounded-[8px] font-semibold text-[14px] shadow-sm transition-all duration-200 cursor-pointer border-none"
+        >
+          <KeyRound size={16} />
+          <span>Change Password</span>
+        </button>
       </div>
 
+      <UnderlineTabs
+        tabs={[
+          { id: 'apply', label: 'Apply Leave' },
+          { id: 'todays', label: "Today's Leave List" },
+          { id: 'report', label: 'Leave Summary Report' }
+        ]}
+        activeTab={activeTab}
+        onTabChange={(tabId) => { setActiveTab(tabId as 'apply' | 'todays' | 'report'); setCurrentPage(1); }}
+      />
+
       {/* Main Full-Width Content Card */}
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden flex flex-col w-full">
+      <div key={activeTab} className="tab-transition-wrapper">
+        <div className="bg-white rounded-[12px] border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden flex flex-col w-full">
         {/* Toolbar */}
         <div className="p-4 bg-slate-50 border-b border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="relative w-full sm:w-80">
@@ -365,36 +338,36 @@ export const MyPage: React.FC = () => {
           {activeTab === 'apply' && (
             <table className="w-full text-left border-collapse min-w-[800px]">
               <thead>
-                <tr className="bg-[#00a896] text-white text-xs font-semibold uppercase tracking-wider">
-                  <th className="py-3.5 px-6">Sr. No.</th>
-                  <th className="py-3.5 px-6">From Date</th>
-                  <th className="py-3.5 px-6">To Date</th>
-                  <th className="py-3.5 px-6">Leave Type</th>
-                  <th className="py-3.5 px-6">Duration</th>
-                  <th className="py-3.5 px-6">Reason</th>
-                  <th className="py-3.5 px-6">Handover To</th>
-                  <th className="py-3.5 px-6">Status</th>
-                  <th className="py-3.5 px-6 text-right">Action</th>
+                <tr className="bg-brand-lightbg text-brand-navy text-[14px] font-semibold uppercase border-b border-brand-border">
+                  <th className="py-3 px-6">SR. NO.</th>
+                  <th className="py-3 px-6">FROM DATE</th>
+                  <th className="py-3 px-6">TO DATE</th>
+                  <th className="py-3 px-6">LEAVE TYPE</th>
+                  <th className="py-3 px-6">DURATION</th>
+                  <th className="py-3 px-6">REASON</th>
+                  <th className="py-3 px-6">HANDOVER TO</th>
+                  <th className="py-3 px-6">STATUS</th>
+                  <th className="py-3 px-6 text-right">ACTION</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-200 text-sm text-slate-700">
+              <tbody className="divide-y divide-brand-border text-[14px]">
                 {filteredLeaveRequests.length === 0 ? (
                   <tr>
-                    <td colSpan={9} className="py-8 text-center text-slate-400 font-semibold uppercase bg-slate-50/50">
+                    <td colSpan={9} className="py-8 text-center text-brand-muted font-semibold uppercase bg-brand-mainbg">
                       NO DATA FOUND
                     </td>
                   </tr>
                 ) : (
                   filteredLeaveRequests.map((req, idx) => (
-                    <tr key={req.id} className="hover:bg-slate-50/80 transition-colors">
-                      <td className="py-3.5 px-6 font-medium text-slate-500">{idx + 1}</td>
-                      <td className="py-3.5 px-6 font-medium text-slate-800">{req.fromDate}</td>
-                      <td className="py-3.5 px-6 font-medium text-slate-800">{req.toDate}</td>
-                      <td className="py-3.5 px-6">{req.leaveType}</td>
-                      <td className="py-3.5 px-6">{req.duration}</td>
-                      <td className="py-3.5 px-6 text-slate-600">{req.reason}</td>
-                      <td className="py-3.5 px-6 text-slate-600">{req.handoverTo}</td>
-                      <td className="py-3.5 px-6">
+                    <tr key={req.id} className="hover:bg-brand-mainbg h-[52px] transition-colors bg-white">
+                      <td className="py-2 px-6 font-medium text-brand-muted">{idx + 1}</td>
+                      <td className="py-2 px-6 font-medium text-brand-navy">{req.fromDate}</td>
+                      <td className="py-2 px-6 font-medium text-brand-navy">{req.toDate}</td>
+                      <td className="py-2 px-6 text-brand-navy">{req.leaveType}</td>
+                      <td className="py-2 px-6 text-brand-navy">{req.duration}</td>
+                      <td className="py-2 px-6 text-brand-muted">{req.reason}</td>
+                      <td className="py-2 px-6 text-brand-muted">{req.handoverTo}</td>
+                      <td className="py-2 px-6">
                         <span
                           className={`inline-block px-2.5 py-1 text-xs font-semibold rounded-full ${
                             req.status === 'Approved'
@@ -407,10 +380,10 @@ export const MyPage: React.FC = () => {
                           {req.status}
                         </span>
                       </td>
-                      <td className="py-3.5 px-6 text-right">
+                      <td className="py-2 px-6 text-right">
                         <button
                           onClick={() => setShowApplyModal(true)}
-                          className="p-1.5 text-[#8BA4CA] hover:text-[#0869D8] hover:bg-slate-100 rounded-md transition-colors cursor-pointer"
+                          className="p-1.5 bg-brand-lightbg text-brand-primary hover:bg-[#E2E8F0] rounded-[6px] transition-colors cursor-pointer inline-flex items-center justify-center"
                           title="Edit Leave Request"
                         >
                           <Edit2 size={18} strokeWidth={1.5} />
@@ -427,37 +400,37 @@ export const MyPage: React.FC = () => {
           {activeTab === 'todays' && (
             <table className="w-full text-left border-collapse min-w-[800px]">
               <thead>
-                <tr className="bg-[#00a896] text-white text-xs font-semibold uppercase tracking-wider">
-                  <th className="py-3.5 px-6">Sr. No.</th>
-                  <th className="py-3.5 px-6">Emp Code</th>
-                  <th className="py-3.5 px-6">Employee Name</th>
-                  <th className="py-3.5 px-6">Department</th>
-                  <th className="py-3.5 px-6">Leave Type</th>
-                  <th className="py-3.5 px-6">Duration</th>
-                  <th className="py-3.5 px-6">Contact No</th>
+                <tr className="bg-brand-lightbg text-brand-navy text-[14px] font-semibold uppercase border-b border-brand-border">
+                  <th className="py-3 px-6">SR. NO.</th>
+                  <th className="py-3 px-6">EMP CODE</th>
+                  <th className="py-3 px-6">EMPLOYEE NAME</th>
+                  <th className="py-3 px-6">DEPARTMENT</th>
+                  <th className="py-3 px-6">LEAVE TYPE</th>
+                  <th className="py-3 px-6">DURATION</th>
+                  <th className="py-3 px-6">CONTACT NO</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-200 text-sm text-slate-700">
+              <tbody className="divide-y divide-brand-border text-[14px]">
                 {filteredTodaysLeaves.length === 0 ? (
                   <tr>
-                    <td colSpan={7} className="py-8 text-center text-slate-400 font-semibold uppercase bg-slate-50/50">
+                    <td colSpan={7} className="py-8 text-center text-brand-muted font-semibold uppercase bg-brand-mainbg">
                       NO DATA FOUND
                     </td>
                   </tr>
                 ) : (
                   filteredTodaysLeaves.map((item, idx) => (
-                    <tr key={item.id} className="hover:bg-slate-50/80 transition-colors">
-                      <td className="py-3.5 px-6 font-medium text-slate-500">{idx + 1}</td>
-                      <td className="py-3.5 px-6 font-mono font-medium text-blue-600">{item.empCode}</td>
-                      <td className="py-3.5 px-6 font-semibold text-[#12284A]">{item.empName}</td>
-                      <td className="py-3.5 px-6 text-slate-600">{item.department}</td>
-                      <td className="py-3.5 px-6">
-                        <span className="inline-block px-2.5 py-1 text-xs font-semibold rounded-full bg-teal-50 text-teal-700 border border-teal-200">
+                    <tr key={item.id} className="hover:bg-brand-mainbg h-[52px] transition-colors bg-white">
+                      <td className="py-2 px-6 font-medium text-brand-muted">{idx + 1}</td>
+                      <td className="py-2 px-6 font-mono font-medium text-brand-primary">{item.empCode}</td>
+                      <td className="py-2 px-6 font-medium text-brand-navy">{item.empName}</td>
+                      <td className="py-2 px-6 text-brand-muted">{item.department}</td>
+                      <td className="py-2 px-6">
+                        <span className="inline-block px-2.5 py-1 text-xs font-semibold rounded-full bg-brand-lightbg text-brand-primary border border-brand-border">
                           {item.leaveType}
                         </span>
                       </td>
-                      <td className="py-3.5 px-6">{item.duration}</td>
-                      <td className="py-3.5 px-6 text-slate-600">{item.contactNo}</td>
+                      <td className="py-2 px-6 text-brand-navy">{item.duration}</td>
+                      <td className="py-2 px-6 text-brand-muted">{item.contactNo}</td>
                     </tr>
                   ))
                 )}
@@ -469,37 +442,37 @@ export const MyPage: React.FC = () => {
           {activeTab === 'report' && (
             <table className="w-full text-left border-collapse min-w-[800px]">
               <thead>
-                <tr className="bg-[#00a896] text-white text-xs font-semibold uppercase tracking-wider">
-                  <th className="py-3.5 px-6">Sr. No.</th>
-                  <th className="py-3.5 px-6">Emp Code</th>
-                  <th className="py-3.5 px-6">Emp Name</th>
-                  <th className="py-3.5 px-6">Month</th>
-                  <th className="py-3.5 px-6">Financial Year</th>
-                  <th className="py-3.5 px-6">Total Leave</th>
-                  <th className="py-3.5 px-6">Approved</th>
-                  <th className="py-3.5 px-6">Pending</th>
-                  <th className="py-3.5 px-6">Cancelled</th>
+                <tr className="bg-brand-lightbg text-brand-navy text-[14px] font-semibold uppercase border-b border-brand-border">
+                  <th className="py-3 px-6">SR. NO.</th>
+                  <th className="py-3 px-6">EMP CODE</th>
+                  <th className="py-3 px-6">EMP NAME</th>
+                  <th className="py-3 px-6">MONTH</th>
+                  <th className="py-3 px-6">FINANCIAL YEAR</th>
+                  <th className="py-3 px-6">TOTAL LEAVE</th>
+                  <th className="py-3 px-6">APPROVED</th>
+                  <th className="py-3 px-6">PENDING</th>
+                  <th className="py-3 px-6">CANCELLED</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-200 text-sm text-slate-700">
+              <tbody className="divide-y divide-brand-border text-[14px]">
                 {filteredLeaveReports.length === 0 ? (
                   <tr>
-                    <td colSpan={9} className="py-8 text-center text-slate-400 font-semibold uppercase bg-slate-50/50">
+                    <td colSpan={9} className="py-8 text-center text-brand-muted font-semibold uppercase bg-brand-mainbg">
                       NO DATA FOUND
                     </td>
                   </tr>
                 ) : (
                   filteredLeaveReports.map((report, idx) => (
-                    <tr key={report.id} className="hover:bg-slate-50/80 transition-colors">
-                      <td className="py-3.5 px-6 font-medium text-slate-500">{idx + 1}</td>
-                      <td className="py-3.5 px-6 font-mono font-medium text-blue-600">{report.empCode}</td>
-                      <td className="py-3.5 px-6 font-semibold text-[#12284A]">{report.empName}</td>
-                      <td className="py-3.5 px-6">{report.month}</td>
-                      <td className="py-3.5 px-6 text-slate-600">{report.financialYear}</td>
-                      <td className="py-3.5 px-6 font-semibold">{report.totalLeave}</td>
-                      <td className="py-3.5 px-6 text-green-600 font-semibold">{report.approved}</td>
-                      <td className="py-3.5 px-6 text-yellow-600 font-semibold">{report.pending}</td>
-                      <td className="py-3.5 px-6 text-red-600 font-semibold">{report.cancelled}</td>
+                    <tr key={report.id} className="hover:bg-brand-mainbg h-[52px] transition-colors bg-white">
+                      <td className="py-2 px-6 font-medium text-brand-muted">{idx + 1}</td>
+                      <td className="py-2 px-6 font-mono font-medium text-brand-primary">{report.empCode}</td>
+                      <td className="py-2 px-6 font-medium text-brand-navy">{report.empName}</td>
+                      <td className="py-2 px-6 text-brand-navy">{report.month}</td>
+                      <td className="py-2 px-6 text-brand-muted">{report.financialYear}</td>
+                      <td className="py-2 px-6 font-semibold text-brand-navy">{report.totalLeave}</td>
+                      <td className="py-2 px-6 text-green-600 font-semibold">{report.approved}</td>
+                      <td className="py-2 px-6 text-yellow-600 font-semibold">{report.pending}</td>
+                      <td className="py-2 px-6 text-red-600 font-semibold">{report.cancelled}</td>
                     </tr>
                   ))
                 )}
@@ -562,12 +535,13 @@ export const MyPage: React.FC = () => {
           </div>
         </div>
       </div>
+    </div>
 
       {/* FORM MODAL 1: Change Password Form Modal */}
       {showPasswordModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-3 sm:p-4 overflow-y-auto">
           <div className="bg-white rounded-2xl border border-slate-200 shadow-2xl w-full max-w-md my-auto max-h-[90vh] flex flex-col overflow-hidden transform transition-all animate-in fade-in zoom-in-95 duration-200">
-            <div className="bg-[#00a896] text-white px-6 py-4 flex items-center justify-between shrink-0">
+            <div className="bg-brand-navy text-white px-6 py-4 flex items-center justify-between shrink-0">
               <h3 className="font-bold text-base sm:text-lg flex items-center gap-2">
                 <span>» Change Password Form</span>
               </h3>
@@ -640,7 +614,7 @@ export const MyPage: React.FC = () => {
       {showApplyModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-3 sm:p-4 overflow-y-auto">
           <div className="bg-white rounded-2xl border border-slate-200 shadow-2xl w-full max-w-lg my-auto max-h-[90vh] flex flex-col overflow-hidden transform transition-all animate-in fade-in zoom-in-95 duration-200">
-            <div className="bg-[#00a896] text-white px-6 py-4 flex items-center justify-between shrink-0">
+            <div className="bg-brand-navy text-white px-6 py-4 flex items-center justify-between shrink-0">
               <h3 className="font-bold text-base sm:text-lg flex items-center gap-2">
                 <span>» Leave Apply Form</span>
               </h3>

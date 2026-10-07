@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import PageHeader from '../../../components/page-header/PageHeader';
+import UnderlineTabs from '../../../components/tabs/UnderlineTabs';
 import { Search, Edit2, Eye, Download, X, Send } from 'lucide-react';
 
 type MisSubTab =
@@ -131,33 +133,22 @@ export const MisReports: React.FC = () => {
 
   return (
     <div className="w-full flex flex-col space-y-5 font-sans">
-      {/* Top Header Bar (Policy Master Style) */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
-        <div>
-          <h1 className="text-2xl font-bold text-[#12284A]">MIS Reports</h1>
-          <p className="text-sm text-slate-500">Manage commission profit, agent summaries, payment advice & reports</p>
-        </div>
-      </div>
+      {/* Top Header Bar */}
+      <PageHeader
+        title="MIS Reports"
+        description="Manage commission profit, agent summaries, payment advice & reports"
+      />
 
-      {/* Horizontal Scrollable Sub-Tabs List (Exact Policy Master Style) */}
-      <div className="flex items-center gap-1.5 bg-white p-2 rounded-xl border border-slate-200 shadow-sm overflow-x-auto custom-scrollbar">
-        {tabsList.map(tab => (
-          <button
-            key={tab.key}
-            onClick={() => { setActiveTab(tab.key); setCurrentPage(1); setSearchQuery(''); }}
-            className={`px-4 py-2 rounded-lg font-medium text-xs sm:text-sm whitespace-nowrap transition-all duration-200 cursor-pointer ${
-              activeTab === tab.key
-                ? 'bg-[#00a896] text-white shadow-sm'
-                : 'text-slate-600 hover:text-[#12284A] hover:bg-slate-100'
-            }`}
-          >
-            {tab.label}
-          </button>
-        ))}
-      </div>
+      {/* Horizontal Sub-Tabs Bar */}
+      <UnderlineTabs
+        tabs={tabsList.map(tab => ({ id: tab.key, label: tab.label }))}
+        activeTab={activeTab}
+        onTabChange={(tabId) => { setActiveTab(tabId as MisSubTab); setCurrentPage(1); setSearchQuery(''); }}
+      />
 
-      {/* Main Full-Width Content Container (Policy Master Card Format) */}
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden flex flex-col w-full">
+      {/* Main Full-Width Content Container */}
+      <div key={activeTab} className="tab-transition-wrapper">
+        <div className="bg-white rounded-[12px] border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden flex flex-col w-full">
         
         {/* TAB 1: COMMISSION PROFIT (Image 2 exact match) */}
         {activeTab === 'commission' && (
@@ -170,7 +161,7 @@ export const MisReports: React.FC = () => {
                     name="dateTypeComm"
                     checked={dateType === 'trans'}
                     onChange={() => setDateType('trans')}
-                    className="accent-[#00a896]"
+                    className="accent-[#0869D8]"
                   />
                   Trans Date
                 </label>
@@ -180,7 +171,7 @@ export const MisReports: React.FC = () => {
                     name="dateTypeComm"
                     checked={dateType === 'risk'}
                     onChange={() => setDateType('risk')}
-                    className="accent-[#00a896]"
+                    className="accent-[#0869D8]"
                   />
                   Risk Start Date
                 </label>
@@ -192,7 +183,7 @@ export const MisReports: React.FC = () => {
                   type="date"
                   value={fromDate}
                   onChange={(e) => setFromDate(e.target.value)}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[#00a896]"
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[#0869D8]"
                 />
               </div>
 
@@ -202,7 +193,7 @@ export const MisReports: React.FC = () => {
                   type="date"
                   value={toDate}
                   onChange={(e) => setToDate(e.target.value)}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[#00a896]"
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[#0869D8]"
                 />
               </div>
 
@@ -226,14 +217,14 @@ export const MisReports: React.FC = () => {
           </div>
         )}
 
-        {/* TAB 2: AGENT WISE SUMMARY (Image 3 exact match) */}
+        {/* TAB 2: AGENT WISE SUMMARY */}
         {activeTab === 'agentSummary' && (
           <div className="p-5 border-b border-slate-200 space-y-4">
-            <div className="bg-[#00a896] text-white px-5 py-3 font-semibold text-sm rounded-lg flex items-center justify-between">
+            <div className="bg-slate-50 text-slate-800 border border-slate-200 px-5 py-3 font-semibold text-sm rounded-lg flex items-center justify-between shadow-xs">
               <span>» Agent Wise Summary</span>
               <button
                 onClick={() => setShowModal(true)}
-                className="px-4 py-1.5 bg-white text-[#00a896] hover:bg-slate-100 rounded text-xs font-bold transition shadow-sm cursor-pointer"
+                className="px-4 py-1.5 bg-[#0869D8] text-white hover:bg-[#0654B0] rounded text-xs font-bold transition shadow-sm cursor-pointer border-none"
               >
                 Open Form Modal
               </button>
@@ -247,7 +238,7 @@ export const MisReports: React.FC = () => {
                     name="summaryEntity"
                     checked={entityType === 'Agent'}
                     onChange={() => setEntityType('Agent')}
-                    className="accent-[#00a896]"
+                    className="accent-[#0869D8]"
                   />
                   Agent
                 </label>
@@ -257,7 +248,7 @@ export const MisReports: React.FC = () => {
                     name="summaryEntity"
                     checked={entityType === 'Franchise'}
                     onChange={() => setEntityType('Franchise')}
-                    className="accent-[#00a896]"
+                    className="accent-[#0869D8]"
                   />
                   Franchise
                 </label>
@@ -268,7 +259,7 @@ export const MisReports: React.FC = () => {
                 <select
                   value={selectedMonth}
                   onChange={(e) => setSelectedMonth(e.target.value)}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-[#00a896]"
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-[#0869D8]"
                 >
                   <option value="">--Select Month--</option>
                   <option value="October">October</option>
@@ -282,7 +273,7 @@ export const MisReports: React.FC = () => {
                   placeholder="yyyy"
                   value={selectedYear}
                   onChange={(e) => setSelectedYear(e.target.value)}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-[#00a896]"
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-[#0869D8]"
                 />
               </div>
 
@@ -291,7 +282,7 @@ export const MisReports: React.FC = () => {
                 <select
                   value={selectedBranch}
                   onChange={(e) => setSelectedBranch(e.target.value)}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-[#00a896]"
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-[#0869D8]"
                 >
                   <option value="">--Select Branch--</option>
                   <option value="BARAMATI">BARAMATI</option>
@@ -303,7 +294,7 @@ export const MisReports: React.FC = () => {
                 <select
                   value={selectedAgent}
                   onChange={(e) => setSelectedAgent(e.target.value)}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-[#00a896]"
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-[#0869D8]"
                 >
                   <option value="">--Select Agent--</option>
                   <option value="Amit Deshmukh">Amit Deshmukh</option>
@@ -330,7 +321,7 @@ export const MisReports: React.FC = () => {
                   placeholder="Enter UTR No"
                   value={bankUtrNo}
                   onChange={(e) => setBankUtrNo(e.target.value)}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-[#00a896]"
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-[#0869D8]"
                 />
               </div>
 
@@ -340,7 +331,7 @@ export const MisReports: React.FC = () => {
                   type="date"
                   value={dateInput}
                   onChange={(e) => setDateInput(e.target.value)}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-[#00a896]"
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-[#0869D8]"
                 />
               </div>
 
@@ -351,7 +342,7 @@ export const MisReports: React.FC = () => {
                   placeholder="0.00"
                   value={differenceAmt}
                   onChange={(e) => setDifferenceAmt(e.target.value)}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-[#00a896]"
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-[#0869D8]"
                 />
               </div>
 
@@ -362,7 +353,7 @@ export const MisReports: React.FC = () => {
                   placeholder="Check No"
                   value={checkNo}
                   onChange={(e) => setCheckNo(e.target.value)}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-[#00a896]"
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-[#0869D8]"
                 />
               </div>
 
@@ -378,23 +369,23 @@ export const MisReports: React.FC = () => {
             </div>
 
             <div className="flex items-center justify-end gap-3 pt-2">
-              <button className="px-6 py-2 bg-[#4CAF50] hover:bg-[#43a047] text-white font-semibold text-sm rounded-lg shadow-sm transition cursor-pointer">
+              <button className="px-6 py-2 bg-[#4CAF50] hover:bg-[#43a047] text-white font-semibold text-sm rounded-lg shadow-sm transition cursor-pointer border-none">
                 Save
               </button>
-              <button className="px-6 py-2 bg-[#0869D8] hover:bg-[#0654B0] text-white font-semibold text-sm rounded-lg shadow-sm transition cursor-pointer">
+              <button className="px-6 py-2 bg-[#0869D8] hover:bg-[#0654B0] text-white font-semibold text-sm rounded-lg shadow-sm transition cursor-pointer border-none">
                 View
               </button>
-              <button className="px-6 py-2 bg-[#ff9800] hover:bg-[#fb8c00] text-white font-semibold text-sm rounded-lg shadow-sm transition cursor-pointer">
+              <button className="px-6 py-2 bg-[#ff9800] hover:bg-[#fb8c00] text-white font-semibold text-sm rounded-lg shadow-sm transition cursor-pointer border-none">
                 Export Grid
               </button>
             </div>
           </div>
         )}
 
-        {/* TAB 4: PAYMENT ADVICE (Image 5 exact match) */}
+        {/* TAB 4: PAYMENT ADVICE */}
         {activeTab === 'paymentAdvice' && (
           <div className="p-5 border-b border-slate-200 space-y-4">
-            <div className="bg-[#00a896] text-white px-5 py-3 font-semibold text-sm rounded-lg">
+            <div className="bg-slate-50 text-slate-800 border border-slate-200 px-5 py-3 font-semibold text-sm rounded-lg shadow-xs">
               » Payment Advice Report
             </div>
 
@@ -406,7 +397,7 @@ export const MisReports: React.FC = () => {
                     name="payAdviceEntity"
                     checked={entityType === 'Agent'}
                     onChange={() => setEntityType('Agent')}
-                    className="accent-[#00a896]"
+                    className="accent-[#0869D8]"
                   />
                   Agent
                 </label>
@@ -416,7 +407,7 @@ export const MisReports: React.FC = () => {
                     name="payAdviceEntity"
                     checked={entityType === 'Franchise'}
                     onChange={() => setEntityType('Franchise')}
-                    className="accent-[#00a896]"
+                    className="accent-[#0869D8]"
                   />
                   Franchise
                 </label>
@@ -427,7 +418,7 @@ export const MisReports: React.FC = () => {
                 <select
                   value={selectedBranch}
                   onChange={(e) => setSelectedBranch(e.target.value)}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-[#00a896]"
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-[#0869D8]"
                 >
                   <option value="">--Select Branch--</option>
                   <option value="BARAMATI">BARAMATI</option>
@@ -439,7 +430,7 @@ export const MisReports: React.FC = () => {
                 <select
                   value={selectedAgent}
                   onChange={(e) => setSelectedAgent(e.target.value)}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-[#00a896]"
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-[#0869D8]"
                 >
                   <option value="">--Select Agent--</option>
                   <option value="Amit Deshmukh">Amit Deshmukh</option>
@@ -451,7 +442,7 @@ export const MisReports: React.FC = () => {
                 <select
                   value={selectedMonth}
                   onChange={(e) => setSelectedMonth(e.target.value)}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-[#00a896]"
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-[#0869D8]"
                 >
                   <option value="">--Select Month--</option>
                   <option value="October">October</option>
@@ -459,7 +450,7 @@ export const MisReports: React.FC = () => {
               </div>
 
               <div>
-                <button className="w-full px-5 py-2 bg-[#00a896] hover:bg-[#008f80] text-white rounded-lg text-sm font-semibold shadow-sm transition-all cursor-pointer">
+                <button className="w-full px-5 py-2 bg-[#0869D8] hover:bg-[#0654B0] text-white rounded-lg text-sm font-semibold shadow-sm transition-all cursor-pointer border-none">
                   View Report
                 </button>
               </div>
@@ -467,59 +458,147 @@ export const MisReports: React.FC = () => {
           </div>
         )}
 
-        {/* TAB 9: COMMISSION STATEMENT (NEW IMAGE 1 exact match: Commission Paid Statement) */}
+        {/* TAB 9: COMMISSION STATEMENT */}
         {activeTab === 'statement' && (
-          <div className="p-5 border-b border-slate-200 space-y-4">
-            <div className="bg-[#00a896] text-white px-5 py-3 font-semibold text-sm rounded-lg">
-              » Commission Paid Statement
+          <div className="p-5 border-b border-brand-border bg-brand-mainbg/30 space-y-4">
+            <div className="bg-slate-50 text-slate-800 border border-slate-200 px-5 py-3 font-semibold text-sm rounded-lg flex items-center shadow-xs">
+              <span>» Commission Statement</span>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 items-end">
-              <div className="flex items-center gap-2 pb-2">
-                <span className="text-xs font-bold text-slate-700">ALL</span>
-                <input type="checkbox" className="w-4 h-4 accent-[#00a896] cursor-pointer" />
-              </div>
-
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">Month</label>
+                <label className="block text-xs font-semibold text-slate-700 mb-1">Agent</label>
                 <select
-                  value={selectedMonth}
-                  onChange={(e) => setSelectedMonth(e.target.value)}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-[#00a896]"
+                  value={selectedAgent}
+                  onChange={(e) => setSelectedAgent(e.target.value)}
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-[#0869D8]"
                 >
-                  <option value="">--Select Month--</option>
-                  <option value="October">October</option>
+                  <option value="">--Select Agent--</option>
+                  <option value="Amit Deshmukh">Amit Deshmukh</option>
                 </select>
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">Year</label>
+                <label className="block text-xs font-semibold text-slate-700 mb-1">From Date</label>
                 <input
-                  type="text"
-                  placeholder="yyyy"
-                  value={selectedYear}
-                  onChange={(e) => setSelectedYear(e.target.value)}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-[#00a896]"
+                  type="date"
+                  value={fromDate}
+                  onChange={(e) => setFromDate(e.target.value)}
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-[#0869D8]"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1">To Date</label>
+                <input
+                  type="date"
+                  value={toDate}
+                  onChange={(e) => setToDate(e.target.value)}
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-[#0869D8]"
                 />
               </div>
 
               <div className="flex items-center gap-3">
-                <button className="px-6 py-2 bg-[#0869D8] hover:bg-[#0654B0] text-white font-semibold text-sm rounded-lg shadow-sm transition cursor-pointer">
+                <button className="px-5 py-2 bg-[#0869D8] hover:bg-[#0654B0] text-white font-semibold text-sm rounded-lg shadow-sm transition cursor-pointer border-none">
                   View
                 </button>
-                <button className="px-6 py-2 bg-[#ff9800] hover:bg-[#fb8c00] text-white font-semibold text-sm rounded-lg shadow-sm transition cursor-pointer">
+                <button className="px-5 py-2 bg-[#ff9800] hover:bg-[#fb8c00] text-white font-semibold text-sm rounded-lg shadow-sm transition cursor-pointer border-none">
                   Export Grid
+                </button>
+                <button className="px-5 py-2 bg-[#0869D8] hover:bg-[#0654B0] text-white font-semibold text-sm rounded-lg shadow-sm transition cursor-pointer border-none flex items-center gap-1.5">
+                  <Download size={15} />
+                  <span>Download Pdf</span>
                 </button>
               </div>
             </div>
           </div>
         )}
 
-        {/* TAB 5: AGENT WISE SUMMARY REPORT (NEW IMAGE 2 exact match: Sales Ex. Commission Report) */}
+        {/* TAB 11: EXECUTIVE TARGET REPORT */}
+        {activeTab === 'target' && (
+          <div className="p-5 border-b border-brand-border bg-brand-mainbg/30 space-y-4">
+            <div className="bg-slate-50 text-slate-800 border border-slate-200 px-5 py-3 font-semibold text-sm rounded-lg flex items-center justify-between shadow-xs">
+              <span>» Executive Target Report</span>
+              <button className="px-4 py-1.5 bg-[#ff9800] hover:bg-[#fb8c00] text-white rounded text-xs font-bold transition shadow-sm cursor-pointer border-none">
+                Export To Excel
+              </button>
+            </div>
+
+            {/* Matrix Table View for Executive Targets */}
+            <div className="overflow-x-auto w-full border border-slate-200 rounded-lg">
+              <table className="w-full text-left border-collapse min-w-[1200px] text-xs">
+                <thead>
+                  <tr className="bg-slate-100 text-slate-800 font-bold uppercase border-b border-slate-200">
+                    <th className="py-2.5 px-3 border border-slate-200">SR.NO.</th>
+                    <th className="py-2.5 px-3 border border-slate-200">BRANCH</th>
+                    <th className="py-2.5 px-3 border border-slate-200">SALES PERSON NAME</th>
+                    <th className="py-2.5 px-3 border border-slate-200 text-right">APRIL TAR</th>
+                    <th className="py-2.5 px-3 border border-slate-200 text-right">APRIL ACHV</th>
+                    <th className="py-2.5 px-3 border border-slate-200 text-right">MAY TAR</th>
+                    <th className="py-2.5 px-3 border border-slate-200 text-right">MAY ACHV</th>
+                    <th className="py-2.5 px-3 border border-slate-200 text-right">JUNE TAR</th>
+                    <th className="py-2.5 px-3 border border-slate-200 text-right">JUNE ACHV</th>
+                    <th className="py-2.5 px-3 border border-slate-200 text-right bg-slate-200">Q1 TOTAL ACHV</th>
+                    <th className="py-2.5 px-3 border border-slate-200 text-right">JULY TAR</th>
+                    <th className="py-2.5 px-3 border border-slate-200 text-right">JULY ACHV</th>
+                    <th className="py-2.5 px-3 border border-slate-200 text-right bg-slate-200">YEAR TOTAL ACHV</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-200 text-slate-700">
+                  <tr className="hover:bg-slate-50">
+                    <td className="py-2 px-3 border text-center font-medium">1</td>
+                    <td className="py-2 px-3 border font-semibold">AHILYANAGAR</td>
+                    <td className="py-2 px-3 border font-medium">AMIN DASTAGIR PATHAN</td>
+                    <td className="py-2 px-3 border text-right">0.00</td>
+                    <td className="py-2 px-3 border text-right">0.00</td>
+                    <td className="py-2 px-3 border text-right">0.00</td>
+                    <td className="py-2 px-3 border text-right">0.00</td>
+                    <td className="py-2 px-3 border text-right">0.00</td>
+                    <td className="py-2 px-3 border text-right">0.00</td>
+                    <td className="py-2 px-3 border text-right font-bold bg-slate-100">0.00</td>
+                    <td className="py-2 px-3 border text-right">0.00</td>
+                    <td className="py-2 px-3 border text-right font-semibold text-green-700">85899.00</td>
+                    <td className="py-2 px-3 border text-right font-bold text-blue-700 bg-slate-100">112978.00</td>
+                  </tr>
+                  <tr className="hover:bg-slate-50">
+                    <td className="py-2 px-3 border text-center font-medium">2</td>
+                    <td className="py-2 px-3 border font-semibold">AHILYANAGAR</td>
+                    <td className="py-2 px-3 border font-medium">PRASHANT DILIPRAO MOHEKAR</td>
+                    <td className="py-2 px-3 border text-right">0.00</td>
+                    <td className="py-2 px-3 border text-right font-semibold">1693762.92</td>
+                    <td className="py-2 px-3 border text-right">0.00</td>
+                    <td className="py-2 px-3 border text-right font-semibold">329499.33</td>
+                    <td className="py-2 px-3 border text-right">0.00</td>
+                    <td className="py-2 px-3 border text-right">0.00</td>
+                    <td className="py-2 px-3 border text-right font-bold bg-slate-100 text-green-700">2023262.25</td>
+                    <td className="py-2 px-3 border text-right">0.00</td>
+                    <td className="py-2 px-3 border text-right font-semibold">397308.00</td>
+                    <td className="py-2 px-3 border text-right font-bold text-blue-700 bg-slate-100">10254993.26</td>
+                  </tr>
+                  <tr className="bg-slate-200 font-bold text-slate-900">
+                    <td colSpan={3} className="py-2.5 px-3 border">SUB TOTAL (AHILYANAGAR)</td>
+                    <td className="py-2.5 px-3 border text-right">0.00</td>
+                    <td className="py-2.5 px-3 border text-right text-green-800">2712653.99</td>
+                    <td className="py-2.5 px-3 border text-right">0.00</td>
+                    <td className="py-2.5 px-3 border text-right text-green-800">847535.41</td>
+                    <td className="py-2.5 px-3 border text-right">0.00</td>
+                    <td className="py-2.5 px-3 border text-right">0.00</td>
+                    <td className="py-2.5 px-3 border text-right text-blue-800">3560189.40</td>
+                    <td className="py-2.5 px-3 border text-right">0.00</td>
+                    <td className="py-2.5 px-3 border text-right text-green-800">625563.00</td>
+                    <td className="py-2.5 px-3 border text-right text-blue-800">26923789.90</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
+        {/* TAB 5: AGENT WISE SUMMARY REPORT */}
         {activeTab === 'agentReport' && (
-          <div className="p-5 border-b border-slate-200 space-y-4">
-            <div className="bg-[#00a896] text-white px-5 py-3 font-semibold text-sm rounded-lg">
-              » Sales Ex. Commission Report
+          <div className="p-5 border-b border-brand-border bg-brand-mainbg/30 space-y-4">
+            <div className="bg-slate-50 text-slate-800 border border-slate-200 px-5 py-3 font-semibold text-sm rounded-lg flex items-center shadow-xs">
+              <span>» Sales Ex. Commission Report</span>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
@@ -529,7 +608,7 @@ export const MisReports: React.FC = () => {
                   name="salesDirect"
                   checked
                   readOnly
-                  className="w-4 h-4 accent-[#00a896]"
+                  className="w-4 h-4 accent-[#0869D8]"
                 />
                 <span className="text-xs font-bold text-slate-700">Direct</span>
               </div>
@@ -541,7 +620,7 @@ export const MisReports: React.FC = () => {
                   placeholder="yyyy"
                   value={selectedYear}
                   onChange={(e) => setSelectedYear(e.target.value)}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-[#00a896]"
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-[#0869D8]"
                 />
               </div>
 
@@ -550,7 +629,7 @@ export const MisReports: React.FC = () => {
                 <select
                   value={selectedMonth}
                   onChange={(e) => setSelectedMonth(e.target.value)}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-[#00a896]"
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-[#0869D8]"
                 >
                   <option value="">--Select Month--</option>
                   <option value="October">October</option>
@@ -562,7 +641,7 @@ export const MisReports: React.FC = () => {
                 <select
                   value={selectedExecutive}
                   onChange={(e) => setSelectedExecutive(e.target.value)}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-[#00a896]"
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-[#0869D8]"
                 >
                   <option value="">--Select Executive--</option>
                   <option value="Executive 1">Executive 1</option>
@@ -571,17 +650,17 @@ export const MisReports: React.FC = () => {
             </div>
 
             <div className="flex flex-wrap items-center gap-3 pt-2">
-              <button className="px-6 py-2 bg-[#0869D8] hover:bg-[#0654B0] text-white font-semibold text-sm rounded-lg shadow-sm transition cursor-pointer">
+              <button className="px-6 py-2 bg-[#0869D8] hover:bg-[#0654B0] text-white font-semibold text-sm rounded-lg shadow-sm transition cursor-pointer border-none">
                 View
               </button>
-              <button className="px-6 py-2 bg-[#ff9800] hover:bg-[#fb8c00] text-white font-semibold text-sm rounded-lg shadow-sm transition cursor-pointer">
+              <button className="px-6 py-2 bg-[#ff9800] hover:bg-[#fb8c00] text-white font-semibold text-sm rounded-lg shadow-sm transition cursor-pointer border-none">
                 Export MIS
               </button>
-              <button className="px-6 py-2 bg-[#4CAF50] hover:bg-[#43a047] text-white font-semibold text-sm rounded-lg shadow-sm transition flex items-center gap-2 cursor-pointer">
+              <button className="px-6 py-2 bg-[#4CAF50] hover:bg-[#43a047] text-white font-semibold text-sm rounded-lg shadow-sm transition flex items-center gap-2 cursor-pointer border-none">
                 <Send size={16} />
                 <span>Send Mail</span>
               </button>
-              <button className="px-6 py-2 bg-[#4CAF50] hover:bg-[#43a047] text-white font-semibold text-sm rounded-lg shadow-sm transition flex items-center gap-2 cursor-pointer">
+              <button className="px-6 py-2 bg-[#4CAF50] hover:bg-[#43a047] text-white font-semibold text-sm rounded-lg shadow-sm transition flex items-center gap-2 cursor-pointer border-none">
                 <Download size={16} />
                 <span>Download pdf</span>
               </button>
@@ -589,11 +668,11 @@ export const MisReports: React.FC = () => {
           </div>
         )}
 
-        {/* TAB 7: MIS REPORT (NEW IMAGE 3 & 4 exact match: MIS Report) */}
+        {/* TAB 7: MIS REPORT */}
         {activeTab === 'misReport' && (
-          <div className="p-5 border-b border-slate-200 space-y-4">
-            <div className="bg-[#00a896] text-white px-5 py-3 font-semibold text-sm rounded-lg">
-              » MIS Report
+          <div className="p-5 border-b border-brand-border bg-brand-mainbg/30 space-y-4">
+            <div className="bg-slate-50 text-slate-800 border border-slate-200 px-5 py-3 font-semibold text-sm rounded-lg flex items-center shadow-xs">
+              <span>» MIS Report</span>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
@@ -602,7 +681,7 @@ export const MisReports: React.FC = () => {
                 <select
                   value={selectedMonth}
                   onChange={(e) => setSelectedMonth(e.target.value)}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-[#00a896]"
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-[#0869D8]"
                 >
                   <option value="">--Select Month--</option>
                   <option value="October">October</option>
@@ -616,15 +695,15 @@ export const MisReports: React.FC = () => {
                   placeholder="yyyy"
                   value={selectedYear}
                   onChange={(e) => setSelectedYear(e.target.value)}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-[#00a896]"
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-[#0869D8]"
                 />
               </div>
 
               <div className="col-span-2 flex items-center gap-3">
-                <button className="px-6 py-2 bg-[#0869D8] hover:bg-[#0654B0] text-white font-semibold text-sm rounded-lg shadow-sm transition-all cursor-pointer">
+                <button className="px-6 py-2 bg-[#0869D8] hover:bg-[#0654B0] text-white font-semibold text-sm rounded-lg shadow-sm transition-all cursor-pointer border-none">
                   View
                 </button>
-                <button className="px-6 py-2 bg-[#ff9800] hover:bg-[#fb8c00] text-white font-semibold text-sm rounded-lg shadow-sm transition-all cursor-pointer">
+                <button className="px-6 py-2 bg-[#ff9800] hover:bg-[#fb8c00] text-white font-semibold text-sm rounded-lg shadow-sm transition-all cursor-pointer border-none">
                   Export Grid
                 </button>
               </div>
@@ -632,14 +711,14 @@ export const MisReports: React.FC = () => {
           </div>
         )}
 
-        {/* OTHER TABS FALLBACK DEFAULT FORM (Policy Master Format) */}
+        {/* OTHER TABS FALLBACK DEFAULT FORM */}
         {!['commission', 'agentSummary', 'paymentAdvice', 'statement', 'agentReport', 'misReport'].includes(activeTab) && (
           <div className="p-5 border-b border-slate-200 space-y-4">
-            <div className="bg-[#00a896] text-white px-5 py-3 font-semibold text-sm rounded-lg flex items-center justify-between">
+            <div className="bg-slate-50 text-slate-800 border border-slate-200 px-5 py-3 font-semibold text-sm rounded-lg flex items-center justify-between shadow-xs">
               <span>» {getTabTitle(activeTab)}</span>
               <button
                 onClick={() => setShowModal(true)}
-                className="px-4 py-1.5 bg-white text-[#00a896] hover:bg-slate-100 rounded text-xs font-bold transition shadow-sm cursor-pointer"
+                className="px-4 py-1.5 bg-[#0869D8] text-white hover:bg-[#0654B0] rounded text-xs font-bold transition shadow-sm cursor-pointer border-none"
               >
                 Add / Form Modal
               </button>
@@ -651,7 +730,7 @@ export const MisReports: React.FC = () => {
                 <select
                   value={selectedMonth}
                   onChange={(e) => setSelectedMonth(e.target.value)}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-[#00a896]"
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-[#0869D8]"
                 >
                   <option value="">--Select Month--</option>
                   <option value="October">October</option>
@@ -670,10 +749,10 @@ export const MisReports: React.FC = () => {
               </div>
 
               <div className="col-span-2 flex items-center gap-3">
-                <button className="px-6 py-2 bg-[#0869D8] text-white rounded-lg font-semibold text-sm shadow-sm">
+                <button className="px-6 py-2 bg-[#0869D8] hover:bg-[#0654B0] text-white rounded-lg font-semibold text-sm shadow-sm cursor-pointer border-none">
                   View Report
                 </button>
-                <button className="px-6 py-2 bg-[#ff9800] text-white rounded-lg font-semibold text-sm shadow-sm">
+                <button className="px-6 py-2 bg-[#ff9800] text-white rounded-lg font-semibold text-sm shadow-sm cursor-pointer border-none">
                   Export
                 </button>
               </div>
@@ -699,48 +778,48 @@ export const MisReports: React.FC = () => {
           </span>
         </div>
 
-        {/* Full Width Table View (Policy Master Style) */}
+        {/* Full Width Table View (BranchMaster Style) */}
         <div className="overflow-x-auto w-full">
           <table className="w-full text-left border-collapse min-w-[900px]">
             <thead>
-              <tr className="bg-[#00a896] text-white text-xs font-semibold uppercase tracking-wider">
-                <th className="py-3.5 px-6">Sr. No.</th>
-                <th className="py-3.5 px-6">Trans Date</th>
-                <th className="py-3.5 px-6">Risk Start Date</th>
-                <th className="py-3.5 px-6">Customer Name</th>
-                <th className="py-3.5 px-6">Agent Name</th>
-                <th className="py-3.5 px-6">Branch / Location</th>
-                <th className="py-3.5 px-6">Comm Net Sum</th>
-                <th className="py-3.5 px-6">Inv / UTR No</th>
-                <th className="py-3.5 px-6 text-right">Action</th>
+              <tr className="bg-brand-lightbg text-brand-navy text-[14px] font-semibold uppercase border-b border-brand-border">
+                <th className="py-3 px-6">SR. NO.</th>
+                <th className="py-3 px-6">TRANS DATE</th>
+                <th className="py-3 px-6">RISK START DATE</th>
+                <th className="py-3 px-6">CUSTOMER NAME</th>
+                <th className="py-3 px-6">AGENT NAME</th>
+                <th className="py-3 px-6">BRANCH / LOCATION</th>
+                <th className="py-3 px-6">COMM NET SUM</th>
+                <th className="py-3 px-6">INV / UTR NO</th>
+                <th className="py-3 px-6 text-right">ACTION</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-200 text-sm text-slate-700">
+            <tbody className="divide-y divide-brand-border text-[14px]">
               {filteredData.length === 0 ? (
                 <tr>
-                  <td colSpan={9} className="py-8 text-center text-slate-400 font-semibold uppercase bg-slate-50/50">
+                  <td colSpan={9} className="py-8 text-center text-brand-muted font-semibold uppercase bg-brand-mainbg">
                     NO DATA FOUND
                   </td>
                 </tr>
               ) : (
                 filteredData.map((item, idx) => (
-                  <tr key={item.id} className="hover:bg-slate-50/80 transition-colors">
-                    <td className="py-3.5 px-6 font-medium text-slate-500">{(currentPage - 1) * itemsPerPage + idx + 1}</td>
-                    <td className="py-3.5 px-6 font-medium text-slate-800">{item.transDate}</td>
-                    <td className="py-3.5 px-6 font-medium text-slate-800">{item.riskStartDate}</td>
-                    <td className="py-3.5 px-6 font-semibold text-[#12284A]">{item.customerName}</td>
-                    <td className="py-3.5 px-6">{item.agentName}</td>
-                    <td className="py-3.5 px-6">
-                      <span className="inline-block px-2.5 py-1 text-xs font-semibold rounded-full bg-teal-50 text-teal-700 border border-teal-200">
+                  <tr key={item.id} className="hover:bg-brand-mainbg h-[52px] transition-colors bg-white">
+                    <td className="py-2 px-6 font-medium text-brand-muted">{(currentPage - 1) * itemsPerPage + idx + 1}</td>
+                    <td className="py-2 px-6 font-medium text-brand-navy">{item.transDate}</td>
+                    <td className="py-2 px-6 font-medium text-brand-navy">{item.riskStartDate}</td>
+                    <td className="py-2 px-6 font-medium text-brand-navy">{item.customerName}</td>
+                    <td className="py-2 px-6 text-brand-navy">{item.agentName}</td>
+                    <td className="py-2 px-6">
+                      <span className="inline-block px-2.5 py-1 text-xs font-semibold rounded-full bg-brand-lightbg text-brand-primary border border-brand-border">
                         {item.branch} / {item.location}
                       </span>
                     </td>
-                    <td className="py-3.5 px-6 font-semibold text-green-700">₹{item.commNetSum.toLocaleString('en-IN')}</td>
-                    <td className="py-3.5 px-6 font-mono text-xs text-blue-600">{item.invNo} / {item.bankUtrNo}</td>
-                    <td className="py-3.5 px-6 text-right">
+                    <td className="py-2 px-6 font-semibold text-green-700">₹{item.commNetSum.toLocaleString('en-IN')}</td>
+                    <td className="py-2 px-6 font-mono text-xs text-brand-primary">{item.invNo} / {item.bankUtrNo}</td>
+                    <td className="py-2 px-6 text-right">
                       <button
                         onClick={() => setShowModal(true)}
-                        className="p-1.5 text-[#8BA4CA] hover:text-[#0869D8] hover:bg-slate-100 rounded-md transition-colors cursor-pointer"
+                        className="p-1.5 bg-brand-lightbg text-brand-primary hover:bg-[#E2E8F0] rounded-[6px] transition-colors cursor-pointer inline-flex items-center justify-center"
                         title="Edit Record"
                       >
                         <Edit2 size={18} strokeWidth={1.5} />
@@ -807,12 +886,13 @@ export const MisReports: React.FC = () => {
           </div>
         </div>
       </div>
+    </div>
 
       {/* FORM MODAL POPUP (Exact Policy Master Modal Style) */}
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-3 sm:p-4 overflow-y-auto">
           <div className="bg-white rounded-2xl border border-slate-200 shadow-2xl w-full max-w-xl my-auto max-h-[90vh] flex flex-col overflow-hidden transform transition-all animate-in fade-in zoom-in-95 duration-200">
-            <div className="bg-[#00a896] text-white px-6 py-4 flex items-center justify-between shrink-0">
+            <div className="bg-brand-navy text-white px-6 py-4 flex items-center justify-between shrink-0">
               <h3 className="font-bold text-base sm:text-lg flex items-center gap-2">
                 <span>» {getTabTitle(activeTab)} Form Modal</span>
               </h3>
@@ -893,7 +973,7 @@ export const MisReports: React.FC = () => {
                 </button>
                 <button
                   type="submit"
-                  className="px-6 py-2 bg-[#0869D8] hover:bg-[#0654B0] text-white font-semibold rounded-lg text-sm shadow-md transition-all cursor-pointer"
+                  className="px-6 py-2 bg-brand-primary hover:bg-[#1D4ED8] text-white font-semibold rounded-[8px] text-[14px] shadow-sm transition-all cursor-pointer border-none"
                 >
                   Save
                 </button>

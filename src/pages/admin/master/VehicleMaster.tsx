@@ -248,9 +248,9 @@ const VehicleMaster: React.FC = () => {
           </div>
 
           {/* Dynamic Directory Tables */}
-          <div className="overflow-x-auto w-full">
+          <div className="overflow-x-auto w-full custom-scrollbar">
             {activeTab === 'vehicleMake' ? (
-              <table className="w-full text-left border-collapse">
+              <table className="w-full text-left border-collapse min-w-[850px]">
                 <thead>
                   <tr className="bg-brand-lightbg text-brand-navy text-[14px] font-semibold uppercase border-b border-brand-border">
                     <th className="py-3.5 px-6">MAKE NAME</th>

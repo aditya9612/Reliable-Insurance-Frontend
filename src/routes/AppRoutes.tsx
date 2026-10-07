@@ -18,6 +18,10 @@ import AccountMaster from '../pages/admin/master/AccountMaster'
 import BusinessMaster from '../pages/admin/master/BusinessMaster'
 import MyPage from '../pages/admin/other_modules/MyPage'
 import MisReports from '../pages/admin/reports_analysis/MisReports'
+import Recon from '../pages/admin/reports_analysis/Recon'
+import HrModule from '../pages/admin/other_modules/HrModule'
+import ClaimPage from '../pages/admin/operations/ClaimPage'
+import RenewalPage from '../pages/admin/operations/RenewalPage'
 
 const AppRoutes = () => {
   return (
@@ -40,8 +44,12 @@ const AppRoutes = () => {
             <Route path="/vehicle-master" element={<VehicleMaster />} />
             <Route path="/account-master" element={<AccountMaster />} />
             <Route path="/operations/business-master" element={<BusinessMaster />} />
+            <Route path="/operations/claims" element={<ClaimPage />} />
+            <Route path="/operations/renewal" element={<RenewalPage />} />
             <Route path="/other/my-page" element={<MyPage />} />
+            <Route path="/other/hr" element={<HrModule />} />
             <Route path="/reports/mis" element={<MisReports />} />
+            <Route path="/reports/recon" element={<Recon />} />
             <Route path="/reports" element={<MisReports />} />
           </Route>
         </Route>

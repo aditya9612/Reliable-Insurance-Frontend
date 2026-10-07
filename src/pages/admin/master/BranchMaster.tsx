@@ -199,14 +199,14 @@ const BranchMaster: React.FC = () => {
           </div>
 
           {/* Full Width Table View */}
-          <div className="overflow-x-auto w-full">
+          <div className="overflow-x-auto w-full custom-scrollbar">
             {activeTab === 'type' ? (
-              <table className="w-full text-left border-collapse table-fixed">
+              <table className="w-full text-left border-collapse table-fixed min-w-[600px]">
                 <thead>
                   <tr className="bg-brand-lightbg text-brand-navy text-[14px] font-semibold uppercase border-b border-brand-border">
-                    <th className="py-3 px-6 w-[10%]">SR. NO.</th>
-                    <th className="py-3 px-6 w-[75%]">BRANCH TYPE</th>
-                    <th className="py-3 px-6 text-right w-[15%]">ACTION</th>
+                    <th className="py-3 px-6 w-[15%]">SR. NO.</th>
+                    <th className="py-3 px-6 w-[65%]">BRANCH TYPE</th>
+                    <th className="py-3 px-6 text-right w-[20%]">ACTION</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-brand-border text-[14px]">
@@ -228,7 +228,7 @@ const BranchMaster: React.FC = () => {
                 </tbody>
               </table>
             ) : (
-              <table className="w-full text-left border-collapse">
+              <table className="w-full text-left border-collapse min-w-[750px]">
                 <thead>
                   <tr className="bg-brand-lightbg text-brand-navy text-[14px] font-semibold uppercase border-b border-brand-border">
                     <th className="py-3 px-6">CODE</th>
@@ -322,10 +322,10 @@ const BranchMaster: React.FC = () => {
 
       {/* Form Modal (Create / Edit) */}
       {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-3 sm:p-4 overflow-y-auto">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4 overflow-y-auto">
           <div className="bg-white rounded-2xl border border-slate-200 shadow-2xl w-full max-w-md my-auto max-h-[90vh] flex flex-col overflow-hidden transform transition-all animate-in fade-in zoom-in-95 duration-200">
             {/* Modal Header */}
-            <div className="bg-brand-navy text-white px-6 py-4 flex items-center justify-between">
+            <div className="bg-brand-navy text-white px-6 py-4 flex items-center justify-between shrink-0">
               <h3 className="font-bold text-lg flex items-center gap-2">
                 <span>
                   » {editingItem ? (activeTab === 'type' ? 'Edit Branch Type Form' : 'Edit Branch Master Form') : (activeTab === 'type' ? 'Branch Type Form' : 'Branch Master Form')}
