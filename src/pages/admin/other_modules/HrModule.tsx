@@ -338,7 +338,7 @@ export const HrModule: React.FC = () => {
   const totalPages = Math.ceil(filteredEmployees.length / itemsPerPage) || 1;
 
   return (
-    <div className="w-full flex flex-col space-y-5 font-sans">
+    <div className="w-full max-w-full overflow-x-hidden flex flex-col space-y-5 font-sans">
       {/* Top Header Bar */}
       <PageHeader
         title="HR Module"
@@ -353,8 +353,8 @@ export const HrModule: React.FC = () => {
       />
 
       {/* Main Content Card Container */}
-      <div key={activeTab} className="tab-transition-wrapper">
-        <div className="bg-white rounded-[12px] border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden flex flex-col w-full">
+      <div key={activeTab} className="tab-transition-wrapper w-full max-w-full">
+        <div className="bg-white rounded-[12px] border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden flex flex-col w-full max-w-full">
 
           {/* TAB 1: EXECUTIVE ATTENDANCE */}
           {activeTab === 'executiveAttendance' && (
@@ -365,7 +365,6 @@ export const HrModule: React.FC = () => {
                   onClick={() => setShowModal(true)}
                   className="px-4 py-1.5 bg-[#0869D8] hover:bg-[#0654B0] text-white rounded text-xs font-bold transition shadow-sm cursor-pointer border-none flex items-center gap-1.5"
                 >
-                  <Plus size={14} />
                   <span>Add / Form Modal</span>
                 </button>
               </div>
@@ -472,7 +471,6 @@ export const HrModule: React.FC = () => {
                   onClick={() => setShowModal(true)}
                   className="px-4 py-1.5 bg-[#0869D8] hover:bg-[#0654B0] text-white rounded text-xs font-bold transition shadow-sm cursor-pointer border-none flex items-center gap-1.5"
                 >
-                  <Plus size={14} />
                   <span>Add / Form Modal</span>
                 </button>
               </div>
@@ -543,7 +541,6 @@ export const HrModule: React.FC = () => {
                   onClick={() => setShowModal(true)}
                   className="px-4 py-1.5 bg-[#0869D8] hover:bg-[#0654B0] text-white rounded text-xs font-bold transition shadow-sm cursor-pointer border-none flex items-center gap-1.5"
                 >
-                  <Plus size={14} />
                   <span>Add / Form Modal</span>
                 </button>
               </div>
@@ -605,7 +602,6 @@ export const HrModule: React.FC = () => {
                   onClick={() => setShowModal(true)}
                   className="px-4 py-1.5 bg-[#0869D8] hover:bg-[#0654B0] text-white rounded text-xs font-bold transition shadow-sm cursor-pointer border-none flex items-center gap-1.5"
                 >
-                  <Plus size={14} />
                   <span>Add / Form Modal</span>
                 </button>
               </div>
@@ -700,7 +696,6 @@ export const HrModule: React.FC = () => {
                   onClick={() => setShowModal(true)}
                   className="px-4 py-1.5 bg-[#0869D8] hover:bg-[#0654B0] text-white rounded text-xs font-bold transition shadow-sm cursor-pointer border-none flex items-center gap-1.5"
                 >
-                  <Plus size={14} />
                   <span>Add / Form Modal</span>
                 </button>
               </div>
@@ -748,7 +743,6 @@ export const HrModule: React.FC = () => {
                   onClick={() => setShowModal(true)}
                   className="px-5 py-2 bg-[#0869D8] hover:bg-[#0654B0] text-white rounded-lg text-xs font-bold transition shadow-sm cursor-pointer border-none flex items-center gap-2"
                 >
-                  <UserPlus size={16} />
                   <span>Add Employee (Form Modal)</span>
                 </button>
               </div>
@@ -767,7 +761,6 @@ export const HrModule: React.FC = () => {
                   onClick={() => setShowModal(true)}
                   className="px-4 py-1.5 bg-[#0869D8] hover:bg-[#0654B0] text-white rounded text-xs font-bold transition shadow-sm cursor-pointer border-none flex items-center gap-1.5"
                 >
-                  <Plus size={14} />
                   <span>Add / Form Modal</span>
                 </button>
               </div>
@@ -805,7 +798,6 @@ export const HrModule: React.FC = () => {
                   onClick={() => setShowModal(true)}
                   className="px-4 py-1.5 bg-[#0869D8] hover:bg-[#0654B0] text-white rounded text-xs font-bold transition shadow-sm cursor-pointer border-none flex items-center gap-1.5"
                 >
-                  <Plus size={14} />
                   <span>Add / Form Modal</span>
                 </button>
               </div>
@@ -865,7 +857,6 @@ export const HrModule: React.FC = () => {
                   onClick={() => setShowModal(true)}
                   className="px-4 py-1.5 bg-[#0869D8] hover:bg-[#0654B0] text-white rounded text-xs font-bold transition shadow-sm cursor-pointer border-none flex items-center gap-1.5"
                 >
-                  <Plus size={14} />
                   <span>Add / Form Modal</span>
                 </button>
               </div>
@@ -965,7 +956,6 @@ export const HrModule: React.FC = () => {
                   onClick={() => setShowModal(true)}
                   className="px-4 py-1.5 bg-[#0869D8] hover:bg-[#0654B0] text-white rounded text-xs font-bold transition shadow-sm cursor-pointer border-none flex items-center gap-1.5"
                 >
-                  <Plus size={14} />
                   <span>Add / Form Modal</span>
                 </button>
               </div>
@@ -1036,7 +1026,6 @@ export const HrModule: React.FC = () => {
                   onClick={() => setShowModal(true)}
                   className="px-4 py-1.5 bg-[#0869D8] hover:bg-[#0654B0] text-white rounded text-xs font-bold transition shadow-sm cursor-pointer border-none flex items-center gap-1.5"
                 >
-                  <Plus size={14} />
                   <span>Add / Form Modal</span>
                 </button>
               </div>
@@ -1128,7 +1117,6 @@ export const HrModule: React.FC = () => {
                   onClick={() => setShowModal(true)}
                   className="px-4 py-1.5 bg-[#0869D8] hover:bg-[#0654B0] text-white rounded text-xs font-bold transition shadow-sm cursor-pointer border-none flex items-center gap-1.5"
                 >
-                  <Plus size={14} />
                   <span>Add / Form Modal</span>
                 </button>
               </div>

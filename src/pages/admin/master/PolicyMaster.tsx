@@ -54,7 +54,7 @@ const PolicyMaster: React.FC = () => {
   const sampleBranchesList = [
     'AHILYANAGAR', 'AKLUJ', 'AKOLA', 'AMRAVATI', 'BARAMATI', 'BARSHI', 'BEED', 'BHIGWAN',
     'BULDHANA', 'CHANDRAPUR', 'CHHATRAPATI SAMBHAJINAGAR', 'CHOWPHULA', 'DHULE', 'FRANCHISES',
-    'GOA', 'JALGOAN', 'JALNA', 'KARAD', 'KEY CHANNEL', 'KHAMGOAN', 'KOLHAPUR', 'LATUR', 'MUMBAI',
+    'GOA', 'JALGOAN', 'JALNA', 'KARAD', 'KEY CHANNEL', 'KHAMGOAN', 'KOLHAPUR', 'LATUR', 'LATUR A', 'MUMBAI',
     'NAGPUR', 'NANDURBAR', 'NASHIK', 'PARBHANI', 'PUNE', 'RAJKOT(GJ)', 'SANGLI', 'SATARA', 'SOLAPUR', 'SURAT(GJ)', 'YAVATMAL'
   ];
 
@@ -173,8 +173,8 @@ const PolicyMaster: React.FC = () => {
       case 'insuranceCompany': return 'Insurance Company';
       case 'policyMode': return 'Policy Mode';
       case 'policyType': return 'Policy Type';
-      case 'rto': return 'RTO Master';
-      case 'paymentMode': return 'Payment Master';
+      case 'rto': return 'RTO';
+      case 'paymentMode': return 'Payment Mode';
       case 'paToOwnerDriver': return 'PA To Owner Driver';
       case 'companyPortal': return 'Company Portal';
       case 'brokerTds': return 'Broker TDS Rate';
@@ -350,7 +350,7 @@ const PolicyMaster: React.FC = () => {
   };
 
   return (
-    <div className="w-full flex flex-col space-y-5">
+    <div className="w-full max-w-full overflow-x-hidden flex flex-col space-y-5">
       {/* Header Bar */}
       <PageHeader
         title="Policy Master"
@@ -369,51 +369,63 @@ const PolicyMaster: React.FC = () => {
         {/* SPECIAL CONTENT VIEW: BROKER TDS / AGENT TDS (Image 1) */}
         {(activeTab === 'brokerTds' || activeTab === 'agentTds') && (
           <div className="flex flex-col space-y-5 w-full">
-            {/* Top Filter Card (Image 1) */}
-            <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
-                <div className="flex items-center gap-4">
-                  <span className="text-sm font-medium text-slate-700">TDS Rate For</span>
-                  <div className="flex items-center gap-4 text-sm text-slate-700">
-                    <label className="flex items-center gap-1.5 cursor-pointer">
+            {/* Top Filter Card (Responsive flex-wrap layout) */}
+            <div className="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-sm flex flex-wrap items-center justify-between gap-4 w-full">
+              <div className="flex flex-wrap items-center gap-4 sm:gap-6 min-w-0">
+                <div className="flex flex-wrap items-center gap-3">
+                  <span className="text-sm font-medium text-slate-700 shrink-0">TDS Rate For</span>
+                  {activeTab === 'brokerTds' ? (
+                    <label className="flex items-center gap-1.5 cursor-pointer text-sm text-slate-700">
                       <input
                         type="radio"
-                        name="tdsTarget"
-                        checked={tdsTarget === 'Agent'}
-                        onChange={() => setTdsTarget('Agent')}
+                        checked
+                        readOnly
                         className="accent-[#0869D8]"
                       />
-                      <span>Agent</span>
+                      <span className="font-semibold">Broker</span>
                     </label>
-                    <label className="flex items-center gap-1.5 cursor-pointer">
-                      <input
-                        type="radio"
-                        name="tdsTarget"
-                        checked={tdsTarget === 'Franchise'}
-                        onChange={() => setTdsTarget('Franchise')}
-                        className="accent-[#0869D8]"
-                      />
-                      <span>Franchise</span>
-                    </label>
-                    <label className="flex items-center gap-1.5 cursor-pointer">
-                      <input
-                        type="radio"
-                        name="tdsTarget"
-                        checked={tdsTarget === 'FranchiseAgent'}
-                        onChange={() => setTdsTarget('FranchiseAgent')}
-                        className="accent-[#0869D8]"
-                      />
-                      <span>Franchise Agent</span>
-                    </label>
-                  </div>
+                  ) : (
+                    <div className="flex flex-wrap items-center gap-4 text-sm text-slate-700">
+                      <label className="flex items-center gap-1.5 cursor-pointer">
+                        <input
+                          type="radio"
+                          name="tdsTarget"
+                          checked={tdsTarget === 'Agent'}
+                          onChange={() => setTdsTarget('Agent')}
+                          className="accent-[#0869D8]"
+                        />
+                        <span>Agent</span>
+                      </label>
+                      <label className="flex items-center gap-1.5 cursor-pointer">
+                        <input
+                          type="radio"
+                          name="tdsTarget"
+                          checked={tdsTarget === 'Franchise'}
+                          onChange={() => setTdsTarget('Franchise')}
+                          className="accent-[#0869D8]"
+                        />
+                        <span>Franchise</span>
+                      </label>
+                      <label className="flex items-center gap-1.5 cursor-pointer">
+                        <input
+                          type="radio"
+                          name="tdsTarget"
+                          checked={tdsTarget === 'FranchiseAgent'}
+                          onChange={() => setTdsTarget('FranchiseAgent')}
+                          className="accent-[#0869D8]"
+                        />
+                        <span>Franchise Agent</span>
+                      </label>
+                    </div>
+                  )}
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <span className="text-sm font-medium text-slate-700">Broker</span>
+                  <span className="text-sm font-medium text-slate-700 shrink-0">Broker</span>
                   <select
                     value={selectedBroker}
                     onChange={(e) => setSelectedBroker(e.target.value)}
-                    className="px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-brand-primary focus:border-brand-primary outline-none"
+                    className="w-48 sm:w-56 px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-brand-primary focus:border-brand-primary outline-none"
                   >
                     <option value="">--Select Broker--</option>
                     <option value="broker1">Reliable Brokerage Ltd</option>
@@ -422,7 +434,7 @@ const PolicyMaster: React.FC = () => {
                 </div>
               </div>
 
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 shrink-0 ml-auto">
                 <button className="px-5 py-2 bg-[#f39c12] hover:bg-[#e08e0b] text-white font-medium text-sm rounded-lg shadow-sm transition-all cursor-pointer">
                   View
                 </button>
@@ -435,12 +447,12 @@ const PolicyMaster: React.FC = () => {
               </div>
             </div>
 
-            {/* Details Form Card (Image 1 Bottom) */}
+            {/* Details Form Card */}
             <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden flex flex-col w-full">
               <div className="bg-brand-navy text-white px-5 py-3 font-semibold text-sm">
                 » Details
               </div>
-              <div className="p-5 grid grid-cols-1 sm:grid-cols-4 gap-4 items-end">
+              <div className={`p-5 grid grid-cols-1 ${activeTab === 'brokerTds' ? 'sm:grid-cols-3' : 'sm:grid-cols-4'} gap-4 items-end`}>
                 <div>
                   <label className="block text-xs font-medium text-slate-700 mb-1">Company Name</label>
                   <select
@@ -453,18 +465,20 @@ const PolicyMaster: React.FC = () => {
                   </select>
                 </div>
 
-                <div>
-                  <label className="block text-xs font-medium text-slate-700 mb-1">Branch Name</label>
-                  <select
-                    value={tdsDetailsBranch}
-                    onChange={(e) => setTdsDetailsBranch(e.target.value)}
-                    className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-brand-primary focus:border-brand-primary outline-none"
-                  >
-                    <option value="">--Select Branch--</option>
-                    <option value="BARAMATI">BARAMATI</option>
-                    <option value="MUMBAI">MUMBAI</option>
-                  </select>
-                </div>
+                {activeTab === 'agentTds' && (
+                  <div>
+                    <label className="block text-xs font-medium text-slate-700 mb-1">Branch Name</label>
+                    <select
+                      value={tdsDetailsBranch}
+                      onChange={(e) => setTdsDetailsBranch(e.target.value)}
+                      className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-brand-primary focus:border-brand-primary outline-none"
+                    >
+                      <option value="">--Select Branch--</option>
+                      <option value="BARAMATI">BARAMATI</option>
+                      <option value="MUMBAI">MUMBAI</option>
+                    </select>
+                  </div>
+                )}
 
                 <div>
                   <label className="block text-xs font-medium text-slate-700 mb-1">Valid From</label>
@@ -497,15 +511,15 @@ const PolicyMaster: React.FC = () => {
           </div>
         )}
 
-        {/* SPECIAL CONTENT VIEW: SERVICE CHARGE (Image 2 & 3 Combined Clean Layout) */}
+        {/* SPECIAL CONTENT VIEW: SERVICE CHARGE */}
         {activeTab === 'serviceCharge' && (
           <div className="flex flex-col space-y-5 w-full">
-            {/* Top Filter Card */}
-            <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
-                <div className="flex items-center gap-4">
-                  <span className="text-sm font-medium text-slate-700">Service Charge For</span>
-                  <div className="flex items-center gap-4 text-sm text-slate-700">
+            {/* Top Filter Card (Responsive flex-wrap layout) */}
+            <div className="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-sm flex flex-wrap items-center justify-between gap-4 w-full">
+              <div className="flex flex-wrap items-center gap-4 sm:gap-6 min-w-0">
+                <div className="flex flex-wrap items-center gap-3">
+                  <span className="text-sm font-medium text-slate-700 shrink-0">Service Charge For</span>
+                  <div className="flex flex-wrap items-center gap-4 text-sm text-slate-700">
                     <label className="flex items-center gap-1.5 cursor-pointer">
                       <input
                         type="checkbox"
@@ -537,11 +551,11 @@ const PolicyMaster: React.FC = () => {
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <span className="text-sm font-medium text-slate-700">Broker</span>
+                  <span className="text-sm font-medium text-slate-700 shrink-0">Broker</span>
                   <select
                     value={selectedBroker}
                     onChange={(e) => setSelectedBroker(e.target.value)}
-                    className="px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-brand-primary focus:border-brand-primary outline-none"
+                    className="w-48 sm:w-56 px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-brand-primary focus:border-brand-primary outline-none"
                   >
                     <option value="">--Select Broker--</option>
                     <option value="b1">Reliable Brokerage</option>
@@ -549,7 +563,7 @@ const PolicyMaster: React.FC = () => {
                 </div>
               </div>
 
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 shrink-0 ml-auto">
                 <button className="px-5 py-2 bg-[#f39c12] hover:bg-[#e08e0b] text-white font-medium text-sm rounded-lg shadow-sm transition-all cursor-pointer">
                   View
                 </button>
@@ -562,7 +576,7 @@ const PolicyMaster: React.FC = () => {
               </div>
             </div>
 
-            {/* Service Charge Details Card (Image 2 & 3 Clean Combined Layout) */}
+            {/* Service Charge Details Card */}
             <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden flex flex-col w-full">
               <div className="bg-brand-navy text-white px-5 py-3 font-semibold text-sm">
                 » Service Charge Details
@@ -928,7 +942,15 @@ const PolicyMaster: React.FC = () => {
             <div className="bg-brand-navy text-white px-6 py-4 flex items-center justify-between">
               <h3 className="font-bold text-lg flex items-center gap-2">
                 <span>
-                  » {editingItem ? `Edit ${getTabLabel(activeTab)} Form` : `${getTabLabel(activeTab)} Form`}
+                  » {activeTab === 'rto'
+                      ? 'RTO Form'
+                      : activeTab === 'paymentMode'
+                      ? (editingItem ? 'Edit Payment Mode Form' : 'Payment Mode Form')
+                      : activeTab === 'paToOwnerDriver'
+                      ? 'PA To Owner Driver Form'
+                      : editingItem
+                      ? `Edit ${getTabLabel(activeTab)} Form`
+                      : `${getTabLabel(activeTab)} Form`}
                 </span>
               </h3>
               <button
@@ -1004,7 +1026,140 @@ const PolicyMaster: React.FC = () => {
                   </button>
                 </div>
               </form>
+            ) : activeTab === 'rto' ? (
+              /* RTO FORM MODAL (Image 2) */
+              <form onSubmit={handleSaveForm} className="p-6 space-y-4 overflow-y-auto custom-scrollbar">
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1.5">RTO</label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="AN-01 PORT BLAIR"
+                    value={rtoLocationInput}
+                    onChange={(e) => setRtoLocationInput(e.target.value)}
+                    className="w-full px-4 py-2.5 border border-slate-300 rounded-lg text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-brand-primary transition-all"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1.5">State *</label>
+                  <select
+                    value={rtoStateInput}
+                    onChange={(e) => setRtoStateInput(e.target.value)}
+                    className="w-full px-4 py-2.5 border border-slate-300 rounded-lg text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-brand-primary transition-all bg-white"
+                  >
+                    <option value="">--Select State--</option>
+                    <option value="ANDAMAN NICOBAR ISLANDS">ANDAMAN NICOBAR ISLANDS</option>
+                    <option value="ANDHRA PRADESH">ANDHRA PRADESH</option>
+                    <option value="MAHARASHTRA">MAHARASHTRA</option>
+                    <option value="GUJARAT">GUJARAT</option>
+                    <option value="DELHI">DELHI</option>
+                    <option value="KARNATAKA">KARNATAKA</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1.5">District *</label>
+                  <select
+                    value={rtoDistrictInput}
+                    onChange={(e) => setRtoDistrictInput(e.target.value)}
+                    className="w-full px-4 py-2.5 border border-slate-300 rounded-lg text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-brand-primary transition-all bg-white"
+                  >
+                    <option value="">--Select District--</option>
+                    <option value="PORT BLAIR">PORT BLAIR</option>
+                    <option value="CAR NICOBAR">CAR NICOBAR</option>
+                    <option value="ADILABAD">ADILABAD</option>
+                    <option value="ANANTAPUR">ANANTAPUR</option>
+                    <option value="CHITTOOR">CHITTOOR</option>
+                    <option value="KADAPA">KADAPA</option>
+                    <option value="EAST GODAVARI">EAST GODAVARI</option>
+                    <option value="GUNTUR">GUNTUR</option>
+                    <option value="PUNE">PUNE</option>
+                    <option value="MUMBAI">MUMBAI</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1.5">REG Code *</label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="AN-01"
+                    value={rtoRegCodeInput}
+                    onChange={(e) => setRtoRegCodeInput(e.target.value)}
+                    className="w-full px-4 py-2.5 border border-slate-300 rounded-lg text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-brand-primary transition-all font-mono"
+                  />
+                </div>
+
+                <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
+                  <button
+                    type="button"
+                    onClick={() => { setShowModal(false); setEditingItem(null); }}
+                    className="px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-6 py-2 bg-brand-primary hover:bg-[#0654B0] text-white font-semibold rounded-lg text-sm shadow-md transition-all cursor-pointer"
+                  >
+                    {editingItem ? 'Update' : 'Save'}
+                  </button>
+                </div>
+              </form>
+            ) : activeTab === 'paToOwnerDriver' ? (
+              /* PA TO OWNER DRIVER FORM MODAL (Image 4) */
+              <form onSubmit={handleSaveForm} className="p-6 space-y-4 overflow-y-auto custom-scrollbar">
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1.5">Insurance Company</label>
+                  <select
+                    value={paCompanyInput}
+                    onChange={(e) => setPaCompanyInput(e.target.value)}
+                    className="w-full px-4 py-2.5 border border-slate-300 rounded-lg text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-brand-primary transition-all bg-white"
+                    required
+                  >
+                    <option value="">--Select Company--</option>
+                    {insuranceCompanies.map(c => (
+                      <option key={c.id} value={c.company}>{c.company}</option>
+                    ))}
+                    <option value="TATA AIG GENERAL INSURANCE CO. LTD">TATA AIG GENERAL INSURANCE CO. LTD</option>
+                    <option value="INDUSIND GENERAL INSURANCE CO. LTD">INDUSIND GENERAL INSURANCE CO. LTD</option>
+                    <option value="FUTURE GENERALI INDIA INSURANCE COMPANY LIMITED">FUTURE GENERALI INDIA INSURANCE COMPANY LIMITED</option>
+                    <option value="ROYAL SUNDARAMA GENERAL INSURANCE CO. LIMITED">ROYAL SUNDARAMA GENERAL INSURANCE CO. LIMITED</option>
+                    <option value="ICICI LOMBARD GENERAL INSURANCE CO. LTD">ICICI LOMBARD GENERAL INSURANCE CO. LTD</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1.5">Rate</label>
+                  <input
+                    type="number"
+                    required
+                    placeholder="0"
+                    value={paRateInput}
+                    onChange={(e) => setPaRateInput(Number(e.target.value))}
+                    className="w-full px-4 py-2.5 border border-slate-300 rounded-lg text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-brand-primary transition-all"
+                  />
+                </div>
+
+                <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
+                  <button
+                    type="button"
+                    onClick={() => { setShowModal(false); setEditingItem(null); }}
+                    className="px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-6 py-2 bg-brand-primary hover:bg-[#0654B0] text-white font-semibold rounded-lg text-sm shadow-md transition-all cursor-pointer"
+                  >
+                    Save
+                  </button>
+                </div>
+              </form>
             ) : (
+              /* GENERIC MASTER FORM (Payment Mode, etc.) */
               <form onSubmit={handleSaveForm} className="p-6 space-y-4 overflow-y-auto custom-scrollbar">
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-1.5">{getTabLabel(activeTab)}</label>
