@@ -16,6 +16,10 @@ import PolicyMaster from '../pages/admin/master/PolicyMaster'
 import VehicleMaster from '../pages/admin/master/VehicleMaster'
 import AccountMaster from '../pages/admin/master/AccountMaster'
 import BusinessMaster from '../pages/admin/master/BusinessMaster'
+import UserMaster from '../pages/admin/user/UserMaster'
+import Registration from '../pages/admin/registration/Registration'
+import HrModule from '../pages/admin/hr/HrModule'
+import CommissionGrid from '../pages/admin/commission/CommissionGrid'
 
 const AppRoutes = () => {
   return (
@@ -38,6 +42,14 @@ const AppRoutes = () => {
             <Route path="/vehicle-master" element={<VehicleMaster />} />
             <Route path="/account-master" element={<AccountMaster />} />
             <Route path="/operations/business-master" element={<BusinessMaster />} />
+            <Route path="/users" element={<Navigate to="/users/role-master" replace />} />
+            <Route path="/users/:tab" element={<UserMaster />} />
+            <Route path="/registration" element={<Navigate to="/registration/employee" replace />} />
+            <Route path="/registration/:tab" element={<Registration />} />
+            <Route path="/hr" element={<Navigate to="/hr/executive-attendance" replace />} />
+            <Route path="/hr/:tab" element={<HrModule />} />
+            <Route path="/commission-grid" element={<Navigate to="/commission-grid/agent-commission" replace />} />
+            <Route path="/commission-grid/:tab" element={<CommissionGrid />} />
           </Route>
         </Route>
       </Routes>

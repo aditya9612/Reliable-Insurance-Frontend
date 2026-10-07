@@ -3,7 +3,7 @@ import { NavLink, useLocation } from 'react-router-dom';
 import {
     LayoutDashboard, Database, Users, Briefcase, FileText, Settings,
     ChevronDown, ChevronRight, UserPlus, FileSpreadsheet, Building2,
-    Shield, Map, MessageSquare, Download, Layers
+    Shield, Map, MessageSquare, Download, Layers, UserCheck, Percent
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -16,10 +16,12 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
 
     // Group 1 — Main
     // Group 2 — Master
-    // Group 3 — User & Registration
-    // Group 4 — Business Operations
-    // Group 5 — Reports
-    // Group 6 — Other Modules
+    // Group 3 — User
+    // Group 4 — Registration
+    // Group 5 — HR Module
+    // Group 6 — Business Operations
+    // Group 7 — Reports
+    // Group 8 — Other Modules
 
     type NavItem = { name: string; path: string; icon?: React.ElementType };
     type NavGroup = { title: string; icon: React.ElementType; children?: NavItem[]; path?: string };
@@ -41,11 +43,75 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
             ]
         },
         {
-            title: 'USER & REG.',
+            title: 'USER',
             icon: Users,
             children: [
-                { name: 'User', path: '/users' },
-                { name: 'Registration', path: '/registration' },
+                { name: 'User Role Master', path: '/users/role-master' },
+                { name: 'Designation Master', path: '/users/designation-master' },
+                { name: 'Client App User', path: '/users/client-app-user' },
+                { name: 'Assign Privileges', path: '/users/assign-privileges' },
+                { name: 'Assign Location Head', path: '/users/assign-location-head' },
+                { name: 'Temporary Operator', path: '/users/temporary-operator' },
+                { name: 'Login History', path: '/users/login-history' },
+            ]
+        },
+        {
+            title: 'REGISTRATION',
+            icon: UserPlus,
+            children: [
+                { name: 'Employee', path: '/registration/employee' },
+                { name: 'Agent', path: '/registration/agent' },
+                { name: 'View Agent', path: '/registration/view-agent' },
+                { name: 'View Employee', path: '/registration/view-employee' },
+                { name: 'Bank Beneficiary', path: '/registration/bank-beneficiary' },
+                { name: 'Delete Vehicle', path: '/registration/delete-vehicle' },
+                { name: 'Deactivated Agent List', path: '/registration/deactivated-agent-list' },
+            ]
+        },
+        {
+            title: 'HR MODULE',
+            icon: UserCheck,
+            children: [
+                { name: 'Executive Attendance', path: '/hr/executive-attendance' },
+                { name: 'Attendance', path: '/hr/attendance' },
+                { name: 'Salary Process', path: '/hr/salary-process' },
+                { name: 'Employee Payment', path: '/hr/employee-payment' },
+                { name: 'Holiday Master', path: '/hr/holiday-master' },
+                { name: 'Employee Master', path: '/hr/employee-master' },
+                { name: 'View Employee', path: '/hr/view-employee' },
+                { name: 'Leave Management', path: '/hr/leave-management' },
+                { name: 'Leave Type', path: '/hr/leave-type' },
+                { name: 'Organization Master', path: '/hr/organization-master' },
+                { name: 'Department Master', path: '/hr/department-master' },
+                { name: 'Salary Slip', path: '/hr/salary-slip' },
+                { name: 'Employee Advance', path: '/hr/employee-advance' },
+                { name: 'View Employee Advance', path: '/hr/view-employee-advance' },
+                { name: 'Designation Master', path: '/hr/designation-master' },
+                { name: 'Apply Leave', path: '/hr/apply-leave' },
+                { name: 'Leave Report', path: '/hr/leave-report' },
+            ]
+        },
+        {
+            title: 'COMMISSION GRID',
+            icon: Percent,
+            children: [
+                { name: 'Agent Commission', path: '/commission-grid/agent-commission' },
+                { name: 'Multiple Agent Commission', path: '/commission-grid/multiple-agent-commission' },
+                { name: 'Broker Commission', path: '/commission-grid/broker-commission' },
+                { name: 'Multiple Broker Commission', path: '/commission-grid/multiple-broker-commission' },
+                { name: 'Extra Commission Amount', path: '/commission-grid/extra-commission-amount' },
+                { name: 'Latest Agent Commission', path: '/commission-grid/latest-agent-commission' },
+                { name: 'Broker Latest Grid', path: '/commission-grid/broker-latest-grid' },
+                { name: 'New Broker Commission', path: '/commission-grid/new-broker-commission' },
+                { name: 'New Agent Commission', path: '/commission-grid/new-agent-commission' },
+                { name: 'Executive Self Insentive', path: '/commission-grid/executive-self-incentive' },
+                { name: 'Multiple Executive Self Insentive', path: '/commission-grid/multiple-executive-self-incentive' },
+                { name: 'Check Grid', path: '/commission-grid/check-grid' },
+                { name: 'Comm Veh Age', path: '/commission-grid/comm-veh-age' },
+                { name: 'Year Slab', path: '/commission-grid/year-slab' },
+                { name: 'Multiple Agent Broker Comm', path: '/commission-grid/multiple-agent-broker-comm' },
+                { name: 'Import Broker Grid', path: '/commission-grid/import-broker-grid' },
+                { name: 'Decline Model New', path: '/commission-grid/decline-model-new' },
             ]
         },
         {
@@ -70,7 +136,6 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
                 { name: 'Reports', path: '/reports' },
                 { name: 'MIS', path: '/reports/mis' },
                 { name: 'Recon', path: '/reports/recon' },
-                { name: 'Commission Grid', path: '/reports/commission-grid' },
                 { name: 'Target', path: '/reports/target' },
             ]
         },
@@ -83,17 +148,20 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
                 { name: 'My Page', path: '/other/my-page' },
                 { name: 'Download App', path: '/other/download' },
                 { name: 'Chat Board', path: '/other/chat' },
-                { name: 'HR Module', path: '/other/hr' },
                 { name: 'Old Data', path: '/other/old-data' },
                 { name: 'Calling', path: '/other/calling' },
             ]
         }
     ];
 
-    const [expandedGroups, setExpandedGroups] = useState<string[]>(['MASTER', 'MAIN', 'OPERATIONS']);
+    const [expandedGroups, setExpandedGroups] = useState<string[]>(['MASTER', 'MAIN', 'USER', 'REGISTRATION', 'HR MODULE', 'COMMISSION GRID', 'OPERATIONS']);
 
     const toggleGroup = (title: string) => {
-        if (isCollapsed) return; // Prevent expansion when globally collapsed
+        if (isCollapsed) {
+            setIsCollapsed(false);
+            setExpandedGroups(prev => prev.includes(title) ? prev : [...prev, title]);
+            return;
+        }
         setExpandedGroups(prev =>
             prev.includes(title) ? prev.filter(g => g !== title) : [...prev, title]
         );
