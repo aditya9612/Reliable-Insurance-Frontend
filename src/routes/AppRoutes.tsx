@@ -33,6 +33,7 @@ import RenewalPage from '../pages/admin/operations/RenewalPage'
 import MyPage from '../pages/admin/other_modules/MyPage'
 import MisReports from '../pages/admin/reports_analysis/MisReports'
 import Recon from '../pages/admin/reports_analysis/Recon'
+import TargetPage from '../pages/admin/reports_analysis/TargetPage'
 
 const AppRoutes = () => {
   return (
@@ -82,6 +83,8 @@ const AppRoutes = () => {
             {/* Reports */}
             <Route path="/reports/mis" element={<MisReports />} />
             <Route path="/reports/recon" element={<Recon />} />
+            <Route path="/reports/target" element={<TargetPage />} />
+            <Route path="/target" element={<TargetPage />} />
             <Route path="/reports" element={<MisReports />} />
 
             {/* Other Modules */}
