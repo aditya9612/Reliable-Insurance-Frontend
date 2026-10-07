@@ -6,10 +6,8 @@ const ProtectedRoute: React.FC = () => {
   const { token, loading } = useAuthContext()
 
   if (loading) return <div className="loader">Loading...</div>
-  
-  // Development mode: fallback token so Admin Dashboard displays directly
-  const devToken = token || 'demo-admin-token'
-  if (!devToken) return <Navigate to="/login" replace />
+
+  if (!token) return <Navigate to="/login" replace />
 
   return <Outlet />
 }
