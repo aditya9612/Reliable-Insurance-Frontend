@@ -28,6 +28,10 @@ import CommissionGrid from '../pages/admin/commission/CommissionGrid'
 // Operations
 import ClaimPage from '../pages/admin/operations/ClaimPage'
 import RenewalPage from '../pages/admin/operations/RenewalPage'
+import SupportPage from '../pages/admin/operations/SupportPage'
+
+// Insurance Policy
+import CaliberPolicyPage from '../pages/admin/insurance_policy/CaliberPolicyPage'
 
 // Reports & Other Modules
 import MyPage from '../pages/admin/other_modules/MyPage'
@@ -79,6 +83,10 @@ const AppRoutes = () => {
             {/* Operations */}
             <Route path="/operations/claims" element={<ClaimPage />} />
             <Route path="/operations/renewal" element={<RenewalPage />} />
+            <Route path="/operations/support" element={<SupportPage />} />
+            <Route path="/support" element={<SupportPage />} />
+            <Route path="/operations/caliber-policy" element={<CaliberPolicyPage />} />
+            <Route path="/caliber-policy" element={<CaliberPolicyPage />} />
 
             {/* Reports */}
             <Route path="/reports/mis" element={<MisReports />} />

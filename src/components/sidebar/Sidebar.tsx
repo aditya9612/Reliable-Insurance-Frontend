@@ -38,6 +38,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
             children: [
                 { name: 'Branch Master', path: '/branch-master' },
                 { name: 'Policy Master', path: '/policy-master' },
+                { name: 'Caliber Policy', path: '/insurance-policy/caliber-policy' },
                 { name: 'Vehicle Master', path: '/vehicle-master' },
                 { name: 'Account Master', path: '/account-master' },
             ]
@@ -122,6 +123,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
                 { name: 'Account', path: '/accounts' },
                 { name: 'Claims', path: '/operations/claims' },
                 { name: 'Renewal', path: '/operations/renewal' },
+                { name: 'Caliber Policy', path: '/operations/caliber-policy' },
                 { name: 'Sales', path: '/operations/sales' },
                 { name: 'Franchise', path: '/operations/franchise' },
                 { name: 'POSP', path: '/operations/posp' },
