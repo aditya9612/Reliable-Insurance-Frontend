@@ -1,0 +1,10 @@
+tsconfig.json(25,9): error TS5102: Option 'baseUrl' has been removed. Please remove it from your configuration.
+  Use '"paths": {"*": ["./src/*"]}' instead.
+tsconfig.json(28,17): error TS5090: Non-relative paths are not allowed. Did you forget a leading './'?
+tsconfig.json(31,17): error TS5090: Non-relative paths are not allowed. Did you forget a leading './'?
+tsconfig.json(34,17): error TS5090: Non-relative paths are not allowed. Did you forget a leading './'?
+tsconfig.json(37,17): error TS5090: Non-relative paths are not allowed. Did you forget a leading './'?
+tsconfig.json(40,17): error TS5090: Non-relative paths are not allowed. Did you forget a leading './'?
+tsconfig.json(43,17): error TS5090: Non-relative paths are not allowed. Did you forget a leading './'?
+tsconfig.json(46,17): error TS5090: Non-relative paths are not allowed. Did you forget a leading './'?
+tsconfig.json(49,17): error TS5090: Non-relative paths are not allowed. Did you forget a leading './'?
