@@ -44,6 +44,12 @@ import DeleteTransactionEntry from '../pages/admin/operations/transactions/Delet
 import ReopenRecalculate from '../pages/admin/operations/transactions/ReopenRecalculate'
 import PendingPremiumCash from '../pages/admin/operations/transactions/PendingPremiumCash'
 import AllUserTransEntry from '../pages/admin/operations/transactions/AllUserTransEntry'
+import PolicyCancel from '../pages/admin/operations/transactions/PolicyCancel'
+import QualityCheck from '../pages/admin/operations/transactions/QualityCheck'
+import SelfQuotation from '../pages/admin/operations/transactions/SelfQuotation'
+import NcbRecovery from '../pages/admin/operations/transactions/NcbRecovery'
+import NcbRecoveryReport from '../pages/admin/operations/transactions/NcbRecoveryReport'
+import OnlineAppRequest from '../pages/admin/operations/transactions/OnlineAppRequest'
 
 // Reports & Other Modules
 import MyPage from '../pages/admin/other_modules/MyPage'
@@ -110,6 +116,12 @@ const AppRoutes = () => {
             <Route path="/transactions/reopen-recalculate" element={<ReopenRecalculate />} />
             <Route path="/transactions/pending-premium-cash" element={<PendingPremiumCash />} />
             <Route path="/transactions/all-user-trans" element={<AllUserTransEntry />} />
+            <Route path="/transactions/policy-cancel" element={<PolicyCancel />} />
+            <Route path="/transactions/quality-check" element={<QualityCheck />} />
+            <Route path="/transactions/self-quotation" element={<SelfQuotation />} />
+            <Route path="/transactions/ncb-recovery" element={<NcbRecovery />} />
+            <Route path="/transactions/ncb-recovery-report" element={<NcbRecoveryReport />} />
+            <Route path="/transactions/online-app-request" element={<OnlineAppRequest />} />
 
             {/* Reports */}
             <Route path="/reports/mis" element={<MisReports />} />

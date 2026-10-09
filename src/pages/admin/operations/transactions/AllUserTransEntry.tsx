@@ -189,10 +189,7 @@ const AllUserTransEntry: React.FC = () => {
                                             {record.status === 'VIEW' ? (
                                                 <button className="text-blue-500 font-semibold hover:underline text-xs">VIEW</button>
                                             ) : (
-                                                <div className="flex flex-col gap-1">
-                                                    <span className="text-amber-600 font-bold text-[11px] leading-tight">WAIT FOR<br />APPROVAL</span>
-                                                    <button className="text-blue-500 font-semibold hover:underline text-[11px]">VIEW</button>
-                                                </div>
+                                                <span className="text-amber-600 font-bold text-[11px] leading-tight">WAIT FOR<br />APPROVAL</span>
                                             )}
                                         </div>
                                     </td>
