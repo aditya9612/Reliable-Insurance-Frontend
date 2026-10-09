@@ -357,12 +357,58 @@ const PolicyMaster: React.FC = () => {
         description="Manage insurance policy modes, TDS rates, service charges and master records"
       />
 
-      {/* Horizontal Sub-Tabs List */}
-      <UnderlineTabs
-        tabs={tabsList.map(tab => ({ id: tab, label: getTabLabel(tab) }))}
-        activeTab={activeTab}
-        onTabChange={(tabId) => { setActiveTab(tabId as SubTab); setCurrentPage(1); setSearchQuery(''); }}
-      />
+      {/* 2-Row Full-Width Sub-Tabs Navigation */}
+      <div className="bg-white rounded-2xl border border-brand-border p-3 space-y-2.5 shadow-sm w-full max-w-full">
+        {/* Row 1: First 8 Tabs - Spreading Full Width in 8 Equal Columns */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2 w-full border-b border-slate-200 pb-2.5">
+          {tabsList.slice(0, 8).map((tab) => {
+            const isActive = activeTab === tab;
+            return (
+              <button
+                key={tab}
+                onClick={() => {
+                  setActiveTab(tab);
+                  setCurrentPage(1);
+                  setSearchQuery('');
+                }}
+                className={`w-full py-2.5 px-2 rounded-xl text-[11px] xl:text-[12px] transition-all cursor-pointer border-none text-center font-bold flex items-center justify-center ${
+                  isActive
+                    ? 'bg-brand-primary text-white shadow-sm'
+                    : 'bg-[#F1F5F9] hover:bg-slate-200 text-[#0F172A]'
+                }`}
+                title={getTabLabel(tab)}
+              >
+                <span className="truncate">{getTabLabel(tab)}</span>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Row 2: Remaining 6 Tabs - Spreading Full Width in 6 Equal Columns */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 w-full">
+          {tabsList.slice(8).map((tab) => {
+            const isActive = activeTab === tab;
+            return (
+              <button
+                key={tab}
+                onClick={() => {
+                  setActiveTab(tab);
+                  setCurrentPage(1);
+                  setSearchQuery('');
+                }}
+                className={`w-full py-2.5 px-2 rounded-xl text-[11px] xl:text-[12px] transition-all cursor-pointer border-none text-center font-bold flex items-center justify-center ${
+                  isActive
+                    ? 'bg-brand-primary text-white shadow-sm'
+                    : 'bg-[#F1F5F9] hover:bg-slate-200 text-[#0F172A]'
+                }`}
+                title={getTabLabel(tab)}
+              >
+                <span className="truncate">{getTabLabel(tab)}</span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
 
       {/* Tab Content Animated Wrapper */}
       <div key={activeTab} className="tab-transition-wrapper flex flex-col space-y-5 w-full">

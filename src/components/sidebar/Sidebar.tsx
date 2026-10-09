@@ -38,7 +38,6 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
             children: [
                 { name: 'Branch Master', path: '/branch-master' },
                 { name: 'Policy Master', path: '/policy-master' },
-                { name: 'Caliber Policy', path: '/insurance-policy/caliber-policy' },
                 { name: 'Vehicle Master', path: '/vehicle-master' },
                 { name: 'Account Master', path: '/account-master' },
             ]
@@ -136,7 +135,6 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
             icon: FileSpreadsheet,
             children: [
                 { name: 'Reports', path: '/reports' },
-                { name: 'MIS', path: '/reports/mis' },
                 { name: 'Recon', path: '/reports/recon' },
                 { name: 'Target', path: '/reports/target' },
             ]

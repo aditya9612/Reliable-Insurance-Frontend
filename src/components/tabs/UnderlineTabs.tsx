@@ -14,16 +14,14 @@ interface UnderlineTabsProps {
 
 const UnderlineTabs: React.FC<UnderlineTabsProps> = ({ tabs, activeTab, onTabChange }) => {
     const scrollRef = useRef<HTMLDivElement>(null);
-    const tabRefs = useRef<Record<string, HTMLButtonElement | null>>({});
-    const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0, opacity: 0 });
     const [canScrollLeft, setCanScrollLeft] = useState(false);
     const [canScrollRight, setCanScrollRight] = useState(false);
 
     const checkScroll = () => {
         if (scrollRef.current) {
             const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
-            setCanScrollLeft(scrollLeft > 0);
-            setCanScrollRight(Math.ceil(scrollLeft + clientWidth) < scrollWidth);
+            setCanScrollLeft(scrollLeft > 4);
+            setCanScrollRight(Math.ceil(scrollLeft + clientWidth) < scrollWidth - 4);
         }
     };
 
@@ -33,77 +31,56 @@ const UnderlineTabs: React.FC<UnderlineTabsProps> = ({ tabs, activeTab, onTabCha
         return () => window.removeEventListener('resize', checkScroll);
     }, [tabs]);
 
-    useEffect(() => {
-        // Timeout ensures DOM layout is computed
-        const timeoutId = setTimeout(() => {
-            const activeEl = tabRefs.current[activeTab];
-            if (activeEl) {
-                setIndicatorStyle({
-                    left: activeEl.offsetLeft,
-                    width: activeEl.offsetWidth,
-                    opacity: 1
-                });
-            }
-        }, 50);
-        return () => clearTimeout(timeoutId);
-    }, [activeTab, tabs]);
-
     const scroll = (direction: 'left' | 'right') => {
         if (scrollRef.current) {
             const scrollAmount = direction === 'left' ? -250 : 250;
             scrollRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-            setTimeout(checkScroll, 350); // check after smooth scroll completes
+            setTimeout(checkScroll, 350);
         }
     };
 
     return (
-        <div className="relative border-b border-[#DCE6F0] bg-white w-full group">
-            {/* Optional fade out element to show more items exist */}
+        <div className="relative bg-white rounded-2xl border border border-slate-200 p-2.5 shadow-sm w-full group">
             {canScrollLeft && (
                 <button
                     onClick={() => scroll('left')}
-                    className="absolute left-0 top-0 bottom-0 z-10 w-12 flex items-center justify-start pl-1 bg-gradient-to-r from-white via-white/80 to-transparent text-[#66809F] hover:text-[#2563EB] transition-colors"
+                    className="absolute left-1 top-1/2 -translate-y-1/2 z-10 p-1.5 bg-white border border-slate-200 rounded-full shadow-md text-slate-600 hover:text-brand-primary transition-all cursor-pointer"
+                    title="Scroll Left"
                 >
-                    <div className="bg-white border border-[#DCE6F0] rounded-full shadow-sm p-0.5 flex items-center justify-center">
-                        <ChevronLeft size={16} strokeWidth={2.5} />
-                    </div>
+                    <ChevronLeft size={16} strokeWidth={2.5} />
                 </button>
             )}
 
             <div
                 ref={scrollRef}
                 onScroll={checkScroll}
-                className="flex flex-row items-center gap-7 px-2 sm:px-4 overflow-x-auto [&::-webkit-scrollbar]:hidden h-[54px] w-full relative z-0 scroll-smooth"
+                className="flex flex-row items-center gap-2 overflow-x-auto [&::-webkit-scrollbar]:hidden w-full relative z-0 scroll-smooth py-0.5 px-0.5"
             >
-                {tabs.map((tab) => (
-                    <button
-                        key={tab.id}
-                        ref={(el) => { tabRefs.current[tab.id] = el; }}
-                        onClick={() => onTabChange(tab.id)}
-                        className={`relative h-[54px] flex flex-col justify-center px-1 sm:px-2 font-medium text-sm whitespace-nowrap transition-colors cursor-pointer shrink-0 ${activeTab === tab.id
-                            ? 'text-[#2563EB] font-semibold'
-                            : 'text-[#102A4C] font-medium hover:text-[#2563EB]'
+                {tabs.map((tab) => {
+                    const isActive = activeTab === tab.id;
+                    return (
+                        <button
+                            key={tab.id}
+                            onClick={() => onTabChange(tab.id)}
+                            className={`px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm whitespace-nowrap transition-all cursor-pointer border-none flex items-center justify-center shrink-0 ${
+                                isActive
+                                    ? 'bg-brand-primary text-white shadow-sm'
+                                    : 'bg-[#F1F5F9] hover:bg-slate-200 text-[#0F172A]'
                             }`}
-                    >
-                        <span>{tab.label}</span>
-                    </button>
-                ))}
-
-                {/* Sliding Indicator */}
-                <span
-                    className="absolute bottom-0 h-[2px] bg-[#2563EB] rounded-t-sm transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] z-20 pointer-events-none"
-                    style={{ left: `${indicatorStyle.left}px`, width: `${indicatorStyle.width}px`, opacity: indicatorStyle.opacity }}
-                />
+                        >
+                            <span>{tab.label}</span>
+                        </button>
+                    );
+                })}
             </div>
 
             {canScrollRight && (
                 <button
                     onClick={() => scroll('right')}
-                    className="absolute right-0 top-0 bottom-0 z-10 w-12 flex items-center justify-end pr-1 bg-gradient-to-l from-white via-white/80 to-transparent text-[#66809F] hover:text-[#2563EB] transition-colors"
+                    className="absolute right-1 top-1/2 -translate-y-1/2 z-10 p-1.5 bg-white border border-slate-200 rounded-full shadow-md text-slate-600 hover:text-brand-primary transition-all cursor-pointer"
+                    title="Scroll Right"
                 >
-                    <div className="bg-white border border-[#DCE6F0] rounded-full shadow-sm p-0.5 flex items-center justify-center">
-                        <ChevronRight size={16} strokeWidth={2.5} />
-                    </div>
+                    <ChevronRight size={16} strokeWidth={2.5} />
                 </button>
             )}
         </div>
@@ -111,3 +88,4 @@ const UnderlineTabs: React.FC<UnderlineTabsProps> = ({ tabs, activeTab, onTabCha
 };
 
 export default UnderlineTabs;
+
