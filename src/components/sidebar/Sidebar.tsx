@@ -116,10 +116,39 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
             ]
         },
         {
+            title: 'TRANSACTION',
+            icon: FileText,
+            children: [
+                { name: 'Policy Endorsement', path: '/transactions/policy-endorsement' },
+                { name: 'Corporate Client', path: '/transactions/corporate-client' },
+                { name: 'View App Entry', path: '/transactions/view-app-entry' },
+                { name: 'Policy No Update', path: '/transactions/policy-no-update' },
+                { name: 'Permium Cheque Bouns', path: '/transactions/premium-cheque-bounce' },
+                { name: 'Transaction Report', path: '/transactions/transaction-report' },
+                { name: 'Update Customer', path: '/transactions/update-customer' },
+                { name: 'Update Vehicle Details', path: '/transactions/update-vehicle' },
+                { name: 'All Transaction Report', path: '/transactions/all-transaction-report' },
+                { name: 'Remove Wrong Entries', path: '/transactions/remove-wrong-entries' },
+                { name: 'Non Motor Transaction', path: '/transactions/non-motor' },
+                { name: 'Update App Policy Entry', path: '/transactions/update-app-policy' },
+                { name: 'Delete Transaction Entry', path: '/transactions/delete-transaction' },
+                { name: 'View Policy Document', path: '/transactions/view-policy-document' },
+                { name: 'Reopen Recalculate', path: '/transactions/reopen-recalculate' },
+                { name: 'Pending Premium Cash', path: '/transactions/pending-premium-cash' },
+                { name: 'All User Trans Entry', path: '/transactions/all-user-trans' },
+                { name: 'Policy Cancel', path: '/transactions/policy-cancel' },
+                { name: 'Quality Check', path: '/transactions/quality-check' },
+                { name: 'Quality Report', path: '/transactions/quality-report' },
+                { name: 'Self Quotation', path: '/transactions/self-quotation' },
+                { name: 'Ncb Recovery', path: '/transactions/ncb-recovery' },
+                { name: 'Ncb Recovery Report', path: '/transactions/ncb-recovery-report' },
+                { name: 'Online App Request', path: '/transactions/online-app-request' }
+            ]
+        },
+        {
             title: 'OPERATIONS',
             icon: Briefcase,
             children: [
-                { name: 'Transaction', path: '/transactions' },
                 { name: 'Account', path: '/accounts' },
                 { name: 'Claims', path: '/operations/claims' },
                 { name: 'Renewal', path: '/operations/renewal' },
@@ -156,7 +185,26 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
         }
     ];
 
-    const [expandedGroups, setExpandedGroups] = useState<string[]>(['MASTER', 'MAIN', 'USER', 'REGISTRATION', 'HR MODULE', 'COMMISSION GRID', 'OPERATIONS']);
+    const isActive = (path: string) => location.pathname.startsWith(path);
+    const isGroupActive = (children?: NavItem[]) => children?.some(c => isActive(c.path));
+
+    const [expandedGroups, setExpandedGroups] = useState<string[]>(() => {
+        const activeGroup = navGroups.find(g => isGroupActive(g.children) || (g.path && isActive(g.path)));
+        return activeGroup ? [activeGroup.title] : [];
+    });
+
+    const sidebarRef = React.useRef<HTMLDivElement>(null);
+
+    React.useEffect(() => {
+        if (sidebarRef.current) {
+            // Find active submenu item or main nav link
+            const activeItem = sidebarRef.current.querySelector('.before\\:\\!bg-brand-primary, .\\!border-brand-primary');
+            if (activeItem) {
+                // Scroll it into view instantly on mount
+                activeItem.scrollIntoView({ behavior: 'auto', block: 'center' });
+            }
+        }
+    }, []);
 
     const toggleGroup = (title: string) => {
         if (isCollapsed) {
@@ -168,9 +216,6 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
             prev.includes(title) ? prev.filter(g => g !== title) : [...prev, title]
         );
     };
-
-    const isActive = (path: string) => location.pathname.startsWith(path);
-    const isGroupActive = (children?: NavItem[]) => children?.some(c => isActive(c.path));
 
     return (
         <aside className={`bg-brand-navy text-[#B8C7D9] h-full flex flex-col transition-all duration-300 ease-in-out shrink-0 z-20 shadow-xl fixed md:static top-0 left-0 bottom-0 ${isCollapsed ? '-translate-x-full md:translate-x-0 w-[240px] md:w-[70px] lg:w-[80px]' : 'translate-x-0 w-[240px]'}`}>
@@ -195,7 +240,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
             </div>
 
             {/* Navigation Drawer */}
-            <div className="flex-1 overflow-y-auto overflow-x-hidden py-4 sidebar-scrollbar">
+            <div ref={sidebarRef} className="flex-1 overflow-y-auto overflow-x-hidden py-4 sidebar-scrollbar">
 
                 <nav className="space-y-1.5 px-3">
                     {navGroups.map((group) => {

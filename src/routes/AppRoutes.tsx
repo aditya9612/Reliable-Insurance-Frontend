@@ -33,6 +33,28 @@ import SupportPage from '../pages/admin/operations/SupportPage'
 // Insurance Policy
 import CaliberPolicyPage from '../pages/admin/insurance_policy/CaliberPolicyPage'
 
+// Transactions
+import PolicyEndorsement from '../pages/admin/operations/transactions/PolicyEndorsement'
+import CorporateClient from '../pages/admin/operations/transactions/CorporateClient'
+import ViewAppEntry from '../pages/admin/operations/transactions/ViewAppEntry'
+import PolicyNoUpdate from '../pages/admin/operations/transactions/PolicyNoUpdate'
+import PremiumChequeBounce from '../pages/admin/operations/transactions/PremiumChequeBounce'
+import ViewPolicyDocument from '../pages/admin/operations/transactions/ViewPolicyDocument'
+import AllTransactionReport from '../pages/admin/operations/transactions/AllTransactionReport'
+import RemoveWrongEntries from '../pages/admin/operations/transactions/RemoveWrongEntries'
+import NonMotorTransaction from '../pages/admin/operations/transactions/NonMotorTransaction'
+import UpdateAppPolicy from '../pages/admin/operations/transactions/UpdateAppPolicy'
+import DeleteTransactionEntry from '../pages/admin/operations/transactions/DeleteTransactionEntry'
+import ReopenRecalculate from '../pages/admin/operations/transactions/ReopenRecalculate'
+import PendingPremiumCash from '../pages/admin/operations/transactions/PendingPremiumCash'
+import AllUserTransEntry from '../pages/admin/operations/transactions/AllUserTransEntry'
+import PolicyCancel from '../pages/admin/operations/transactions/PolicyCancel'
+import QualityCheck from '../pages/admin/operations/transactions/QualityCheck'
+import SelfQuotation from '../pages/admin/operations/transactions/SelfQuotation'
+import NcbRecovery from '../pages/admin/operations/transactions/NcbRecovery'
+import NcbRecoveryReport from '../pages/admin/operations/transactions/NcbRecoveryReport'
+import OnlineAppRequest from '../pages/admin/operations/transactions/OnlineAppRequest'
+
 // Reports & Other Modules
 import MyPage from '../pages/admin/other_modules/MyPage'
 import MisReports from '../pages/admin/reports_analysis/MisReports'
@@ -87,6 +109,28 @@ const AppRoutes = () => {
             <Route path="/support" element={<SupportPage />} />
             <Route path="/operations/caliber-policy" element={<CaliberPolicyPage />} />
             <Route path="/caliber-policy" element={<CaliberPolicyPage />} />
+
+            {/* Transactions */}
+            <Route path="/transactions/policy-endorsement" element={<PolicyEndorsement />} />
+            <Route path="/transactions/corporate-client" element={<CorporateClient />} />
+            <Route path="/transactions/view-app-entry" element={<ViewAppEntry />} />
+            <Route path="/transactions/policy-no-update" element={<PolicyNoUpdate />} />
+            <Route path="/transactions/premium-cheque-bounce" element={<PremiumChequeBounce />} />
+            <Route path="/transactions/all-transaction-report" element={<AllTransactionReport />} />
+            <Route path="/transactions/remove-wrong-entries" element={<RemoveWrongEntries />} />
+            <Route path="/transactions/non-motor" element={<NonMotorTransaction />} />
+            <Route path="/transactions/update-app-policy" element={<UpdateAppPolicy />} />
+            <Route path="/transactions/delete-transaction" element={<DeleteTransactionEntry />} />
+            <Route path="/transactions/view-policy-document" element={<ViewPolicyDocument />} />
+            <Route path="/transactions/reopen-recalculate" element={<ReopenRecalculate />} />
+            <Route path="/transactions/pending-premium-cash" element={<PendingPremiumCash />} />
+            <Route path="/transactions/all-user-trans" element={<AllUserTransEntry />} />
+            <Route path="/transactions/policy-cancel" element={<PolicyCancel />} />
+            <Route path="/transactions/quality-check" element={<QualityCheck />} />
+            <Route path="/transactions/self-quotation" element={<SelfQuotation />} />
+            <Route path="/transactions/ncb-recovery" element={<NcbRecovery />} />
+            <Route path="/transactions/ncb-recovery-report" element={<NcbRecoveryReport />} />
+            <Route path="/transactions/online-app-request" element={<OnlineAppRequest />} />
 
             {/* Reports */}
             <Route path="/reports/mis" element={<MisReports />} />

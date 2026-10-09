@@ -22,31 +22,30 @@
         "noUnusedParameters": false,
         "noFallthroughCasesInSwitch": true,
         /* Path aliases */
-        "baseUrl": "./src",
         "paths": {
             "@/*": [
-                "*"
+                "./src/*"
             ],
             "@components/*": [
-                "components/*"
+                "./src/components/*"
             ],
             "@pages/*": [
-                "pages/*"
+                "./src/pages/*"
             ],
             "@context/*": [
-                "context/*"
+                "./src/context/*"
             ],
             "@utils/*": [
-                "utils/*"
+                "./src/utils/*"
             ],
             "@styles/*": [
-                "styles/*"
+                "./src/styles/*"
             ],
             "@routes/*": [
-                "routes/*"
+                "./src/routes/*"
             ],
             "@layouts/*": [
-                "layouts/*"
+                "./src/layouts/*"
             ]
         }
     },

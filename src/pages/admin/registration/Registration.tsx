@@ -140,7 +140,7 @@ const Registration: React.FC = () => {
         { id: 5, agentCode: 'AGT-8805', fullName: 'Prakash Madhavrao Joshi', type: 'BROKER', branch: 'MUMBAI', mobile: '9850987123', email: 'prakash.joshi@reliable.in', panNo: 'BCDEF7890P', kycStatus: 'UNDER REVIEW', totalPolicies: 67, regDate: '20/05/2024', status: 'ACTIVE' },
         { id: 6, agentCode: 'AGT-8806', fullName: 'Ganesh K. Jagtap', type: 'POSP', branch: 'BARAMATI', mobile: '9850123984', email: 'ganesh.posp@reliable.in', panNo: 'FGHIJ4567Y', kycStatus: 'VERIFIED', totalPolicies: 179, regDate: '03/09/2023', status: 'ACTIVE' },
     ]);
-    const [agentForm, setAgentForm] = useState({ fullName: '', type: 'POSP' as const, branch: 'BARAMATI', mobile: '', email: '', panNo: '' });
+    const [agentForm, setAgentForm] = useState({ fullName: '', type: 'POSP' as 'POSP' | 'DIRECT' | 'FRANCHISE' | 'BROKER', branch: 'BARAMATI', mobile: '', email: '', panNo: '' });
 
     // ==========================================
     // 5: BANK BENEFICIARY STATE
