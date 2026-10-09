@@ -19,6 +19,7 @@
 .admin-content {
     flex: 1;
     overflow-y: auto;
+    overflow-x: hidden;
     padding: 24px;
     position: relative;
 }
@@ -70,13 +71,15 @@
 
     to {
         opacity: 1;
-        transform: translateY(0);
+        transform: none;
     }
 }
 
 .page-transition-wrapper {
     animation: slideFadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     width: 100%;
+    max-width: 100%;
+    min-width: 0;
     min-height: 100%;
     display: flex;
     flex-direction: column;
@@ -85,4 +88,6 @@
 .tab-transition-wrapper {
     animation: slideFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     width: 100%;
+    max-width: 100%;
+    min-width: 0;
 }

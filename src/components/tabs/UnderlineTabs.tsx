@@ -73,7 +73,7 @@ const UnderlineTabs: React.FC<UnderlineTabsProps> = ({ tabs, activeTab, onTabCha
             <div
                 ref={scrollRef}
                 onScroll={checkScroll}
-                className="flex flex-row items-center gap-7 px-2 sm:px-4 overflow-x-auto [&::-webkit-scrollbar]:hidden h-[54px] w-full relative z-0 scroll-smooth"
+                className="flex flex-row items-center gap-7 px-2 sm:px-4 overflow-x-auto no-scrollbar [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden h-[54px] w-full relative z-0 scroll-smooth"
             >
                 {tabs.map((tab) => (
                     <button

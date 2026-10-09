@@ -65,11 +65,19 @@ const AppRoutes = () => {
             {/* Registration */}
             <Route path="/registration" element={<Navigate to="/registration/employee" replace />} />
             <Route path="/registration/:tab" element={<Registration />} />
+            <Route path="/delete-vehicle" element={<Navigate to="/registration/delete-vehicle" replace />} />
+            <Route path="/deactivated-agent-list" element={<Navigate to="/registration/deactivated-agent-list" replace />} />
 
             {/* HR Module */}
             <Route path="/hr" element={<Navigate to="/hr/executive-attendance" replace />} />
             <Route path="/hr/:tab" element={<HrModule />} />
             <Route path="/other/hr" element={<Navigate to="/hr/executive-attendance" replace />} />
+            <Route path="/executive-attendance" element={<Navigate to="/hr/executive-attendance" replace />} />
+            <Route path="/attendance" element={<Navigate to="/hr/attendance" replace />} />
+            <Route path="/holiday-master" element={<Navigate to="/hr/holiday-master" replace />} />
+            <Route path="/employee-master" element={<Navigate to="/hr/employee-master" replace />} />
+            <Route path="/view-employee" element={<Navigate to="/hr/view-employee" replace />} />
+            <Route path="/salary-process" element={<Navigate to="/hr/salary-process" replace />} />
 
             {/* Commission Grid */}
             <Route path="/commission-grid" element={<Navigate to="/commission-grid/agent-commission" replace />} />

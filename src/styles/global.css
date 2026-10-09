@@ -96,3 +96,43 @@ body {
   font-size: 1rem;
   color: var(--color-muted);
 }
+
+/* ── ERP Horizontal Scrollbar ─────────────────────── */
+.erp-horizontal-scrollbar {
+  scrollbar-width: auto;
+  scrollbar-color: #FFFFFF #CBD5E1;
+}
+
+.erp-horizontal-scrollbar::-webkit-scrollbar {
+  height: 14px;
+}
+
+.erp-horizontal-scrollbar::-webkit-scrollbar-track {
+  background: #E2E8F0;
+  border-radius: 8px;
+  border: 1px solid #CBD5E1;
+}
+
+.erp-horizontal-scrollbar::-webkit-scrollbar-thumb {
+  background: #FFFFFF;
+  border-radius: 8px;
+  border: 2px solid #94A3B8;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.erp-horizontal-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #FFFFFF;
+  border-color: #64748B;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+/* ── Hide scrollbar utility ───────────────────────── */
+.no-scrollbar {
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}

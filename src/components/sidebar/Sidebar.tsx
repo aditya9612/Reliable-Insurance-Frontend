@@ -23,7 +23,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
     // Group 7 — Reports
     // Group 8 — Other Modules
 
-    type NavItem = { name: string; path: string; icon?: React.ElementType };
+    type NavItem = { name: string; path: string; icon?: React.ElementType; matchPaths?: string[] };
     type NavGroup = { title: string; icon: React.ElementType; children?: NavItem[]; path?: string };
 
     const navGroups: NavGroup[] = [
@@ -45,74 +45,22 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
         {
             title: 'USER',
             icon: Users,
-            children: [
-                { name: 'User Role Master', path: '/users/role-master' },
-                { name: 'Designation Master', path: '/users/designation-master' },
-                { name: 'Client App User', path: '/users/client-app-user' },
-                { name: 'Assign Privileges', path: '/users/assign-privileges' },
-                { name: 'Assign Location Head', path: '/users/assign-location-head' },
-                { name: 'Temporary Operator', path: '/users/temporary-operator' },
-                { name: 'Login History', path: '/users/login-history' },
-            ]
+            path: '/users'
         },
         {
             title: 'REGISTRATION',
             icon: UserPlus,
-            children: [
-                { name: 'Employee', path: '/registration/employee' },
-                { name: 'Agent', path: '/registration/agent' },
-                { name: 'View Agent', path: '/registration/view-agent' },
-                { name: 'View Employee', path: '/registration/view-employee' },
-                { name: 'Bank Beneficiary', path: '/registration/bank-beneficiary' },
-                { name: 'Delete Vehicle', path: '/registration/delete-vehicle' },
-                { name: 'Deactivated Agent List', path: '/registration/deactivated-agent-list' },
-            ]
+            path: '/registration'
         },
         {
             title: 'HR MODULE',
             icon: UserCheck,
-            children: [
-                { name: 'Executive Attendance', path: '/hr/executive-attendance' },
-                { name: 'Attendance', path: '/hr/attendance' },
-                { name: 'Salary Process', path: '/hr/salary-process' },
-                { name: 'Employee Payment', path: '/hr/employee-payment' },
-                { name: 'Holiday Master', path: '/hr/holiday-master' },
-                { name: 'Employee Master', path: '/hr/employee-master' },
-                { name: 'View Employee', path: '/hr/view-employee' },
-                { name: 'Leave Management', path: '/hr/leave-management' },
-                { name: 'Leave Type', path: '/hr/leave-type' },
-                { name: 'Organization Master', path: '/hr/organization-master' },
-                { name: 'Department Master', path: '/hr/department-master' },
-                { name: 'Salary Slip', path: '/hr/salary-slip' },
-                { name: 'Employee Advance', path: '/hr/employee-advance' },
-                { name: 'View Employee Advance', path: '/hr/view-employee-advance' },
-                { name: 'Designation Master', path: '/hr/designation-master' },
-                { name: 'Apply Leave', path: '/hr/apply-leave' },
-                { name: 'Leave Report', path: '/hr/leave-report' },
-            ]
+            path: '/hr'
         },
         {
             title: 'COMMISSION GRID',
             icon: Percent,
-            children: [
-                { name: 'Agent Commission', path: '/commission-grid/agent-commission' },
-                { name: 'Multiple Agent Commission', path: '/commission-grid/multiple-agent-commission' },
-                { name: 'Broker Commission', path: '/commission-grid/broker-commission' },
-                { name: 'Multiple Broker Commission', path: '/commission-grid/multiple-broker-commission' },
-                { name: 'Extra Commission Amount', path: '/commission-grid/extra-commission-amount' },
-                { name: 'Latest Agent Commission', path: '/commission-grid/latest-agent-commission' },
-                { name: 'Broker Latest Grid', path: '/commission-grid/broker-latest-grid' },
-                { name: 'New Broker Commission', path: '/commission-grid/new-broker-commission' },
-                { name: 'New Agent Commission', path: '/commission-grid/new-agent-commission' },
-                { name: 'Executive Self Insentive', path: '/commission-grid/executive-self-incentive' },
-                { name: 'Multiple Executive Self Insentive', path: '/commission-grid/multiple-executive-self-incentive' },
-                { name: 'Check Grid', path: '/commission-grid/check-grid' },
-                { name: 'Comm Veh Age', path: '/commission-grid/comm-veh-age' },
-                { name: 'Year Slab', path: '/commission-grid/year-slab' },
-                { name: 'Multiple Agent Broker Comm', path: '/commission-grid/multiple-agent-broker-comm' },
-                { name: 'Import Broker Grid', path: '/commission-grid/import-broker-grid' },
-                { name: 'Decline Model New', path: '/commission-grid/decline-model-new' },
-            ]
+            path: '/commission-grid'
         },
         {
             title: 'OPERATIONS',
@@ -154,7 +102,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
         }
     ];
 
-    const [expandedGroups, setExpandedGroups] = useState<string[]>(['MASTER', 'MAIN', 'USER', 'REGISTRATION', 'HR MODULE', 'COMMISSION GRID', 'OPERATIONS']);
+    const [expandedGroups, setExpandedGroups] = useState<string[]>(['MASTER', 'OPERATIONS']);
 
     const toggleGroup = (title: string) => {
         if (isCollapsed) {
@@ -167,8 +115,17 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
         );
     };
 
-    const isActive = (path: string) => location.pathname.startsWith(path);
-    const isGroupActive = (children?: NavItem[]) => children?.some(c => isActive(c.path));
+    const isPathActive = (path: string) => location.pathname === path || (path !== '/' && location.pathname.startsWith(path));
+
+    const isChildActive = (child: NavItem) => {
+        if (location.pathname === child.path) return true;
+        if (child.matchPaths && child.matchPaths.some(p => location.pathname === p || location.pathname.startsWith(p))) {
+            return true;
+        }
+        return location.pathname.startsWith(child.path);
+    };
+
+    const isGroupActive = (children?: NavItem[]) => children?.some(c => isChildActive(c));
 
     return (
         <aside className={`bg-brand-navy text-[#B8C7D9] h-full flex flex-col transition-all duration-300 ease-in-out shrink-0 z-20 shadow-xl fixed md:static top-0 left-0 bottom-0 ${isCollapsed ? '-translate-x-full md:translate-x-0 w-[240px] md:w-[70px] lg:w-[80px]' : 'translate-x-0 w-[240px]'}`}>
@@ -200,7 +157,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
                         const Icon = group.icon;
                         const hasChildren = !!group.children;
                         const isExpanded = expandedGroups.includes(group.title) && !isCollapsed;
-                        const groupActive = isGroupActive(group.children) || (group.path && isActive(group.path));
+                        const groupActive = isGroupActive(group.children) || (group.path && isPathActive(group.path));
 
                         return (
                             <div key={group.title} className="flex flex-col">
@@ -222,11 +179,14 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
                                     <NavLink
                                         to={group.path || '#'}
                                         onClick={() => { if (window.innerWidth < 768) setIsCollapsed(true); }}
-                                        className={({ isActive }) => `flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors group border-l-[3px] border-transparent ${isActive ? 'bg-brand-navydark text-white !border-brand-primary' : 'text-[#B8C7D9] hover:bg-brand-navydark hover:text-white'}`}
+                                        className={() => {
+                                            const active = group.path ? isPathActive(group.path) : false;
+                                            return `flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors group border-l-[3px] border-transparent ${active ? 'bg-brand-navydark text-white !border-brand-primary' : 'text-[#B8C7D9] hover:bg-brand-navydark hover:text-white'}`;
+                                        }}
                                         title={isCollapsed ? group.title : ''}
                                     >
-                                        <Icon size={20} className={(group.path && isActive(group.path)) ? 'text-brand-primary' : 'text-[#8FA7C2] group-hover:text-white'} />
-                                        {!isCollapsed && <span className={`text-sm font-medium ${group.path && isActive(group.path) ? 'text-white' : 'text-[#B8C7D9]'}`}>{group.title}</span>}
+                                        <Icon size={20} className={(group.path && isPathActive(group.path)) ? 'text-brand-primary' : 'text-[#8FA7C2] group-hover:text-white'} />
+                                        {!isCollapsed && <span className={`text-sm font-medium ${group.path && isPathActive(group.path) ? 'text-white' : 'text-[#B8C7D9]'}`}>{group.title}</span>}
                                     </NavLink>
                                 )}
 
@@ -235,16 +195,19 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
                                     <div className={`grid transition-all duration-300 ease-in-out ${isExpanded ? 'grid-rows-[1fr] opacity-100 mt-1' : 'grid-rows-[0fr] opacity-0 mt-0'}`}>
                                         <div className="overflow-hidden">
                                             <div className="flex flex-col ml-9 border-l border-brand-navydark space-y-1 mb-1">
-                                                {group.children?.map(child => (
-                                                    <NavLink
-                                                        key={child.name}
-                                                        to={child.path}
-                                                        onClick={() => { if (window.innerWidth < 768) setIsCollapsed(true); }}
-                                                        className={({ isActive }) => `px-4 py-1.5 text-[13px] rounded-r-lg transition-colors relative before:absolute before:-left-[1px] before:top-1/2 before:-translate-y-1/2 before:h-[2px] before:w-2 before:bg-brand-navydark ${isActive ? 'text-white font-medium bg-brand-navydark before:!bg-brand-primary' : 'text-[#B8C7D9] hover:text-white hover:bg-brand-navydark'}`}
-                                                    >
-                                                        {child.name}
-                                                    </NavLink>
-                                                ))}
+                                                {group.children?.map(child => {
+                                                    const active = isChildActive(child);
+                                                    return (
+                                                        <NavLink
+                                                            key={child.name}
+                                                            to={child.path}
+                                                            onClick={() => { if (window.innerWidth < 768) setIsCollapsed(true); }}
+                                                            className={`px-4 py-1.5 text-[13px] rounded-r-lg transition-colors relative before:absolute before:-left-[1px] before:top-1/2 before:-translate-y-1/2 before:h-[2px] before:w-2 before:bg-brand-navydark ${active ? 'text-white font-medium bg-brand-navydark before:!bg-brand-primary' : 'text-[#B8C7D9] hover:text-white hover:bg-brand-navydark'}`}
+                                                        >
+                                                            {child.name}
+                                                        </NavLink>
+                                                    );
+                                                })}
                                             </div>
                                         </div>
                                     </div>
