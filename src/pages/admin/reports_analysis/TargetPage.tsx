@@ -158,7 +158,7 @@ export const TargetPage: React.FC = () => {
 
   const branchesList = [
     'AHILYANAGAR', 'AKLUJ', 'AKOLA', 'AMRAVATI', 'BARAMATI', 'BARSHI',
-    'BEED', 'CHHATRAPATI SAMBHAJINAGAR', 'DHULE', 'LATUR', 'MUMBAI', 'NAGPUR', 'PUNE', 'SATARA', 'SOLAPUR'
+    'BEED', 'CHANDRAPUR', 'CHHATRAPATI SAMBHAJINAGAR', 'DHULE', 'LATUR', 'MUMBAI', 'NAGPUR', 'PUNE', 'SATARA', 'SOLAPUR'
   ];
 
   const salesExecutivesList = [
@@ -171,6 +171,132 @@ export const TargetPage: React.FC = () => {
     'HEMANT ARUN PATIL',
     'SANTOSH SAWANT'
   ];
+
+  const financialYearsList = [
+    '2026-2027',
+    '2025-2026',
+    '2024-2025',
+    '2023-2024',
+    '2022-2023',
+    '2021-2022',
+    '2020-2021',
+    '2019-2020',
+    '2018-2019'
+  ];
+
+  // Update Target Form State (Image 1)
+  const [showUpdateTargetForm, setShowUpdateTargetForm] = useState(false);
+  const [updateFormSalesEx, setUpdateFormSalesEx] = useState('ABHISHEK VILAS GAIKWAD');
+  const [updateFormFinYear, setUpdateFormFinYear] = useState('2026-2027');
+  const [updateFormTargetMonth, setUpdateFormTargetMonth] = useState('July');
+  const [updateFormAssignTarget, setUpdateFormAssignTarget] = useState('3000000.00');
+  const [updateFormAchievedTarget, setUpdateFormAchievedTarget] = useState('1432850.89');
+
+  // Target Report & Monthly Target Report View States
+  const [showTargetReportTable, setShowTargetReportTable] = useState(false);
+  const [showMonthlyReportTable, setShowMonthlyReportTable] = useState(false);
+
+  // Monthly Target Report List State (Image 2)
+  interface MonthlyTargetReportRow {
+    id: number;
+    branchName: string;
+    name: string;
+    financialYear: string;
+    targetMonth: string;
+    assignAmount: number;
+    achievedAmount: number;
+    shortfall: number;
+  }
+
+  const [monthlyTargetReports] = useState<MonthlyTargetReportRow[]>([
+    { id: 945, branchName: 'CHANDRAPUR', name: 'RAJESH SUDHAKAR PATIL', financialYear: '2026-2027', targetMonth: 'JULY', assignAmount: 2500000.00, achievedAmount: 2150000.00, shortfall: 350000.00 },
+    { id: 946, branchName: 'CHANDRAPUR', name: 'SACHIN GAJANAN MORE', financialYear: '2026-2027', targetMonth: 'JULY', assignAmount: 1800000.00, achievedAmount: 1920000.00, shortfall: -120000.00 },
+    { id: 947, branchName: 'AKLUJ', name: 'AVINASH BHARAT KORATKAR', financialYear: '2026-2027', targetMonth: 'JULY', assignAmount: 3000000.00, achievedAmount: 2335660.20, shortfall: 664339.80 },
+    { id: 948, branchName: 'BARAMATI', name: 'ARVIND DNYANESHWAR GAWADE', financialYear: '2026-2027', targetMonth: 'JULY', assignAmount: 3000000.00, achievedAmount: 1432850.89, shortfall: 1567149.11 },
+    { id: 949, branchName: 'BARAMATI', name: 'SHEKHAR RAJENDRA KUMBHAR', financialYear: '2026-2027', targetMonth: 'JULY', assignAmount: 2200000.00, achievedAmount: 1482857.60, shortfall: 717142.40 },
+    { id: 950, branchName: 'BARAMATI', name: 'MANGESH RAVINDRA KAMBLE', financialYear: '2026-2027', targetMonth: 'JULY', assignAmount: 1200000.00, achievedAmount: 1392721.10, shortfall: -192721.10 },
+    { id: 951, branchName: 'BARAMATI', name: 'SARIKA NAMDEO BHANDALKAR', financialYear: '2026-2027', targetMonth: 'JULY', assignAmount: 1500000.00, achievedAmount: 1089491.90, shortfall: 410508.10 },
+    { id: 952, branchName: 'BARAMATI', name: 'NILAKSHI NARENDRA KULKARNI', financialYear: '2026-2027', targetMonth: 'JULY', assignAmount: 3000000.00, achievedAmount: 1667323.73, shortfall: 1332676.27 },
+    { id: 953, branchName: 'BARAMATI', name: 'SNEHAL SUNIL AGAWANE', financialYear: '2026-2027', targetMonth: 'JULY', assignAmount: 2500000.00, achievedAmount: 2387628.27, shortfall: 112371.73 },
+    { id: 954, branchName: 'BARAMATI', name: 'RUTUJA NITIN MANE', financialYear: '2026-2027', targetMonth: 'JULY', assignAmount: 3500000.00, achievedAmount: 3684090.12, shortfall: -184090.12 },
+    { id: 955, branchName: 'BARAMATI', name: 'MAYURI RAJENDRA MULE', financialYear: '2026-2027', targetMonth: 'JULY', assignAmount: 1200000.00, achievedAmount: 841103.97, shortfall: 358896.03 },
+  ]);
+
+  // Assigned Target List State (Matches Previous Project Columns: ID, Employee Name, Target Month, financialYear, Motar Amount, New Agent, New Posp)
+  const [assignedTargets, setAssignedTargets] = useState([
+    {
+      id: 1,
+      empName: 'ANURAG CHANDRASHEKHAR JOSHI',
+      targetMonth: 'AUGUST',
+      financialYear: '2026-2027',
+      motorAmount: 0,
+      newAgent: 0,
+      newPosp: 0,
+      isSelected: false,
+    },
+    {
+      id: 2,
+      empName: 'ARVIND DNYANESHWAR GAWADE',
+      targetMonth: 'AUGUST',
+      financialYear: '2026-2027',
+      motorAmount: 250000,
+      newAgent: 5,
+      newPosp: 10,
+      isSelected: false,
+    },
+    {
+      id: 3,
+      empName: 'ADITYA RAJENDRA SAPKAL',
+      targetMonth: 'AUGUST',
+      financialYear: '2026-2027',
+      motorAmount: 180000,
+      newAgent: 3,
+      newPosp: 8,
+      isSelected: false,
+    },
+    {
+      id: 4,
+      empName: 'AMOL RAMCHANDRA WANAVE',
+      targetMonth: 'AUGUST',
+      financialYear: '2026-2027',
+      motorAmount: 150000,
+      newAgent: 2,
+      newPosp: 6,
+      isSelected: false,
+    },
+    {
+      id: 5,
+      empName: 'AVINASH BHARAT KORATKAR',
+      targetMonth: 'AUGUST',
+      financialYear: '2026-2027',
+      motorAmount: 300000,
+      newAgent: 4,
+      newPosp: 12,
+      isSelected: false,
+    },
+    {
+      id: 6,
+      empName: 'HEMANT RAJU KAKULTE',
+      targetMonth: 'AUGUST',
+      financialYear: '2026-2027',
+      motorAmount: 350000,
+      newAgent: 6,
+      newPosp: 15,
+      isSelected: false,
+    },
+  ]);
+
+  const handleAssignedTargetChange = (id: number, field: 'motorAmount' | 'newAgent' | 'newPosp', val: string | number) => {
+    setAssignedTargets(prev => prev.map(row => row.id === id ? { ...row, [field]: val } : row));
+  };
+
+  const handleToggleSelectAssignedTarget = (id: number) => {
+    setAssignedTargets(prev => prev.map(row => row.id === id ? { ...row, isSelected: !row.isSelected } : row));
+  };
+
+  const handleToggleSelectAllAssignedTargets = (checked: boolean) => {
+    setAssignedTargets(prev => prev.map(row => ({ ...row, isSelected: checked })));
+  };
 
   // Editable row target state for Assign Target tab
   const handleAssignTargetChange = (id: number, field: 'motorTarget' | 'nonMotorTarget' | 'healthTarget', val: number) => {
@@ -233,6 +359,14 @@ export const TargetPage: React.FC = () => {
   });
   const totalBranchPages = Math.ceil(filteredBranchReports.length / itemsPerPage) || 1;
   const paginatedBranchReports = filteredBranchReports.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+  const filteredMonthlyReports = monthlyTargetReports.filter(item => {
+    const matchBranch = isAllSelected || !selectedBranch || selectedBranch === '--Select Branch Name--' || item.branchName.toLowerCase() === selectedBranch.toLowerCase();
+    const matchMonth = !selectedMonth || selectedMonth === '--Select Month Name--' || item.targetMonth.toLowerCase() === selectedMonth.toLowerCase();
+    return matchBranch && matchMonth;
+  });
+  const totalMonthlyPages = Math.ceil(filteredMonthlyReports.length / itemsPerPage) || 1;
+  const paginatedMonthlyReports = filteredMonthlyReports.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   return (
     <div className="w-full max-w-full overflow-x-hidden flex flex-col space-y-5">
@@ -330,47 +464,79 @@ export const TargetPage: React.FC = () => {
                 <table className="w-full text-left border-collapse min-w-[950px]">
                   <thead>
                     <tr className="bg-brand-lightbg text-brand-navy text-[13px] sm:text-[14px] font-semibold uppercase border-b border-brand-border whitespace-nowrap">
-                      <th className="py-3 px-4 text-center w-16">SR. NO.</th>
-                      <th className="py-3 px-6">EXECUTIVE NAME</th>
-                      <th className="py-3 px-4">BRANCH</th>
-                      <th className="py-3 px-4 text-right">MOTOR TARGET (₹)</th>
-                      <th className="py-3 px-4 text-right">NON-MOTOR TARGET (₹)</th>
-                      <th className="py-3 px-4 text-right">HEALTH TARGET (₹)</th>
-                      <th className="py-3 px-6 text-right font-bold">TOTAL TARGET (₹)</th>
+                      <th className="py-3 px-4 text-center w-16">ID</th>
+                      <th className="py-3 px-6">EMPLOYEE NAME</th>
+                      <th className="py-3 px-4">TARGET MONTH</th>
+                      <th className="py-3 px-4">FINANCIALYEAR</th>
+                      <th className="py-3 px-4 text-right">MOTAR AMOUNT</th>
+                      <th className="py-3 px-4 text-center">NEW AGENT</th>
+                      <th className="py-3 px-4 text-center">NEW POSP</th>
+                      <th className="py-3 px-4 text-center w-14">
+                        <input
+                          type="checkbox"
+                          checked={assignedTargets.length > 0 && assignedTargets.every(r => r.isSelected)}
+                          onChange={(e) => handleToggleSelectAllAssignedTargets(e.target.checked)}
+                          className="w-4 h-4 rounded text-brand-primary focus:ring-brand-primary cursor-pointer"
+                        />
+                      </th>
+                      <th className="py-3 px-4 text-center w-24">
+                        <button
+                          type="button"
+                          onClick={() => showToast('Targets saved successfully!')}
+                          className="px-4 py-1.5 bg-brand-primary hover:bg-[#0654B0] text-white font-bold rounded text-xs shadow-sm transition-all duration-200 cursor-pointer border-none uppercase"
+                        >
+                          save
+                        </button>
+                      </th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-brand-border text-[14px]">
-                    {paginatedExecTargets.map((row, idx) => (
-                      <tr key={row.id} className="hover:bg-brand-mainbg h-[52px] transition-colors bg-white">
-                        <td className="py-2 px-4 text-center font-medium text-slate-500">{idx + 1}</td>
-                        <td className="py-2 px-6 font-semibold text-brand-navy">{row.empName}</td>
-                        <td className="py-2 px-4 font-medium text-slate-600">{row.branch}</td>
-                        <td className="py-2 px-4 text-right">
+                  <tbody className="divide-y divide-brand-border text-[13px]">
+                    {assignedTargets.map((row) => (
+                      <tr key={row.id} className="hover:bg-brand-mainbg h-[50px] transition-colors bg-white whitespace-nowrap">
+                        <td className="py-2.5 px-4 text-center font-medium text-slate-500">{row.id}</td>
+                        <td className="py-2.5 px-6 font-bold text-brand-navy">{row.empName}</td>
+                        <td className="py-2.5 px-4 font-semibold text-slate-700 uppercase">{row.targetMonth}</td>
+                        <td className="py-2.5 px-4 font-mono text-slate-700">{row.financialYear}</td>
+                        <td className="py-2.5 px-4 text-right">
                           <input
                             type="number"
-                            value={row.motorTarget}
-                            onChange={(e) => handleAssignTargetChange(row.id, 'motorTarget', Number(e.target.value))}
-                            className="w-full max-w-[120px] min-w-[80px] px-2 py-1.5 border border-slate-300 rounded text-right font-mono text-xs font-semibold focus:ring-2 focus:ring-brand-primary"
+                            value={row.motorAmount}
+                            onChange={(e) => handleAssignedTargetChange(row.id, 'motorAmount', e.target.value)}
+                            className="w-full max-w-[130px] min-w-[90px] px-2.5 py-1.5 border border-slate-300 rounded text-right font-mono text-xs font-semibold focus:ring-2 focus:ring-brand-primary bg-white text-slate-800"
                           />
                         </td>
-                        <td className="py-2 px-4 text-right">
+                        <td className="py-2.5 px-4 text-center">
                           <input
                             type="number"
-                            value={row.nonMotorTarget}
-                            onChange={(e) => handleAssignTargetChange(row.id, 'nonMotorTarget', Number(e.target.value))}
-                            className="w-full max-w-[120px] min-w-[80px] px-2 py-1.5 border border-slate-300 rounded text-right font-mono text-xs font-semibold focus:ring-2 focus:ring-brand-primary"
+                            value={row.newAgent}
+                            onChange={(e) => handleAssignedTargetChange(row.id, 'newAgent', e.target.value)}
+                            className="w-20 px-2 py-1.5 border border-slate-300 rounded text-center font-mono text-xs font-semibold focus:ring-2 focus:ring-brand-primary bg-white text-slate-800"
                           />
                         </td>
-                        <td className="py-2 px-4 text-right">
+                        <td className="py-2.5 px-4 text-center">
                           <input
                             type="number"
-                            value={row.healthTarget}
-                            onChange={(e) => handleAssignTargetChange(row.id, 'healthTarget', Number(e.target.value))}
-                            className="w-full max-w-[120px] min-w-[80px] px-2 py-1.5 border border-slate-300 rounded text-right font-mono text-xs font-semibold focus:ring-2 focus:ring-brand-primary"
+                            value={row.newPosp}
+                            onChange={(e) => handleAssignedTargetChange(row.id, 'newPosp', e.target.value)}
+                            className="w-20 px-2 py-1.5 border border-slate-300 rounded text-center font-mono text-xs font-semibold focus:ring-2 focus:ring-brand-primary bg-white text-slate-800"
                           />
                         </td>
-                        <td className="py-2 px-6 text-right font-mono font-bold text-brand-primary text-base">
-                          ₹{row.totalTarget.toLocaleString()}
+                        <td className="py-2.5 px-4 text-center">
+                          <input
+                            type="checkbox"
+                            checked={!!row.isSelected}
+                            onChange={() => handleToggleSelectAssignedTarget(row.id)}
+                            className="w-4 h-4 rounded text-brand-primary focus:ring-brand-primary cursor-pointer"
+                          />
+                        </td>
+                        <td className="py-2.5 px-4 text-center">
+                          <button
+                            type="button"
+                            onClick={() => showToast(`Target for ${row.empName} saved successfully!`)}
+                            className="px-3.5 py-1 bg-brand-primary hover:bg-[#0654B0] text-white font-semibold rounded text-xs shadow-sm transition-all duration-200 cursor-pointer border-none uppercase"
+                          >
+                            save
+                          </button>
                         </td>
                       </tr>
                     ))}
@@ -382,7 +548,7 @@ export const TargetPage: React.FC = () => {
               <div className="flex items-center justify-end pt-2">
                 <button
                   type="button"
-                  onClick={handleSaveAnnualTargets}
+                  onClick={() => showToast('Annual target details saved successfully!')}
                   className="w-full sm:w-auto px-8 py-2.5 bg-brand-primary hover:bg-[#0654B0] text-white font-semibold rounded-lg text-sm shadow-md transition-all duration-200 cursor-pointer border-none uppercase"
                 >
                   save
@@ -392,7 +558,7 @@ export const TargetPage: React.FC = () => {
           )}
 
           {/* ========================================================================= */}
-          {/* TAB 2: UPDATE TARGET */}
+          {/* TAB 2: UPDATE TARGET (Image 1) */}
           {/* ========================================================================= */}
           {activeTab === 'updateTarget' && (
             <div className="p-4 sm:p-6 space-y-6 w-full max-w-full">
@@ -408,8 +574,13 @@ export const TargetPage: React.FC = () => {
                       <label className="block text-xs font-bold text-brand-navy mb-1">Sales Executive</label>
                       <select
                         value={selectedExecutive}
-                        onChange={(e) => setSelectedExecutive(e.target.value)}
-                        className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs bg-white text-brand-navy focus:ring-2 focus:ring-brand-primary"
+                        onChange={(e) => {
+                          setSelectedExecutive(e.target.value);
+                          if (e.target.value && e.target.value !== '--Select Emp Name--') {
+                            setUpdateFormSalesEx(e.target.value);
+                          }
+                        }}
+                        className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs bg-white text-brand-navy focus:ring-2 focus:ring-brand-primary cursor-pointer"
                       >
                         <option value="">--Select Emp Name--</option>
                         {salesExecutivesList.map(emp => <option key={emp} value={emp}>{emp}</option>)}
@@ -418,19 +589,30 @@ export const TargetPage: React.FC = () => {
 
                     <div>
                       <label className="block text-xs font-bold text-brand-navy mb-1">Financial Year</label>
-                      <input
-                        type="text"
+                      <select
                         value={finYear}
-                        onChange={(e) => setFinYear(e.target.value)}
+                        onChange={(e) => {
+                          setFinYear(e.target.value);
+                          setUpdateFormFinYear(e.target.value);
+                        }}
                         className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs bg-white text-brand-navy focus:ring-2 focus:ring-brand-primary"
-                      />
+                      >
+                        {financialYearsList.map(y => <option key={y} value={y}>{y}</option>)}
+                      </select>
                     </div>
 
                     <div>
                       <button
                         type="button"
-                        onClick={() => showToast('Monthly target loaded')}
-                        className="w-full sm:w-auto px-6 py-2 bg-brand-primary hover:bg-[#0654B0] text-white font-semibold rounded-lg text-xs shadow-sm transition-all duration-200 cursor-pointer border-none"
+                        onClick={() => {
+                          if (selectedExecutive && selectedExecutive !== '--Select Emp Name--') {
+                            setUpdateFormSalesEx(selectedExecutive);
+                          }
+                          setUpdateFormFinYear(finYear || '2026-2027');
+                          setShowUpdateTargetForm(true);
+                          showToast('Annual Target Details loaded');
+                        }}
+                        className="w-full sm:w-auto px-8 py-2 bg-brand-primary hover:bg-[#0654B0] text-white font-semibold rounded-lg text-xs shadow-sm transition-all duration-200 cursor-pointer border-none uppercase"
                       >
                         Show
                       </button>
@@ -439,64 +621,165 @@ export const TargetPage: React.FC = () => {
                 </div>
               </div>
 
-              {/* Monthly Executive Target Table */}
-              <div className="overflow-x-auto w-full max-w-full border border-brand-border rounded-[12px] bg-white custom-scrollbar">
-                <table className="w-full text-left border-collapse min-w-[950px]">
-                  <thead>
-                    <tr className="bg-brand-lightbg text-brand-navy text-[13px] sm:text-[14px] font-semibold uppercase border-b border-brand-border whitespace-nowrap">
-                      <th className="py-3 px-4 text-center w-16">SR. NO.</th>
-                      <th className="py-3 px-6">EXECUTIVE NAME</th>
-                      <th className="py-3 px-4">MONTH</th>
-                      <th className="py-3 px-6 text-right">TARGET PREMIUM (₹)</th>
-                      <th className="py-3 px-6 text-right">ACHIEVED PREMIUM (₹)</th>
-                      <th className="py-3 px-4 text-center">COMPLETION %</th>
-                      <th className="py-3 px-6 text-center">ACTION</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-brand-border text-[14px]">
-                    {paginatedExecTargets.map((row, idx) => {
-                      const pct = Math.round((row.achievedTarget / (row.totalTarget || 1)) * 100);
-                      return (
-                        <tr key={row.id} className="hover:bg-brand-mainbg h-[52px] transition-colors bg-white">
-                          <td className="py-2 px-4 text-center font-medium text-slate-500">{idx + 1}</td>
-                          <td className="py-2 px-6 font-semibold text-brand-navy">{row.empName}</td>
-                          <td className="py-2 px-4 font-medium text-slate-600">{row.month}</td>
-                          <td className="py-2 px-6 text-right font-mono font-bold text-brand-navy">₹{row.totalTarget.toLocaleString()}</td>
-                          <td className="py-2 px-6 text-right font-mono font-bold text-emerald-600">₹{row.achievedTarget.toLocaleString()}</td>
-                          <td className="py-2 px-4 text-center">
-                            <span className={`px-2.5 py-1 text-xs font-bold rounded-full ${
-                              pct >= 100 ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'
-                            }`}>
-                              {pct}%
-                            </span>
-                          </td>
-                          <td className="py-2 px-6 text-center">
-                            <button
-                              type="button"
-                              onClick={() => handleOpenEditModal(row)}
-                              className="px-3 py-1 bg-brand-lightbg text-brand-primary hover:bg-[#E2E8F0] rounded-[6px] text-xs font-bold transition cursor-pointer border-none flex items-center justify-center gap-1 mx-auto"
-                            >
-                              <Edit2 size={14} />
-                              <span>Update</span>
-                            </button>
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
+              {/* Form Data Card opened upon clicking Show (Matches Image 1) */}
+              {showUpdateTargetForm && (
+                <div className="border border-brand-border rounded-[12px] overflow-hidden bg-white shadow-sm space-y-4 animate-in fade-in duration-200">
+                  <div className="bg-[#128C7E] text-white px-5 py-3 font-semibold text-[14px] border-b border-brand-border flex items-center justify-between">
+                    <span>» Annual Target Details</span>
+                  </div>
 
-              {/* Bottom Back Button */}
-              <div className="flex items-center justify-center pt-2">
-                <button
-                  type="button"
-                  onClick={() => setActiveTab('assignTarget')}
-                  className="px-8 py-2 bg-[#5B9BD5] hover:bg-[#4A86C6] text-white font-semibold rounded-lg text-xs shadow-sm transition-all duration-200 cursor-pointer border-none uppercase"
-                >
-                  BACK
-                </button>
-              </div>
+                  <div className="p-4 sm:p-6 space-y-5 bg-brand-mainbg">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 items-end">
+                      <div>
+                        <label className="block text-xs font-bold text-brand-navy mb-1">Financial Year</label>
+                        <select
+                          value={updateFormFinYear}
+                          onChange={(e) => setUpdateFormFinYear(e.target.value)}
+                          className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs bg-white text-brand-navy focus:ring-2 focus:ring-brand-primary"
+                        >
+                          {financialYearsList.map(y => <option key={y} value={y}>{y}</option>)}
+                        </select>
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-bold text-brand-navy mb-1">salesEx</label>
+                        <select
+                          value={updateFormSalesEx}
+                          onChange={(e) => setUpdateFormSalesEx(e.target.value)}
+                          className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs bg-white text-brand-navy focus:ring-2 focus:ring-brand-primary"
+                        >
+                          <option value="ABHISHEK VILAS GAIKWAD">ABHISHEK VILAS GAIKWAD</option>
+                          {salesExecutivesList.map(emp => <option key={emp} value={emp}>{emp}</option>)}
+                        </select>
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-bold text-brand-navy mb-1">Target Month</label>
+                        <input
+                          type="text"
+                          value={updateFormTargetMonth}
+                          onChange={(e) => setUpdateFormTargetMonth(e.target.value)}
+                          className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs bg-white text-brand-navy focus:ring-2 focus:ring-brand-primary"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-bold text-brand-navy mb-1">Assign Target</label>
+                        <input
+                          type="text"
+                          value={updateFormAssignTarget}
+                          onChange={(e) => setUpdateFormAssignTarget(e.target.value)}
+                          className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs bg-white text-brand-navy focus:ring-2 focus:ring-brand-primary font-mono text-right"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-bold text-brand-navy mb-1">Achived Target</label>
+                        <input
+                          type="text"
+                          value={updateFormAchievedTarget}
+                          onChange={(e) => setUpdateFormAchievedTarget(e.target.value)}
+                          className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs bg-white text-brand-navy focus:ring-2 focus:ring-brand-primary font-mono text-right"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="flex flex-wrap items-center gap-3 pt-2">
+                      <button
+                        type="button"
+                        onClick={() => showToast('Target updated successfully!')}
+                        className="px-6 py-2 bg-brand-primary hover:bg-[#0654B0] text-white font-bold rounded-lg text-xs shadow-sm transition-all duration-200 cursor-pointer border-none uppercase"
+                      >
+                        UPDATE
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setUpdateFormAssignTarget('0.00');
+                          setUpdateFormAchievedTarget('0.00');
+                          showToast('Form reset');
+                        }}
+                        className="px-6 py-2 bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-lg text-xs shadow-sm transition-all duration-200 cursor-pointer border-none uppercase"
+                      >
+                        Reset
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Back Button (Only visible when form is open, Image 1) */}
+              {showUpdateTargetForm && (
+                <div className="flex items-center justify-start">
+                  <button
+                    type="button"
+                    onClick={() => setShowUpdateTargetForm(false)}
+                    className="px-8 py-2 bg-[#5B9BD5] hover:bg-[#4A86C6] text-white font-bold rounded-lg text-xs shadow-sm transition-all duration-200 cursor-pointer border-none uppercase"
+                  >
+                    BACK
+                  </button>
+                </div>
+              )}
+
+              {/* Monthly Executive Target Table or Empty State (Matches Image 1) */}
+              {showUpdateTargetForm && filteredExecTargets.length === 0 ? (
+                <div className="p-8 text-center bg-slate-50 border border-slate-200 rounded-lg text-slate-500 font-semibold text-xs tracking-wider">
+                  NO DATA FOUND
+                </div>
+              ) : (
+                <div className="overflow-x-auto w-full max-w-full border border-brand-border rounded-[12px] bg-white custom-scrollbar">
+                  <table className="w-full text-left border-collapse min-w-[950px]">
+                    <thead>
+                      <tr className="bg-brand-lightbg text-brand-navy text-[13px] sm:text-[14px] font-semibold uppercase border-b border-brand-border whitespace-nowrap">
+                        <th className="py-3 px-4 text-center w-16">SR. NO.</th>
+                        <th className="py-3 px-6">EXECUTIVE NAME</th>
+                        <th className="py-3 px-4">MONTH</th>
+                        <th className="py-3 px-6 text-right">TARGET PREMIUM (₹)</th>
+                        <th className="py-3 px-6 text-right">ACHIEVED PREMIUM (₹)</th>
+                        <th className="py-3 px-4 text-center">COMPLETION %</th>
+                        <th className="py-3 px-6 text-center">ACTION</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-brand-border text-[14px]">
+                      {paginatedExecTargets.map((row, idx) => {
+                        const pct = Math.round((row.achievedTarget / (row.totalTarget || 1)) * 100);
+                        return (
+                          <tr key={row.id} className="hover:bg-brand-mainbg h-[52px] transition-colors bg-white">
+                            <td className="py-2 px-4 text-center font-medium text-slate-500">{idx + 1}</td>
+                            <td className="py-2 px-6 font-semibold text-brand-navy">{row.empName}</td>
+                            <td className="py-2 px-4 font-medium text-slate-600">{row.month}</td>
+                            <td className="py-2 px-6 text-right font-mono font-bold text-brand-navy">₹{row.totalTarget.toLocaleString()}</td>
+                            <td className="py-2 px-6 text-right font-mono font-bold text-emerald-600">₹{row.achievedTarget.toLocaleString()}</td>
+                            <td className="py-2 px-4 text-center">
+                              <span className={`px-2.5 py-1 text-xs font-bold rounded-full ${
+                                pct >= 100 ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'
+                              }`}>
+                                {pct}%
+                              </span>
+                            </td>
+                            <td className="py-2 px-6 text-center">
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setUpdateFormSalesEx(row.empName);
+                                  setUpdateFormTargetMonth(row.month);
+                                  setUpdateFormAssignTarget(row.totalTarget.toString());
+                                  setUpdateFormAchievedTarget(row.achievedTarget.toString());
+                                  setShowUpdateTargetForm(true);
+                                }}
+                                className="px-3 py-1 bg-brand-lightbg text-brand-primary hover:bg-[#E2E8F0] rounded-[6px] text-xs font-bold transition cursor-pointer border-none flex items-center justify-center gap-1 mx-auto"
+                              >
+                                <Edit2 size={14} />
+                                <span>Update</span>
+                              </button>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              )}
             </div>
           )}
 
@@ -538,26 +821,30 @@ export const TargetPage: React.FC = () => {
 
                     <div className="w-full sm:w-48">
                       <label className="block text-xs font-bold text-brand-navy mb-1">Financial Year</label>
-                      <input
-                        type="text"
+                      <select
                         value={finYear}
                         onChange={(e) => setFinYear(e.target.value)}
                         className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs bg-white text-brand-navy focus:ring-2 focus:ring-brand-primary"
-                      />
+                      >
+                        {financialYearsList.map(y => <option key={y} value={y}>{y}</option>)}
+                      </select>
                     </div>
 
                     <div className="flex items-center gap-3 w-full sm:w-auto">
                       <button
                         type="button"
-                        onClick={() => showToast('Target report loaded')}
-                        className="flex-1 sm:flex-none px-6 py-2 bg-brand-primary hover:bg-[#0654B0] text-white font-semibold rounded-lg text-xs shadow-sm transition-all duration-200 cursor-pointer border-none"
+                        onClick={() => {
+                          setShowTargetReportTable(true);
+                          showToast('Target report loaded');
+                        }}
+                        className="flex-1 sm:flex-none px-6 py-2 bg-brand-primary hover:bg-[#0654B0] text-white font-semibold rounded-lg text-xs shadow-sm transition-all duration-200 cursor-pointer border-none uppercase"
                       >
                         Show
                       </button>
                       <button
                         type="button"
                         onClick={() => showToast('Report exported as Excel file')}
-                        className="flex-1 sm:flex-none px-6 py-2 bg-amber-500 hover:bg-amber-600 text-white font-semibold rounded-lg text-xs shadow-sm transition-all duration-200 cursor-pointer border-none"
+                        className="flex-1 sm:flex-none px-6 py-2 bg-amber-500 hover:bg-amber-600 text-white font-semibold rounded-lg text-xs shadow-sm transition-all duration-200 cursor-pointer border-none uppercase"
                       >
                         Export
                       </button>
@@ -566,73 +853,85 @@ export const TargetPage: React.FC = () => {
                 </div>
               </div>
 
-              {/* Target Report Table */}
-              <div className="overflow-x-auto w-full max-w-full border border-brand-border rounded-[12px] bg-white custom-scrollbar">
-                <table className="w-full text-left border-collapse min-w-[1000px]">
-                  <thead>
-                    <tr className="bg-brand-lightbg text-brand-navy text-[13px] sm:text-[14px] font-semibold uppercase border-b border-brand-border whitespace-nowrap">
-                      <th className="py-3 px-4 text-center w-16">SR. NO.</th>
-                      <th className="py-3 px-6">EXECUTIVE NAME</th>
-                      <th className="py-3 px-4">BRANCH</th>
-                      <th className="py-3 px-4">DESIGNATION</th>
-                      <th className="py-3 px-6 text-right">TARGET (₹)</th>
-                      <th className="py-3 px-6 text-right">ACHIEVED (₹)</th>
-                      <th className="py-3 px-6 text-right">VARIANCE (₹)</th>
-                      <th className="py-3 px-4 text-center">ACHIEVEMENT %</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-brand-border text-[14px]">
-                    {paginatedExecTargets.map((row, idx) => {
-                      const variance = row.achievedTarget - row.totalTarget;
-                      const pct = Math.round((row.achievedTarget / (row.totalTarget || 1)) * 100);
-                      return (
-                        <tr key={row.id} className="hover:bg-brand-mainbg h-[52px] transition-colors bg-white">
-                          <td className="py-2 px-4 text-center font-medium text-slate-500">{idx + 1}</td>
-                          <td className="py-2 px-6 font-semibold text-brand-navy">{row.empName}</td>
-                          <td className="py-2 px-4 font-medium text-slate-600">{row.branch}</td>
-                          <td className="py-2 px-4 text-slate-600">{row.designation}</td>
-                          <td className="py-2 px-6 text-right font-mono font-bold text-brand-navy">₹{row.totalTarget.toLocaleString()}</td>
-                          <td className="py-2 px-6 text-right font-mono font-bold text-emerald-600">₹{row.achievedTarget.toLocaleString()}</td>
-                          <td className={`py-2 px-6 text-right font-mono font-bold ${variance >= 0 ? 'text-emerald-600' : 'text-red-600'}`}>
-                            {variance >= 0 ? `+₹${variance.toLocaleString()}` : `-₹${Math.abs(variance).toLocaleString()}`}
-                          </td>
-                          <td className="py-2 px-4 text-center">
-                            <span className={`px-2.5 py-1 text-xs font-bold rounded-full ${
-                              pct >= 100 ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'
-                            }`}>
-                              {pct}%
-                            </span>
-                          </td>
+              {/* Target Report Table or Placeholder */}
+              {!showTargetReportTable ? (
+                <div className="p-8 text-center bg-slate-50 border border-slate-200 rounded-lg text-slate-500 font-medium text-xs">
+                  Please select filters and click "Show" to view the Target Report.
+                </div>
+              ) : filteredExecTargets.length === 0 ? (
+                <div className="p-8 text-center bg-slate-50 border border-slate-200 rounded-lg text-slate-500 font-semibold text-xs tracking-wider">
+                  NO DATA FOUND
+                </div>
+              ) : (
+                <>
+                  <div className="overflow-x-auto w-full max-w-full border border-brand-border rounded-[12px] bg-white custom-scrollbar">
+                    <table className="w-full text-left border-collapse min-w-[1000px]">
+                      <thead>
+                        <tr className="bg-brand-lightbg text-brand-navy text-[13px] sm:text-[14px] font-semibold uppercase border-b border-brand-border whitespace-nowrap">
+                          <th className="py-3 px-4 text-center w-16">SR. NO.</th>
+                          <th className="py-3 px-6">EXECUTIVE NAME</th>
+                          <th className="py-3 px-4">BRANCH</th>
+                          <th className="py-3 px-4">DESIGNATION</th>
+                          <th className="py-3 px-6 text-right">TARGET (₹)</th>
+                          <th className="py-3 px-6 text-right">ACHIEVED (₹)</th>
+                          <th className="py-3 px-6 text-right">VARIANCE (₹)</th>
+                          <th className="py-3 px-4 text-center">ACHIEVEMENT %</th>
                         </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
+                      </thead>
+                      <tbody className="divide-y divide-brand-border text-[14px]">
+                        {paginatedExecTargets.map((row, idx) => {
+                          const variance = row.achievedTarget - row.totalTarget;
+                          const pct = Math.round((row.achievedTarget / (row.totalTarget || 1)) * 100);
+                          return (
+                            <tr key={row.id} className="hover:bg-brand-mainbg h-[52px] transition-colors bg-white">
+                              <td className="py-2 px-4 text-center font-medium text-slate-500">{idx + 1}</td>
+                              <td className="py-2 px-6 font-semibold text-brand-navy">{row.empName}</td>
+                              <td className="py-2 px-4 font-medium text-slate-600">{row.branch}</td>
+                              <td className="py-2 px-4 text-slate-600">{row.designation}</td>
+                              <td className="py-2 px-6 text-right font-mono font-bold text-brand-navy">₹{row.totalTarget.toLocaleString()}</td>
+                              <td className="py-2 px-6 text-right font-mono font-bold text-emerald-600">₹{row.achievedTarget.toLocaleString()}</td>
+                              <td className={`py-2 px-6 text-right font-mono font-bold ${variance >= 0 ? 'text-emerald-600' : 'text-red-600'}`}>
+                                {variance >= 0 ? `+₹${variance.toLocaleString()}` : `-₹${Math.abs(variance).toLocaleString()}`}
+                              </td>
+                              <td className="py-2 px-4 text-center">
+                                <span className={`px-2.5 py-1 text-xs font-bold rounded-full ${
+                                  pct >= 100 ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'
+                                }`}>
+                                  {pct}%
+                                </span>
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
 
-              {/* Table Pagination */}
-              <div className="p-4 bg-slate-50 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4 rounded-b-[12px]">
-                <div className="flex items-center gap-2 text-xs text-slate-600 font-medium">
-                  <span>Records per page:</span>
-                  <select
-                    value={itemsPerPage}
-                    onChange={(e) => { setItemsPerPage(Number(e.target.value)); setCurrentPage(1); }}
-                    className="px-2 py-1 bg-white border border-slate-300 rounded-md text-xs font-semibold text-slate-700"
-                  >
-                    <option value={10}>10</option>
-                    <option value={20}>20</option>
-                    <option value={50}>50</option>
-                  </select>
-                </div>
-                <span className="text-xs text-slate-500 font-medium">
-                  Showing {filteredExecTargets.length === 0 ? 0 : (currentPage - 1) * itemsPerPage + 1} - {Math.min(currentPage * itemsPerPage, filteredExecTargets.length)} of {filteredExecTargets.length} records
-                </span>
-                <div className="flex items-center gap-1">
-                  <button onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))} disabled={currentPage === 1} className="w-8 h-8 flex items-center justify-center text-xs text-slate-600 bg-white border border-slate-300 rounded-md hover:bg-slate-100 disabled:opacity-40 cursor-pointer">&lt;</button>
-                  <button className="w-8 h-8 bg-brand-primary text-white font-bold text-xs rounded-md">{currentPage}</button>
-                  <button onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalExecPages))} disabled={currentPage === totalExecPages || totalExecPages === 0} className="w-8 h-8 flex items-center justify-center text-xs text-slate-600 bg-white border border-slate-300 rounded-md hover:bg-slate-100 disabled:opacity-40 cursor-pointer">&gt;</button>
-                </div>
-              </div>
+                  {/* Table Pagination */}
+                  <div className="p-4 bg-slate-50 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4 rounded-b-[12px]">
+                    <div className="flex items-center gap-2 text-xs text-slate-600 font-medium">
+                      <span>Records per page:</span>
+                      <select
+                        value={itemsPerPage}
+                        onChange={(e) => { setItemsPerPage(Number(e.target.value)); setCurrentPage(1); }}
+                        className="px-2 py-1 bg-white border border-slate-300 rounded-md text-xs font-semibold text-slate-700"
+                      >
+                        <option value={10}>10</option>
+                        <option value={20}>20</option>
+                        <option value={50}>50</option>
+                      </select>
+                    </div>
+                    <span className="text-xs text-slate-500 font-medium">
+                      Showing {filteredExecTargets.length === 0 ? 0 : (currentPage - 1) * itemsPerPage + 1} - {Math.min(currentPage * itemsPerPage, filteredExecTargets.length)} of {filteredExecTargets.length} records
+                    </span>
+                    <div className="flex items-center gap-1">
+                      <button onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))} disabled={currentPage === 1} className="w-8 h-8 flex items-center justify-center text-xs text-slate-600 bg-white border border-slate-300 rounded-md hover:bg-slate-100 disabled:opacity-40 cursor-pointer">&lt;</button>
+                      <button className="w-8 h-8 bg-brand-primary text-white font-bold text-xs rounded-md">{currentPage}</button>
+                      <button onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalExecPages))} disabled={currentPage === totalExecPages || totalExecPages === 0} className="w-8 h-8 flex items-center justify-center text-xs text-slate-600 bg-white border border-slate-300 rounded-md hover:bg-slate-100 disabled:opacity-40 cursor-pointer">&gt;</button>
+                    </div>
+                  </div>
+                </>
+              )}
             </div>
           )}
 
@@ -686,26 +985,30 @@ export const TargetPage: React.FC = () => {
 
                     <div className="w-full sm:w-40">
                       <label className="block text-xs font-bold text-brand-navy mb-1">Financial Year</label>
-                      <input
-                        type="text"
+                      <select
                         value={finYear}
                         onChange={(e) => setFinYear(e.target.value)}
                         className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs bg-white text-brand-navy focus:ring-2 focus:ring-brand-primary"
-                      />
+                      >
+                        {financialYearsList.map(y => <option key={y} value={y}>{y}</option>)}
+                      </select>
                     </div>
 
                     <div className="flex items-center gap-3 w-full sm:w-auto">
                       <button
                         type="button"
-                        onClick={() => showToast('Monthly target report loaded')}
-                        className="flex-1 sm:flex-none px-6 py-2 bg-brand-primary hover:bg-[#0654B0] text-white font-semibold rounded-lg text-xs shadow-sm transition-all duration-200 cursor-pointer border-none"
+                        onClick={() => {
+                          setShowMonthlyReportTable(true);
+                          showToast('Monthly target report loaded');
+                        }}
+                        className="flex-1 sm:flex-none px-6 py-2 bg-brand-primary hover:bg-[#0654B0] text-white font-semibold rounded-lg text-xs shadow-sm transition-all duration-200 cursor-pointer border-none uppercase"
                       >
                         Show
                       </button>
                       <button
                         type="button"
                         onClick={() => showToast('Monthly report exported as Excel file')}
-                        className="flex-1 sm:flex-none px-6 py-2 bg-amber-500 hover:bg-amber-600 text-white font-semibold rounded-lg text-xs shadow-sm transition-all duration-200 cursor-pointer border-none"
+                        className="flex-1 sm:flex-none px-6 py-2 bg-amber-500 hover:bg-amber-600 text-white font-semibold rounded-lg text-xs shadow-sm transition-all duration-200 cursor-pointer border-none uppercase"
                       >
                         Export
                       </button>
@@ -714,69 +1017,75 @@ export const TargetPage: React.FC = () => {
                 </div>
               </div>
 
-              {/* Monthly Branch Target Report Table */}
-              <div className="overflow-x-auto w-full max-w-full border border-brand-border rounded-[12px] bg-white custom-scrollbar">
-                <table className="w-full text-left border-collapse min-w-[1000px]">
-                  <thead>
-                    <tr className="bg-brand-lightbg text-brand-navy text-[13px] sm:text-[14px] font-semibold uppercase border-b border-brand-border whitespace-nowrap">
-                      <th className="py-3 px-4 text-center w-16">SR. NO.</th>
-                      <th className="py-3 px-6">BRANCH NAME</th>
-                      <th className="py-3 px-4">MONTH</th>
-                      <th className="py-3 px-4 text-center">EXECUTIVE COUNT</th>
-                      <th className="py-3 px-6 text-right">TARGET AMOUNT (₹)</th>
-                      <th className="py-3 px-6 text-right">ACHIEVED AMOUNT (₹)</th>
-                      <th className="py-3 px-6 text-right">VARIANCE (₹)</th>
-                      <th className="py-3 px-4 text-center">BRANCH %</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-brand-border text-[14px]">
-                    {paginatedBranchReports.map((row, idx) => (
-                      <tr key={row.id} className="hover:bg-brand-mainbg h-[52px] transition-colors bg-white">
-                        <td className="py-2 px-4 text-center font-medium text-slate-500">{idx + 1}</td>
-                        <td className="py-2 px-6 font-semibold text-brand-navy">{row.branchName}</td>
-                        <td className="py-2 px-4 font-medium text-slate-600">{row.month}</td>
-                        <td className="py-2 px-4 text-center font-bold text-slate-700">{row.executiveCount}</td>
-                        <td className="py-2 px-6 text-right font-mono font-bold text-brand-navy">₹{row.targetAmount.toLocaleString()}</td>
-                        <td className="py-2 px-6 text-right font-mono font-bold text-emerald-600">₹{row.achievedAmount.toLocaleString()}</td>
-                        <td className={`py-2 px-6 text-right font-mono font-bold ${row.variance >= 0 ? 'text-emerald-600' : 'text-red-600'}`}>
-                          {row.variance >= 0 ? `+₹${row.variance.toLocaleString()}` : `-₹${Math.abs(row.variance).toLocaleString()}`}
-                        </td>
-                        <td className="py-2 px-4 text-center">
-                          <span className={`px-2.5 py-1 text-xs font-bold rounded-full ${
-                            row.percentage >= 100 ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'
-                          }`}>
-                            {row.percentage}%
-                          </span>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+              {/* Monthly Branch Target Report Table (Matches Image 2) */}
+              {!showMonthlyReportTable ? (
+                <div className="p-8 text-center bg-slate-50 border border-slate-200 rounded-lg text-slate-500 font-medium text-xs">
+                  Please select filters and click "Show" to view the Monthly Target Report.
+                </div>
+              ) : filteredMonthlyReports.length === 0 ? (
+                <div className="p-8 text-center bg-slate-50 border border-slate-200 rounded-lg text-slate-500 font-semibold text-xs tracking-wider">
+                  NO DATA FOUND
+                </div>
+              ) : (
+                <>
+                  <div className="overflow-x-auto w-full max-w-full border border-brand-border rounded-[12px] bg-white custom-scrollbar">
+                    <table className="w-full text-left border-collapse min-w-[1050px]">
+                      <thead>
+                        <tr className="bg-brand-lightbg text-brand-navy text-[13px] sm:text-[14px] font-semibold uppercase border-b border-brand-border whitespace-nowrap">
+                          <th className="py-3 px-4 text-center w-16">ID</th>
+                          <th className="py-3 px-6">BRANCH NAME</th>
+                          <th className="py-3 px-6">NAME</th>
+                          <th className="py-3 px-4">FINANCIALYEAR</th>
+                          <th className="py-3 px-4">TARGET MONTH</th>
+                          <th className="py-3 px-6 text-right">ASSIGN AMOUNT</th>
+                          <th className="py-3 px-6 text-right">ACHIEVED AMOUNT</th>
+                          <th className="py-3 px-6 text-right">SHORTFOLL</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-brand-border text-[13px]">
+                        {paginatedMonthlyReports.map((row) => (
+                          <tr key={row.id} className="hover:bg-brand-mainbg h-[48px] transition-colors bg-white whitespace-nowrap">
+                            <td className="py-2.5 px-4 text-center font-medium text-slate-500">{row.id}</td>
+                            <td className="py-2.5 px-6 font-semibold text-slate-700">{row.branchName}</td>
+                            <td className="py-2.5 px-6 font-bold text-brand-navy">{row.name}</td>
+                            <td className="py-2.5 px-4 font-mono text-slate-700">{row.financialYear}</td>
+                            <td className="py-2.5 px-4 font-semibold text-slate-700 uppercase">{row.targetMonth}</td>
+                            <td className="py-2.5 px-6 text-right font-mono font-bold text-brand-navy">{row.assignAmount.toFixed(2)}</td>
+                            <td className="py-2.5 px-6 text-right font-mono font-bold text-emerald-600">{row.achievedAmount.toFixed(2)}</td>
+                            <td className={`py-2.5 px-6 text-right font-mono font-bold ${row.shortfall < 0 ? 'text-red-600' : 'text-slate-800'}`}>
+                              {row.shortfall.toFixed(2)}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
 
-              {/* Table Pagination */}
-              <div className="p-4 bg-slate-50 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4 rounded-b-[12px]">
-                <div className="flex items-center gap-2 text-xs text-slate-600 font-medium">
-                  <span>Records per page:</span>
-                  <select
-                    value={itemsPerPage}
-                    onChange={(e) => { setItemsPerPage(Number(e.target.value)); setCurrentPage(1); }}
-                    className="px-2 py-1 bg-white border border-slate-300 rounded-md text-xs font-semibold text-slate-700"
-                  >
-                    <option value={10}>10</option>
-                    <option value={20}>20</option>
-                    <option value={50}>50</option>
-                  </select>
-                </div>
-                <span className="text-xs text-slate-500 font-medium">
-                  Showing {filteredBranchReports.length === 0 ? 0 : (currentPage - 1) * itemsPerPage + 1} - {Math.min(currentPage * itemsPerPage, filteredBranchReports.length)} of {filteredBranchReports.length} records
-                </span>
-                <div className="flex items-center gap-1">
-                  <button onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))} disabled={currentPage === 1} className="w-8 h-8 flex items-center justify-center text-xs text-slate-600 bg-white border border-slate-300 rounded-md hover:bg-slate-100 disabled:opacity-40 cursor-pointer">&lt;</button>
-                  <button className="w-8 h-8 bg-brand-primary text-white font-bold text-xs rounded-md">{currentPage}</button>
-                  <button onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalBranchPages))} disabled={currentPage === totalBranchPages || totalBranchPages === 0} className="w-8 h-8 flex items-center justify-center text-xs text-slate-600 bg-white border border-slate-300 rounded-md hover:bg-slate-100 disabled:opacity-40 cursor-pointer">&gt;</button>
-                </div>
-              </div>
+                  {/* Table Pagination */}
+                  <div className="p-4 bg-slate-50 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4 rounded-b-[12px]">
+                    <div className="flex items-center gap-2 text-xs text-slate-600 font-medium">
+                      <span>Records per page:</span>
+                      <select
+                        value={itemsPerPage}
+                        onChange={(e) => { setItemsPerPage(Number(e.target.value)); setCurrentPage(1); }}
+                        className="px-2 py-1 bg-white border border-slate-300 rounded-md text-xs font-semibold text-slate-700"
+                      >
+                        <option value={10}>10</option>
+                        <option value={20}>20</option>
+                        <option value={50}>50</option>
+                      </select>
+                    </div>
+                    <span className="text-xs text-slate-500 font-medium">
+                      Showing {filteredMonthlyReports.length === 0 ? 0 : (currentPage - 1) * itemsPerPage + 1} - {Math.min(currentPage * itemsPerPage, filteredMonthlyReports.length)} of {filteredMonthlyReports.length} records
+                    </span>
+                    <div className="flex items-center gap-1">
+                      <button onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))} disabled={currentPage === 1} className="w-8 h-8 flex items-center justify-center text-xs text-slate-600 bg-white border border-slate-300 rounded-md hover:bg-slate-100 disabled:opacity-40 cursor-pointer">&lt;</button>
+                      <button className="w-8 h-8 bg-brand-primary text-white font-bold text-xs rounded-md">{currentPage}</button>
+                      <button onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalMonthlyPages))} disabled={currentPage === totalMonthlyPages || totalMonthlyPages === 0} className="w-8 h-8 flex items-center justify-center text-xs text-slate-600 bg-white border border-slate-300 rounded-md hover:bg-slate-100 disabled:opacity-40 cursor-pointer">&gt;</button>
+                    </div>
+                  </div>
+                </>
+              )}
             </div>
           )}
 
