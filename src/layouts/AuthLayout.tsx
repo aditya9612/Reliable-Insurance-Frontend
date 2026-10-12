@@ -1,9 +1,10 @@
 import React from 'react'
-import { Navigate, Outlet } from 'react-router-dom'
+import { Navigate, Outlet, useLocation } from 'react-router-dom'
 import { useAuthContext } from '@context/AuthContext'
 
 const AuthLayout: React.FC = () => {
   const { token, loading } = useAuthContext()
+  const location = useLocation()
 
   if (loading) return null
 
@@ -11,8 +12,10 @@ const AuthLayout: React.FC = () => {
   if (token) return <Navigate to="/dashboard" replace />
 
   return (
-    <div className="w-full min-h-screen">
-      <Outlet />
+    <div className="w-full min-h-screen overflow-hidden">
+      <div key={location.pathname} className="page-transition-wrapper min-h-screen">
+        <Outlet />
+      </div>
     </div>
   )
 }

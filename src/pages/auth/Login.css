@@ -528,9 +528,9 @@ body {
 
     width: 550px;
 
-    min-height: 670px;
+    min-height: auto;
 
-    padding: 52px 52px 38px;
+    padding: 36px 44px 28px;
 
     background: white;
 

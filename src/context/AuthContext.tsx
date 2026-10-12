@@ -4,6 +4,9 @@ export interface UserData {
   id: number;
   name: string;
   role?: string;
+  roleTitle?: string;
+  branch?: string;
+  email?: string;
 }
 
 interface AuthContextType {
@@ -17,12 +20,19 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | null>(null)
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<UserData | null>(null)
+  const [user, setUser] = useState<UserData | null>(() => {
+    try {
+      const savedUser = localStorage.getItem('user');
+      return savedUser ? JSON.parse(savedUser) : null;
+    } catch {
+      return null;
+    }
+  });
   const [token, setToken] = useState<string | null>(localStorage.getItem('token') || null)
   const [loading, setLoading] = useState<boolean>(true)
 
   useEffect(() => {
-    // TODO: validate token / fetch current user profile
+    // validate token / fetch current user profile
     setLoading(false)
   }, [token])
 
@@ -30,12 +40,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setUser(userData)
     setToken(authToken)
     localStorage.setItem('token', authToken)
+    localStorage.setItem('user', JSON.stringify(userData))
   }
 
   const logout = () => {
     setUser(null)
     setToken(null)
     localStorage.removeItem('token')
+    localStorage.removeItem('user')
   }
 
   return (
