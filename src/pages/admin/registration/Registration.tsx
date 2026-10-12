@@ -2385,7 +2385,19 @@ const Registration: React.FC = () => {
                     ) : activeTab === 'bank-beneficiary' ? (
                         <button
                             onClick={() => {
-                                setBeneficiaryForm({ beneficiaryName: '', entityType: 'AGENT', entityCode: '', bankName: 'HDFC BANK', accountNumber: '', ifscCode: '', accountType: 'SAVINGS', branch: '' });
+                                setBeneficiaryForm({
+                                    beneficiaryName: '',
+                                    entityType: beneficiaryTypeFilter,
+                                    entityCode: beneficiaryTypeFilter === 'FRANCHISE' ? `FA${1035 + beneficiaries.length}` : `AGT${1100 + beneficiaries.length}`,
+                                    bankName: 'HDFC BANK',
+                                    accountNumber: '',
+                                    ifscCode: '',
+                                    accountType: 'SAVINGS',
+                                    branch: 'PUNE',
+                                    branchName: beneficiaryTypeFilter === 'FRANCHISE' ? 'FRANCHISES' : 'BARAMATI',
+                                    address: '',
+                                    mobile: ''
+                                });
                                 setModalType('BENEFICIARY');
                             }}
                             className="inline-flex items-center gap-2 px-4 py-2 bg-brand-primary text-white rounded-[8px] text-[14px] font-semibold hover:bg-[#1D4ED8] shadow-sm transition-all cursor-pointer border-none"
