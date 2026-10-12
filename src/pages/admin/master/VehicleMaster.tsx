@@ -299,7 +299,7 @@ const VehicleMaster: React.FC = () => {
   const subTabs: SubTab[] = ['vehicleType', 'vehicleMake', 'vehicleFuel', 'vehicleModel', 'vehicleVariant', 'updateVehicleVariant'];
 
   return (
-    <div className="w-full max-w-full overflow-x-hidden flex flex-col space-y-5">
+    <div className="w-full max-w-full overflow-x-hidden flex flex-col space-y-3">
       {/* Top Header */}
       <PageHeader
         title="Vehicle Master"
@@ -315,7 +315,7 @@ const VehicleMaster: React.FC = () => {
 
       {/* Main Unified Card for all Sub-Tabs */}
       <div key={activeTab} className="tab-transition-wrapper w-full max-w-full">
-        <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden flex flex-col w-full max-w-full">
+        <div className="bg-white rounded-[12px] border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden flex flex-col w-full max-w-full">
 
           {/* Special UI layout for Vehicle Variant Tab (Image 4: List Table removed) */}
           {activeTab === 'vehicleVariant' ? (
@@ -572,7 +572,7 @@ const VehicleMaster: React.FC = () => {
           ) : (
             <>
               {/* Table Search & Add Button Toolbar for standard sub-tabs */}
-              <div className="p-4 bg-slate-50 border-b border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div className="p-4 bg-slate-50 border-b border-brand-border flex flex-col sm:flex-row items-center justify-between gap-4">
                 {activeTab === 'vehicleModel' ? (
                   <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
                     <input
@@ -580,82 +580,82 @@ const VehicleMaster: React.FC = () => {
                       placeholder="Search Make Name Here"
                       value={searchMakeQuery}
                       onChange={(e) => setSearchMakeQuery(e.target.value)}
-                      className="px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-brand-primary"
+                      className="px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm text-brand-navy placeholder-[#94a3b8] focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all h-[40px]"
                     />
                     <input
                       type="text"
                       placeholder="Search Model Name Here"
                       value={searchModelQuery}
                       onChange={(e) => setSearchModelQuery(e.target.value)}
-                      className="px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-brand-primary"
+                      className="px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm text-brand-navy placeholder-[#94a3b8] focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all h-[40px]"
                     />
                   </div>
                 ) : (
-                  <div className="relative w-full sm:w-80">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                  <div className="relative w-full sm:w-[400px]">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
                     <input
                       type="text"
                       placeholder={`Search ${getTabLabel(activeTab)}...`}
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      className="w-full pl-9 pr-4 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-brand-primary transition-all"
+                      className="w-full pl-9 pr-4 py-2 bg-white border border-slate-300 rounded-lg text-sm text-brand-navy placeholder-[#94a3b8] focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all h-[40px]"
                     />
                   </div>
                 )}
 
                 <button
                   onClick={handleOpenCreateModal}
-                  className="w-full sm:w-auto flex items-center justify-center px-5 py-2.5 bg-brand-primary hover:bg-[#0654B0] text-white rounded-lg font-medium text-sm shadow-sm transition-all duration-200 cursor-pointer"
+                  className="w-full sm:w-auto px-5 py-2 bg-brand-primary hover:bg-[#1D4ED8] text-white rounded-lg font-semibold text-sm shadow-xs transition-all duration-200 cursor-pointer border-none h-[40px] flex items-center justify-center gap-2 shrink-0"
                 >
                   <span>Add New {getTabLabel(activeTab)}</span>
                 </button>
               </div>
 
               {/* Dynamic Directory Tables */}
-              <div className="overflow-x-auto w-full custom-scrollbar">
+              <div className="overflow-x-auto w-full custom-scrollbar min-h-[400px]">
                 {activeTab === 'vehicleMake' ? (
                   <table className="w-full text-left border-collapse min-w-[850px]">
                     <thead>
-                      <tr className="bg-brand-lightbg text-brand-navy text-[14px] font-semibold uppercase border-b border-brand-border">
-                        <th className="py-3.5 px-6">MAKE NAME</th>
-                        <th className="py-3.5 px-4 text-center">GCV</th>
-                        <th className="py-3.5 px-4 text-center">MISC_D</th>
-                        <th className="py-3.5 px-4 text-center">PCV</th>
-                        <th className="py-3.5 px-4 text-center">PVT CAR</th>
-                        <th className="py-3.5 px-4 text-center">TWO WHEELER</th>
-                        <th className="py-3.5 px-4 text-center">BUS</th>
-                        <th className="py-3.5 px-4 text-center">THREE WHEELER GCV</th>
-                        <th className="py-3.5 px-4 text-center">THREE WHEELER PCV</th>
-                        <th className="py-3.5 px-6 text-right">Action</th>
+                      <tr className="bg-brand-lightbg text-brand-navy text-[13px] font-semibold uppercase border-b border-brand-border whitespace-nowrap">
+                        <th className="py-3 px-4">MAKE NAME</th>
+                        <th className="py-3 px-4 text-center">GCV</th>
+                        <th className="py-3 px-4 text-center">MISC_D</th>
+                        <th className="py-3 px-4 text-center">PCV</th>
+                        <th className="py-3 px-4 text-center">PVT CAR</th>
+                        <th className="py-3 px-4 text-center">TWO WHEELER</th>
+                        <th className="py-3 px-4 text-center">BUS</th>
+                        <th className="py-3 px-4 text-center">THREE WHEELER GCV</th>
+                        <th className="py-3 px-4 text-center">THREE WHEELER PCV</th>
+                        <th className="py-3 px-4 text-center">Action</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-200 text-sm text-slate-700">
+                    <tbody className="divide-y divide-brand-border text-[13px]">
                       {paginatedData.map((m: any) => (
-                        <tr key={m.id} className="hover:bg-brand-mainbg h-[52px] transition-colors bg-white">
-                          <td className="py-3.5 px-6 font-semibold text-[#12284A]">{m.makeName}</td>
-                          <td className="py-3.5 px-4 text-center font-medium">{m.gcv}</td>
-                          <td className="py-3.5 px-4 text-center font-medium">{m.miscD}</td>
-                          <td className="py-3.5 px-4 text-center font-medium">{m.pcv}</td>
-                          <td className="py-3.5 px-4 text-center font-medium">{m.pvtCar}</td>
-                          <td className="py-3.5 px-4 text-center font-medium">{m.twoWheeler}</td>
-                          <td className="py-3.5 px-4 text-center font-medium">{m.bus}</td>
-                          <td className="py-3.5 px-4 text-center font-medium">{m.threeWheelerGcv}</td>
-                          <td className="py-3.5 px-4 text-center font-medium">{m.threeWheelerPcv}</td>
-                          <td className="py-3.5 px-6 text-right">
-                            <div className="flex items-center justify-end gap-3">
+                        <tr key={m.id} className="hover:bg-brand-mainbg h-[48px] transition-colors bg-white">
+                          <td className="py-2 px-4 font-semibold text-[#12284A]">{m.makeName}</td>
+                          <td className="py-2 px-4 text-center font-medium text-slate-600">{m.gcv}</td>
+                          <td className="py-2 px-4 text-center font-medium text-slate-600">{m.miscD}</td>
+                          <td className="py-2 px-4 text-center font-medium text-slate-600">{m.pcv}</td>
+                          <td className="py-2 px-4 text-center font-medium text-slate-600">{m.pvtCar}</td>
+                          <td className="py-2 px-4 text-center font-medium text-slate-600">{m.twoWheeler}</td>
+                          <td className="py-2 px-4 text-center font-medium text-slate-600">{m.bus}</td>
+                          <td className="py-2 px-4 text-center font-medium text-slate-600">{m.threeWheelerGcv}</td>
+                          <td className="py-2 px-4 text-center font-medium text-slate-600">{m.threeWheelerPcv}</td>
+                          <td className="py-2 px-4 text-center">
+                            <div className="flex items-center justify-center gap-2">
                               <button
                                 onClick={() => handleOpenEditModal(m)}
-                                className="p-1.5 bg-brand-lightbg text-brand-primary hover:bg-[#E2E8F0] rounded-[6px] transition-colors cursor-pointer inline-flex items-center justify-center"
+                                className="p-1.5 bg-brand-lightbg text-brand-primary hover:bg-[#E2E8F0] rounded-[6px] transition-colors cursor-pointer inline-flex items-center justify-center border-none"
                                 title="Edit Vehicle Make"
                               >
-                                <Edit2 size={18} strokeWidth={1.5} />
+                                <Edit2 size={16} strokeWidth={1.5} />
                               </button>
                               <button
                                 onClick={() => handleDeleteItem(m.id)}
-                                className="p-1.5 bg-[#F4F8FC] text-brand-error hover:bg-[#FEE2E2] rounded-[6px] transition-colors cursor-pointer inline-flex items-center justify-center"
+                                className="p-1.5 bg-[#F4F8FC] text-brand-error hover:bg-[#FEE2E2] rounded-[6px] transition-colors cursor-pointer inline-flex items-center justify-center border-none"
                                 title="Delete Vehicle Make"
                               >
-                                <Trash2 size={18} strokeWidth={1.5} />
+                                <Trash2 size={16} strokeWidth={1.5} />
                               </button>
                             </div>
                           </td>
@@ -664,24 +664,24 @@ const VehicleMaster: React.FC = () => {
                     </tbody>
                   </table>
                 ) : activeTab === 'vehicleFuel' ? (
-                  <table className="w-full text-left border-collapse">
+                  <table className="w-full text-left border-collapse min-w-[600px]">
                     <thead>
-                      <tr className="bg-brand-lightbg text-brand-navy text-[14px] font-semibold uppercase border-b border-brand-border">
-                        <th className="py-3.5 px-6">TYPE</th>
-                        <th className="py-3.5 px-6 text-right w-24">Action</th>
+                      <tr className="bg-brand-lightbg text-brand-navy text-[13px] font-semibold uppercase border-b border-brand-border whitespace-nowrap">
+                        <th className="py-3 px-4">TYPE</th>
+                        <th className="py-3 px-4 text-center w-24">Action</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-200 text-sm text-slate-700">
+                    <tbody className="divide-y divide-brand-border text-[13px]">
                       {paginatedData.map((f: any) => (
-                        <tr key={f.id} className="hover:bg-brand-mainbg h-[52px] transition-colors bg-white">
-                          <td className="py-3.5 px-6 font-semibold text-[#12284A]">{f.type}</td>
-                          <td className="py-3.5 px-6 text-right">
+                        <tr key={f.id} className="hover:bg-brand-mainbg h-[48px] transition-colors bg-white">
+                          <td className="py-2 px-4 font-semibold text-[#12284A]">{f.type}</td>
+                          <td className="py-2 px-4 text-center">
                             <button
                               onClick={() => handleOpenEditModal(f)}
-                              className="p-1.5 bg-brand-lightbg text-brand-primary hover:bg-[#E2E8F0] rounded-[6px] transition-colors cursor-pointer inline-flex items-center justify-center"
+                              className="p-1.5 bg-brand-lightbg text-brand-primary hover:bg-[#E2E8F0] rounded-[6px] transition-colors cursor-pointer inline-flex items-center justify-center border-none"
                               title="Edit Vehicle Fuel"
                             >
-                              <Edit2 size={18} strokeWidth={1.5} />
+                              <Edit2 size={16} strokeWidth={1.5} />
                             </button>
                           </td>
                         </tr>
@@ -689,38 +689,38 @@ const VehicleMaster: React.FC = () => {
                     </tbody>
                   </table>
                 ) : activeTab === 'vehicleModel' ? (
-                  <table className="w-full text-left border-collapse">
+                  <table className="w-full text-left border-collapse min-w-[700px]">
                     <thead>
-                      <tr className="bg-brand-lightbg text-brand-navy text-[14px] font-semibold uppercase border-b border-brand-border">
-                        <th className="py-3.5 px-6">MAKE NAME</th>
-                        <th className="py-3.5 px-6">MODEL NAME</th>
-                        <th className="py-3.5 px-4">R MAKEID</th>
-                        <th className="py-3.5 px-6">TYPE</th>
-                        <th className="py-3.5 px-6 text-right">Action</th>
+                      <tr className="bg-brand-lightbg text-brand-navy text-[13px] font-semibold uppercase border-b border-brand-border whitespace-nowrap">
+                        <th className="py-3 px-4">MAKE NAME</th>
+                        <th className="py-3 px-4">MODEL NAME</th>
+                        <th className="py-3 px-4">R MAKEID</th>
+                        <th className="py-3 px-4">TYPE</th>
+                        <th className="py-3 px-4 text-center w-28">Action</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-200 text-sm text-slate-700">
+                    <tbody className="divide-y divide-brand-border text-[13px]">
                       {paginatedData.map((m: any) => (
-                        <tr key={m.id} className="hover:bg-brand-mainbg h-[52px] transition-colors bg-white">
-                          <td className="py-3.5 px-6 font-semibold text-[#12284A]">{m.makeName}</td>
-                          <td className="py-3.5 px-6 font-medium text-slate-700">{m.modelName}</td>
-                          <td className="py-3.5 px-4 font-mono text-slate-500">{m.rMakeId}</td>
-                          <td className="py-3.5 px-6 text-slate-600 font-semibold">{m.type}</td>
-                          <td className="py-3.5 px-6 text-right">
-                            <div className="flex items-center justify-end gap-3">
+                        <tr key={m.id} className="hover:bg-brand-mainbg h-[48px] transition-colors bg-white">
+                          <td className="py-2 px-4 font-semibold text-[#12284A]">{m.makeName}</td>
+                          <td className="py-2 px-4 font-medium text-slate-700">{m.modelName}</td>
+                          <td className="py-2 px-4 font-mono text-slate-500">{m.rMakeId}</td>
+                          <td className="py-2 px-4 text-slate-600 font-semibold">{m.type}</td>
+                          <td className="py-2 px-4 text-center">
+                            <div className="flex items-center justify-center gap-2">
                               <button
                                 onClick={() => handleOpenEditModal(m)}
-                                className="p-1.5 bg-brand-lightbg text-brand-primary hover:bg-[#E2E8F0] rounded-[6px] transition-colors cursor-pointer inline-flex items-center justify-center"
+                                className="p-1.5 bg-brand-lightbg text-brand-primary hover:bg-[#E2E8F0] rounded-[6px] transition-colors cursor-pointer inline-flex items-center justify-center border-none"
                                 title="Edit Model"
                               >
-                                <Edit2 size={18} strokeWidth={1.5} />
+                                <Edit2 size={16} strokeWidth={1.5} />
                               </button>
                               <button
                                 onClick={() => handleDeleteItem(m.id)}
-                                className="p-1.5 bg-[#F4F8FC] text-brand-error hover:bg-[#FEE2E2] rounded-[6px] transition-colors cursor-pointer inline-flex items-center justify-center"
+                                className="p-1.5 bg-[#F4F8FC] text-brand-error hover:bg-[#FEE2E2] rounded-[6px] transition-colors cursor-pointer inline-flex items-center justify-center border-none"
                                 title="Delete Model"
                               >
-                                <Trash2 size={18} strokeWidth={1.5} />
+                                <Trash2 size={16} strokeWidth={1.5} />
                               </button>
                             </div>
                           </td>
@@ -729,26 +729,26 @@ const VehicleMaster: React.FC = () => {
                     </tbody>
                   </table>
                 ) : (
-                  <table className="w-full text-left border-collapse">
+                  <table className="w-full text-left border-collapse min-w-[600px]">
                     <thead>
-                      <tr className="bg-brand-lightbg text-brand-navy text-[14px] font-semibold uppercase border-b border-brand-border">
-                        <th className="py-3.5 px-6 w-20">Sr. No.</th>
-                        <th className="py-3.5 px-6">{getTabLabel(activeTab).toUpperCase()}</th>
-                        <th className="py-3.5 px-6 text-right w-24">Action</th>
+                      <tr className="bg-brand-lightbg text-brand-navy text-[13px] font-semibold uppercase border-b border-brand-border whitespace-nowrap">
+                        <th className="py-3 px-4 w-20">Sr. No.</th>
+                        <th className="py-3 px-4">{getTabLabel(activeTab).toUpperCase()}</th>
+                        <th className="py-3 px-4 text-center w-24">Action</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-200 text-sm text-slate-700">
+                    <tbody className="divide-y divide-brand-border text-[13px]">
                       {paginatedData.map((item: any, idx: number) => (
-                        <tr key={item.id} className="hover:bg-brand-mainbg h-[52px] transition-colors bg-white">
-                          <td className="py-3.5 px-6 font-medium text-slate-500">{(currentPage - 1) * itemsPerPage + idx + 1}</td>
-                          <td className="py-3.5 px-6 font-semibold text-[#12284A]">{item.name || item.title}</td>
-                          <td className="py-3.5 px-6 text-right">
+                        <tr key={item.id} className="hover:bg-brand-mainbg h-[48px] transition-colors bg-white">
+                          <td className="py-2 px-4 font-medium text-brand-primary">{(currentPage - 1) * itemsPerPage + idx + 1}</td>
+                          <td className="py-2 px-4 font-semibold text-[#12284A]">{item.name || item.title}</td>
+                          <td className="py-2 px-4 text-center">
                             <button
                               onClick={() => handleOpenEditModal(item)}
-                              className="p-1.5 bg-brand-lightbg text-brand-primary hover:bg-[#E2E8F0] rounded-[6px] transition-colors cursor-pointer inline-flex items-center justify-center"
+                              className="p-1.5 bg-brand-lightbg text-brand-primary hover:bg-[#E2E8F0] rounded-[6px] transition-colors cursor-pointer inline-flex items-center justify-center border-none"
                               title={`Edit ${getTabLabel(activeTab)}`}
                             >
-                              <Edit2 size={18} strokeWidth={1.5} />
+                              <Edit2 size={16} strokeWidth={1.5} />
                             </button>
                           </td>
                         </tr>
@@ -759,8 +759,8 @@ const VehicleMaster: React.FC = () => {
               </div>
 
               {/* Standard Footer Pagination Bar */}
-              <div className="p-4 bg-slate-50 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
-                <div className="flex items-center gap-2 text-xs text-slate-600 font-medium">
+              <div className="p-4 bg-slate-50 border-t border-brand-border flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div className="flex items-center gap-2 text-sm text-brand-muted font-medium">
                   <span>Records per page:</span>
                   <select
                     value={itemsPerPage}
@@ -768,7 +768,7 @@ const VehicleMaster: React.FC = () => {
                       setItemsPerPage(Number(e.target.value));
                       setCurrentPage(1);
                     }}
-                    className="px-2 py-1 bg-white border border-slate-300 rounded-md text-xs font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-brand-primary cursor-pointer"
+                    className="px-2 py-1 bg-white border border-brand-border rounded-md text-sm font-semibold text-brand-navy focus:outline-none focus:ring-1 focus:ring-brand-primary cursor-pointer"
                   >
                     <option value={10}>10</option>
                     <option value={20}>20</option>
@@ -777,7 +777,7 @@ const VehicleMaster: React.FC = () => {
                   </select>
                 </div>
 
-                <span className="text-xs text-slate-500 font-medium">
+                <span className="text-sm text-brand-muted font-medium">
                   Showing {currentDataset.length === 0 ? 0 : (currentPage - 1) * itemsPerPage + 1} - {Math.min(currentPage * itemsPerPage, currentDataset.length)} of {currentDataset.length} records
                 </span>
 
@@ -785,7 +785,7 @@ const VehicleMaster: React.FC = () => {
                   <button
                     onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                     disabled={currentPage === 1}
-                    className="w-8 h-8 flex items-center justify-center text-xs font-semibold text-slate-600 bg-white border border-slate-300 rounded-md hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+                    className="w-8 h-8 flex items-center justify-center text-sm font-semibold text-brand-navy bg-white border border-brand-border rounded-md hover:bg-brand-mainbg disabled:opacity-40 disabled:cursor-not-allowed transition-all"
                   >
                     &lt;
                   </button>
@@ -793,9 +793,9 @@ const VehicleMaster: React.FC = () => {
                     <button
                       key={page}
                       onClick={() => setCurrentPage(page)}
-                      className={`w-8 h-8 flex items-center justify-center text-xs font-bold rounded-md transition-all ${currentPage === page
+                      className={`w-8 h-8 flex items-center justify-center text-sm font-semibold rounded-md transition-all ${currentPage === page
                         ? 'bg-brand-primary text-white shadow-sm'
-                        : 'bg-white text-slate-700 border border-slate-300 hover:bg-slate-100'
+                        : 'bg-white text-brand-navy border border-brand-border hover:bg-brand-mainbg'
                         }`}
                     >
                       {page}
@@ -804,7 +804,7 @@ const VehicleMaster: React.FC = () => {
                   <button
                     onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
                     disabled={currentPage === totalPages || totalPages === 0}
-                    className="w-8 h-8 flex items-center justify-center text-xs font-semibold text-slate-600 bg-white border border-slate-300 rounded-md hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+                    className="w-8 h-8 flex items-center justify-center text-sm font-semibold text-brand-navy bg-white border border-brand-border rounded-md hover:bg-brand-mainbg disabled:opacity-40 disabled:cursor-not-allowed transition-all"
                   >
                     &gt;
                   </button>
@@ -824,14 +824,14 @@ const VehicleMaster: React.FC = () => {
                 {activeTab === 'vehicleMake'
                   ? '» Vehicle Make Form'
                   : activeTab === 'vehicleFuel'
-                  ? '» Vehicle Fuel Form'
-                  : activeTab === 'vehicleModel'
-                  ? '» Vehicle Model Form'
-                  : activeTab === 'vehicleVariant'
-                  ? '» Vehicle Variant Form'
-                  : editingItem
-                  ? `Edit ${getTabLabel(activeTab)}`
-                  : `Add New ${getTabLabel(activeTab)}`}
+                    ? '» Vehicle Fuel Form'
+                    : activeTab === 'vehicleModel'
+                      ? '» Vehicle Model Form'
+                      : activeTab === 'vehicleVariant'
+                        ? '» Vehicle Variant Form'
+                        : editingItem
+                          ? `Edit ${getTabLabel(activeTab)}`
+                          : `Add New ${getTabLabel(activeTab)}`}
               </h2>
               <button onClick={() => setShowModal(false)} className="text-white/80 hover:text-white p-1 rounded-lg shrink-0 cursor-pointer border-none bg-transparent">
                 <X size={20} />

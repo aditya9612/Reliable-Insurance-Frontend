@@ -158,7 +158,7 @@ const BranchMaster: React.FC = () => {
   const paginatedData = currentData.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   return (
-    <div className="w-full flex flex-col space-y-5">
+    <div className="w-full flex flex-col space-y-3">
       {/* Top Bar Header */}
       <PageHeader
         title="Branch Master"
@@ -178,88 +178,104 @@ const BranchMaster: React.FC = () => {
       <div key={activeTab} className="tab-transition-wrapper">
         <div className="bg-white rounded-[12px] border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden flex flex-col w-full">
           {/* Table Toolbar */}
-          <div className="p-4 bg-white border-b border-brand-border flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div className="relative w-full sm:w-80">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-brand-primary" size={18} />
+          <div className="p-4 bg-slate-50 border-b border-brand-border flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="relative w-full sm:w-[400px]">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
               <input
                 type="text"
                 placeholder={`Search ${activeTab === 'type' ? 'Branch Type...' : 'Branch Name/Code...'}`}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-9 pr-4 py-2 bg-white border border-brand-border rounded-[8px] text-[14px] text-brand-navy placeholder-[#66809F] focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all"
+                className="w-full pl-9 pr-4 py-2 bg-white border border-slate-300 rounded-lg text-sm text-brand-navy placeholder-[#94a3b8] focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all h-[40px]"
               />
             </div>
 
             <button
               onClick={handleOpenCreateModal}
-              className="w-full sm:w-auto flex items-center justify-center gap-2 px-5 py-2.5 bg-brand-primary hover:bg-[#1D4ED8] text-white rounded-[8px] font-semibold text-[14px] shadow-sm transition-all duration-200 cursor-pointer border-none"
+              className="w-full sm:w-auto px-5 py-2 bg-brand-primary hover:bg-[#1D4ED8] text-white rounded-lg font-semibold text-sm shadow-xs transition-all duration-200 cursor-pointer border-none h-[40px] flex items-center justify-center gap-2 shrink-0"
             >
               <span>Add New {activeTab === 'type' ? 'Branch Type' : 'Branch'}</span>
             </button>
           </div>
 
           {/* Full Width Table View */}
-          <div className="overflow-x-auto w-full custom-scrollbar">
+          <div className="overflow-x-auto w-full custom-scrollbar min-h-[400px]">
             {activeTab === 'type' ? (
-              <table className="w-full text-left border-collapse table-fixed min-w-[600px]">
+              <table className="w-full text-left border-collapse min-w-[1000px]">
                 <thead>
-                  <tr className="bg-brand-lightbg text-brand-navy text-[14px] font-semibold uppercase border-b border-brand-border">
-                    <th className="py-3 px-6 w-[15%]">SR. NO.</th>
-                    <th className="py-3 px-6 w-[65%]">BRANCH TYPE</th>
-                    <th className="py-3 px-6 text-right w-[20%]">ACTION</th>
+                  <tr className="bg-brand-lightbg text-brand-navy text-[13px] font-semibold uppercase border-b border-brand-border whitespace-nowrap">
+                    <th className="py-3 px-4 w-[100px]">SR. NO.</th>
+                    <th className="py-3 px-4">BRANCH TYPE</th>
+                    <th className="py-3 px-4 text-center w-[120px]">ACTION</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-brand-border text-[14px]">
-                  {(paginatedData as BranchType[]).map((item, idx) => (
-                    <tr key={item.id} className="hover:bg-brand-mainbg h-[52px] transition-colors bg-white">
-                      <td className="py-2 px-6 font-medium text-brand-muted">{(currentPage - 1) * itemsPerPage + idx + 1}</td>
-                      <td className="py-2 px-6 font-medium text-brand-navy">{item.type}</td>
-                      <td className="py-2 px-6 text-right">
-                        <button
-                          onClick={() => handleOpenEditTypeModal(item)}
-                          className="p-1.5 bg-brand-lightbg text-brand-primary hover:bg-[#E2E8F0] rounded-[6px] transition-colors cursor-pointer inline-flex items-center justify-center"
-                          title="Edit Branch Type"
-                        >
-                          <Edit2 size={18} strokeWidth={1.5} />
-                        </button>
+                <tbody className="divide-y divide-brand-border text-[13px]">
+                  {paginatedData.length > 0 ? (
+                    (paginatedData as BranchType[]).map((item, idx) => (
+                      <tr key={item.id} className="hover:bg-brand-mainbg h-[48px] transition-colors bg-white">
+                        <td className="py-2 px-4 font-medium text-brand-primary">{(currentPage - 1) * itemsPerPage + idx + 1}</td>
+                        <td className="py-2 px-4 font-semibold text-[#12284A]">{item.type}</td>
+                        <td className="py-2 px-4 text-center">
+                          <button
+                            onClick={() => handleOpenEditTypeModal(item)}
+                            className="p-1.5 bg-brand-lightbg text-brand-primary hover:bg-[#E2E8F0] rounded-[6px] transition-colors cursor-pointer inline-flex items-center justify-center border-none"
+                            title="Edit Branch Type"
+                          >
+                            <Edit2 size={16} strokeWidth={1.5} />
+                          </button>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan={3} className="py-12 text-center text-slate-500">
+                        No records found for the selected matching criteria.
                       </td>
                     </tr>
-                  ))}
+                  )}
                 </tbody>
               </table>
             ) : (
-              <table className="w-full text-left border-collapse min-w-[750px]">
+              <table className="w-full text-left border-collapse min-w-[1000px]">
                 <thead>
-                  <tr className="bg-brand-lightbg text-brand-navy text-[14px] font-semibold uppercase border-b border-brand-border">
-                    <th className="py-3 px-6">CODE</th>
-                    <th className="py-3 px-6">BRANCH NAME</th>
-                    <th className="py-3 px-6">ADDRESS</th>
-                    <th className="py-3 px-6">BRANCH TYPE</th>
-                    <th className="py-3 px-6 text-right">ACTION</th>
+                  <tr className="bg-brand-lightbg text-brand-navy text-[13px] font-semibold uppercase border-b border-brand-border whitespace-nowrap">
+                    <th className="py-3 px-4 w-[120px]">CODE</th>
+                    <th className="py-3 px-4 min-w-[220px]">BRANCH NAME</th>
+                    <th className="py-3 px-4 min-w-[280px]">ADDRESS</th>
+                    <th className="py-3 px-4 w-[180px]">BRANCH TYPE</th>
+                    <th className="py-3 px-4 text-center w-[120px]">ACTION</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-brand-border text-[14px]">
-                  {(paginatedData as Branch[]).map((b) => (
-                    <tr key={b.code} className="hover:bg-brand-mainbg h-[52px] transition-colors bg-white">
-                      <td className="py-2 px-6 font-medium text-brand-primary">{b.code}</td>
-                      <td className="py-2 px-6 font-medium text-brand-navy">{b.name}</td>
-                      <td className="py-2 px-6 text-brand-muted">{b.address}</td>
-                      <td className="py-2 px-6">
-                        <span className="inline-block px-2.5 py-1 text-xs font-semibold rounded-full bg-brand-lightbg text-brand-primary border border-brand-border">
-                          {b.type}
-                        </span>
-                      </td>
-                      <td className="py-2 px-6 text-right">
-                        <button
-                          onClick={() => handleOpenEditBranchModal(b)}
-                          className="p-1.5 bg-brand-lightbg text-brand-primary hover:bg-[#E2E8F0] rounded-[6px] transition-colors cursor-pointer inline-flex items-center justify-center"
-                          title="Edit Branch"
-                        >
-                          <Edit2 size={18} strokeWidth={1.5} />
-                        </button>
+                <tbody className="divide-y divide-brand-border text-[13px]">
+                  {paginatedData.length > 0 ? (
+                    (paginatedData as Branch[]).map((b) => (
+                      <tr key={b.code} className="hover:bg-brand-mainbg h-[48px] transition-colors bg-white">
+                        <td className="py-2 px-4 font-medium text-brand-primary">{b.code}</td>
+                        <td className="py-2 px-4 font-semibold text-[#12284A]">{b.name}</td>
+                        <td className="py-2 px-4 text-slate-600">{b.address}</td>
+                        <td className="py-2 px-4">
+                          <span className="inline-block px-2.5 py-0.5 text-xs font-semibold rounded-full bg-brand-lightbg text-brand-primary border border-brand-border">
+                            {b.type}
+                          </span>
+                        </td>
+                        <td className="py-2 px-4 text-center">
+                          <button
+                            onClick={() => handleOpenEditBranchModal(b)}
+                            className="p-1.5 bg-brand-lightbg text-brand-primary hover:bg-[#E2E8F0] rounded-[6px] transition-colors cursor-pointer inline-flex items-center justify-center border-none"
+                            title="Edit Branch"
+                          >
+                            <Edit2 size={16} strokeWidth={1.5} />
+                          </button>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan={5} className="py-12 text-center text-slate-500">
+                        No records found for the selected matching criteria.
                       </td>
                     </tr>
-                  ))}
+                  )}
                 </tbody>
               </table>
             )}

@@ -371,11 +371,10 @@ const PolicyMaster: React.FC = () => {
                   setCurrentPage(1);
                   setSearchQuery('');
                 }}
-                className={`w-full py-2.5 px-2 rounded-xl text-[11px] xl:text-[12px] transition-all cursor-pointer border-none text-center font-bold flex items-center justify-center ${
-                  isActive
+                className={`w-full py-2.5 px-2 rounded-xl text-[11px] xl:text-[12px] transition-all cursor-pointer border-none text-center font-bold flex items-center justify-center ${isActive
                     ? 'bg-brand-primary text-white shadow-sm'
                     : 'bg-[#F1F5F9] hover:bg-slate-200 text-[#0F172A]'
-                }`}
+                  }`}
                 title={getTabLabel(tab)}
               >
                 <span className="truncate">{getTabLabel(tab)}</span>
@@ -396,11 +395,10 @@ const PolicyMaster: React.FC = () => {
                   setCurrentPage(1);
                   setSearchQuery('');
                 }}
-                className={`w-full py-2.5 px-2 rounded-xl text-[11px] xl:text-[12px] transition-all cursor-pointer border-none text-center font-bold flex items-center justify-center ${
-                  isActive
+                className={`w-full py-2.5 px-2 rounded-xl text-[11px] xl:text-[12px] transition-all cursor-pointer border-none text-center font-bold flex items-center justify-center ${isActive
                     ? 'bg-brand-primary text-white shadow-sm'
                     : 'bg-[#F1F5F9] hover:bg-slate-200 text-[#0F172A]'
-                }`}
+                  }`}
                 title={getTabLabel(tab)}
               >
                 <span className="truncate">{getTabLabel(tab)}</span>
@@ -989,14 +987,14 @@ const PolicyMaster: React.FC = () => {
               <h3 className="font-bold text-lg flex items-center gap-2">
                 <span>
                   » {activeTab === 'rto'
-                      ? 'RTO Form'
-                      : activeTab === 'paymentMode'
+                    ? 'RTO Form'
+                    : activeTab === 'paymentMode'
                       ? (editingItem ? 'Edit Payment Mode Form' : 'Payment Mode Form')
                       : activeTab === 'paToOwnerDriver'
-                      ? 'PA To Owner Driver Form'
-                      : editingItem
-                      ? `Edit ${getTabLabel(activeTab)} Form`
-                      : `${getTabLabel(activeTab)} Form`}
+                        ? 'PA To Owner Driver Form'
+                        : editingItem
+                          ? `Edit ${getTabLabel(activeTab)} Form`
+                          : `${getTabLabel(activeTab)} Form`}
                 </span>
               </h3>
               <button

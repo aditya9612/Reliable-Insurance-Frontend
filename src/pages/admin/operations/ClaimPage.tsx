@@ -29,7 +29,7 @@ interface DetailedClaimRow {
 export const ClaimPage: React.FC = () => {
   // Main Sub-Tabs (Dropdown Options in Navigation Navbar)
   const [activeMainTab, setActiveMainTab] = useState<ClaimMainTab>('claimReport');
-  
+
   // Status filter for Claim Report (Open vs Closed)
   const [reportFilterStatus, setReportFilterStatus] = useState<ClaimStatusFilter>('open');
 
@@ -238,7 +238,7 @@ export const ClaimPage: React.FC = () => {
   const filteredClaims = getFilteredClaims();
 
   return (
-    <div className="w-full flex flex-col space-y-5 font-sans">
+    <div className="w-full flex flex-col space-y-3 font-sans">
       {/* Page Header */}
       <PageHeader
         title="Claim Management"
@@ -269,21 +269,19 @@ export const ClaimPage: React.FC = () => {
               <div className="flex items-center gap-3">
                 <button
                   onClick={() => setReportFilterStatus('closed')}
-                  className={`px-5 py-2 rounded-lg text-xs font-semibold transition cursor-pointer border-none shadow-xs ${
-                    reportFilterStatus === 'closed'
+                  className={`px-5 py-2 rounded-lg text-xs font-semibold transition cursor-pointer border-none shadow-xs ${reportFilterStatus === 'closed'
                       ? 'bg-[#0869D8] text-white'
                       : 'bg-white text-[#0869D8] border border-blue-300 hover:bg-blue-50'
-                  }`}
+                    }`}
                 >
                   Closed Claim
                 </button>
                 <button
                   onClick={() => setReportFilterStatus('open')}
-                  className={`px-5 py-2 rounded-lg text-xs font-semibold transition cursor-pointer border-none shadow-xs ${
-                    reportFilterStatus === 'open'
+                  className={`px-5 py-2 rounded-lg text-xs font-semibold transition cursor-pointer border-none shadow-xs ${reportFilterStatus === 'open'
                       ? 'bg-[#E54D42] text-white'
                       : 'bg-white text-[#E54D42] border border-red-300 hover:bg-red-50'
-                  }`}
+                    }`}
                 >
                   Open Claim
                 </button>
@@ -315,22 +313,20 @@ export const ClaimPage: React.FC = () => {
               <div className="flex items-center gap-3">
                 <button
                   onClick={() => setRequestFilterStatus('open')}
-                  className={`px-5 py-2 rounded-lg text-xs font-semibold transition cursor-pointer border-none shadow-xs ${
-                    requestFilterStatus === 'open'
+                  className={`px-5 py-2 rounded-lg text-xs font-semibold transition cursor-pointer border-none shadow-xs ${requestFilterStatus === 'open'
                       ? 'bg-[#0869D8] text-white'
                       : 'bg-white text-[#0869D8] border border-blue-300 hover:bg-blue-50'
-                  }`}
+                    }`}
                 >
                   Claim
                 </button>
 
                 <button
                   onClick={() => setRequestFilterStatus('closed')}
-                  className={`px-5 py-2 rounded-lg text-xs font-semibold transition cursor-pointer border-none shadow-xs ${
-                    requestFilterStatus === 'closed'
+                  className={`px-5 py-2 rounded-lg text-xs font-semibold transition cursor-pointer border-none shadow-xs ${requestFilterStatus === 'closed'
                       ? 'bg-[#E54D42] text-white'
                       : 'bg-white text-[#E54D42] border border-red-300 hover:bg-red-50'
-                  }`}
+                    }`}
                 >
                   Closed Claim
                 </button>

@@ -103,6 +103,118 @@ const AnimatedLogoText = () => {
     );
 };
 
+export interface MockAccount {
+    id: number;
+    userId: string;
+    aliases: string[];
+    name: string;
+    role: string;
+    roleTitle: string;
+    branch: string;
+    password: string;
+    color: string;
+    description: string;
+}
+
+export const MOCK_ACCOUNTS: MockAccount[] = [
+    {
+        id: 101,
+        userId: '101',
+        aliases: ['operator', 'op'],
+        name: 'Ramesh Shinde',
+        role: 'operator',
+        roleTitle: 'Operator',
+        branch: 'Baramati Branch',
+        password: 'password123',
+        color: '#2563EB',
+        description: 'Operations & Data Entry'
+    },
+    {
+        id: 102,
+        userId: '102',
+        aliases: ['account', 'acc', 'accounts'],
+        name: 'Suresh Joshi',
+        role: 'account',
+        roleTitle: 'ACCOUNT',
+        branch: 'Pune Head Office',
+        password: 'password123',
+        color: '#059669',
+        description: 'Finance & Ledger Management'
+    },
+    {
+        id: 103,
+        userId: '103',
+        aliases: ['itsupport', 'it', 'support'],
+        name: 'Nilesh Patil',
+        role: 'it_support',
+        roleTitle: 'IT Support',
+        branch: 'Central IT Cell',
+        password: 'password123',
+        color: '#7C3AED',
+        description: 'Systems & Access Support'
+    },
+    {
+        id: 104,
+        userId: '104',
+        aliases: ['locationhead', 'teamleader', 'lh'],
+        name: 'Vinayak Kadam',
+        role: 'location_head',
+        roleTitle: 'Location Head/Team Leader',
+        branch: 'Chhatrapati Sambhajinagar',
+        password: 'password123',
+        color: '#D97706',
+        description: 'Branch & Team Supervision'
+    },
+    {
+        id: 105,
+        userId: '105',
+        aliases: ['statehead', 'sh'],
+        name: 'Rajesh Deshmukh',
+        role: 'state_head',
+        roleTitle: 'State Head',
+        branch: 'Maharashtra State Office',
+        password: 'password123',
+        color: '#4F46E5',
+        description: 'State Level Operations'
+    },
+    {
+        id: 106,
+        userId: '106',
+        aliases: ['clusterhead', 'ch'],
+        name: 'Santosh Sawant',
+        role: 'cluster_head',
+        roleTitle: 'Cluster Head',
+        branch: 'Western Cluster',
+        password: 'password123',
+        color: '#0D9488',
+        description: 'Cluster Leadership'
+    },
+    {
+        id: 107,
+        userId: '107',
+        aliases: ['endorsement', 'endo'],
+        name: 'Pooja Shinde',
+        role: 'endorsement',
+        roleTitle: 'ENDORSEMENT',
+        branch: 'Operations Hub',
+        password: 'password123',
+        color: '#E11D48',
+        description: 'Policy Endorsements & Revisions'
+    },
+    {
+        id: 999,
+        userId: '999',
+        aliases: ['admin', 'sysadmin'],
+        name: 'System Admin',
+        role: 'admin',
+        roleTitle: 'System Admin',
+        branch: 'Baramati Head Office',
+        password: 'admin123',
+        color: '#1E293B',
+        description: 'System Administrator'
+    }
+];
+
 const Login = () => {
 
     const [userId, setUserId] = useState('');
@@ -111,8 +223,10 @@ const Login = () => {
     const [error, setError] = useState('');
     const [isHiding, setIsHiding] = useState(false);
     const [fieldErrors, setFieldErrors] = useState<{ userId?: string, password?: string }>({});
+    const [showRoleSelector, setShowRoleSelector] = useState(true);
 
     const { login } = useAuthContext();
+    const navigate = useNavigate();
 
     // Auto-dismiss the toast notification after 3 seconds
     useEffect(() => {
@@ -133,7 +247,25 @@ const Login = () => {
         }
     }, [isHiding]);
 
-    const navigate = useNavigate();
+    const performLogin = (acc: MockAccount) => {
+        login(
+            {
+                id: acc.id,
+                name: acc.name,
+                role: acc.role,
+                roleTitle: acc.roleTitle,
+                branch: acc.branch
+            },
+            `mock-token-${acc.role}`
+        );
+        navigate('/');
+    };
+
+    const handleQuickLogin = (acc: MockAccount) => {
+        setUserId(acc.userId);
+        setPassword(acc.password);
+        performLogin(acc);
+    };
 
     const handleSubmit = (
         e: React.FormEvent<HTMLFormElement>
@@ -151,22 +283,21 @@ const Login = () => {
             return;
         }
 
-        // Mock authentication for admin only
-        if (userId === '999' && password === 'admin123') {
-            login(
-                {
-                    id: 999,
-                    name: 'System Admin',
-                    role: 'admin'
-                },
-                'mock-token-admin'
-            );
+        const normalizedInputId = userId.trim().toLowerCase();
+        const matchedAccount = MOCK_ACCOUNTS.find(acc =>
+            acc.userId.toLowerCase() === normalizedInputId ||
+            acc.aliases.some(alias => alias.toLowerCase() === normalizedInputId)
+        );
+
+        if (
+            matchedAccount &&
+            (password === matchedAccount.password || password === 'password123' || password === 'admin123')
+        ) {
+            performLogin(matchedAccount);
         } else {
-            setError('Invalid credentials. Please use User ID 999 and the correct password.');
+            setError('Invalid credentials. Try User ID: 101-107 or 999 with password "password123" / "admin123".');
             return;
         }
-
-        navigate('/');
     };
 
     return (
@@ -394,11 +525,50 @@ const Login = () => {
                         </button>
 
 
+                        {/* =========================================
+                            QUICK ROLE LOGIN (DEMO SELECTOR)
+                        ========================================= */}
+                        <div className="mt-6 pt-5 border-t border-slate-100">
+                            <div className="flex items-center justify-between mb-3">
+                                <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
+                                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                                    Quick Demo Login (Select Role):
+                                </span>
+                                <span className="text-[11px] text-slate-400 font-mono">
+                                    Pass: password123
+                                </span>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-2 max-h-[190px] overflow-y-auto pr-1">
+                                {MOCK_ACCOUNTS.map((acc) => (
+                                    <button
+                                        key={acc.id}
+                                        type="button"
+                                        onClick={() => handleQuickLogin(acc)}
+                                        className="flex flex-col text-left px-2.5 py-1.5 rounded-lg border border-slate-200 hover:border-brand-primary/50 hover:bg-blue-50/50 transition-all text-xs group cursor-pointer"
+                                        title={`Instant login as ${acc.name} (${acc.roleTitle})`}
+                                    >
+                                        <div className="flex items-center justify-between w-full">
+                                            <span className="font-semibold text-slate-800 group-hover:text-brand-primary truncate">
+                                                {acc.roleTitle}
+                                            </span>
+                                            <span className="text-[10px] font-mono text-slate-400 group-hover:text-slate-600">
+                                                #{acc.userId}
+                                            </span>
+                                        </div>
+                                        <span className="text-[11px] text-slate-500 truncate">
+                                            {acc.name}
+                                        </span>
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+
                         {/* COPYRIGHT */}
 
-                        <div className="copyright mt-6">
-                            © 2026 Reliable Associates.
-                            All rights reserved.
+                        <div className="copyright mt-5">
+                            © 2026 Reliable Associates. All rights reserved.
                         </div>
 
                     </form>
