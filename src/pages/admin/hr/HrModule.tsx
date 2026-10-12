@@ -477,21 +477,21 @@ const HrModule: React.FC = () => {
                             onClick={() => setModalType('HOLIDAY')}
                             className="inline-flex items-center gap-2 px-4 py-2 bg-brand-primary hover:bg-[#1D4ED8] text-white rounded-[8px] text-[14px] font-semibold shadow-sm transition-all cursor-pointer border-none"
                         >
-                            <Plus size={16} /> Add Holiday
+                            Add Holiday
                         </button>
                     ) : activeTab === 'apply-leave' || activeTab === 'leave-management' ? (
                         <button
                             onClick={() => setModalType('APPLY_LEAVE')}
                             className="inline-flex items-center gap-2 px-4 py-2 bg-brand-primary hover:bg-[#1D4ED8] text-white rounded-[8px] text-[14px] font-semibold shadow-sm transition-all cursor-pointer border-none"
                         >
-                            <Plus size={16} /> Submit Leave Request
+                            Submit Leave Request
                         </button>
                     ) : activeTab === 'employee-advance' || activeTab === 'view-employee-advance' ? (
                         <button
                             onClick={() => setModalType('ADVANCE')}
                             className="inline-flex items-center gap-2 px-4 py-2 bg-brand-primary hover:bg-[#1D4ED8] text-white rounded-[8px] text-[14px] font-semibold shadow-sm transition-all cursor-pointer border-none"
                         >
-                            <Plus size={16} /> Request Advance
+                            Request Advance
                         </button>
                     ) : (
                         <button

@@ -48,6 +48,61 @@ const FeatureCard: React.FC<FeatureCardProps> = ({
     </div>
 );
 
+const AnimatedLogoText = () => {
+    const [isExpanded, setIsExpanded] = useState(false);
+
+    useEffect(() => {
+        // Trigger slightly faster so the user doesn't wait too long
+        const timer = setTimeout(() => setIsExpanded(true), 350);
+        return () => clearTimeout(timer);
+    }, []);
+
+    const renderCascadingLetters = (word: string, isBlue: boolean, delayOffset: number) => {
+        // The most perfectly smooth way to transition an unknown dynamic width is CSS Grid 1fr trick.
+        return (
+            <div
+                className="grid transition-all duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
+                style={{ gridTemplateColumns: !isExpanded ? '0fr' : '1fr' }}
+            >
+                <div className="overflow-hidden min-w-0 flex items-center">
+                    {word.split('').map((char, index) => (
+                        <span
+                            key={index}
+                            className={`inline-block tracking-wide ${isBlue ? 'text-[#38BDF8]' : 'text-white'} transition-all duration-[700ms] ease-out will-change-transform`}
+                            style={{
+                                fontSize: '36px',
+                                opacity: !isExpanded ? 0 : 1,
+                                transform: !isExpanded ? 'translateX(-20px)' : 'translateX(0)',
+                                transitionDelay: !isExpanded ? '0ms' : `${delayOffset + (index * 40)}ms`
+                            }}
+                        >
+                            {char}
+                        </span>
+                    ))}
+                </div>
+            </div>
+        );
+    };
+
+    return (
+        <div
+            className="flex flex-row items-center select-none whitespace-nowrap mb-[42px]"
+            style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
+        >
+            <div className="flex items-center">
+                <span className="text-white font-bold tracking-tight" style={{ fontSize: '42px', zIndex: 10 }}>R</span>
+                {renderCascadingLetters('eliable', false, 0)}
+            </div>
+            {/* Dynamic gap between words smoothly animates */}
+            <div className={`transition-all duration-[800ms] ease-[cubic-bezier(0.16,1,0.3,1)] ${!isExpanded ? 'w-0' : 'w-3.5'}`} />
+            <div className="flex items-center">
+                <span className="text-[#38BDF8] font-normal tracking-tight" style={{ fontSize: '42px', zIndex: 10 }}>A</span>
+                {renderCascadingLetters('ssociates', true, 280)}
+            </div>
+        </div>
+    );
+};
+
 const Login = () => {
 
     const [userId, setUserId] = useState('');
@@ -136,11 +191,7 @@ const Login = () => {
                 <div className="left-content">
 
                     {/* REAL LOGO */}
-                    <img
-                        src="/logo-light.svg"
-                        alt="Reliable Associates"
-                        className="company-logo"
-                    />
+                    <AnimatedLogoText />
 
                     <div className="left-divider"></div>
 
@@ -201,20 +252,13 @@ const Login = () => {
                 <div className="right-wave"></div>
                 <div className="right-wave-line"></div>
 
-                <div className="login-card">
+                <div className="login-card mt-6">
 
-                    {/* REAL LOGO */}
-                    <img
-                        src="/logo-dark.svg"
-                        alt="Reliable Associates"
-                        className="card-logo"
-                    />
-
-                    <h2 className="card-title">
+                    <h2 className="card-title text-center">
                         Welcome Back
                     </h2>
 
-                    <p className="card-subtitle">
+                    <p className="card-subtitle text-center">
                         Sign in to continue
                     </p>
 
@@ -350,18 +394,9 @@ const Login = () => {
                         </button>
 
 
-                        {/* DIVIDER */}
-
-                        <div className="divider">
-                            <span></span>
-                            <small>OR</small>
-                            <span></span>
-                        </div>
-
-
                         {/* COPYRIGHT */}
 
-                        <div className="copyright">
+                        <div className="copyright mt-6">
                             © 2026 Reliable Associates.
                             All rights reserved.
                         </div>
