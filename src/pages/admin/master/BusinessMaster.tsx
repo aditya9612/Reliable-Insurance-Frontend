@@ -102,7 +102,7 @@ const BusinessMaster: React.FC = () => {
   const paginatedData = filteredList.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   return (
-    <div className="w-full flex flex-col space-y-5">
+    <div className="w-full flex flex-col space-y-3">
       <PageHeader
         title="Business Master"
         description="Manage change reporting hierarchy and designation masters"
@@ -118,58 +118,60 @@ const BusinessMaster: React.FC = () => {
       />
 
       <div key={activeTab} className="tab-transition-wrapper">
-        <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden flex flex-col w-full">
-          <div className="p-4 bg-slate-50 border-b border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div className="relative w-full sm:w-80">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+        <div className="bg-white rounded-[12px] border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden flex flex-col w-full">
+          {/* Table Toolbar */}
+          <div className="p-4 bg-slate-50 border-b border-brand-border flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="relative w-full sm:w-[400px]">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
               <input
                 type="text"
                 placeholder={`Search ${getTabLabel(activeTab)}...`}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-9 pr-4 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-brand-primary"
+                className="w-full pl-9 pr-4 py-2 bg-white border border-slate-300 rounded-lg text-sm text-brand-navy placeholder-[#94a3b8] focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all h-[40px]"
               />
             </div>
 
             <button
               onClick={handleOpenCreateModal}
-              className="w-full sm:w-auto flex items-center justify-center px-5 py-2.5 bg-brand-primary hover:bg-[#0654B0] text-white rounded-lg font-medium text-sm shadow-sm transition-all cursor-pointer"
+              className="w-full sm:w-auto px-5 py-2 bg-brand-primary hover:bg-[#1D4ED8] text-white rounded-lg font-semibold text-sm shadow-xs transition-all duration-200 cursor-pointer border-none h-[40px] flex items-center justify-center gap-2 shrink-0"
             >
               <span>Add New {getTabLabel(activeTab)}</span>
             </button>
           </div>
 
-          <div className="overflow-x-auto w-full">
-            <table className="w-full text-left border-collapse">
+          {/* Table View */}
+          <div className="overflow-x-auto w-full custom-scrollbar min-h-[400px]">
+            <table className="w-full text-left border-collapse min-w-[600px]">
               <thead>
-                <tr className="bg-brand-lightbg text-brand-navy text-[14px] font-semibold uppercase border-b border-brand-border">
-                  <th className="py-3.5 px-6 w-20">Sr. No.</th>
-                  <th className="py-3.5 px-6">DESIGNATION</th>
+                <tr className="bg-brand-lightbg text-brand-navy text-[13px] font-semibold uppercase border-b border-brand-border whitespace-nowrap">
+                  <th className="py-3 px-4 w-20">Sr. No.</th>
+                  <th className="py-3 px-4">DESIGNATION</th>
                   {activeTab === 'changeReporting' ? (
-                    <th className="py-3.5 px-6">REPORTING TO</th>
+                    <th className="py-3 px-4">REPORTING TO</th>
                   ) : (
-                    <th className="py-3.5 px-6">DEPARTMENT</th>
+                    <th className="py-3 px-4">DEPARTMENT</th>
                   )}
-                  <th className="py-3.5 px-6 text-right w-24">Action</th>
+                  <th className="py-3 px-4 text-center w-24">Action</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-200 text-sm text-slate-700">
+              <tbody className="divide-y divide-brand-border text-[13px]">
                 {paginatedData.map((item, idx) => (
-                  <tr key={item.id} className="hover:bg-brand-mainbg h-[52px] transition-colors bg-white">
-                    <td className="py-3.5 px-6 font-medium text-slate-500">{(currentPage - 1) * itemsPerPage + idx + 1}</td>
-                    <td className="py-3.5 px-6 font-semibold text-[#12284A]">{item.title}</td>
+                  <tr key={item.id} className="hover:bg-brand-mainbg h-[48px] transition-colors bg-white">
+                    <td className="py-2 px-4 font-medium text-brand-primary">{(currentPage - 1) * itemsPerPage + idx + 1}</td>
+                    <td className="py-2 px-4 font-semibold text-[#12284A]">{item.title}</td>
                     {activeTab === 'changeReporting' ? (
-                      <td className="py-3.5 px-6 font-medium text-brand-primary">{item.reportingTo}</td>
+                      <td className="py-2 px-4 font-medium text-brand-primary">{item.reportingTo}</td>
                     ) : (
-                      <td className="py-3.5 px-6 text-slate-600">{item.department}</td>
+                      <td className="py-2 px-4 text-slate-600">{item.department}</td>
                     )}
-                    <td className="py-3.5 px-6 text-right">
+                    <td className="py-2 px-4 text-center">
                       <button
                         onClick={() => handleOpenEditModal(item)}
-                        className="p-1.5 bg-brand-lightbg text-brand-primary hover:bg-[#E2E8F0] rounded-[6px] transition-colors cursor-pointer inline-flex items-center justify-center"
+                        className="p-1.5 bg-brand-lightbg text-brand-primary hover:bg-[#E2E8F0] rounded-[6px] transition-colors cursor-pointer inline-flex items-center justify-center border-none"
                         title={`Edit ${getTabLabel(activeTab)}`}
                       >
-                        <Edit2 size={18} strokeWidth={1.5} />
+                        <Edit2 size={16} strokeWidth={1.5} />
                       </button>
                     </td>
                   </tr>
@@ -178,8 +180,9 @@ const BusinessMaster: React.FC = () => {
             </table>
           </div>
 
-          <div className="p-4 bg-slate-50 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div className="flex items-center gap-2 text-xs text-slate-600 font-medium">
+          {/* Footer Pagination */}
+          <div className="p-4 bg-slate-50 border-t border-brand-border flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-2 text-sm text-brand-muted font-medium">
               <span>Records per page:</span>
               <select
                 value={itemsPerPage}
@@ -187,7 +190,7 @@ const BusinessMaster: React.FC = () => {
                   setItemsPerPage(Number(e.target.value));
                   setCurrentPage(1);
                 }}
-                className="px-2 py-1 bg-white border border-slate-300 rounded-md text-xs font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-brand-primary cursor-pointer"
+                className="px-2 py-1 bg-white border border-brand-border rounded-md text-sm font-semibold text-brand-navy focus:outline-none focus:ring-1 focus:ring-brand-primary cursor-pointer"
               >
                 <option value={10}>10</option>
                 <option value={20}>20</option>
@@ -196,7 +199,7 @@ const BusinessMaster: React.FC = () => {
               </select>
             </div>
 
-            <span className="text-xs text-slate-500 font-medium">
+            <span className="text-sm text-brand-muted font-medium">
               Showing {filteredList.length === 0 ? 0 : (currentPage - 1) * itemsPerPage + 1} - {Math.min(currentPage * itemsPerPage, filteredList.length)} of {filteredList.length} records
             </span>
 
@@ -204,7 +207,7 @@ const BusinessMaster: React.FC = () => {
               <button
                 onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                 disabled={currentPage === 1}
-                className="w-8 h-8 flex items-center justify-center text-xs font-semibold text-slate-600 bg-white border border-slate-300 rounded-md hover:bg-slate-100 disabled:opacity-40 transition-all"
+                className="w-8 h-8 flex items-center justify-center text-sm font-semibold text-brand-navy bg-white border border-brand-border rounded-md hover:bg-brand-mainbg disabled:opacity-40 disabled:cursor-not-allowed transition-all"
               >
                 &lt;
               </button>
@@ -212,9 +215,9 @@ const BusinessMaster: React.FC = () => {
                 <button
                   key={page}
                   onClick={() => setCurrentPage(page)}
-                  className={`w-8 h-8 flex items-center justify-center text-xs font-bold rounded-md transition-all ${currentPage === page
+                  className={`w-8 h-8 flex items-center justify-center text-sm font-semibold rounded-md transition-all ${currentPage === page
                     ? 'bg-brand-primary text-white shadow-sm'
-                    : 'bg-white text-slate-700 border border-slate-300 hover:bg-slate-100'
+                    : 'bg-white text-brand-navy border border-brand-border hover:bg-brand-mainbg'
                     }`}
                 >
                   {page}
@@ -223,7 +226,7 @@ const BusinessMaster: React.FC = () => {
               <button
                 onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
                 disabled={currentPage === totalPages || totalPages === 0}
-                className="w-8 h-8 flex items-center justify-center text-xs font-semibold text-slate-600 bg-white border border-slate-300 rounded-md hover:bg-slate-100 disabled:opacity-40 transition-all"
+                className="w-8 h-8 flex items-center justify-center text-sm font-semibold text-brand-navy bg-white border border-brand-border rounded-md hover:bg-brand-mainbg disabled:opacity-40 disabled:cursor-not-allowed transition-all"
               >
                 &gt;
               </button>

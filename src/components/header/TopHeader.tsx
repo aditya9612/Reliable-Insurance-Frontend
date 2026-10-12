@@ -36,7 +36,7 @@ const TopHeader: React.FC<TopHeaderProps> = ({ isCollapsed, toggleSidebar }) => 
 
                 {/* Branch Info */}
                 <div className="hidden md:flex items-center px-3 py-1.5 bg-brand-lightbg text-brand-primary rounded-md text-sm font-medium border border-brand-border">
-                    <span className="text-brand-muted mr-1">Branch:</span> Baramati
+                    <span className="text-brand-muted mr-1">Branch:</span> {user?.branch || 'Baramati'}
                 </div>
 
                 {/* Notifications */}
@@ -58,8 +58,8 @@ const TopHeader: React.FC<TopHeaderProps> = ({ isCollapsed, toggleSidebar }) => 
                             <div className="text-sm font-semibold text-brand-navy leading-tight">
                                 {user?.name || 'Admin User'}
                             </div>
-                            <div className="text-xs text-brand-muted leading-tight">
-                                {user?.role === 'admin' ? 'System Admin' : 'Employee'}
+                            <div className="text-xs text-brand-muted leading-tight font-medium">
+                                {user?.roleTitle || (user?.role === 'admin' ? 'System Admin' : 'Employee')}
                             </div>
                         </div>
                         <ChevronDown size={16} className="text-brand-muted" />
