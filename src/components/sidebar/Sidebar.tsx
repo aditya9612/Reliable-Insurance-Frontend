@@ -131,14 +131,20 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
         }
     ];
 
-<<<<<<< HEAD
-    const [expandedGroups, setExpandedGroups] = useState<string[]>(['MASTER', 'OPERATIONS']);
-=======
-    const isActive = (path: string) => location.pathname.startsWith(path);
-    const isGroupActive = (children?: NavItem[]) => children?.some(c => isActive(c.path));
+    const isPathActive = (path: string) => location.pathname === path || (path !== '/' && location.pathname.startsWith(path));
+
+    const isChildActive = (child: NavItem) => {
+        if (location.pathname === child.path) return true;
+        if (child.matchPaths && child.matchPaths.some(p => location.pathname === p || location.pathname.startsWith(p))) {
+            return true;
+        }
+        return location.pathname.startsWith(child.path);
+    };
+
+    const isGroupActive = (children?: NavItem[]) => children?.some(c => isChildActive(c));
 
     const [expandedGroups, setExpandedGroups] = useState<string[]>(() => {
-        const activeGroup = navGroups.find(g => isGroupActive(g.children) || (g.path && isActive(g.path)));
+        const activeGroup = navGroups.find(g => isGroupActive(g.children) || (g.path && isPathActive(g.path)));
         return activeGroup ? [activeGroup.title] : [];
     });
 
@@ -154,7 +160,6 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
             }
         }
     }, []);
->>>>>>> testing
 
     const toggleGroup = (title: string) => {
         if (isCollapsed) {
@@ -167,21 +172,6 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
         );
     };
 
-<<<<<<< HEAD
-    const isPathActive = (path: string) => location.pathname === path || (path !== '/' && location.pathname.startsWith(path));
-
-    const isChildActive = (child: NavItem) => {
-        if (location.pathname === child.path) return true;
-        if (child.matchPaths && child.matchPaths.some(p => location.pathname === p || location.pathname.startsWith(p))) {
-            return true;
-        }
-        return location.pathname.startsWith(child.path);
-    };
-
-    const isGroupActive = (children?: NavItem[]) => children?.some(c => isChildActive(c));
-
-=======
->>>>>>> testing
     return (
         <aside className={`bg-brand-navy text-[#B8C7D9] h-full flex flex-col transition-all duration-300 ease-in-out shrink-0 z-20 shadow-xl fixed md:static top-0 left-0 bottom-0 ${isCollapsed ? '-translate-x-full md:translate-x-0 w-[240px] md:w-[70px] lg:w-[80px]' : 'translate-x-0 w-[240px]'}`}>
 
