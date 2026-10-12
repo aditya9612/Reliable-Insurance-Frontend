@@ -1340,7 +1340,6 @@ const Registration: React.FC = () => {
             status: 'INACTIVE'
         }
     ]);
-<<<<<<< HEAD
     const [agentForm, setAgentForm] = useState({ fullName: '', type: 'POSP' as const, branch: 'BARAMATI', mobile: '', email: '', panNo: '' });
     const [agentViewFilter, setAgentViewFilter] = useState<'ACTIVE' | 'INACTIVE'>('ACTIVE');
     const [agentSearchQuery, setAgentSearchQuery] = useState('');
@@ -1669,9 +1668,6 @@ const Registration: React.FC = () => {
         setAgentUsernameChecked(null);
         showToast('Agent registration form has been reset.');
     };
-=======
-    const [agentForm, setAgentForm] = useState({ fullName: '', type: 'POSP' as 'POSP' | 'DIRECT' | 'FRANCHISE' | 'BROKER', branch: 'BARAMATI', mobile: '', email: '', panNo: '' });
->>>>>>> testing
 
     // ==========================================
     // 5: BANK BENEFICIARY STATE
