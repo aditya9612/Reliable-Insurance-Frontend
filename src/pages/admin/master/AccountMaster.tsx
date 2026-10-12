@@ -164,7 +164,7 @@ const AccountMaster: React.FC = () => {
   const subTabs: SubTab[] = ['ledgerType', 'ledgerMaster', 'bankMaster'];
 
   return (
-    <div className="w-full max-w-full overflow-x-hidden flex flex-col space-y-3">
+    <div className="w-full flex flex-col space-y-3">
       {/* Top Header */}
       <PageHeader
         title="Account Master"
@@ -206,7 +206,7 @@ const AccountMaster: React.FC = () => {
           <div className="overflow-x-auto w-full custom-scrollbar min-h-[400px]">
             {activeTab === 'ledgerMaster' ? (
               /* Ledger Master Table */
-              <table className="w-full text-left border-collapse min-w-[900px]">
+              <table className="w-full text-left border-collapse min-w-[1000px]">
                 <thead>
                   <tr className="bg-brand-lightbg text-brand-navy text-[13px] font-semibold uppercase border-b border-brand-border whitespace-nowrap">
                     <th className="py-3 px-4 w-16">Sr. No.</th>
@@ -253,7 +253,7 @@ const AccountMaster: React.FC = () => {
               </table>
             ) : activeTab === 'bankMaster' ? (
               /* Bank Master Table showing ONLY TYPE & Action (Images 1 & 2) */
-              <table className="w-full text-left border-collapse min-w-[700px]">
+              <table className="w-full text-left border-collapse min-w-[1000px]">
                 <thead>
                   <tr className="bg-brand-lightbg text-brand-navy text-[13px] font-semibold uppercase border-b border-brand-border whitespace-nowrap">
                     <th className="py-3 px-4">TYPE</th>
@@ -295,7 +295,7 @@ const AccountMaster: React.FC = () => {
               </table>
             ) : (
               /* Standard Ledger Type Table */
-              <table className="w-full text-left border-collapse min-w-[700px]">
+              <table className="w-full text-left border-collapse min-w-[1000px]">
                 <thead>
                   <tr className="bg-brand-lightbg text-brand-navy text-[13px] font-semibold uppercase border-b border-brand-border whitespace-nowrap">
                     <th className="py-3 px-4 w-20">Sr. No.</th>
@@ -332,7 +332,7 @@ const AccountMaster: React.FC = () => {
           </div>
 
           {/* Footer Pagination Bar */}
-          <div className="p-4 bg-slate-50 border-t border-brand-border flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="p-4 bg-white border-t border-brand-border flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-2 text-sm text-brand-muted font-medium">
               <span>Records per page:</span>
               <select
