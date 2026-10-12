@@ -54,11 +54,7 @@ const UnderlineTabs: React.FC<UnderlineTabsProps> = ({ tabs, activeTab, onTabCha
             <div
                 ref={scrollRef}
                 onScroll={checkScroll}
-<<<<<<< HEAD
-                className="flex flex-row items-center gap-7 px-2 sm:px-4 overflow-x-auto no-scrollbar [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden h-[54px] w-full relative z-0 scroll-smooth"
-=======
                 className="flex flex-row items-center gap-1.5 overflow-x-auto [&::-webkit-scrollbar]:hidden w-full relative z-0 scroll-smooth py-0.5 px-0.5"
->>>>>>> onkar
             >
                 {tabs.map((tab) => {
                     const isActive = activeTab === tab.id;
@@ -66,13 +62,9 @@ const UnderlineTabs: React.FC<UnderlineTabsProps> = ({ tabs, activeTab, onTabCha
                         <button
                             key={tab.id}
                             onClick={() => onTabChange(tab.id)}
-<<<<<<< HEAD
-                            className={`px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm whitespace-nowrap transition-all cursor-pointer border-none flex items-center justify-center shrink-0 ${isActive
-=======
                             className={`px-4 py-1.5 sm:py-2 rounded-lg font-semibold text-xs sm:text-sm whitespace-nowrap transition-all cursor-pointer border-none flex items-center justify-center shrink-0 ${isActive
->>>>>>> onkar
-                                    ? 'bg-brand-primary text-white shadow-sm'
-                                    : 'bg-[#F1F5F9] hover:bg-slate-200 text-[#0F172A]'
+                                ? 'bg-brand-primary text-white shadow-sm'
+                                : 'bg-[#F1F5F9] hover:bg-slate-200 text-[#0F172A]'
                                 }`}
                         >
                             <span>{tab.label}</span>
