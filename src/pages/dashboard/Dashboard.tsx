@@ -8,6 +8,7 @@ import {
     Search, FileCheck, Layers, LayoutGrid, Check, ArrowRight,
     ShieldAlert
 } from 'lucide-react';
+import { useAuthContext } from '../../context/AuthContext';
 
 interface MetricItem {
     id: string;
@@ -22,6 +23,8 @@ interface MetricItem {
 
 const Dashboard: React.FC = () => {
     const navigate = useNavigate();
+    const { user } = useAuthContext();
+    const isAdmin = user?.role === 'admin';
     const [viewMode, setViewMode] = useState<'cards' | 'matrix'>('cards');
 
     // Category 1: Digital Collections & Instant Payments
@@ -48,6 +51,39 @@ const Dashboard: React.FC = () => {
         { id: 'attended', label: 'Attended', count: 4, to: '/support' },
         { id: 'support-req', label: 'Support Request', count: 0, to: '/support' },
     ];
+
+    // For non-admin roles, remove all operational data, queues, and cards
+    if (!isAdmin) {
+        return (
+            <div className="w-full h-full pb-10 space-y-6">
+                <Breadcrumbs />
+
+                {/* Page Header */}
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-brand-border">
+                    <PageHeader
+                        title="Dashboard"
+                        description={`Operational dashboard for ${user?.name || 'User'} (${user?.roleTitle || user?.role || 'Employee'})`}
+                    />
+                </div>
+
+                {/* Non-Admin Empty Dashboard Display */}
+                <div className="bg-white rounded-2xl border border-brand-border p-12 text-center shadow-sm max-w-xl mx-auto mt-10">
+                    <div className="w-16 h-16 rounded-2xl bg-brand-lightbg text-brand-primary flex items-center justify-center mx-auto mb-4 border border-blue-100">
+                        <LayoutGrid size={32} />
+                    </div>
+                    <h3 className="text-lg font-bold text-brand-navy mb-1">
+                        Welcome, {user?.name || 'User'}
+                    </h3>
+                    <p className="text-xs font-semibold uppercase tracking-wider text-brand-primary mb-3">
+                        Role: {user?.roleTitle || user?.role || 'User'} • {user?.branch || 'General'}
+                    </p>
+                    <p className="text-sm text-brand-muted max-w-md mx-auto leading-relaxed">
+                        No active widgets or data are configured for this role. Live transaction counters, priority queues, and executive metrics are reserved for Administrator accounts.
+                    </p>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="w-full h-full pb-10 space-y-6">
