@@ -5,6 +5,7 @@ import {
     ChevronDown, ChevronRight, UserPlus, FileSpreadsheet, Building2,
     Shield, Map, MessageSquare, Download, Layers, UserCheck, Percent
 } from 'lucide-react';
+import { useAuthContext } from '../../context/AuthContext';
 
 interface SidebarProps {
     isCollapsed: boolean;
@@ -13,6 +14,8 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
     const location = useLocation();
+    const { user } = useAuthContext();
+    const isAdmin = user?.role === 'admin';
 
     // Group 1 — Main
     // Group 2 — Master
@@ -26,7 +29,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
     type NavItem = { name: string; path: string; icon?: React.ElementType; matchPaths?: string[] };
     type NavGroup = { title: string; icon: React.ElementType; children?: NavItem[]; path?: string };
 
-    const navGroups: NavGroup[] = [
+    const navGroups: NavGroup[] = isAdmin ? [
         {
             title: 'MAIN',
             icon: LayoutDashboard,
@@ -128,6 +131,12 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
                 { name: 'Old Data', path: '/other/old-data' },
                 { name: 'Calling', path: '/other/calling' },
             ]
+        }
+    ] : [
+        {
+            title: 'MAIN',
+            icon: LayoutDashboard,
+            path: '/dashboard'
         }
     ];
 
