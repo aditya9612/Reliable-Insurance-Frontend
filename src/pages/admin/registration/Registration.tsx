@@ -4059,36 +4059,32 @@ const Registration: React.FC = () => {
                             <button
                                 type="button"
                                 onClick={() => setAgentViewFilter('ACTIVE')}
-                                className={`px-10 py-2.5 text-[15px] font-bold tracking-wide transition-all cursor-pointer rounded-[6px] flex items-center gap-2.5 ${
-                                    agentViewFilter === 'ACTIVE'
-                                        ? 'bg-brand-primary text-white shadow-sm'
-                                        : 'bg-transparent text-slate-600 hover:text-brand-primary hover:bg-blue-50/60'
-                                }`}
+                                className={`px-10 py-2.5 text-[15px] font-bold tracking-wide transition-all cursor-pointer rounded-[6px] flex items-center gap-2.5 ${agentViewFilter === 'ACTIVE'
+                                    ? 'bg-brand-primary text-white shadow-sm'
+                                    : 'bg-transparent text-slate-600 hover:text-brand-primary hover:bg-blue-50/60'
+                                    }`}
                             >
                                 <span>Active Agent</span>
-                                <span className={`px-2 py-0.5 text-xs font-semibold rounded-full ${
-                                    agentViewFilter === 'ACTIVE'
-                                        ? 'bg-white text-brand-primary'
-                                        : 'bg-slate-100 text-slate-600'
-                                }`}>
+                                <span className={`px-2 py-0.5 text-xs font-semibold rounded-full ${agentViewFilter === 'ACTIVE'
+                                    ? 'bg-white text-brand-primary'
+                                    : 'bg-slate-100 text-slate-600'
+                                    }`}>
                                     {agents.filter(a => a.status === 'ACTIVE').length}
                                 </span>
                             </button>
                             <button
                                 type="button"
                                 onClick={() => setAgentViewFilter('INACTIVE')}
-                                className={`px-10 py-2.5 text-[15px] font-bold tracking-wide transition-all cursor-pointer rounded-[6px] flex items-center gap-2.5 ${
-                                    agentViewFilter === 'INACTIVE'
-                                        ? 'bg-brand-primary text-white shadow-sm'
-                                        : 'bg-transparent text-slate-600 hover:text-brand-primary hover:bg-blue-50/60'
-                                }`}
+                                className={`px-10 py-2.5 text-[15px] font-bold tracking-wide transition-all cursor-pointer rounded-[6px] flex items-center gap-2.5 ${agentViewFilter === 'INACTIVE'
+                                    ? 'bg-brand-primary text-white shadow-sm'
+                                    : 'bg-transparent text-slate-600 hover:text-brand-primary hover:bg-blue-50/60'
+                                    }`}
                             >
                                 <span>Inactive Agent</span>
-                                <span className={`px-2 py-0.5 text-xs font-semibold rounded-full ${
-                                    agentViewFilter === 'INACTIVE'
-                                        ? 'bg-white text-brand-primary'
-                                        : 'bg-slate-100 text-slate-600'
-                                }`}>
+                                <span className={`px-2 py-0.5 text-xs font-semibold rounded-full ${agentViewFilter === 'INACTIVE'
+                                    ? 'bg-white text-brand-primary'
+                                    : 'bg-slate-100 text-slate-600'
+                                    }`}>
                                     {agents.filter(a => a.status === 'INACTIVE').length}
                                 </span>
                             </button>
@@ -4584,36 +4580,32 @@ const Registration: React.FC = () => {
                             <button
                                 type="button"
                                 onClick={() => setEmpViewFilter('ACTIVE')}
-                                className={`px-10 py-2.5 text-[15px] font-bold tracking-wide transition-all cursor-pointer rounded-[6px] flex items-center gap-2.5 ${
-                                    empViewFilter === 'ACTIVE'
-                                        ? 'bg-brand-primary text-white shadow-sm'
-                                        : 'bg-transparent text-slate-600 hover:text-brand-primary hover:bg-blue-50/60'
-                                }`}
+                                className={`px-10 py-2.5 text-[15px] font-bold tracking-wide transition-all cursor-pointer rounded-[6px] flex items-center gap-2.5 ${empViewFilter === 'ACTIVE'
+                                    ? 'bg-brand-primary text-white shadow-sm'
+                                    : 'bg-transparent text-slate-600 hover:text-brand-primary hover:bg-blue-50/60'
+                                    }`}
                             >
                                 <span>Active Employee</span>
-                                <span className={`px-2 py-0.5 text-xs font-semibold rounded-full ${
-                                    empViewFilter === 'ACTIVE'
-                                        ? 'bg-white text-brand-primary'
-                                        : 'bg-slate-200 text-slate-700'
-                                }`}>
+                                <span className={`px-2 py-0.5 text-xs font-semibold rounded-full ${empViewFilter === 'ACTIVE'
+                                    ? 'bg-white text-brand-primary'
+                                    : 'bg-slate-200 text-slate-700'
+                                    }`}>
                                     {employees.filter(e => e.status === 'ACTIVE').length}
                                 </span>
                             </button>
                             <button
                                 type="button"
                                 onClick={() => setEmpViewFilter('INACTIVE')}
-                                className={`px-10 py-2.5 text-[15px] font-bold tracking-wide transition-all cursor-pointer rounded-[6px] flex items-center gap-2.5 ${
-                                    empViewFilter === 'INACTIVE'
-                                        ? 'bg-brand-primary text-white shadow-sm'
-                                        : 'bg-transparent text-slate-600 hover:text-brand-primary hover:bg-blue-50/60'
-                                }`}
+                                className={`px-10 py-2.5 text-[15px] font-bold tracking-wide transition-all cursor-pointer rounded-[6px] flex items-center gap-2.5 ${empViewFilter === 'INACTIVE'
+                                    ? 'bg-brand-primary text-white shadow-sm'
+                                    : 'bg-transparent text-slate-600 hover:text-brand-primary hover:bg-blue-50/60'
+                                    }`}
                             >
                                 <span>Inactive Employee</span>
-                                <span className={`px-2 py-0.5 text-xs font-semibold rounded-full ${
-                                    empViewFilter === 'INACTIVE'
-                                        ? 'bg-white text-brand-primary'
-                                        : 'bg-slate-100 text-slate-600'
-                                }`}>
+                                <span className={`px-2 py-0.5 text-xs font-semibold rounded-full ${empViewFilter === 'INACTIVE'
+                                    ? 'bg-white text-brand-primary'
+                                    : 'bg-slate-100 text-slate-600'
+                                    }`}>
                                     {employees.filter(e => e.status === 'INACTIVE').length}
                                 </span>
                             </button>

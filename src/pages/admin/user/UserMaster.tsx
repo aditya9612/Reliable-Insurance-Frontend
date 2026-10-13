@@ -148,7 +148,7 @@ const UserMaster: React.FC = () => {
     const [roleForm, setRoleForm] = useState({ code: '', name: '', department: 'Operations', description: '', status: 'ACTIVE' as 'ACTIVE' | 'INACTIVE' });
     const [editingRoleId, setEditingRoleId] = useState<number | null>(null);
     const [rolePage, setRolePage] = useState<number>(1);
-    const rolesPerPage = 10;
+    const [rolesPerPage, setRolesPerPage] = useState<number>(10);
 
     // ==========================================
     // 2. DESIGNATION MASTER STATE
@@ -173,7 +173,7 @@ const UserMaster: React.FC = () => {
     const [desgForm, setDesgForm] = useState({ code: '', title: '', department: 'MANAGEMENT', reportingTo: '', grade: 'L-1' });
     const [editingDesgId, setEditingDesgId] = useState<number | null>(null);
     const [desgPage, setDesgPage] = useState<number>(1);
-    const desgsPerPage = 10;
+    const [desgsPerPage, setDesgsPerPage] = useState<number>(10);
 
     // ==========================================
     // 3. CLIENT APP USER STATE
@@ -424,7 +424,7 @@ const UserMaster: React.FC = () => {
     };
 
     return (
-        <div className="w-full flex flex-col space-y-5">
+        <div className="w-full flex flex-col space-y-3">
             {/* Notification Toast */}
             {toastMessage && (
                 <div className="fixed top-5 right-5 z-50 flex items-center gap-2 bg-[#0B203C] text-white px-5 py-3 rounded-xl shadow-xl border border-blue-500/30 animate-in fade-in slide-in-from-top-4 duration-200">
@@ -451,28 +451,28 @@ const UserMaster: React.FC = () => {
                 <div key={activeTab} className="tab-transition-wrapper">
                     <div className="bg-white rounded-[12px] border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden flex flex-col w-full">
                         {/* Table Toolbar */}
-                        <div className="p-4 bg-white border-b border-brand-border flex flex-col sm:flex-row items-center justify-between gap-4">
-                            <div className="relative w-full sm:w-80">
-                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-brand-primary" size={18} />
+                        <div className="p-4 bg-slate-50 border-b border-brand-border flex flex-col sm:flex-row items-center justify-between gap-4">
+                            <div className="relative w-full sm:w-[400px]">
+                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
                                 <input
                                     type="text"
                                     placeholder="Search by user role..."
                                     value={searchQuery}
                                     onChange={(e) => { setSearchQuery(e.target.value); setRolePage(1); }}
-                                    className="w-full pl-9 pr-4 py-2 bg-white border border-brand-border rounded-[8px] text-[14px] text-brand-navy placeholder-[#66809F] focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all"
+                                    className="w-full pl-9 pr-4 py-2 bg-white border border-slate-300 rounded-lg text-sm text-brand-navy placeholder-[#94a3b8] focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all h-[40px]"
                                 />
                             </div>
 
                             <button
                                 onClick={() => { setEditingRoleId(null); setRoleForm({ code: '', name: '', department: 'Operations', description: '', status: 'ACTIVE' }); setModalType('ROLE'); }}
-                                className="w-full sm:w-auto flex items-center justify-center gap-2 px-5 py-2.5 bg-brand-primary hover:bg-[#1D4ED8] text-white rounded-[8px] font-semibold text-[14px] shadow-sm transition-all duration-200 cursor-pointer border-none"
+                                className="w-full sm:w-auto px-5 py-2 bg-brand-primary hover:bg-[#1D4ED8] text-white rounded-lg font-semibold text-sm shadow-xs transition-all duration-200 cursor-pointer border-none h-[40px] flex items-center justify-center gap-2 shrink-0"
                             >
                                 <Plus size={16} />
                                 <span>Add New Role</span>
                             </button>
                         </div>
 
-                        {/* Full Width Table View matching 2nd attached photo */}
+                        {/* Full Width Table View matching BranchMaster */}
                         {(() => {
                             const filteredRoles = roles.filter(r => !searchQuery || r.name.toLowerCase().includes(searchQuery.toLowerCase()));
                             const totalRolePages = Math.max(1, Math.ceil(filteredRoles.length / rolesPerPage));
@@ -480,38 +480,38 @@ const UserMaster: React.FC = () => {
 
                             return (
                                 <>
-                                    <div className="overflow-x-auto w-full custom-scrollbar">
-                                        <table className="w-full text-left border-collapse table-fixed">
+                                    <div className="overflow-x-auto w-full custom-scrollbar min-h-[400px]">
+                                        <table className="w-full text-left border-collapse min-w-[1000px]">
                                             <thead>
-                                                <tr className="bg-brand-primary text-white text-[13px] font-bold uppercase tracking-wider">
-                                                    <th className="py-3 px-4 border-r border-white/20">USER ROLE</th>
-                                                    <th className="py-3 px-4 w-[60px] text-center"></th>
+                                                <tr className="bg-brand-lightbg text-brand-navy text-[13px] font-semibold uppercase border-b border-brand-border whitespace-nowrap">
+                                                    <th className="py-3 px-4">USER ROLE</th>
+                                                    <th className="py-3 px-4 text-center w-[120px]">ACTION</th>
                                                 </tr>
                                             </thead>
-                                            <tbody className="divide-y divide-slate-200 text-[13px]">
+                                            <tbody className="divide-y divide-brand-border text-[13px]">
                                                 {paginatedRoles.map((r) => (
-                                                    <tr key={r.id} className="hover:bg-slate-50/80 h-[48px] transition-colors bg-white">
-                                                        <td className="py-2.5 px-4 font-normal text-slate-800 text-[13px] tracking-wide border-r border-slate-200/80">
+                                                    <tr key={r.id} className="hover:bg-brand-mainbg h-[48px] transition-colors bg-white">
+                                                        <td className="py-2 px-4 font-semibold text-[#12284A]">
                                                             {r.name}
                                                         </td>
-                                                        <td className="py-2.5 px-4 text-center">
+                                                        <td className="py-2 px-4 text-center">
                                                             <button
                                                                 onClick={() => {
                                                                     setEditingRoleId(r.id);
                                                                     setRoleForm({ code: r.code, name: r.name, department: r.department, description: r.description, status: r.status });
                                                                     setModalType('ROLE');
                                                                 }}
-                                                                className="p-1.5 text-[#1E88E5] hover:text-[#0D47A1] hover:bg-blue-50 rounded transition-colors cursor-pointer border-none bg-transparent inline-flex items-center justify-center"
+                                                                className="p-1.5 bg-brand-lightbg text-brand-primary hover:bg-[#E2E8F0] rounded-[6px] transition-colors cursor-pointer inline-flex items-center justify-center border-none"
                                                                 title="Edit Role"
                                                             >
-                                                                <Edit2 size={16} />
+                                                                <Edit2 size={16} strokeWidth={1.5} />
                                                             </button>
                                                         </td>
                                                     </tr>
                                                 ))}
                                                 {paginatedRoles.length === 0 && (
                                                     <tr>
-                                                        <td colSpan={2} className="py-8 text-center text-brand-muted text-sm">
+                                                        <td colSpan={2} className="py-12 text-center text-slate-500">
                                                             No user roles found matching "{searchQuery}"
                                                         </td>
                                                     </tr>
@@ -520,28 +520,57 @@ const UserMaster: React.FC = () => {
                                         </table>
                                     </div>
 
-                                    {/* Pagination matching Image 2: 1 2 3 4 5 ... LAST */}
-                                    <div className="px-4 py-3 bg-[#F8FAFC] border-t border-slate-200 flex items-center gap-2 text-[13px]">
-                                        {[1, 2, 3, 4, 5].map((pageNum) => (
-                                            <button
-                                                key={pageNum}
-                                                onClick={() => setRolePage(pageNum)}
-                                                className={`px-1.5 py-0.5 rounded cursor-pointer border-none bg-transparent font-medium ${
-                                                    rolePage === pageNum
-                                                        ? 'text-[#0052CC] font-bold underline'
-                                                        : 'text-[#0052CC] hover:underline'
-                                                }`}
+                                    {/* Pagination matching BranchMaster */}
+                                    <div className="p-4 bg-white border-t border-brand-border flex flex-col sm:flex-row items-center justify-between gap-4">
+                                        <div className="flex items-center gap-2 text-sm text-brand-muted font-medium">
+                                            <span>Records per page:</span>
+                                            <select
+                                                value={rolesPerPage}
+                                                onChange={(e) => {
+                                                    setRolesPerPage(Number(e.target.value));
+                                                    setRolePage(1);
+                                                }}
+                                                className="px-2 py-1 bg-white border border-brand-border rounded-md text-sm font-semibold text-brand-navy focus:outline-none focus:ring-1 focus:ring-brand-primary focus:border-brand-primary cursor-pointer"
                                             >
-                                                {pageNum}
+                                                <option value={10}>10</option>
+                                                <option value={20}>20</option>
+                                                <option value={50}>50</option>
+                                                <option value={100}>100</option>
+                                            </select>
+                                        </div>
+
+                                        <span className="text-sm text-brand-muted font-medium">
+                                            Showing {filteredRoles.length === 0 ? 0 : (rolePage - 1) * rolesPerPage + 1} - {Math.min(rolePage * rolesPerPage, filteredRoles.length)} of {filteredRoles.length} records
+                                        </span>
+
+                                        <div className="flex items-center gap-1">
+                                            <button
+                                                onClick={() => setRolePage(prev => Math.max(prev - 1, 1))}
+                                                disabled={rolePage === 1}
+                                                className="w-8 h-8 flex items-center justify-center text-xs font-semibold text-brand-navy bg-white border border-brand-border rounded-md hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+                                            >
+                                                &lt;
                                             </button>
-                                        ))}
-                                        <span className="text-[#0052CC] px-0.5">...</span>
-                                        <button
-                                            onClick={() => setRolePage(totalRolePages)}
-                                            className="px-1.5 py-0.5 text-[#0052CC] hover:underline cursor-pointer border-none bg-transparent font-medium"
-                                        >
-                                            LAST
-                                        </button>
+                                            {Array.from({ length: totalRolePages || 1 }, (_, i) => i + 1).map((page) => (
+                                                <button
+                                                    key={page}
+                                                    onClick={() => setRolePage(page)}
+                                                    className={`w-8 h-8 flex items-center justify-center text-xs font-bold rounded-md transition-all ${rolePage === page
+                                                        ? 'bg-brand-primary text-white shadow-sm'
+                                                        : 'bg-white text-brand-navy border border-brand-border hover:bg-slate-100'
+                                                        }`}
+                                                >
+                                                    {page}
+                                                </button>
+                                            ))}
+                                            <button
+                                                onClick={() => setRolePage(prev => Math.min(prev + 1, totalRolePages))}
+                                                disabled={rolePage === totalRolePages || totalRolePages === 0}
+                                                className="w-8 h-8 flex items-center justify-center text-xs font-semibold text-brand-navy bg-white border border-brand-border rounded-md hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+                                            >
+                                                &gt;
+                                            </button>
+                                        </div>
                                     </div>
                                 </>
                             );
@@ -553,15 +582,15 @@ const UserMaster: React.FC = () => {
                 <div key={activeTab} className="tab-transition-wrapper">
                     <div className="bg-white rounded-[12px] border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden flex flex-col w-full">
                         {/* Table Toolbar */}
-                        <div className="p-4 bg-white border-b border-brand-border flex flex-col sm:flex-row items-center justify-between gap-4">
-                            <div className="relative w-full sm:w-80">
-                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-brand-primary" size={18} />
+                        <div className="p-4 bg-slate-50 border-b border-brand-border flex flex-col sm:flex-row items-center justify-between gap-4">
+                            <div className="relative w-full sm:w-[400px]">
+                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
                                 <input
                                     type="text"
                                     placeholder="Search by designation type..."
                                     value={searchQuery}
                                     onChange={(e) => { setSearchQuery(e.target.value); setDesgPage(1); }}
-                                    className="w-full pl-9 pr-4 py-2 bg-white border border-brand-border rounded-[8px] text-[14px] text-brand-navy placeholder-[#66809F] focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all"
+                                    className="w-full pl-9 pr-4 py-2 bg-white border border-slate-300 rounded-lg text-sm text-brand-navy placeholder-[#94a3b8] focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all h-[40px]"
                                 />
                             </div>
 
@@ -571,14 +600,14 @@ const UserMaster: React.FC = () => {
                                     setDesgForm({ code: '', title: '', department: 'OPERATIONS', reportingTo: '', grade: 'L-1' });
                                     setModalType('DESG');
                                 }}
-                                className="w-full sm:w-auto flex items-center justify-center gap-2 px-5 py-2.5 bg-brand-primary hover:bg-[#1D4ED8] text-white rounded-[8px] font-semibold text-[14px] shadow-sm transition-all duration-200 cursor-pointer border-none"
+                                className="w-full sm:w-auto px-5 py-2 bg-brand-primary hover:bg-[#1D4ED8] text-white rounded-lg font-semibold text-sm shadow-xs transition-all duration-200 cursor-pointer border-none h-[40px] flex items-center justify-center gap-2 shrink-0"
                             >
                                 <Plus size={16} />
                                 <span>Add Designation</span>
                             </button>
                         </div>
 
-                        {/* Full Width Table View matching 2nd attached photo */}
+                        {/* Full Width Table View matching BranchMaster */}
                         {(() => {
                             const filteredDesgs = designations.filter(d => !searchQuery || d.title.toLowerCase().includes(searchQuery.toLowerCase()));
                             const totalDesgPages = Math.max(1, Math.ceil(filteredDesgs.length / desgsPerPage));
@@ -586,52 +615,50 @@ const UserMaster: React.FC = () => {
 
                             return (
                                 <>
-                                    <div className="overflow-x-auto w-full custom-scrollbar">
-                                        <table className="w-full text-left border-collapse table-fixed">
+                                    <div className="overflow-x-auto w-full custom-scrollbar min-h-[400px]">
+                                        <table className="w-full text-left border-collapse min-w-[1000px]">
                                             <thead>
-                                                <tr className="bg-brand-primary text-white text-[13px] font-bold uppercase tracking-wider">
-                                                    <th className="py-3 px-4 border-r border-white/20">DESIGNATION TYPE</th>
-                                                    <th className="py-3 px-3 w-[55px] border-r border-white/20 text-center"></th>
-                                                    <th className="py-3 px-3 w-[120px] text-center"></th>
+                                                <tr className="bg-brand-lightbg text-brand-navy text-[13px] font-semibold uppercase border-b border-brand-border whitespace-nowrap">
+                                                    <th className="py-3 px-4">DESIGNATION TYPE</th>
+                                                    <th className="py-3 px-4 text-center w-[120px]">ACTION</th>
                                                 </tr>
                                             </thead>
-                                            <tbody className="divide-y divide-slate-200 text-[13px]">
+                                            <tbody className="divide-y divide-brand-border text-[13px]">
                                                 {paginatedDesgs.map((d) => (
-                                                    <tr key={d.id} className="hover:bg-slate-50/80 h-[48px] transition-colors bg-white">
-                                                        <td className="py-2.5 px-4 font-normal text-slate-800 text-[13px] tracking-wide border-r border-slate-200/80">
+                                                    <tr key={d.id} className="hover:bg-brand-mainbg h-[48px] transition-colors bg-white">
+                                                        <td className="py-2 px-4 font-semibold text-[#12284A]">
                                                             {d.title}
                                                         </td>
-                                                        <td className="py-2.5 px-3 text-center border-r border-slate-200/80 w-[55px]">
-                                                            <button
-                                                                onClick={() => {
-                                                                    setEditingDesgId(d.id);
-                                                                    setDesgForm({ ...desgForm, title: d.title });
-                                                                    setModalType('DESG');
-                                                                }}
-                                                                className="p-1 text-[#1E88E5] hover:text-[#0D47A1] hover:bg-blue-50 rounded transition-colors cursor-pointer border-none bg-transparent inline-flex items-center justify-center"
-                                                                title="Edit Designation"
-                                                            >
-                                                                <Edit2 size={16} />
-                                                            </button>
-                                                        </td>
-                                                        <td className="py-2.5 px-3 text-center w-[120px]">
-                                                            <button
-                                                                onClick={() => {
-                                                                    setDesignations(prev => prev.filter(x => x.id !== d.id));
-                                                                    showToast(`Designation "${d.title}" deleted.`);
-                                                                }}
-                                                                className="inline-flex items-center gap-1.5 text-[#1E88E5] hover:text-[#0D47A1] hover:underline cursor-pointer border-none bg-transparent text-[13px] font-normal"
-                                                                title="Delete Designation"
-                                                            >
-                                                                <Trash2 size={16} />
-                                                                <span>DELETE</span>
-                                                            </button>
+                                                        <td className="py-2 px-4 text-center">
+                                                            <div className="flex items-center justify-center gap-2">
+                                                                <button
+                                                                    onClick={() => {
+                                                                        setEditingDesgId(d.id);
+                                                                        setDesgForm({ ...desgForm, title: d.title });
+                                                                        setModalType('DESG');
+                                                                    }}
+                                                                    className="p-1.5 bg-brand-lightbg text-brand-primary hover:bg-[#E2E8F0] rounded-[6px] transition-colors cursor-pointer inline-flex items-center justify-center border-none"
+                                                                    title="Edit Designation"
+                                                                >
+                                                                    <Edit2 size={16} strokeWidth={1.5} />
+                                                                </button>
+                                                                <button
+                                                                    onClick={() => {
+                                                                        setDesignations(prev => prev.filter(x => x.id !== d.id));
+                                                                        showToast(`Designation "${d.title}" deleted.`);
+                                                                    }}
+                                                                    className="p-1.5 bg-[#F4F8FC] text-brand-error hover:bg-[#FEE2E2] rounded-[6px] transition-colors cursor-pointer inline-flex items-center justify-center border-none"
+                                                                    title="Delete Designation"
+                                                                >
+                                                                    <Trash2 size={16} strokeWidth={1.5} />
+                                                                </button>
+                                                            </div>
                                                         </td>
                                                     </tr>
                                                 ))}
                                                 {paginatedDesgs.length === 0 && (
                                                     <tr>
-                                                        <td colSpan={3} className="py-8 text-center text-brand-muted text-sm">
+                                                        <td colSpan={2} className="py-12 text-center text-brand-muted text-sm">
                                                             No designations found matching "{searchQuery}"
                                                         </td>
                                                     </tr>
@@ -640,21 +667,57 @@ const UserMaster: React.FC = () => {
                                         </table>
                                     </div>
 
-                                    {/* Pagination matching Image 2: 1 2 */}
-                                    <div className="px-4 py-3 bg-[#F8FAFC] border-t border-slate-200 flex items-center gap-2 text-[14px]">
-                                        {Array.from({ length: totalDesgPages }, (_, i) => i + 1).map((pageNum) => (
-                                            <button
-                                                key={pageNum}
-                                                onClick={() => setDesgPage(pageNum)}
-                                                className={`px-1.5 py-0.5 rounded cursor-pointer border-none bg-transparent font-medium ${
-                                                    desgPage === pageNum
-                                                        ? 'text-[#0052CC] font-bold underline'
-                                                        : 'text-[#0052CC] hover:underline'
-                                                }`}
+                                    {/* Pagination matching BranchMaster */}
+                                    <div className="p-4 bg-white border-t border-brand-border flex flex-col sm:flex-row items-center justify-between gap-4">
+                                        <div className="flex items-center gap-2 text-sm text-brand-muted font-medium">
+                                            <span>Records per page:</span>
+                                            <select
+                                                value={desgsPerPage}
+                                                onChange={(e) => {
+                                                    setDesgsPerPage(Number(e.target.value));
+                                                    setDesgPage(1);
+                                                }}
+                                                className="px-2 py-1 bg-white border border-brand-border rounded-md text-sm font-semibold text-brand-navy focus:outline-none focus:ring-1 focus:ring-brand-primary focus:border-brand-primary cursor-pointer"
                                             >
-                                                {pageNum}
+                                                <option value={10}>10</option>
+                                                <option value={20}>20</option>
+                                                <option value={50}>50</option>
+                                                <option value={100}>100</option>
+                                            </select>
+                                        </div>
+
+                                        <span className="text-sm text-brand-muted font-medium">
+                                            Showing {filteredDesgs.length === 0 ? 0 : (desgPage - 1) * desgsPerPage + 1} - {Math.min(desgPage * desgsPerPage, filteredDesgs.length)} of {filteredDesgs.length} records
+                                        </span>
+
+                                        <div className="flex items-center gap-1">
+                                            <button
+                                                onClick={() => setDesgPage(prev => Math.max(prev - 1, 1))}
+                                                disabled={desgPage === 1}
+                                                className="w-8 h-8 flex items-center justify-center text-xs font-semibold text-brand-navy bg-white border border-brand-border rounded-md hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+                                            >
+                                                &lt;
                                             </button>
-                                        ))}
+                                            {Array.from({ length: totalDesgPages || 1 }, (_, i) => i + 1).map((page) => (
+                                                <button
+                                                    key={page}
+                                                    onClick={() => setDesgPage(page)}
+                                                    className={`w-8 h-8 flex items-center justify-center text-xs font-bold rounded-md transition-all ${desgPage === page
+                                                        ? 'bg-brand-primary text-white shadow-sm'
+                                                        : 'bg-white text-brand-navy border border-brand-border hover:bg-slate-100'
+                                                        }`}
+                                                >
+                                                    {page}
+                                                </button>
+                                            ))}
+                                            <button
+                                                onClick={() => setDesgPage(prev => Math.min(prev + 1, totalDesgPages))}
+                                                disabled={desgPage === totalDesgPages || totalDesgPages === 0}
+                                                className="w-8 h-8 flex items-center justify-center text-xs font-semibold text-brand-navy bg-white border border-brand-border rounded-md hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+                                            >
+                                                &gt;
+                                            </button>
+                                        </div>
                                     </div>
                                 </>
                             );
@@ -775,31 +838,31 @@ const UserMaster: React.FC = () => {
                         </form>
                     </div>
 
-                    {/* Bottom Table: matching Photo 1 & 2 */}
-                    <div className="bg-white rounded-[10px] shadow-sm border border-slate-200/80 overflow-hidden">
-                        <div className="overflow-x-auto w-full custom-scrollbar">
-                            <table className="w-full text-left border-collapse table-fixed">
+                    {/* Bottom Table: matching BranchMaster */}
+                    <div className="bg-white rounded-[12px] border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden flex flex-col w-full">
+                        <div className="overflow-x-auto w-full custom-scrollbar min-h-[400px]">
+                            <table className="w-full text-left border-collapse min-w-[1000px]">
                                 <thead>
-                                    <tr className="bg-brand-primary text-white text-[13px] font-bold uppercase tracking-wider">
-                                        <th className="py-3 px-4 w-[28%] border-r border-white/20">COMPANY NAME</th>
-                                        <th className="py-3 px-4 w-[36%] border-r border-white/20">USER NAME</th>
-                                        <th className="py-3 px-4 w-[31%] border-r border-white/20">PASSWORD</th>
-                                        <th className="py-3 px-3 w-[5%] text-center"></th>
+                                    <tr className="bg-brand-lightbg text-brand-navy text-[13px] font-semibold uppercase border-b border-brand-border whitespace-nowrap">
+                                        <th className="py-3 px-4">COMPANY NAME</th>
+                                        <th className="py-3 px-4">USER NAME</th>
+                                        <th className="py-3 px-4">PASSWORD</th>
+                                        <th className="py-3 px-4 text-center w-[120px]">ACTION</th>
                                     </tr>
                                 </thead>
-                                <tbody className="divide-y divide-slate-200 text-[13px]">
+                                <tbody className="divide-y divide-brand-border text-[13px]">
                                     {clientUsers.map((user) => (
-                                        <tr key={user.id} className="hover:bg-slate-50/80 h-[48px] transition-colors bg-white">
-                                            <td className="py-2.5 px-4 font-normal text-slate-800 text-[13px] tracking-wide border-r border-slate-200/80">
+                                        <tr key={user.id} className="hover:bg-brand-mainbg h-[48px] transition-colors bg-white">
+                                            <td className="py-2 px-4 font-semibold text-[#12284A]">
                                                 {user.companyName}
                                             </td>
-                                            <td className="py-2.5 px-4 font-normal text-slate-800 text-[13px] tracking-wide border-r border-slate-200/80">
+                                            <td className="py-2 px-4 text-brand-navy">
                                                 {user.userName}
                                             </td>
-                                            <td className="py-2.5 px-4 font-normal text-slate-800 text-[13px] tracking-wide border-r border-slate-200/80">
+                                            <td className="py-2 px-4 text-brand-muted font-mono text-xs">
                                                 {user.password}
                                             </td>
-                                            <td className="py-2.5 px-3 text-center">
+                                            <td className="py-2 px-4 text-center">
                                                 <button
                                                     onClick={() => {
                                                         setEditingClientId(user.id);
@@ -810,17 +873,17 @@ const UserMaster: React.FC = () => {
                                                         });
                                                         window.scrollTo({ top: 0, behavior: 'smooth' });
                                                     }}
-                                                    className="p-1 text-[#1E88E5] hover:text-[#0D47A1] hover:bg-blue-50 rounded transition-colors cursor-pointer border-none bg-transparent inline-flex items-center justify-center"
+                                                    className="p-1.5 bg-brand-lightbg text-brand-primary hover:bg-[#E2E8F0] rounded-[6px] transition-colors cursor-pointer inline-flex items-center justify-center border-none"
                                                     title="Edit User"
                                                 >
-                                                    <Edit2 size={16} />
+                                                    <Edit2 size={16} strokeWidth={1.5} />
                                                 </button>
                                             </td>
                                         </tr>
                                     ))}
                                     {clientUsers.length === 0 && (
                                         <tr>
-                                            <td colSpan={4} className="py-8 text-center text-slate-400 text-sm">
+                                            <td colSpan={4} className="py-12 text-center text-slate-500">
                                                 No client app users found.
                                             </td>
                                         </tr>
@@ -933,24 +996,24 @@ const UserMaster: React.FC = () => {
 
                     {/* Pages Table displayed after clicking Show Pages */}
                     {showPages && (
-                        <div className="bg-white rounded-[10px] shadow-sm border border-slate-200/80 overflow-hidden animate-in fade-in duration-200">
+                        <div className="bg-white rounded-[12px] border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden flex flex-col w-full animate-in fade-in duration-200">
                             {/* Toolbar */}
-                            <div className="p-4 bg-white border-b border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
-                                <div className="text-[14px] font-semibold text-slate-800">
-                                    Privileges Matrix for <span className="text-brand-primary">{selectedPrivilegeRole || 'Default Role'}</span> ({selectedBranch || 'All Branches'})
+                            <div className="p-4 bg-slate-50 border-b border-brand-border flex flex-col sm:flex-row items-center justify-between gap-4">
+                                <div className="text-sm font-semibold text-brand-navy">
+                                    Privileges Matrix for <span className="text-brand-primary font-bold">{selectedPrivilegeRole || 'Default Role'}</span> ({selectedBranch || 'All Branches'})
                                 </div>
                                 <div className="flex items-center gap-3">
                                     <button
                                         type="button"
                                         onClick={() => handleSelectAllPrivileges(true)}
-                                        className="px-3.5 py-1.5 text-xs font-semibold text-brand-primary bg-blue-50 hover:bg-blue-100 rounded-[6px] transition-colors cursor-pointer border-none"
+                                        className="px-3.5 py-1.5 text-xs font-semibold text-brand-primary bg-blue-50 hover:bg-blue-100 rounded-md transition-colors cursor-pointer border border-brand-primary/20"
                                     >
                                         Grant All
                                     </button>
                                     <button
                                         type="button"
                                         onClick={() => handleSelectAllPrivileges(false)}
-                                        className="px-3.5 py-1.5 text-xs font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-[6px] transition-colors cursor-pointer border-none"
+                                        className="px-3.5 py-1.5 text-xs font-semibold text-slate-600 bg-white hover:bg-slate-100 rounded-md transition-colors cursor-pointer border border-brand-border"
                                     >
                                         Clear All
                                     </button>
@@ -958,31 +1021,31 @@ const UserMaster: React.FC = () => {
                             </div>
 
                             {/* Full Width Table View */}
-                            <div className="overflow-x-auto w-full custom-scrollbar">
-                                <table className="w-full text-left border-collapse table-fixed">
+                            <div className="overflow-x-auto w-full custom-scrollbar min-h-[400px]">
+                                <table className="w-full text-left border-collapse min-w-[1000px]">
                                     <thead>
-                                        <tr className="bg-brand-primary text-white text-[13px] font-bold uppercase tracking-wider">
-                                            <th className="py-3 px-4 w-[25%] border-r border-white/20">MODULE / PAGE NAME</th>
-                                            <th className="py-3 px-4 w-[17%] border-r border-white/20">CATEGORY</th>
-                                            <th className="py-3 px-2 text-center w-[9%] border-r border-white/20">VIEW</th>
-                                            <th className="py-3 px-2 text-center w-[9%] border-r border-white/20">CREATE</th>
-                                            <th className="py-3 px-2 text-center w-[9%] border-r border-white/20">EDIT</th>
-                                            <th className="py-3 px-2 text-center w-[9%] border-r border-white/20">DELETE</th>
-                                            <th className="py-3 px-2 text-center w-[9%] border-r border-white/20">EXPORT</th>
-                                            <th className="py-3 px-2 text-center w-[13%]">APPROVE</th>
+                                        <tr className="bg-brand-lightbg text-brand-navy text-[13px] font-semibold uppercase border-b border-brand-border whitespace-nowrap">
+                                            <th className="py-3 px-4">MODULE / PAGE NAME</th>
+                                            <th className="py-3 px-4">CATEGORY</th>
+                                            <th className="py-3 px-2 text-center w-[90px]">VIEW</th>
+                                            <th className="py-3 px-2 text-center w-[90px]">CREATE</th>
+                                            <th className="py-3 px-2 text-center w-[90px]">EDIT</th>
+                                            <th className="py-3 px-2 text-center w-[90px]">DELETE</th>
+                                            <th className="py-3 px-2 text-center w-[90px]">EXPORT</th>
+                                            <th className="py-3 px-2 text-center w-[110px]">APPROVE</th>
                                         </tr>
                                     </thead>
-                                    <tbody className="divide-y divide-slate-200 text-[13px]">
+                                    <tbody className="divide-y divide-brand-border text-[13px]">
                                         {privileges.map((p) => (
-                                            <tr key={p.id} className="hover:bg-slate-50/80 h-[48px] transition-colors bg-white">
-                                                <td className="py-2.5 px-4 font-normal text-slate-800 text-[13px] tracking-wide border-r border-slate-200/80 truncate" title={p.moduleName}>
+                                            <tr key={p.id} className="hover:bg-brand-mainbg h-[48px] transition-colors bg-white">
+                                                <td className="py-2 px-4 font-semibold text-[#12284A] truncate" title={p.moduleName}>
                                                     {p.moduleName}
                                                 </td>
-                                                <td className="py-2.5 px-4 text-xs text-slate-500 font-normal border-r border-slate-200/80 truncate" title={p.category}>
+                                                <td className="py-2 px-4 text-xs text-brand-muted font-normal truncate" title={p.category}>
                                                     {p.category}
                                                 </td>
                                                 {(['view', 'create', 'edit', 'delete', 'exportData', 'approve'] as const).map(col => (
-                                                    <td key={col} className="py-2.5 px-2 text-center border-r border-slate-200/80 last:border-r-0">
+                                                    <td key={col} className="py-2 px-2 text-center">
                                                         <input
                                                             type="checkbox"
                                                             checked={p[col]}
@@ -997,11 +1060,11 @@ const UserMaster: React.FC = () => {
                                 </table>
                             </div>
 
-                            <div className="p-4 bg-white border-t border-slate-200 flex justify-end">
+                            <div className="p-4 bg-white border-t border-brand-border flex justify-end">
                                 <button
                                     type="button"
                                     onClick={() => showToast(`Privileges updated successfully for ${selectedPrivilegeRole || 'selected role'} at ${selectedBranch || 'selected branch'}!`)}
-                                    className="px-6 py-2.5 bg-brand-primary hover:bg-[#1D4ED8] text-white text-[14px] font-semibold rounded-[6px] shadow-sm transition-colors cursor-pointer border-none"
+                                    className="px-6 py-2.5 bg-brand-primary hover:bg-[#1D4ED8] text-white text-sm font-semibold rounded-lg shadow-xs transition-colors cursor-pointer border-none"
                                 >
                                     Save Privileges
                                 </button>
@@ -1089,15 +1152,15 @@ const UserMaster: React.FC = () => {
 
                         return (
                             <>
-                                <div className="bg-white rounded-[10px] shadow-sm border border-slate-200/80 overflow-hidden">
-                                    <div className="overflow-x-auto w-full custom-scrollbar max-h-[540px] overflow-y-auto">
-                                        <table className="w-full text-left border-collapse table-fixed">
-                                            <thead className="sticky top-0 z-10 shadow-sm">
-                                                <tr className="bg-brand-primary text-white text-[13px] font-bold uppercase tracking-wider">
-                                                    <th className="py-2.5 px-4 w-[90px] border-r border-white/20">SR.NO.</th>
-                                                    <th className="py-2.5 px-4 w-[55%] border-r border-white/20">SALES EXECUTIVE NAME</th>
-                                                    <th className="py-2.5 px-4 w-[35%] border-r border-white/20">MOBILENO</th>
-                                                    <th className="py-2.5 px-3 w-[60px] text-center">
+                                <div className="bg-white rounded-[12px] border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden flex flex-col w-full">
+                                    <div className="overflow-x-auto w-full custom-scrollbar min-h-[400px]">
+                                        <table className="w-full text-left border-collapse min-w-[1000px]">
+                                            <thead>
+                                                <tr className="bg-brand-lightbg text-brand-navy text-[13px] font-semibold uppercase border-b border-brand-border whitespace-nowrap">
+                                                    <th className="py-3 px-4 w-[90px]">SR.NO.</th>
+                                                    <th className="py-3 px-4">SALES EXECUTIVE NAME</th>
+                                                    <th className="py-3 px-4">MOBILENO</th>
+                                                    <th className="py-3 px-4 w-[80px] text-center">
                                                         <input
                                                             type="checkbox"
                                                             checked={isAllSelected}
@@ -1108,24 +1171,24 @@ const UserMaster: React.FC = () => {
                                                     </th>
                                                 </tr>
                                             </thead>
-                                            <tbody className="divide-y divide-slate-200 text-[13px]">
+                                            <tbody className="divide-y divide-brand-border text-[13px]">
                                                 {filteredExecutives.map((exec, idx) => {
                                                     const isChecked = selectedSalesExIds.includes(exec.id);
                                                     return (
                                                         <tr
                                                             key={exec.id}
-                                                            className={`h-[42px] transition-colors ${isChecked ? 'bg-blue-50/60 hover:bg-blue-50/90' : 'bg-white hover:bg-slate-50/80'}`}
+                                                            className={`h-[48px] transition-colors ${isChecked ? 'bg-blue-50/60 hover:bg-blue-50/90' : 'bg-white hover:bg-brand-mainbg'}`}
                                                         >
-                                                            <td className="py-2 px-4 font-normal text-slate-800 text-[13px] border-r border-slate-200/80">
+                                                            <td className="py-2 px-4 text-brand-muted">
                                                                 {idx + 1}
                                                             </td>
-                                                            <td className="py-2 px-4 font-normal text-slate-800 text-[13px] tracking-wide border-r border-slate-200/80 uppercase">
+                                                            <td className="py-2 px-4 font-semibold text-[#12284A] uppercase">
                                                                 {exec.name}
                                                             </td>
-                                                            <td className="py-2 px-4 font-normal text-slate-800 text-[13px] border-r border-slate-200/80">
+                                                            <td className="py-2 px-4 text-brand-navy font-mono text-xs">
                                                                 {exec.mobile}
                                                             </td>
-                                                            <td className="py-2 px-3 text-center">
+                                                            <td className="py-2 px-4 text-center">
                                                                 <input
                                                                     type="checkbox"
                                                                     checked={isChecked}
@@ -1138,7 +1201,7 @@ const UserMaster: React.FC = () => {
                                                 })}
                                                 {filteredExecutives.length === 0 && (
                                                     <tr>
-                                                        <td colSpan={4} className="py-8 text-center text-slate-500 text-[14px]">
+                                                        <td colSpan={4} className="py-12 text-center text-slate-500">
                                                             No sales executives found matching "{salesExSearch}"
                                                         </td>
                                                     </tr>
@@ -1275,45 +1338,44 @@ const UserMaster: React.FC = () => {
                         </div>
                     </div>
 
-                    {/* Table matching Photo 1, 2, and 3 */}
-                    <div className="bg-white rounded-[10px] shadow-sm border border-slate-200/80 overflow-hidden">
-                        <div className="overflow-x-auto w-full custom-scrollbar">
-                            <table className="w-full text-left border-collapse table-fixed">
+                    {/* Table matching BranchMaster */}
+                    <div className="bg-white rounded-[12px] border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden flex flex-col w-full">
+                        <div className="overflow-x-auto w-full custom-scrollbar min-h-[400px]">
+                            <table className="w-full text-left border-collapse min-w-[1000px]">
                                 <thead>
-                                    <tr className="bg-brand-primary text-white text-[13px] font-bold uppercase tracking-wider">
-                                        <th className="py-2.5 px-4 w-[45%] border-r border-white/20">OPERATOR</th>
-                                        <th className="py-2.5 px-4 w-[45%] border-r border-white/20">TEMPORARY OPERATOR</th>
-                                        <th className="py-2.5 px-4 w-[10%] text-right pr-6"></th>
+                                    <tr className="bg-brand-lightbg text-brand-navy text-[13px] font-semibold uppercase border-b border-brand-border whitespace-nowrap">
+                                        <th className="py-3 px-4">OPERATOR</th>
+                                        <th className="py-3 px-4">TEMPORARY OPERATOR</th>
+                                        <th className="py-3 px-4 text-center w-[120px]">ACTION</th>
                                     </tr>
                                 </thead>
-                                <tbody className="divide-y divide-slate-200 text-[13px]">
+                                <tbody className="divide-y divide-brand-border text-[13px]">
                                     {tempAssignments.map((item) => (
-                                        <tr key={item.id} className="h-[44px] hover:bg-slate-50/80 transition-colors bg-white">
-                                            <td className="py-2 px-4 font-normal text-slate-800 text-[13px] uppercase border-r border-slate-200/80">
+                                        <tr key={item.id} className="h-[48px] hover:bg-brand-mainbg transition-colors bg-white">
+                                            <td className="py-2 px-4 font-semibold text-[#12284A] uppercase">
                                                 {item.operator}
                                             </td>
-                                            <td className="py-2 px-4 font-normal text-slate-800 text-[13px] uppercase border-r border-slate-200/80">
+                                            <td className="py-2 px-4 text-brand-navy uppercase">
                                                 {item.temporaryOperator}
                                             </td>
-                                            <td className="py-2 px-4 text-right pr-6">
+                                            <td className="py-2 px-4 text-center">
                                                 <button
                                                     type="button"
                                                     onClick={() => {
                                                         setTempAssignments(prev => prev.filter(a => a.id !== item.id));
                                                         showToast(`Deleted temporary operator assignment for ${item.operator}`);
                                                     }}
-                                                    className="text-brand-primary hover:text-rose-600 transition-colors cursor-pointer inline-flex items-center gap-1 font-semibold text-[12px] tracking-wide border-none bg-transparent"
-                                                    title="Delete Temporary Operator Assignment"
+                                                    className="p-1.5 bg-[#F4F8FC] text-brand-error hover:bg-[#FEE2E2] rounded-[6px] transition-colors cursor-pointer inline-flex items-center justify-center border-none"
+                                                    title="Delete Assignment"
                                                 >
-                                                    <Trash2 size={13} className="inline stroke-[2.2]" />
-                                                    <span>DELETE</span>
+                                                    <Trash2 size={16} strokeWidth={1.5} />
                                                 </button>
                                             </td>
                                         </tr>
                                     ))}
                                     {tempAssignments.length === 0 && (
                                         <tr>
-                                            <td colSpan={3} className="py-8 text-center text-slate-400 text-[14px]">
+                                            <td colSpan={3} className="py-12 text-center text-slate-500">
                                                 No temporary operator assignments found.
                                             </td>
                                         </tr>
@@ -1435,7 +1497,7 @@ const UserMaster: React.FC = () => {
                         </div>
                     </div>
 
-                    {/* Table matching Photo 1, 2 */}
+                    {/* Table matching BranchMaster */}
                     {(() => {
                         const filtered = loginLogs.filter(l =>
                             (loginSelectedRole === '--ALL--' || l.role === loginSelectedRole) &&
@@ -1443,52 +1505,52 @@ const UserMaster: React.FC = () => {
                         );
 
                         return (
-                            <div className="bg-white rounded-[10px] shadow-sm border border-slate-200/80 overflow-hidden">
-                                <div className="overflow-x-auto w-full custom-scrollbar max-h-[560px] overflow-y-auto">
-                                    <table className="w-full text-left border-collapse table-fixed">
-                                        <thead className="sticky top-0 z-10 shadow-sm">
-                                            <tr className="bg-brand-primary text-white text-[13px] font-bold uppercase tracking-wider">
-                                                <th className="py-2.5 px-4 w-[80px] border-r border-white/20">SR.NO.</th>
-                                                <th className="py-2.5 px-4 w-[140px] border-r border-white/20">LOGIN DATE</th>
-                                                <th className="py-2.5 px-4 w-[220px] border-r border-white/20">USER ROLE</th>
-                                                <th className="py-2.5 px-4 w-[180px] border-r border-white/20">USER NAME</th>
-                                                <th className="py-2.5 px-4 w-[280px] border-r border-white/20">NAME</th>
-                                                <th className="py-2.5 px-4 w-[120px] border-r border-white/20">REMARK</th>
-                                                <th className="py-2.5 px-4 w-[160px]">IP ADDRESS</th>
+                            <div className="bg-white rounded-[12px] border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden flex flex-col w-full">
+                                <div className="overflow-x-auto w-full custom-scrollbar min-h-[400px]">
+                                    <table className="w-full text-left border-collapse min-w-[1000px]">
+                                        <thead className="sticky top-0 z-10 shadow-xs">
+                                            <tr className="bg-brand-lightbg text-brand-navy text-[13px] font-semibold uppercase border-b border-brand-border whitespace-nowrap">
+                                                <th className="py-3 px-4 w-[80px]">SR.NO.</th>
+                                                <th className="py-3 px-4">LOGIN DATE</th>
+                                                <th className="py-3 px-4">USER ROLE</th>
+                                                <th className="py-3 px-4">USER NAME</th>
+                                                <th className="py-3 px-4">NAME</th>
+                                                <th className="py-3 px-4">REMARK</th>
+                                                <th className="py-3 px-4">IP ADDRESS</th>
                                             </tr>
                                         </thead>
-                                        <tbody className="divide-y divide-slate-200 text-[13px]">
+                                        <tbody className="divide-y divide-brand-border text-[13px]">
                                             {filtered.map((item, idx) => (
-                                                <tr key={item.id} className="h-[46px] hover:bg-slate-50/80 transition-colors bg-white">
-                                                    <td className="py-2 px-4 font-normal text-slate-800 text-[13px] border-r border-slate-200/80">
+                                                <tr key={item.id} className="h-[48px] hover:bg-brand-mainbg transition-colors bg-white">
+                                                    <td className="py-2 px-4 text-brand-muted">
                                                         {idx + 1}
                                                     </td>
-                                                    <td className="py-2 px-4 font-normal text-slate-800 text-[13px] border-r border-slate-200/80">
+                                                    <td className="py-2 px-4 text-brand-navy">
                                                         <div className="leading-snug">
-                                                            <div>{item.loginDate}</div>
-                                                            <div className="text-[12px] text-slate-600 font-mono">{item.loginTime}</div>
+                                                            <div className="font-medium">{item.loginDate}</div>
+                                                            <div className="text-[12px] text-brand-muted font-mono">{item.loginTime}</div>
                                                         </div>
                                                     </td>
-                                                    <td className="py-2 px-4 font-normal text-slate-800 text-[13px] uppercase border-r border-slate-200/80">
+                                                    <td className="py-2 px-4 font-semibold text-[#12284A] uppercase">
                                                         {item.role}
                                                     </td>
-                                                    <td className="py-2 px-4 font-normal text-slate-800 text-[13px] uppercase border-r border-slate-200/80">
+                                                    <td className="py-2 px-4 text-brand-navy uppercase">
                                                         {item.userName}
                                                     </td>
-                                                    <td className="py-2 px-4 font-normal text-slate-800 text-[13px] uppercase border-r border-slate-200/80">
+                                                    <td className="py-2 px-4 text-brand-navy uppercase">
                                                         {item.name}
                                                     </td>
-                                                    <td className="py-2 px-4 font-normal text-slate-800 text-[13px] uppercase border-r border-slate-200/80">
+                                                    <td className="py-2 px-4 text-brand-muted">
                                                         {item.remark}
                                                     </td>
-                                                    <td className="py-2 px-4 font-normal text-slate-800 text-[13px] font-mono">
+                                                    <td className="py-2 px-4 text-brand-navy font-mono text-xs">
                                                         {item.ipAddress}
                                                     </td>
                                                 </tr>
                                             ))}
                                             {filtered.length === 0 && (
                                                 <tr>
-                                                    <td colSpan={7} className="py-8 text-center text-slate-400 text-[14px]">
+                                                    <td colSpan={7} className="py-12 text-center text-slate-500">
                                                         No login history records found.
                                                     </td>
                                                 </tr>

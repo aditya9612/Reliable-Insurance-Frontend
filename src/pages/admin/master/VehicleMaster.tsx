@@ -299,7 +299,7 @@ const VehicleMaster: React.FC = () => {
   const subTabs: SubTab[] = ['vehicleType', 'vehicleMake', 'vehicleFuel', 'vehicleModel', 'vehicleVariant', 'updateVehicleVariant'];
 
   return (
-    <div className="w-full max-w-full overflow-x-hidden flex flex-col space-y-3">
+    <div className="w-full flex flex-col space-y-3">
       {/* Top Header */}
       <PageHeader
         title="Vehicle Master"
@@ -314,8 +314,8 @@ const VehicleMaster: React.FC = () => {
       />
 
       {/* Main Unified Card for all Sub-Tabs */}
-      <div key={activeTab} className="tab-transition-wrapper w-full max-w-full">
-        <div className="bg-white rounded-[12px] border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden flex flex-col w-full max-w-full">
+      <div key={activeTab} className="tab-transition-wrapper">
+        <div className="bg-white rounded-[12px] border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden flex flex-col w-full">
 
           {/* Special UI layout for Vehicle Variant Tab (Image 4: List Table removed) */}
           {activeTab === 'vehicleVariant' ? (
@@ -614,7 +614,7 @@ const VehicleMaster: React.FC = () => {
               {/* Dynamic Directory Tables */}
               <div className="overflow-x-auto w-full custom-scrollbar min-h-[400px]">
                 {activeTab === 'vehicleMake' ? (
-                  <table className="w-full text-left border-collapse min-w-[850px]">
+                  <table className="w-full text-left border-collapse min-w-[1000px]">
                     <thead>
                       <tr className="bg-brand-lightbg text-brand-navy text-[13px] font-semibold uppercase border-b border-brand-border whitespace-nowrap">
                         <th className="py-3 px-4">MAKE NAME</th>
@@ -664,7 +664,7 @@ const VehicleMaster: React.FC = () => {
                     </tbody>
                   </table>
                 ) : activeTab === 'vehicleFuel' ? (
-                  <table className="w-full text-left border-collapse min-w-[600px]">
+                  <table className="w-full text-left border-collapse min-w-[1000px]">
                     <thead>
                       <tr className="bg-brand-lightbg text-brand-navy text-[13px] font-semibold uppercase border-b border-brand-border whitespace-nowrap">
                         <th className="py-3 px-4">TYPE</th>
@@ -689,7 +689,7 @@ const VehicleMaster: React.FC = () => {
                     </tbody>
                   </table>
                 ) : activeTab === 'vehicleModel' ? (
-                  <table className="w-full text-left border-collapse min-w-[700px]">
+                  <table className="w-full text-left border-collapse min-w-[1000px]">
                     <thead>
                       <tr className="bg-brand-lightbg text-brand-navy text-[13px] font-semibold uppercase border-b border-brand-border whitespace-nowrap">
                         <th className="py-3 px-4">MAKE NAME</th>
@@ -729,7 +729,7 @@ const VehicleMaster: React.FC = () => {
                     </tbody>
                   </table>
                 ) : (
-                  <table className="w-full text-left border-collapse min-w-[600px]">
+                  <table className="w-full text-left border-collapse min-w-[1000px]">
                     <thead>
                       <tr className="bg-brand-lightbg text-brand-navy text-[13px] font-semibold uppercase border-b border-brand-border whitespace-nowrap">
                         <th className="py-3 px-4 w-20">Sr. No.</th>
@@ -759,7 +759,7 @@ const VehicleMaster: React.FC = () => {
               </div>
 
               {/* Standard Footer Pagination Bar */}
-              <div className="p-4 bg-slate-50 border-t border-brand-border flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div className="p-4 bg-white border-t border-brand-border flex flex-col sm:flex-row items-center justify-between gap-4">
                 <div className="flex items-center gap-2 text-sm text-brand-muted font-medium">
                   <span>Records per page:</span>
                   <select
