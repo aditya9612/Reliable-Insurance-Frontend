@@ -4060,36 +4060,32 @@ const Registration: React.FC = () => {
                             <button
                                 type="button"
                                 onClick={() => setAgentViewFilter('ACTIVE')}
-                                className={`px-10 py-2.5 text-[15px] font-bold tracking-wide transition-all cursor-pointer rounded-[6px] flex items-center gap-2.5 ${
-                                    agentViewFilter === 'ACTIVE'
+                                className={`px-10 py-2.5 text-[15px] font-bold tracking-wide transition-all cursor-pointer rounded-[6px] flex items-center gap-2.5 ${agentViewFilter === 'ACTIVE'
                                         ? 'bg-brand-primary text-white shadow-sm'
                                         : 'bg-transparent text-slate-600 hover:text-brand-primary hover:bg-blue-50/60'
-                                }`}
+                                    }`}
                             >
                                 <span>Active Agent</span>
-                                <span className={`px-2 py-0.5 text-xs font-semibold rounded-full ${
-                                    agentViewFilter === 'ACTIVE'
+                                <span className={`px-2 py-0.5 text-xs font-semibold rounded-full ${agentViewFilter === 'ACTIVE'
                                         ? 'bg-white text-brand-primary'
                                         : 'bg-slate-100 text-slate-600'
-                                }`}>
+                                    }`}>
                                     {agents.filter(a => a.status === 'ACTIVE').length}
                                 </span>
                             </button>
                             <button
                                 type="button"
                                 onClick={() => setAgentViewFilter('INACTIVE')}
-                                className={`px-10 py-2.5 text-[15px] font-bold tracking-wide transition-all cursor-pointer rounded-[6px] flex items-center gap-2.5 ${
-                                    agentViewFilter === 'INACTIVE'
+                                className={`px-10 py-2.5 text-[15px] font-bold tracking-wide transition-all cursor-pointer rounded-[6px] flex items-center gap-2.5 ${agentViewFilter === 'INACTIVE'
                                         ? 'bg-brand-primary text-white shadow-sm'
                                         : 'bg-transparent text-slate-600 hover:text-brand-primary hover:bg-blue-50/60'
-                                }`}
+                                    }`}
                             >
                                 <span>Inactive Agent</span>
-                                <span className={`px-2 py-0.5 text-xs font-semibold rounded-full ${
-                                    agentViewFilter === 'INACTIVE'
+                                <span className={`px-2 py-0.5 text-xs font-semibold rounded-full ${agentViewFilter === 'INACTIVE'
                                         ? 'bg-white text-brand-primary'
                                         : 'bg-slate-100 text-slate-600'
-                                }`}>
+                                    }`}>
                                     {agents.filter(a => a.status === 'INACTIVE').length}
                                 </span>
                             </button>
@@ -4232,110 +4228,110 @@ const Registration: React.FC = () => {
                         >
                             <table className="text-left border-collapse min-w-[5000px] w-full text-[13px]">
                                 <thead>
-                                    <tr className="bg-brand-primary text-white font-bold text-[12px] tracking-wider uppercase border-b-2 border-blue-700">
+                                    <tr className="bg-brand-lightbg text-brand-navy text-[13px] font-semibold uppercase border-b border-brand-border whitespace-nowrap">
                                         {/* Column 1: STATUS */}
-                                        <th className="py-3.5 px-3.5 w-[100px] min-w-[100px] text-center border-r border-white/20 whitespace-nowrap">
+                                        <th className="py-3 px-4 w-[100px] min-w-[100px] text-center whitespace-nowrap">
                                             STATUS
                                         </th>
                                         {/* Column 2: CODE */}
-                                        <th className="py-3.5 px-3.5 w-[110px] min-w-[110px] border-r border-white/20 whitespace-nowrap">
+                                        <th className="py-3 px-4 w-[110px] min-w-[110px] whitespace-nowrap">
                                             CODE
                                         </th>
                                         {/* Column 3: AGENT NAME */}
-                                        <th className="py-3.5 px-3.5 w-[270px] min-w-[270px] border-r border-white/20 whitespace-nowrap">
+                                        <th className="py-3 px-4 w-[270px] min-w-[270px] whitespace-nowrap">
                                             AGENT NAME
                                         </th>
                                         {/* Column 4: ADDRESS */}
-                                        <th className="py-3.5 px-3.5 w-[440px] min-w-[440px] border-r border-white/20 whitespace-nowrap">
+                                        <th className="py-3 px-4 w-[440px] min-w-[440px] whitespace-nowrap">
                                             ADDRESS
                                         </th>
                                         {/* Column 5: EMAILID */}
-                                        <th className="py-3.5 px-3.5 w-[290px] min-w-[290px] border-r border-white/20 whitespace-nowrap">
+                                        <th className="py-3 px-4 w-[290px] min-w-[290px] whitespace-nowrap">
                                             EMAILID
                                         </th>
                                         {/* Column 6: GENDER */}
-                                        <th className="py-3.5 px-3.5 w-[110px] min-w-[110px] text-center border-r border-white/20 whitespace-nowrap">
+                                        <th className="py-3 px-4 w-[110px] min-w-[110px] text-center whitespace-nowrap">
                                             GENDER
                                         </th>
                                         {/* Column 7: ADHAR NO */}
-                                        <th className="py-3.5 px-3.5 w-[150px] min-w-[150px] border-r border-white/20 whitespace-nowrap">
+                                        <th className="py-3 px-4 w-[150px] min-w-[150px] whitespace-nowrap">
                                             ADHAR NO
                                         </th>
                                         {/* Column 8: PAN NO */}
-                                        <th className="py-3.5 px-3.5 w-[130px] min-w-[130px] border-r border-white/20 whitespace-nowrap">
+                                        <th className="py-3 px-4 w-[130px] min-w-[130px] whitespace-nowrap">
                                             PAN NO
                                         </th>
                                         {/* Column 9: SELF BANK NAME */}
-                                        <th className="py-3.5 px-3.5 w-[210px] min-w-[210px] border-r border-white/20 whitespace-nowrap">
+                                        <th className="py-3 px-4 w-[210px] min-w-[210px] whitespace-nowrap">
                                             SELF BANK NAME
                                         </th>
                                         {/* Column 10: SELF ACC HOLDER NAME */}
-                                        <th className="py-3.5 px-3.5 w-[260px] min-w-[260px] border-r border-white/20 whitespace-nowrap">
+                                        <th className="py-3 px-4 w-[260px] min-w-[260px] whitespace-nowrap">
                                             SELF ACC HOLDER NAME
                                         </th>
                                         {/* Column 11: SELF BANK BRANCH */}
-                                        <th className="py-3.5 px-3.5 w-[160px] min-w-[160px] border-r border-white/20 whitespace-nowrap">
+                                        <th className="py-3 px-4 w-[160px] min-w-[160px] whitespace-nowrap">
                                             SELF BANK BRANCH
                                         </th>
                                         {/* Column 12: SELF IFSC_CODE */}
-                                        <th className="py-3.5 px-3.5 w-[150px] min-w-[150px] border-r border-white/20 whitespace-nowrap">
+                                        <th className="py-3 px-4 w-[150px] min-w-[150px] whitespace-nowrap">
                                             SELF IFSC_CODE
                                         </th>
                                         {/* Column 13: SELF ACCOUNT NO */}
-                                        <th className="py-3.5 px-3.5 w-[180px] min-w-[180px] border-r border-white/20 whitespace-nowrap">
+                                        <th className="py-3 px-4 w-[180px] min-w-[180px] whitespace-nowrap">
                                             SELF ACCOUNT NO
                                         </th>
                                         {/* Column 14: BRANCH NAME */}
-                                        <th className="py-3.5 px-3.5 w-[140px] min-w-[140px] border-r border-white/20 whitespace-nowrap">
+                                        <th className="py-3 px-4 w-[140px] min-w-[140px] whitespace-nowrap">
                                             BRANCH NAME
                                         </th>
                                         {/* Column 15: USER NAME */}
-                                        <th className="py-3.5 px-3.5 w-[170px] min-w-[170px] border-r border-white/20 whitespace-nowrap">
+                                        <th className="py-3 px-4 w-[170px] min-w-[170px] whitespace-nowrap">
                                             USER NAME
                                         </th>
                                         {/* Column 16: USER PASSWORD */}
-                                        <th className="py-3.5 px-3.5 w-[170px] min-w-[170px] border-r border-white/20 whitespace-nowrap">
+                                        <th className="py-3 px-4 w-[170px] min-w-[170px] whitespace-nowrap">
                                             USER PASSWORD
                                         </th>
                                         {/* Column 17: SALES EXECUTIVE NAME */}
-                                        <th className="py-3.5 px-3.5 w-[250px] min-w-[250px] border-r border-white/20 whitespace-nowrap">
+                                        <th className="py-3 px-4 w-[250px] min-w-[250px] whitespace-nowrap">
                                             SALES EXECUTIVE NAME
                                         </th>
                                         {/* Column 18: CO-ORDINATOR NAME */}
-                                        <th className="py-3.5 px-3.5 w-[250px] min-w-[250px] border-r border-white/20 whitespace-nowrap">
+                                        <th className="py-3 px-4 w-[250px] min-w-[250px] whitespace-nowrap">
                                             CO-ORDINATOR NAME
                                         </th>
                                         {/* Column 19: QUOTATION CO-ORDINATOR NAME */}
-                                        <th className="py-3.5 px-3.5 w-[250px] min-w-[250px] border-r border-white/20 whitespace-nowrap">
+                                        <th className="py-3 px-4 w-[250px] min-w-[250px] whitespace-nowrap">
                                             QUOTATION CO-ORDINATOR NAME
                                         </th>
                                         {/* Column 20: INSPECTION CO-ORDINATOR NAME */}
-                                        <th className="py-3.5 px-3.5 w-[250px] min-w-[250px] border-r border-white/20 whitespace-nowrap">
+                                        <th className="py-3 px-4 w-[250px] min-w-[250px] whitespace-nowrap">
                                             INSPECTION CO-ORDINATOR NAME
                                         </th>
                                         {/* Column 21: ENDROSMENT CO-ORDINATOR NAME */}
-                                        <th className="py-3.5 px-3.5 w-[250px] min-w-[250px] border-r border-white/20 whitespace-nowrap">
+                                        <th className="py-3 px-4 w-[250px] min-w-[250px] whitespace-nowrap">
                                             ENDROSMENT CO-ORDINATOR NAME
                                         </th>
                                         {/* Column 22: AGENT TSDS */}
-                                        <th className="py-3.5 px-3.5 w-[120px] min-w-[120px] text-center border-r border-white/20 whitespace-nowrap">
+                                        <th className="py-3 px-4 w-[120px] min-w-[120px] text-center whitespace-nowrap">
                                             AGENT TSDS
                                         </th>
                                         {/* Column 23: EXIT DATE */}
-                                        <th className="py-3.5 px-3.5 w-[190px] min-w-[190px] border-r border-white/20 whitespace-nowrap">
+                                        <th className="py-3 px-4 w-[190px] min-w-[190px] whitespace-nowrap">
                                             EXIT DATE
                                         </th>
                                         {/* Column 24: ID */}
-                                        <th className="py-3.5 px-3.5 w-[80px] min-w-[80px] text-center border-r border-white/20 whitespace-nowrap">
+                                        <th className="py-3 px-4 w-[80px] min-w-[80px] text-center whitespace-nowrap">
                                             ID
                                         </th>
                                         {/* Column 25: LOCATION */}
-                                        <th className="py-3.5 px-3.5 w-[140px] min-w-[140px] whitespace-nowrap">
+                                        <th className="py-3 px-4 w-[140px] min-w-[140px] whitespace-nowrap">
                                             LOCATION
                                         </th>
                                     </tr>
                                 </thead>
-                                <tbody className="text-[13px]">
+                                <tbody className="divide-y divide-brand-border text-[13px]">
                                     {(() => {
                                         const visibleAgents = agents.filter(a => {
                                             const matchesStatus = a.status === agentViewFilter;
@@ -4389,10 +4385,10 @@ const Registration: React.FC = () => {
                                             return (
                                                 <tr
                                                     key={a.id}
-                                                    className={`hover:bg-[#EAF2FF] ${rowBg} transition-colors border-b border-slate-200`}
+                                                    className={`hover:bg-brand-mainbg h-[48px] transition-colors bg-white border-b border-brand-border`}
                                                 >
                                                     {/* 1: STATUS */}
-                                                    <td className="py-2.5 px-3.5 text-center border-r border-slate-200 whitespace-nowrap">
+                                                    <td className="py-2 px-4 text-center whitespace-nowrap">
                                                         <button
                                                             type="button"
                                                             onClick={() => handleToggleAgentStatus(a.id)}
@@ -4404,77 +4400,77 @@ const Registration: React.FC = () => {
                                                     </td>
 
                                                     {/* 2: CODE */}
-                                                    <td className="py-2.5 px-3.5 font-mono font-medium text-slate-700 border-r border-slate-200 whitespace-nowrap">
+                                                    <td className="py-2 px-4 font-mono font-medium text-slate-700 whitespace-nowrap">
                                                         {a.agentCode}
                                                     </td>
 
                                                     {/* 3: AGENT NAME */}
-                                                    <td className="py-2.5 px-3.5 font-semibold text-slate-900 border-r border-slate-200 whitespace-nowrap">
+                                                    <td className="py-2 px-4 font-semibold text-slate-900 whitespace-nowrap">
                                                         {a.fullName}
                                                     </td>
 
                                                     {/* 4: ADDRESS */}
-                                                    <td className="py-2.5 px-3.5 text-slate-700 border-r border-slate-200 whitespace-nowrap">
+                                                    <td className="py-2 px-4 text-slate-700 whitespace-nowrap">
                                                         {a.address || '-'}
                                                     </td>
 
                                                     {/* 5: EMAILID */}
-                                                    <td className="py-2.5 px-3.5 text-slate-700 font-medium border-r border-slate-200 whitespace-nowrap">
+                                                    <td className="py-2 px-4 text-slate-700 font-medium whitespace-nowrap">
                                                         {a.email}
                                                     </td>
 
                                                     {/* 6: GENDER */}
-                                                    <td className="py-2.5 px-3.5 text-center text-slate-700 border-r border-slate-200 whitespace-nowrap">
+                                                    <td className="py-2 px-4 text-center text-slate-700 whitespace-nowrap">
                                                         {a.gender || 'MALE'}
                                                     </td>
 
                                                     {/* 7: ADHAR NO */}
-                                                    <td className="py-2.5 px-3.5 font-mono text-slate-700 border-r border-slate-200 whitespace-nowrap">
+                                                    <td className="py-2 px-4 font-mono text-slate-700 whitespace-nowrap">
                                                         {a.aadharNo || '-'}
                                                     </td>
 
                                                     {/* 8: PAN NO */}
-                                                    <td className="py-2.5 px-3.5 font-mono text-slate-700 border-r border-slate-200 whitespace-nowrap">
+                                                    <td className="py-2 px-4 font-mono text-slate-700 whitespace-nowrap">
                                                         {a.panNo || '-'}
                                                     </td>
 
                                                     {/* 9: SELF BANK NAME */}
-                                                    <td className="py-2.5 px-3.5 font-medium text-slate-800 border-r border-slate-200 whitespace-nowrap">
+                                                    <td className="py-2 px-4 font-medium text-slate-800 whitespace-nowrap">
                                                         {a.bankName || '-'}
                                                     </td>
 
                                                     {/* 10: SELF ACC HOLDER NAME */}
-                                                    <td className="py-2.5 px-3.5 text-slate-700 border-r border-slate-200 whitespace-nowrap">
+                                                    <td className="py-2 px-4 text-slate-700 whitespace-nowrap">
                                                         {a.accHolderName || a.fullName}
                                                     </td>
 
                                                     {/* 11: SELF BANK BRANCH */}
-                                                    <td className="py-2.5 px-3.5 text-slate-700 border-r border-slate-200 whitespace-nowrap">
+                                                    <td className="py-2 px-4 text-slate-700 whitespace-nowrap">
                                                         {a.bankBranch || '0'}
                                                     </td>
 
                                                     {/* 12: SELF IFSC_CODE */}
-                                                    <td className="py-2.5 px-3.5 font-mono text-slate-700 border-r border-slate-200 whitespace-nowrap">
+                                                    <td className="py-2 px-4 font-mono text-slate-700 whitespace-nowrap">
                                                         {a.ifscCode || '-'}
                                                     </td>
 
                                                     {/* 13: SELF ACCOUNT NO */}
-                                                    <td className="py-2.5 px-3.5 font-mono text-slate-700 border-r border-slate-200 whitespace-nowrap">
+                                                    <td className="py-2 px-4 font-mono text-slate-700 whitespace-nowrap">
                                                         {a.accountNo || '-'}
                                                     </td>
 
                                                     {/* 14: BRANCH NAME */}
-                                                    <td className="py-2.5 px-3.5 text-slate-800 font-medium border-r border-slate-200 whitespace-nowrap">
+                                                    <td className="py-2 px-4 text-slate-800 font-medium whitespace-nowrap">
                                                         {a.branchName || a.branch || 'BARAMATI'}
                                                     </td>
 
                                                     {/* 15: USER NAME */}
-                                                    <td className="py-2.5 px-3.5 font-mono text-slate-700 border-r border-slate-200 whitespace-nowrap">
+                                                    <td className="py-2 px-4 font-mono text-slate-700 whitespace-nowrap">
                                                         {a.userName || `${a.agentCode.toLowerCase()}`}
                                                     </td>
 
                                                     {/* 16: USER PASSWORD */}
-                                                    <td className="py-2.5 px-3.5 font-mono border-r border-slate-200 whitespace-nowrap">
+                                                    <td className="py-2 px-4 font-mono whitespace-nowrap">
                                                         {showPasswords ? (
                                                             <span className="text-slate-800 font-semibold">{a.userPassword || '******'}</span>
                                                         ) : (
@@ -4483,47 +4479,47 @@ const Registration: React.FC = () => {
                                                     </td>
 
                                                     {/* 17: SALES EXECUTIVE NAME */}
-                                                    <td className="py-2.5 px-3.5 text-slate-700 border-r border-slate-200 whitespace-nowrap">
+                                                    <td className="py-2 px-4 text-slate-700 whitespace-nowrap">
                                                         {a.salesExecutive || '-'}
                                                     </td>
 
                                                     {/* 18: CO-ORDINATOR NAME */}
-                                                    <td className="py-2.5 px-3.5 text-slate-700 border-r border-slate-200 whitespace-nowrap">
+                                                    <td className="py-2 px-4 text-slate-700 whitespace-nowrap">
                                                         {a.coordinator || '-'}
                                                     </td>
 
                                                     {/* 19: QUOTATION CO-ORDINATOR NAME */}
-                                                    <td className="py-2.5 px-3.5 text-slate-700 border-r border-slate-200 whitespace-nowrap">
+                                                    <td className="py-2 px-4 text-slate-700 whitespace-nowrap">
                                                         {a.quotationCoordinator || '-'}
                                                     </td>
 
                                                     {/* 20: INSPECTION CO-ORDINATOR NAME */}
-                                                    <td className="py-2.5 px-3.5 text-slate-700 border-r border-slate-200 whitespace-nowrap">
+                                                    <td className="py-2 px-4 text-slate-700 whitespace-nowrap">
                                                         {a.inspectionCoordinator || '-'}
                                                     </td>
 
                                                     {/* 21: ENDROSMENT CO-ORDINATOR NAME */}
-                                                    <td className="py-2.5 px-3.5 text-slate-700 border-r border-slate-200 whitespace-nowrap">
+                                                    <td className="py-2 px-4 text-slate-700 whitespace-nowrap">
                                                         {a.endorsementCoordinator || '-'}
                                                     </td>
 
                                                     {/* 22: AGENT TSDS */}
-                                                    <td className="py-2.5 px-3.5 text-center font-mono text-slate-700 border-r border-slate-200 whitespace-nowrap">
+                                                    <td className="py-2 px-4 text-center font-mono text-slate-700 whitespace-nowrap">
                                                         {a.agentTsds || '2'}
                                                     </td>
 
                                                     {/* 23: EXIT DATE */}
-                                                    <td className="py-2.5 px-3.5 font-mono text-xs text-slate-700 border-r border-slate-200 whitespace-nowrap">
+                                                    <td className="py-2 px-4 font-mono text-xs text-slate-700 whitespace-nowrap">
                                                         {a.exitDate || '-'}
                                                     </td>
 
                                                     {/* 24: ID */}
-                                                    <td className="py-2.5 px-3.5 text-center font-mono font-medium text-slate-800 border-r border-slate-200 whitespace-nowrap">
+                                                    <td className="py-2 px-4 text-center font-mono font-medium text-slate-800 whitespace-nowrap">
                                                         {a.erpId || a.id}
                                                     </td>
 
                                                     {/* 25: LOCATION */}
-                                                    <td className="py-2.5 px-3.5 text-slate-800 font-medium whitespace-nowrap">
+                                                    <td className="py-2 px-4 text-slate-800 font-medium whitespace-nowrap">
                                                         {a.location || a.branch || 'BARAMATI'}
                                                     </td>
                                                 </tr>
@@ -4585,36 +4581,32 @@ const Registration: React.FC = () => {
                             <button
                                 type="button"
                                 onClick={() => setEmpViewFilter('ACTIVE')}
-                                className={`px-10 py-2.5 text-[15px] font-bold tracking-wide transition-all cursor-pointer rounded-[6px] flex items-center gap-2.5 ${
-                                    empViewFilter === 'ACTIVE'
+                                className={`px-10 py-2.5 text-[15px] font-bold tracking-wide transition-all cursor-pointer rounded-[6px] flex items-center gap-2.5 ${empViewFilter === 'ACTIVE'
                                         ? 'bg-brand-primary text-white shadow-sm'
                                         : 'bg-transparent text-slate-600 hover:text-brand-primary hover:bg-blue-50/60'
-                                }`}
+                                    }`}
                             >
                                 <span>Active Employee</span>
-                                <span className={`px-2 py-0.5 text-xs font-semibold rounded-full ${
-                                    empViewFilter === 'ACTIVE'
+                                <span className={`px-2 py-0.5 text-xs font-semibold rounded-full ${empViewFilter === 'ACTIVE'
                                         ? 'bg-white text-brand-primary'
                                         : 'bg-slate-200 text-slate-700'
-                                }`}>
+                                    }`}>
                                     {employees.filter(e => e.status === 'ACTIVE').length}
                                 </span>
                             </button>
                             <button
                                 type="button"
                                 onClick={() => setEmpViewFilter('INACTIVE')}
-                                className={`px-10 py-2.5 text-[15px] font-bold tracking-wide transition-all cursor-pointer rounded-[6px] flex items-center gap-2.5 ${
-                                    empViewFilter === 'INACTIVE'
+                                className={`px-10 py-2.5 text-[15px] font-bold tracking-wide transition-all cursor-pointer rounded-[6px] flex items-center gap-2.5 ${empViewFilter === 'INACTIVE'
                                         ? 'bg-brand-primary text-white shadow-sm'
                                         : 'bg-transparent text-slate-600 hover:text-brand-primary hover:bg-blue-50/60'
-                                }`}
+                                    }`}
                             >
                                 <span>Inactive Employee</span>
-                                <span className={`px-2 py-0.5 text-xs font-semibold rounded-full ${
-                                    empViewFilter === 'INACTIVE'
+                                <span className={`px-2 py-0.5 text-xs font-semibold rounded-full ${empViewFilter === 'INACTIVE'
                                         ? 'bg-white text-brand-primary'
                                         : 'bg-slate-100 text-slate-600'
-                                }`}>
+                                    }`}>
                                     {employees.filter(e => e.status === 'INACTIVE').length}
                                 </span>
                             </button>
@@ -4759,153 +4751,153 @@ const Registration: React.FC = () => {
                         >
                             <table className="text-left border-collapse min-w-[6300px] w-full text-[13px]">
                                 <thead>
-                                    <tr className="bg-brand-primary text-white font-bold text-[12px] tracking-wider uppercase border-b-2 border-blue-700">
+                                    <tr className="bg-brand-lightbg text-brand-navy text-[13px] font-semibold uppercase border-b border-brand-border whitespace-nowrap">
                                         {/* Column 1: VIEW */}
-                                        <th className="py-3.5 px-3.5 w-[70px] min-w-[70px] text-center border-r border-white/20 whitespace-nowrap">
+                                        <th className="py-3 px-4 w-[70px] min-w-[70px] text-center whitespace-nowrap">
                                             VIEW
                                         </th>
                                         {/* Column 2: EDIT */}
-                                        <th className="py-3.5 px-3.5 w-[65px] min-w-[65px] text-center border-r border-white/20 whitespace-nowrap">
+                                        <th className="py-3 px-4 w-[65px] min-w-[65px] text-center whitespace-nowrap">
                                             EDIT
                                         </th>
                                         {/* Column 3: EMP CODE */}
-                                        <th className="py-3.5 px-3.5 w-[120px] min-w-[120px] border-r border-white/20 whitespace-nowrap">
+                                        <th className="py-3 px-4 w-[120px] min-w-[120px] whitespace-nowrap">
                                             EMP CODE
                                         </th>
                                         {/* Column 4: EMPLOYEE NAME */}
-                                        <th className="py-3.5 px-3.5 w-[260px] min-w-[260px] border-r border-white/20 whitespace-nowrap">
+                                        <th className="py-3 px-4 w-[260px] min-w-[260px] whitespace-nowrap">
                                             EMPLOYEE NAME
                                         </th>
                                         {/* Column 5: ADDRESS */}
-                                        <th className="py-3.5 px-3.5 w-[420px] min-w-[420px] border-r border-white/20 whitespace-nowrap">
+                                        <th className="py-3 px-4 w-[420px] min-w-[420px] whitespace-nowrap">
                                             ADDRESS
                                         </th>
                                         {/* Column 6: GENDER */}
-                                        <th className="py-3.5 px-3.5 w-[90px] min-w-[90px] text-center border-r border-white/20 whitespace-nowrap">
+                                        <th className="py-3 px-4 w-[90px] min-w-[90px] text-center whitespace-nowrap">
                                             GENDER
                                         </th>
                                         {/* Column 7: MARITAL STATUS */}
-                                        <th className="py-3.5 px-3.5 w-[130px] min-w-[130px] text-center border-r border-white/20 whitespace-nowrap">
+                                        <th className="py-3 px-4 w-[130px] min-w-[130px] text-center whitespace-nowrap">
                                             MARITAL STATUS
                                         </th>
                                         {/* Column 8: OFFICE NO */}
-                                        <th className="py-3.5 px-3.5 w-[130px] min-w-[130px] border-r border-white/20 whitespace-nowrap">
+                                        <th className="py-3 px-4 w-[130px] min-w-[130px] whitespace-nowrap">
                                             OFFICE NO
                                         </th>
                                         {/* Column 9: MOBLIE NO */}
-                                        <th className="py-3.5 px-3.5 w-[130px] min-w-[130px] border-r border-white/20 whitespace-nowrap">
+                                        <th className="py-3 px-4 w-[130px] min-w-[130px] whitespace-nowrap">
                                             MOBLIE NO
                                         </th>
                                         {/* Column 10: EMAIL ID */}
-                                        <th className="py-3.5 px-3.5 w-[250px] min-w-[250px] border-r border-white/20 whitespace-nowrap">
+                                        <th className="py-3 px-4 w-[250px] min-w-[250px] whitespace-nowrap">
                                             EMAIL ID
                                         </th>
                                         {/* Column 11: PAN NO */}
-                                        <th className="py-3.5 px-3.5 w-[130px] min-w-[130px] border-r border-white/20 whitespace-nowrap">
+                                        <th className="py-3 px-4 w-[130px] min-w-[130px] whitespace-nowrap">
                                             PAN NO
                                         </th>
                                         {/* Column 12: AADHAR NO */}
-                                        <th className="py-3.5 px-3.5 w-[160px] min-w-[160px] border-r border-white/20 whitespace-nowrap">
+                                        <th className="py-3 px-4 w-[160px] min-w-[160px] whitespace-nowrap">
                                             AADHAR NO
                                         </th>
                                         {/* Column 13: BANK NAME */}
-                                        <th className="py-3.5 px-3.5 w-[240px] min-w-[240px] border-r border-white/20 whitespace-nowrap">
+                                        <th className="py-3 px-4 w-[240px] min-w-[240px] whitespace-nowrap">
                                             BANK NAME
                                         </th>
                                         {/* Column 14: BANK BRANCH */}
-                                        <th className="py-3.5 px-3.5 w-[150px] min-w-[150px] border-r border-white/20 whitespace-nowrap">
+                                        <th className="py-3 px-4 w-[150px] min-w-[150px] whitespace-nowrap">
                                             BANK BRANCH
                                         </th>
                                         {/* Column 15: IFSC CODE */}
-                                        <th className="py-3.5 px-3.5 w-[140px] min-w-[140px] border-r border-white/20 whitespace-nowrap">
+                                        <th className="py-3 px-4 w-[140px] min-w-[140px] whitespace-nowrap">
                                             IFSC CODE
                                         </th>
                                         {/* Column 16: ACCOUNT NO */}
-                                        <th className="py-3.5 px-3.5 w-[170px] min-w-[170px] border-r border-white/20 whitespace-nowrap">
+                                        <th className="py-3 px-4 w-[170px] min-w-[170px] whitespace-nowrap">
                                             ACCOUNT NO
                                         </th>
                                         {/* Column 17: BRANCH NAME */}
-                                        <th className="py-3.5 px-3.5 w-[140px] min-w-[140px] border-r border-white/20 whitespace-nowrap">
+                                        <th className="py-3 px-4 w-[140px] min-w-[140px] whitespace-nowrap">
                                             BRANCH NAME
                                         </th>
                                         {/* Column 18: USER NAME */}
-                                        <th className="py-3.5 px-3.5 w-[150px] min-w-[150px] border-r border-white/20 whitespace-nowrap">
+                                        <th className="py-3 px-4 w-[150px] min-w-[150px] whitespace-nowrap">
                                             USER NAME
                                         </th>
                                         {/* Column 19: USER PASSWORD */}
-                                        <th className="py-3.5 px-3.5 w-[150px] min-w-[150px] border-r border-white/20 whitespace-nowrap">
+                                        <th className="py-3 px-4 w-[150px] min-w-[150px] whitespace-nowrap">
                                             USER PASSWORD
                                         </th>
                                         {/* Column 20: CO-ORDINATOR NAME */}
-                                        <th className="py-3.5 px-3.5 w-[230px] min-w-[230px] border-r border-white/20 whitespace-nowrap">
+                                        <th className="py-3 px-4 w-[230px] min-w-[230px] whitespace-nowrap">
                                             CO-ORDINATOR NAME
                                         </th>
                                         {/* Column 21: QUOTATION CO-ORDINATOR NAME */}
-                                        <th className="py-3.5 px-3.5 w-[240px] min-w-[240px] border-r border-white/20 whitespace-nowrap">
+                                        <th className="py-3 px-4 w-[240px] min-w-[240px] whitespace-nowrap">
                                             QUOTATION CO-ORDINATOR NAME
                                         </th>
                                         {/* Column 22: INSPECTION CO-ORDINATOR NAME */}
-                                        <th className="py-3.5 px-3.5 w-[240px] min-w-[240px] border-r border-white/20 whitespace-nowrap">
+                                        <th className="py-3 px-4 w-[240px] min-w-[240px] whitespace-nowrap">
                                             INSPECTION CO-ORDINATOR NAME
                                         </th>
                                         {/* Column 23: ENDROSMENT CO-ORDINATOR NAME */}
-                                        <th className="py-3.5 px-3.5 w-[240px] min-w-[240px] border-r border-white/20 whitespace-nowrap">
+                                        <th className="py-3 px-4 w-[240px] min-w-[240px] whitespace-nowrap">
                                             ENDROSMENT CO-ORDINATOR NAME
                                         </th>
                                         {/* Column 24: LOCATION HEAD NAME */}
-                                        <th className="py-3.5 px-3.5 w-[280px] min-w-[280px] border-r border-white/20 whitespace-nowrap">
+                                        <th className="py-3 px-4 w-[280px] min-w-[280px] whitespace-nowrap">
                                             LOCATION HEAD NAME
                                         </th>
                                         {/* Column 25: BUSINESS PROCESS */}
-                                        <th className="py-3.5 px-3.5 w-[160px] min-w-[160px] border-r border-white/20 whitespace-nowrap">
+                                        <th className="py-3 px-4 w-[160px] min-w-[160px] whitespace-nowrap">
                                             BUSINESS PROCESS
                                         </th>
                                         {/* Column 26: LINE OF BUSINESS */}
-                                        <th className="py-3.5 px-3.5 w-[150px] min-w-[150px] border-r border-white/20 whitespace-nowrap">
+                                        <th className="py-3 px-4 w-[150px] min-w-[150px] whitespace-nowrap">
                                             LINE OF BUSINESS
                                         </th>
                                         {/* Column 27: FUNCTION TYPE */}
-                                        <th className="py-3.5 px-3.5 w-[140px] min-w-[140px] border-r border-white/20 whitespace-nowrap">
+                                        <th className="py-3 px-4 w-[140px] min-w-[140px] whitespace-nowrap">
                                             FUNCTION TYPE
                                         </th>
                                         {/* Column 28: DESIGNATION */}
-                                        <th className="py-3.5 px-3.5 w-[190px] min-w-[190px] border-r border-white/20 whitespace-nowrap">
+                                        <th className="py-3 px-4 w-[190px] min-w-[190px] whitespace-nowrap">
                                             DESIGNATION
                                         </th>
                                         {/* Column 29: CLASS */}
-                                        <th className="py-3.5 px-3.5 w-[100px] min-w-[100px] border-r border-white/20 whitespace-nowrap">
+                                        <th className="py-3 px-4 w-[100px] min-w-[100px] whitespace-nowrap">
                                             CLASS
                                         </th>
                                         {/* Column 30: REPORTING */}
-                                        <th className="py-3.5 px-3.5 w-[260px] min-w-[260px] border-r border-white/20 whitespace-nowrap">
+                                        <th className="py-3 px-4 w-[260px] min-w-[260px] whitespace-nowrap">
                                             REPORTING
                                         </th>
                                         {/* Column 31: JOINING DATE */}
-                                        <th className="py-3.5 px-3.5 w-[170px] min-w-[170px] border-r border-white/20 whitespace-nowrap">
+                                        <th className="py-3 px-4 w-[170px] min-w-[170px] whitespace-nowrap">
                                             JOINING DATE
                                         </th>
                                         {/* Column 32: DOCS */}
-                                        <th className="py-3.5 px-3.5 w-[100px] min-w-[100px] text-center border-r border-white/20 whitespace-nowrap">
+                                        <th className="py-3 px-4 w-[100px] min-w-[100px] text-center whitespace-nowrap">
                                             DOCS
                                         </th>
                                         {/* Column 33: ID */}
-                                        <th className="py-3.5 px-3.5 w-[70px] min-w-[70px] text-center border-r border-white/20 whitespace-nowrap">
+                                        <th className="py-3 px-4 w-[70px] min-w-[70px] text-center whitespace-nowrap">
                                             ID
                                         </th>
                                         {/* Column 34: EXECUTIVE TYPE */}
-                                        <th className="py-3.5 px-3.5 w-[190px] min-w-[190px] border-r border-white/20 whitespace-nowrap">
+                                        <th className="py-3 px-4 w-[190px] min-w-[190px] whitespace-nowrap">
                                             EXECUTIVE TYPE
                                         </th>
                                         {/* Column 35: DATE OF BIRTH */}
-                                        <th className="py-3.5 px-3.5 w-[170px] min-w-[170px] border-r border-white/20 whitespace-nowrap">
+                                        <th className="py-3 px-4 w-[170px] min-w-[170px] whitespace-nowrap">
                                             DATE OF BIRTH
                                         </th>
                                         {/* Column 36: EXIT */}
-                                        <th className="py-3.5 px-3.5 w-[80px] min-w-[80px] text-center border-r border-white/20 whitespace-nowrap">
+                                        <th className="py-3 px-4 w-[80px] min-w-[80px] text-center whitespace-nowrap">
                                             EXIT
                                         </th>
                                         {/* Column 37: DELETE */}
-                                        <th className="py-3.5 px-3.5 w-[100px] min-w-[100px] text-center whitespace-nowrap">
+                                        <th className="py-3 px-4 w-[100px] min-w-[100px] text-center whitespace-nowrap">
                                             DELETE
                                         </th>
                                     </tr>
@@ -4966,10 +4958,10 @@ const Registration: React.FC = () => {
                                             return (
                                                 <tr
                                                     key={e.id}
-                                                    className={`hover:bg-[#EAF2FF] ${rowBg} transition-colors border-b border-slate-200`}
+                                                    className={`hover:bg-brand-mainbg h-[48px] transition-colors bg-white border-b border-brand-border`}
                                                 >
                                                     {/* 1: VIEW */}
-                                                    <td className="py-2.5 px-3 text-center border-r border-slate-200 whitespace-nowrap">
+                                                    <td className="py-2.5 px-3 text-center whitespace-nowrap">
                                                         <button
                                                             type="button"
                                                             onClick={() => showToast(`Viewing profile for ${e.fullName} (${e.empCode})`)}
@@ -4980,7 +4972,7 @@ const Registration: React.FC = () => {
                                                     </td>
 
                                                     {/* 2: EDIT */}
-                                                    <td className="py-2.5 px-2 text-center border-r border-slate-200 whitespace-nowrap">
+                                                    <td className="py-2.5 px-2 text-center whitespace-nowrap">
                                                         <button
                                                             type="button"
                                                             onClick={() => {
@@ -5003,87 +4995,87 @@ const Registration: React.FC = () => {
                                                     </td>
 
                                                     {/* 3: EMP CODE */}
-                                                    <td className="py-2.5 px-3.5 font-mono font-medium text-slate-800 border-r border-slate-200 whitespace-nowrap">
+                                                    <td className="py-2 px-4 font-mono font-medium text-slate-800 whitespace-nowrap">
                                                         {e.empCode}
                                                     </td>
 
                                                     {/* 4: EMPLOYEE NAME */}
-                                                    <td className="py-2.5 px-3.5 font-bold text-slate-900 border-r border-slate-200 whitespace-nowrap">
+                                                    <td className="py-2 px-4 font-bold text-slate-900 whitespace-nowrap">
                                                         {e.fullName}
                                                     </td>
 
                                                     {/* 5: ADDRESS */}
-                                                    <td className="py-2.5 px-3.5 text-slate-700 border-r border-slate-200 whitespace-nowrap">
+                                                    <td className="py-2 px-4 text-slate-700 whitespace-nowrap">
                                                         {e.address || '-'}
                                                     </td>
 
                                                     {/* 6: GENDER */}
-                                                    <td className="py-2.5 px-3.5 text-center text-slate-700 border-r border-slate-200 whitespace-nowrap">
+                                                    <td className="py-2 px-4 text-center text-slate-700 whitespace-nowrap">
                                                         {e.gender || 'MALE'}
                                                     </td>
 
                                                     {/* 7: MARITAL STATUS */}
-                                                    <td className="py-2.5 px-3.5 text-center text-slate-700 border-r border-slate-200 whitespace-nowrap">
+                                                    <td className="py-2 px-4 text-center text-slate-700 whitespace-nowrap">
                                                         {e.maritalStatus || 'MARRIED'}
                                                     </td>
 
                                                     {/* 8: OFFICE NO */}
-                                                    <td className="py-2.5 px-3.5 font-mono text-slate-700 border-r border-slate-200 whitespace-nowrap">
+                                                    <td className="py-2 px-4 font-mono text-slate-700 whitespace-nowrap">
                                                         {e.officeNo || '-'}
                                                     </td>
 
                                                     {/* 9: MOBLIE NO */}
-                                                    <td className="py-2.5 px-3.5 font-mono font-medium text-slate-800 border-r border-slate-200 whitespace-nowrap">
+                                                    <td className="py-2 px-4 font-mono font-medium text-slate-800 whitespace-nowrap">
                                                         {e.mobile || '-'}
                                                     </td>
 
                                                     {/* 10: EMAIL ID */}
-                                                    <td className="py-2.5 px-3.5 text-slate-700 font-medium border-r border-slate-200 whitespace-nowrap">
+                                                    <td className="py-2 px-4 text-slate-700 font-medium whitespace-nowrap">
                                                         {e.email || '-'}
                                                     </td>
 
                                                     {/* 11: PAN NO */}
-                                                    <td className="py-2.5 px-3.5 font-mono text-slate-700 border-r border-slate-200 whitespace-nowrap">
+                                                    <td className="py-2 px-4 font-mono text-slate-700 whitespace-nowrap">
                                                         {e.panNo || '-'}
                                                     </td>
 
                                                     {/* 12: AADHAR NO */}
-                                                    <td className="py-2.5 px-3.5 font-mono text-slate-700 border-r border-slate-200 whitespace-nowrap">
+                                                    <td className="py-2 px-4 font-mono text-slate-700 whitespace-nowrap">
                                                         {e.aadharNo || '-'}
                                                     </td>
 
                                                     {/* 13: BANK NAME */}
-                                                    <td className="py-2.5 px-3.5 font-medium text-slate-800 border-r border-slate-200 whitespace-nowrap">
+                                                    <td className="py-2 px-4 font-medium text-slate-800 whitespace-nowrap">
                                                         {e.bankName || '-'}
                                                     </td>
 
                                                     {/* 14: BANK BRANCH */}
-                                                    <td className="py-2.5 px-3.5 text-slate-700 border-r border-slate-200 whitespace-nowrap">
+                                                    <td className="py-2 px-4 text-slate-700 whitespace-nowrap">
                                                         {e.bankBranch || '-'}
                                                     </td>
 
                                                     {/* 15: IFSC CODE */}
-                                                    <td className="py-2.5 px-3.5 font-mono text-slate-700 border-r border-slate-200 whitespace-nowrap">
+                                                    <td className="py-2 px-4 font-mono text-slate-700 whitespace-nowrap">
                                                         {e.ifscCode || '-'}
                                                     </td>
 
                                                     {/* 16: ACCOUNT NO */}
-                                                    <td className="py-2.5 px-3.5 font-mono text-slate-700 border-r border-slate-200 whitespace-nowrap">
+                                                    <td className="py-2 px-4 font-mono text-slate-700 whitespace-nowrap">
                                                         {e.accountNo || '-'}
                                                     </td>
 
                                                     {/* 17: BRANCH NAME */}
-                                                    <td className="py-2.5 px-3.5 font-medium text-slate-800 border-r border-slate-200 whitespace-nowrap">
+                                                    <td className="py-2 px-4 font-medium text-slate-800 whitespace-nowrap">
                                                         {e.branchName || e.branch || 'BARAMATI'}
                                                     </td>
 
                                                     {/* 18: USER NAME */}
-                                                    <td className="py-2.5 px-3.5 font-mono font-medium text-brand-primary border-r border-slate-200 whitespace-nowrap">
+                                                    <td className="py-2 px-4 font-mono font-medium text-brand-primary whitespace-nowrap">
                                                         {e.userName || '-'}
                                                     </td>
 
                                                     {/* 19: USER PASSWORD */}
-                                                    <td className="py-2.5 px-3.5 font-mono text-slate-700 border-r border-slate-200 whitespace-nowrap">
+                                                    <td className="py-2 px-4 font-mono text-slate-700 whitespace-nowrap">
                                                         {showEmpPasswords ? (
                                                             <span className="text-slate-800">{e.userPassword || '••••••••'}</span>
                                                         ) : (
@@ -5092,67 +5084,67 @@ const Registration: React.FC = () => {
                                                     </td>
 
                                                     {/* 20: CO-ORDINATOR NAME */}
-                                                    <td className="py-2.5 px-3.5 text-slate-700 border-r border-slate-200 whitespace-nowrap">
+                                                    <td className="py-2 px-4 text-slate-700 whitespace-nowrap">
                                                         {e.coordinator || '-'}
                                                     </td>
 
                                                     {/* 21: QUOTATION CO-ORDINATOR NAME */}
-                                                    <td className="py-2.5 px-3.5 text-slate-700 border-r border-slate-200 whitespace-nowrap">
+                                                    <td className="py-2 px-4 text-slate-700 whitespace-nowrap">
                                                         {e.quotationCoordinator || '-'}
                                                     </td>
 
                                                     {/* 22: INSPECTION CO-ORDINATOR NAME */}
-                                                    <td className="py-2.5 px-3.5 text-slate-700 border-r border-slate-200 whitespace-nowrap">
+                                                    <td className="py-2 px-4 text-slate-700 whitespace-nowrap">
                                                         {e.inspectionCoordinator || '-'}
                                                     </td>
 
                                                     {/* 23: ENDROSMENT CO-ORDINATOR NAME */}
-                                                    <td className="py-2.5 px-3.5 text-slate-700 border-r border-slate-200 whitespace-nowrap">
+                                                    <td className="py-2 px-4 text-slate-700 whitespace-nowrap">
                                                         {e.endorsementCoordinator || '-'}
                                                     </td>
 
                                                     {/* 24: LOCATION HEAD NAME */}
-                                                    <td className="py-2.5 px-3.5 text-slate-700 border-r border-slate-200 whitespace-nowrap">
+                                                    <td className="py-2 px-4 text-slate-700 whitespace-nowrap">
                                                         {e.locationHead || '-'}
                                                     </td>
 
                                                     {/* 25: BUSINESS PROCESS */}
-                                                    <td className="py-2.5 px-3.5 text-slate-700 border-r border-slate-200 whitespace-nowrap">
+                                                    <td className="py-2 px-4 text-slate-700 whitespace-nowrap">
                                                         {e.businessProcess || '-'}
                                                     </td>
 
                                                     {/* 26: LINE OF BUSINESS */}
-                                                    <td className="py-2.5 px-3.5 text-slate-700 border-r border-slate-200 whitespace-nowrap">
+                                                    <td className="py-2 px-4 text-slate-700 whitespace-nowrap">
                                                         {e.lineOfBusiness || '-'}
                                                     </td>
 
                                                     {/* 27: FUNCTION TYPE */}
-                                                    <td className="py-2.5 px-3.5 text-slate-700 border-r border-slate-200 whitespace-nowrap">
+                                                    <td className="py-2 px-4 text-slate-700 whitespace-nowrap">
                                                         {e.functionType || 'OPERATIONS'}
                                                     </td>
 
                                                     {/* 28: DESIGNATION */}
-                                                    <td className="py-2.5 px-3.5 font-medium text-slate-800 border-r border-slate-200 whitespace-nowrap">
+                                                    <td className="py-2 px-4 font-medium text-slate-800 whitespace-nowrap">
                                                         {e.designation || '-'}
                                                     </td>
 
                                                     {/* 29: CLASS */}
-                                                    <td className="py-2.5 px-3.5 text-slate-700 border-r border-slate-200 whitespace-nowrap">
+                                                    <td className="py-2 px-4 text-slate-700 whitespace-nowrap">
                                                         {e.employeeClass || 'CLASS 5'}
                                                     </td>
 
                                                     {/* 30: REPORTING */}
-                                                    <td className="py-2.5 px-3.5 font-medium text-slate-800 border-r border-slate-200 whitespace-nowrap">
+                                                    <td className="py-2 px-4 font-medium text-slate-800 whitespace-nowrap">
                                                         {e.reporting || '-'}
                                                     </td>
 
                                                     {/* 31: JOINING DATE */}
-                                                    <td className="py-2.5 px-3.5 font-mono text-slate-700 border-r border-slate-200 whitespace-nowrap">
+                                                    <td className="py-2 px-4 font-mono text-slate-700 whitespace-nowrap">
                                                         {e.joiningDate || e.doj || '-'}
                                                     </td>
 
                                                     {/* 32: DOCS */}
-                                                    <td className="py-2.5 px-3.5 text-center border-r border-slate-200 whitespace-nowrap">
+                                                    <td className="py-2 px-4 text-center whitespace-nowrap">
                                                         {e.docsStatus === 'VIEW' ? (
                                                             <button
                                                                 type="button"
@@ -5167,22 +5159,22 @@ const Registration: React.FC = () => {
                                                     </td>
 
                                                     {/* 33: ID */}
-                                                    <td className="py-2.5 px-3.5 text-center font-mono font-medium text-slate-800 border-r border-slate-200 whitespace-nowrap">
+                                                    <td className="py-2 px-4 text-center font-mono font-medium text-slate-800 whitespace-nowrap">
                                                         {e.erpId || e.id}
                                                     </td>
 
                                                     {/* 34: EXECUTIVE TYPE */}
-                                                    <td className="py-2.5 px-3.5 text-slate-700 border-r border-slate-200 whitespace-nowrap">
+                                                    <td className="py-2 px-4 text-slate-700 whitespace-nowrap">
                                                         {e.executiveType || 'OPERATIONAL SUPPORT'}
                                                     </td>
 
                                                     {/* 35: DATE OF BIRTH */}
-                                                    <td className="py-2.5 px-3.5 font-mono text-slate-700 border-r border-slate-200 whitespace-nowrap">
+                                                    <td className="py-2 px-4 font-mono text-slate-700 whitespace-nowrap">
                                                         {e.dateOfBirth || '-'}
                                                     </td>
 
                                                     {/* 36: EXIT */}
-                                                    <td className="py-2.5 px-3.5 text-center border-r border-slate-200 whitespace-nowrap">
+                                                    <td className="py-2 px-4 text-center whitespace-nowrap">
                                                         <button
                                                             type="button"
                                                             onClick={() => handleToggleEmpStatus(e.id)}
@@ -5194,7 +5186,7 @@ const Registration: React.FC = () => {
                                                     </td>
 
                                                     {/* 37: DELETE */}
-                                                    <td className="py-2.5 px-3.5 text-center whitespace-nowrap">
+                                                    <td className="py-2 px-4 text-center whitespace-nowrap">
                                                         <button
                                                             type="button"
                                                             onClick={() => handleDeleteEmp(e.id)}
@@ -5357,11 +5349,11 @@ const Registration: React.FC = () => {
                                         <table className="w-full text-left border-collapse min-w-[700px]">
                                             <thead>
                                                 <tr className="bg-brand-primary text-white text-[12px] font-bold uppercase tracking-wider">
-                                                    <th className="py-2.5 px-3.5 border-r border-blue-500/40 w-[24%]">Account Holder Name</th>
-                                                    <th className="py-2.5 px-3.5 border-r border-blue-500/40 w-[24%]">Bank Name</th>
-                                                    <th className="py-2.5 px-3.5 border-r border-blue-500/40 w-[18%]">Branch</th>
-                                                    <th className="py-2.5 px-3.5 border-r border-blue-500/40 w-[20%]">Account No.</th>
-                                                    <th className="py-2.5 px-3.5 w-[14%]">Ifsc_code</th>
+                                                    <th className="py-2 px-4 border-r border-blue-500/40 w-[24%]">Account Holder Name</th>
+                                                    <th className="py-2 px-4 border-r border-blue-500/40 w-[24%]">Bank Name</th>
+                                                    <th className="py-2 px-4 border-r border-blue-500/40 w-[18%]">Branch</th>
+                                                    <th className="py-2 px-4 border-r border-blue-500/40 w-[20%]">Account No.</th>
+                                                    <th className="py-2 px-4 w-[14%]">Ifsc_code</th>
                                                 </tr>
                                             </thead>
                                             <tbody className="text-[13px] text-brand-navy divide-y divide-brand-border bg-white">
@@ -5396,11 +5388,11 @@ const Registration: React.FC = () => {
                                         <table className="w-full text-left border-collapse min-w-[700px]">
                                             <thead>
                                                 <tr className="bg-brand-primary text-white text-[12px] font-bold uppercase tracking-wider">
-                                                    <th className="py-2.5 px-3.5 border-r border-blue-500/40 w-[24%]">Account Holder Name</th>
-                                                    <th className="py-2.5 px-3.5 border-r border-blue-500/40 w-[24%]">Bank Name</th>
-                                                    <th className="py-2.5 px-3.5 border-r border-blue-500/40 w-[18%]">Branch</th>
-                                                    <th className="py-2.5 px-3.5 border-r border-blue-500/40 w-[20%]">Account No.</th>
-                                                    <th className="py-2.5 px-3.5 w-[14%]">Ifsc_code</th>
+                                                    <th className="py-2 px-4 border-r border-blue-500/40 w-[24%]">Account Holder Name</th>
+                                                    <th className="py-2 px-4 border-r border-blue-500/40 w-[24%]">Bank Name</th>
+                                                    <th className="py-2 px-4 border-r border-blue-500/40 w-[18%]">Branch</th>
+                                                    <th className="py-2 px-4 border-r border-blue-500/40 w-[20%]">Account No.</th>
+                                                    <th className="py-2 px-4 w-[14%]">Ifsc_code</th>
                                                 </tr>
                                             </thead>
                                             <tbody className="text-[13px] text-brand-navy divide-y divide-brand-border bg-white">
@@ -5621,15 +5613,15 @@ const Registration: React.FC = () => {
                             >
                                 <table className="w-full text-left border-collapse min-w-[1250px]">
                                     <thead>
-                                        <tr className="bg-brand-primary text-white text-[12px] font-bold uppercase tracking-wider sticky top-0 z-10 select-none shadow-sm">
-                                            <th className="py-3 px-3 text-center border-r border-blue-500/30 w-[80px]">VIEW</th>
-                                            <th className="py-3 px-3 border-r border-blue-500/30 w-[110px]">CODE</th>
-                                            <th className="py-3 px-4 border-r border-blue-500/30 w-[280px]">
+                                        <tr className="bg-brand-lightbg text-brand-navy text-[13px] font-semibold uppercase border-b border-brand-border whitespace-nowrap">
+                                            <th className="py-3 px-4 text-center w-[80px]">VIEW</th>
+                                            <th className="py-3 px-4 w-[110px]">CODE</th>
+                                            <th className="py-3 px-4 w-[280px]">
                                                 {beneficiaryTypeFilter === 'FRANCHISE' ? 'FRANCHISE' : 'AGENT NAME'}
                                             </th>
-                                            <th className="py-3 px-3 border-r border-blue-500/30 w-[160px]">BRANCH NAME</th>
-                                            <th className="py-3 px-4 border-r border-blue-500/30 min-w-[420px]">ADDRESS</th>
-                                            <th className="py-3 px-3 w-[150px]">MOBLIE NO</th>
+                                            <th className="py-3 px-4 w-[160px]">BRANCH NAME</th>
+                                            <th className="py-3 px-4 min-w-[420px]">ADDRESS</th>
+                                            <th className="py-3 px-4 w-[150px]">MOBILE NO</th>
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-brand-border text-[13px] bg-white">
@@ -5650,10 +5642,10 @@ const Registration: React.FC = () => {
                                             .map((b) => (
                                                 <tr
                                                     key={b.id}
-                                                    className="hover:bg-blue-50/50 transition-colors h-[48px]"
+                                                    className="hover:bg-brand-mainbg h-[48px] transition-colors bg-white"
                                                 >
                                                     {/* VIEW Link (Matches ERP blue VIEW action) */}
-                                                    <td className="py-2.5 px-3 text-center border-r border-brand-border/60">
+                                                    <td className="py-2 px-4 text-center">
                                                         <button
                                                             type="button"
                                                             onClick={() => setViewingBeneficiary(b)}
@@ -5663,23 +5655,23 @@ const Registration: React.FC = () => {
                                                         </button>
                                                     </td>
                                                     {/* CODE */}
-                                                    <td className="py-2.5 px-3 font-semibold text-brand-navy border-r border-brand-border/60 whitespace-nowrap">
+                                                    <td className="py-2 px-4 font-semibold text-brand-navy whitespace-nowrap">
                                                         {b.entityCode}
                                                     </td>
                                                     {/* FRANCHISE / AGENT NAME */}
-                                                    <td className="py-2.5 px-4 font-semibold text-brand-navy border-r border-brand-border/60">
+                                                    <td className="py-2 px-4 font-semibold text-brand-navy">
                                                         {b.beneficiaryName}
                                                     </td>
                                                     {/* BRANCH NAME */}
-                                                    <td className="py-2.5 px-3 text-brand-navy border-r border-brand-border/60 whitespace-nowrap">
+                                                    <td className="py-2 px-4 text-brand-navy whitespace-nowrap">
                                                         {b.branchName || b.branch || 'FRANCHISES'}
                                                     </td>
                                                     {/* ADDRESS */}
-                                                    <td className="py-2.5 px-4 text-xs text-brand-muted border-r border-brand-border/60 leading-relaxed">
+                                                    <td className="py-2 px-4 text-xs text-brand-muted leading-relaxed">
                                                         {b.address || 'NA,NA,PUNE,MAHARASHTRA'}
                                                     </td>
-                                                    {/* MOBLIE NO */}
-                                                    <td className="py-2.5 px-3 font-mono text-xs text-brand-navy whitespace-nowrap">
+                                                    {/* MOBILE NO */}
+                                                    <td className="py-2 px-4 font-mono text-xs text-brand-navy whitespace-nowrap">
                                                         {b.mobile || 'N/A'}
                                                     </td>
                                                 </tr>

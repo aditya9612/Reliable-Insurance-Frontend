@@ -196,9 +196,7 @@ const INITIAL_ACTIVE_AGENTS: AgentItemRecord[] = [
 ];
 
 const DeactivatedAgentListTab: React.FC = () => {
-    // Radio selection state: 'Active' or 'InActive' (matches screenshot radio buttons)
     const [statusFilter, setStatusFilter] = useState<'Active' | 'InActive'>('Active');
-    const [appliedStatus, setAppliedStatus] = useState<'Active' | 'InActive'>('Active');
 
     // Search query: "Search Agent Name Here" (matches screenshot rounded input)
     const [searchQuery, setSearchQuery] = useState('');
@@ -222,17 +220,12 @@ const DeactivatedAgentListTab: React.FC = () => {
         setTimeout(() => setToastMessage(null), 3500);
     };
 
-    // When "Show" button is clicked (matches screenshot "Show" button)
-    const handleShowClick = () => {
-        setAppliedStatus(statusFilter);
-        setCurrentPage(1);
-        showToast(`Filtered list to display ${statusFilter} agents`);
-    };
+
 
     // Get active dataset based on applied status
     const currentList = useMemo(() => {
-        return appliedStatus === 'Active' ? activeAgents : inactiveAgents;
-    }, [appliedStatus, activeAgents, inactiveAgents]);
+        return statusFilter === 'Active' ? activeAgents : inactiveAgents;
+    }, [statusFilter, activeAgents, inactiveAgents]);
 
     // Filter by "Search Agent Name Here"
     const filteredAgents = useMemo(() => {
@@ -254,9 +247,9 @@ const DeactivatedAgentListTab: React.FC = () => {
         return filteredAgents.slice(start, start + itemsPerPage);
     }, [filteredAgents, currentPage, itemsPerPage]);
 
-    // Export list to CSV (matches screenshot "Export" button)
+    // Export list to CSV
     const handleExportCSV = () => {
-        if (appliedStatus === 'InActive') {
+        if (statusFilter === 'InActive') {
             const headers = ['SR. NO.', 'AGENT CODE', 'AGENT NAME', 'BRANCH', 'MOBILE NO', 'DEACTIVATION DATE', 'REASON FOR DEACTIVATION', 'CATEGORY', 'DEACTIVATED BY', 'PAST POLICIES', 'STATUS'];
             const rows = filteredAgents.map((a, i) => [
                 i + 1,
@@ -265,7 +258,7 @@ const DeactivatedAgentListTab: React.FC = () => {
                 `"${a.branch}"`,
                 `"${a.mobile}"`,
                 `"${a.date}"`,
-                `"${(a.reason || '').replace(/"/g, '""')}"`,
+                `"${(a.reason || '').replace(/\"/g, '""')}"`,
                 `"${a.category || ''}"`,
                 `"${a.deactivatedBy || 'Admin'}"`,
                 a.pastPolicies,
@@ -300,7 +293,7 @@ const DeactivatedAgentListTab: React.FC = () => {
             link.click();
             document.body.removeChild(link);
         }
-        showToast(`Exported ${filteredAgents.length} ${appliedStatus.toLowerCase()} agent records to CSV`);
+        showToast(`Exported ${filteredAgents.length} ${statusFilter.toLowerCase()} agent records to CSV`);
     };
 
     // Confirm Reactivate
@@ -351,191 +344,114 @@ const DeactivatedAgentListTab: React.FC = () => {
                 </div>
             )}
 
-            {/* TOP CARD: EXACT UI FROM USER SCREENSHOT */}
-            {/* White card with Radio buttons (Active / InActive), Show button (Blue), Export button (Orange) */}
-            <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6 sm:p-7">
-                <div className="flex flex-wrap items-center gap-6 sm:gap-10">
-                    {/* Radio Group: Active vs InActive matching screenshot */}
-                    <div className="flex items-center gap-7">
-                        {/* 1. Active Radio */}
-                        <label className="flex items-center gap-2 cursor-pointer select-none group">
-                            <input
-                                type="radio"
-                                name="agentStatus"
-                                value="Active"
-                                checked={statusFilter === 'Active'}
-                                onChange={() => {
-                                    setStatusFilter('Active');
-                                    setAppliedStatus('Active');
-                                    setCurrentPage(1);
-                                }}
-                                className="w-4 h-4 text-brand-primary accent-brand-primary border-slate-300 focus:ring-brand-primary cursor-pointer"
-                            />
-                            <span className={`text-[15px] font-bold tracking-wide transition-colors ${
-                                statusFilter === 'Active' ? 'text-slate-900' : 'text-slate-600 group-hover:text-slate-900'
-                            }`}>
-                                Active
-                            </span>
-                        </label>
-
-                        {/* 2. InActive Radio */}
-                        <label className="flex items-center gap-2 cursor-pointer select-none group">
-                            <input
-                                type="radio"
-                                name="agentStatus"
-                                value="InActive"
-                                checked={statusFilter === 'InActive'}
-                                onChange={() => {
-                                    setStatusFilter('InActive');
-                                    setAppliedStatus('InActive');
-                                    setCurrentPage(1);
-                                }}
-                                className="w-4 h-4 text-brand-primary accent-brand-primary border-slate-300 focus:ring-brand-primary cursor-pointer"
-                            />
-                            <span className={`text-[15px] font-bold tracking-wide transition-colors ${
-                                statusFilter === 'InActive' ? 'text-slate-900' : 'text-slate-600 group-hover:text-slate-900'
-                            }`}>
-                                InActive
-                            </span>
-                        </label>
+            {/* Search Toolbar: Search + Dropdown + Export in one line */}
+            <div className="bg-white rounded-xl border border-brand-border shadow-sm p-4">
+                <div className="flex items-center gap-3 flex-wrap">
+                    {/* Search Input */}
+                    <div className="relative flex-1 min-w-[200px] max-w-md">
+                        <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" size={17} />
+                        <input
+                            type="text"
+                            value={searchQuery}
+                            onChange={(e) => {
+                                setSearchQuery(e.target.value);
+                                setCurrentPage(1);
+                            }}
+                            placeholder="Search agent name, code or branch"
+                            className="w-full pl-10 pr-9 py-2.5 bg-white border border-[#CBD5E1] rounded-lg text-sm text-slate-800 placeholder-[#94A3B8] shadow-2xs focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-brand-primary transition-all font-medium"
+                        />
+                        {searchQuery && (
+                            <button
+                                type="button"
+                                onClick={() => { setSearchQuery(''); setCurrentPage(1); }}
+                                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-0.5 cursor-pointer"
+                                title="Clear search"
+                            >
+                                <X size={15} />
+                            </button>
+                        )}
                     </div>
 
-                    {/* Action Buttons: Show (Blue) & Export (Amber) matching screenshot */}
-                    <div className="flex items-center gap-4">
-                        {/* Show Button (Blue Theme #00509d / bg-brand-primary) */}
-                        <button
-                            type="button"
-                            onClick={handleShowClick}
-                            className="px-9 py-2 bg-brand-primary hover:bg-[#00509d] text-white font-semibold text-[14px] rounded-[6px] shadow-sm transition-all duration-150 cursor-pointer border-none min-w-[90px] text-center"
-                        >
-                            Show
-                        </button>
-
-                        {/* Export Button (Orange / Amber #e59838) */}
-                        <button
-                            type="button"
-                            onClick={handleExportCSV}
-                            className="px-9 py-2 bg-[#e59838] hover:bg-[#d48729] text-white font-semibold text-[14px] rounded-[6px] shadow-sm transition-all duration-150 cursor-pointer border-none min-w-[90px] text-center"
-                        >
-                            Export
-                        </button>
-                    </div>
-
-                    {/* Summary Counter Tag */}
-                    <div className="ml-auto hidden md:flex items-center gap-2 text-xs text-slate-500 font-medium">
-                        <span>Total {appliedStatus} Records:</span>
-                        <span className={`px-2.5 py-0.5 rounded-full text-xs font-bold ${
-                            appliedStatus === 'Active' ? 'bg-blue-100 text-brand-primary' : 'bg-rose-100 text-rose-700'
-                        }`}>
-                            {filteredAgents.length}
-                        </span>
-                    </div>
-                </div>
-            </div>
-
-            {/* SEARCH INPUT FIELD: EXACT UI FROM USER SCREENSHOT */}
-            {/* Pill shaped search input "Search Agent Name Here" */}
-            <div className="flex items-center justify-between gap-4 flex-wrap">
-                <div className="relative w-full sm:w-96">
-                    <input
-                        type="text"
-                        value={searchQuery}
+                    {/* Status Dropdown */}
+                    <select
+                        value={statusFilter}
                         onChange={(e) => {
-                            setSearchQuery(e.target.value);
+                            setStatusFilter(e.target.value as 'Active' | 'InActive');
                             setCurrentPage(1);
                         }}
-                        placeholder="Search Agent Name Here"
-                        className="w-full pl-5 pr-10 py-2.5 bg-white border border-[#CBD5E1] rounded-full text-[14px] text-slate-800 placeholder-[#94A3B8] shadow-2xs focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-brand-primary transition-all font-medium"
-                    />
-                    {searchQuery ? (
-                        <button
-                            type="button"
-                            onClick={() => setSearchQuery('')}
-                            className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-0.5 cursor-pointer"
-                            title="Clear search"
-                        >
-                            <X size={16} />
-                        </button>
-                    ) : (
-                        <Search className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" size={16} />
-                    )}
-                </div>
+                        className="px-4 py-2.5 bg-white border border-[#CBD5E1] rounded-lg text-sm font-semibold text-slate-700 shadow-2xs focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-brand-primary cursor-pointer"
+                    >
+                        <option value="Active">Active</option>
+                        <option value="InActive">InActive</option>
+                    </select>
 
-                <div className="text-xs text-slate-500 font-medium">
-                    Currently Viewing: <span className="font-bold text-brand-navy">{appliedStatus} Agents List</span>
+                    {/* Export Button */}
+                    <button
+                        type="button"
+                        onClick={handleExportCSV}
+                        className="inline-flex items-center gap-2 px-4 py-2.5 bg-brand-primary hover:bg-[#1D4ED8] text-white rounded-lg text-sm font-semibold shadow-sm transition-all cursor-pointer border-none"
+                    >
+                        <Download size={15} />
+                        <span>Export CSV</span>
+                    </button>
                 </div>
             </div>
 
-            {/* DATA TABLE IN BLUE THEME */}
+            {/* DATA TABLE */}
             <div className="bg-white rounded-xl border border-brand-border shadow-sm overflow-hidden flex flex-col w-full min-w-0">
-                {/* Table Header Status Banner */}
-                <div className="bg-blue-50/60 px-5 py-2.5 border-b border-brand-border flex items-center justify-between text-xs text-brand-navy">
-                    <div className="flex items-center gap-2 font-medium">
-                        <span className={`inline-block w-2 h-2 rounded-full ${
-                            appliedStatus === 'Active' ? 'bg-brand-primary' : 'bg-rose-500'
-                        } animate-pulse`}></span>
-                        <span>
-                            Displaying <strong className="text-slate-900 font-bold">{filteredAgents.length}</strong> {appliedStatus.toLowerCase()} agent records
-                            {searchQuery && <span> matching "<strong className="text-brand-primary">{searchQuery}</strong>"</span>}
-                        </span>
-                    </div>
-                    <span className="text-[11px] text-brand-primary bg-white px-2.5 py-1 rounded border border-blue-200/80 font-medium">
-                        Reliable Insurance ERP • Agent Directory
-                    </span>
-                </div>
 
                 {/* Table with Blue Header Theme */}
                 <div className="w-full overflow-x-auto min-w-0 erp-horizontal-scrollbar">
                     <table className="text-left border-collapse w-full min-w-[950px] text-[13px]">
                         <thead>
-                            <tr className="bg-brand-primary text-white font-bold text-[12px] tracking-wider uppercase border-b-2 border-blue-700 select-none">
-                                <th className="py-3.5 px-4 w-16 text-center border-r border-white/20 whitespace-nowrap">
+                            <tr className="bg-brand-lightbg text-brand-navy text-[13px] font-semibold uppercase border-b border-brand-border whitespace-nowrap select-none">
+                                <th className="py-3.5 px-4 w-16 text-center whitespace-nowrap">
                                     SR. NO.
                                 </th>
-                                <th className="py-3.5 px-4 w-32 border-r border-white/20 whitespace-nowrap">
+                                <th className="py-3.5 px-4 w-32 whitespace-nowrap">
                                     AGENT CODE
                                 </th>
-                                <th className="py-3.5 px-4 w-56 border-r border-white/20 whitespace-nowrap">
+                                <th className="py-3.5 px-4 w-56 whitespace-nowrap">
                                     AGENT NAME
                                 </th>
-                                <th className="py-3.5 px-4 w-32 border-r border-white/20 whitespace-nowrap">
+                                <th className="py-3.5 px-4 w-32 whitespace-nowrap">
                                     BRANCH
                                 </th>
-                                <th className="py-3.5 px-4 w-32 border-r border-white/20 whitespace-nowrap">
+                                <th className="py-3.5 px-4 w-32 whitespace-nowrap">
                                     MOBILE
                                 </th>
-                                {appliedStatus === 'InActive' ? (
+                                {statusFilter === 'InActive' ? (
                                     <>
-                                        <th className="py-3.5 px-4 w-36 border-r border-white/20 whitespace-nowrap">
+                                        <th className="py-3.5 px-4 w-36 whitespace-nowrap">
                                             DEACTIVATION DATE
                                         </th>
-                                        <th className="py-3.5 px-4 w-64 border-r border-white/20 whitespace-nowrap">
+                                        <th className="py-3.5 px-4 w-64 whitespace-nowrap">
                                             REASON FOR DEACTIVATION
                                         </th>
-                                        <th className="py-3.5 px-4 w-36 border-r border-white/20 whitespace-nowrap">
+                                        <th className="py-3.5 px-4 w-36 whitespace-nowrap">
                                             DEACTIVATED BY
                                         </th>
-                                        <th className="py-3.5 px-4 w-28 text-center border-r border-white/20 whitespace-nowrap">
+                                        <th className="py-3.5 px-4 w-28 text-center whitespace-nowrap">
                                             PAST POLICIES
                                         </th>
                                     </>
                                 ) : (
                                     <>
-                                        <th className="py-3.5 px-4 w-48 border-r border-white/20 whitespace-nowrap">
+                                        <th className="py-3.5 px-4 w-48 whitespace-nowrap">
                                             EMAIL ID
                                         </th>
-                                        <th className="py-3.5 px-4 w-28 text-center border-r border-white/20 whitespace-nowrap">
+                                        <th className="py-3.5 px-4 w-28 text-center whitespace-nowrap">
                                             TYPE
                                         </th>
-                                        <th className="py-3.5 px-4 w-36 border-r border-white/20 whitespace-nowrap">
+                                        <th className="py-3.5 px-4 w-36 whitespace-nowrap">
                                             REGISTRATION DATE
                                         </th>
-                                        <th className="py-3.5 px-4 w-28 text-center border-r border-white/20 whitespace-nowrap">
+                                        <th className="py-3.5 px-4 w-28 text-center whitespace-nowrap">
                                             TOTAL POLICIES
                                         </th>
                                     </>
                                 )}
-                                <th className="py-3.5 px-4 w-28 text-center border-r border-white/20 whitespace-nowrap">
+                                <th className="py-3.5 px-4 w-28 text-center whitespace-nowrap">
                                     STATUS
                                 </th>
                                 <th className="py-3.5 px-4 w-32 text-right whitespace-nowrap">
@@ -549,9 +465,9 @@ const DeactivatedAgentListTab: React.FC = () => {
                                     <td colSpan={11} className="py-12 text-center text-slate-500">
                                         <div className="flex flex-col items-center justify-center gap-2">
                                             <UserX size={36} className="text-slate-300" />
-                                            <p className="text-base font-semibold text-slate-700">No {appliedStatus.toLowerCase()} agents found</p>
+                                            <p className="text-base font-semibold text-slate-700">No {statusFilter.toLowerCase()} agents found</p>
                                             <p className="text-xs text-slate-400">
-                                                {searchQuery ? `No records match "${searchQuery}"` : `There are currently no agents with ${appliedStatus} status.`}
+                                                {searchQuery ? `No records match "${searchQuery}"` : `There are currently no agents with ${statusFilter} status.`}
                                             </p>
                                             {searchQuery && (
                                                 <button
@@ -569,97 +485,95 @@ const DeactivatedAgentListTab: React.FC = () => {
                                 paginatedAgents.map((agent, idx) => (
                                     <tr
                                         key={agent.id}
-                                        className={`h-[52px] transition-colors ${
-                                            idx % 2 === 0 ? 'bg-white' : 'bg-slate-50/40'
-                                        } hover:bg-blue-50/40`}
+                                        className={`h-[52px] transition-colors ${idx % 2 === 0 ? 'bg-white' : 'bg-slate-50/40'
+                                            } hover:bg-blue-50/40`}
                                     >
                                         {/* SR. NO. */}
-                                        <td className="py-2.5 px-4 text-center border-r border-slate-200 text-xs font-medium text-slate-500">
+                                        <td className="py-2.5 px-4 text-center text-xs font-medium text-slate-500">
                                             {(currentPage - 1) * itemsPerPage + idx + 1}
                                         </td>
 
                                         {/* AGENT CODE */}
-                                        <td className="py-2.5 px-4 border-r border-slate-200 font-mono font-bold text-xs text-brand-primary whitespace-nowrap">
+                                        <td className="py-2.5 px-4 font-mono font-bold text-xs text-brand-primary whitespace-nowrap">
                                             {agent.agentCode}
                                         </td>
 
                                         {/* AGENT NAME */}
-                                        <td className="py-2.5 px-4 border-r border-slate-200 font-semibold text-brand-navy whitespace-nowrap">
+                                        <td className="py-2.5 px-4 font-semibold text-brand-navy whitespace-nowrap">
                                             {agent.fullName}
                                         </td>
 
                                         {/* BRANCH */}
-                                        <td className="py-2.5 px-4 border-r border-slate-200 text-xs font-medium text-slate-700 whitespace-nowrap">
+                                        <td className="py-2.5 px-4 text-xs font-medium text-slate-700 whitespace-nowrap">
                                             {agent.branch}
                                         </td>
 
                                         {/* MOBILE */}
-                                        <td className="py-2.5 px-4 border-r border-slate-200 font-mono text-xs text-slate-700 whitespace-nowrap">
+                                        <td className="py-2.5 px-4 font-mono text-xs text-slate-700 whitespace-nowrap">
                                             {agent.mobile}
                                         </td>
 
-                                        {appliedStatus === 'InActive' ? (
+                                        {statusFilter === 'InActive' ? (
                                             <>
                                                 {/* DEACTIVATION DATE */}
-                                                <td className="py-2.5 px-4 border-r border-slate-200 font-mono text-xs text-slate-500 whitespace-nowrap">
+                                                <td className="py-2.5 px-4 font-mono text-xs text-slate-500 whitespace-nowrap">
                                                     {agent.date}
                                                 </td>
 
                                                 {/* REASON FOR DEACTIVATION */}
-                                                <td className="py-2.5 px-4 border-r border-slate-200 text-xs text-slate-600 truncate max-w-xs" title={agent.reason}>
+                                                <td className="py-2.5 px-4 text-xs text-slate-600 truncate max-w-xs" title={agent.reason}>
                                                     {agent.reason}
                                                 </td>
 
                                                 {/* DEACTIVATED BY */}
-                                                <td className="py-2.5 px-4 border-r border-slate-200 text-xs text-slate-600 whitespace-nowrap">
+                                                <td className="py-2.5 px-4 text-xs text-slate-600 whitespace-nowrap">
                                                     {agent.deactivatedBy || 'System Admin'}
                                                 </td>
 
                                                 {/* PAST POLICIES */}
-                                                <td className="py-2.5 px-4 text-center border-r border-slate-200 font-semibold text-xs text-slate-700">
+                                                <td className="py-2.5 px-4 text-center font-semibold text-xs text-slate-700">
                                                     {agent.pastPolicies}
                                                 </td>
                                             </>
                                         ) : (
                                             <>
                                                 {/* EMAIL ID */}
-                                                <td className="py-2.5 px-4 border-r border-slate-200 text-xs text-slate-600 whitespace-nowrap">
+                                                <td className="py-2.5 px-4 text-xs text-slate-600 whitespace-nowrap">
                                                     {agent.email || '-'}
                                                 </td>
 
                                                 {/* TYPE */}
-                                                <td className="py-2.5 px-4 text-center border-r border-slate-200 text-xs whitespace-nowrap">
+                                                <td className="py-2.5 px-4 text-center text-xs whitespace-nowrap">
                                                     <span className="px-2 py-0.5 rounded text-[11px] font-bold bg-slate-100 text-slate-700">
                                                         {agent.type || 'POSP'}
                                                     </span>
                                                 </td>
 
                                                 {/* REGISTRATION DATE */}
-                                                <td className="py-2.5 px-4 border-r border-slate-200 font-mono text-xs text-slate-500 whitespace-nowrap">
+                                                <td className="py-2.5 px-4 font-mono text-xs text-slate-500 whitespace-nowrap">
                                                     {agent.date}
                                                 </td>
 
                                                 {/* TOTAL POLICIES */}
-                                                <td className="py-2.5 px-4 text-center border-r border-slate-200 font-bold text-xs text-brand-primary">
+                                                <td className="py-2.5 px-4 text-center font-bold text-xs text-brand-primary">
                                                     {agent.pastPolicies}
                                                 </td>
                                             </>
                                         )}
 
                                         {/* STATUS BADGE */}
-                                        <td className="py-2.5 px-4 text-center border-r border-slate-200 whitespace-nowrap">
-                                            <span className={`inline-block px-2.5 py-0.5 rounded-full text-[11px] font-bold ${
-                                                agent.status === 'ACTIVE'
+                                        <td className="py-2.5 px-4 text-center whitespace-nowrap">
+                                            <span className={`inline-block px-2.5 py-0.5 rounded-full text-[11px] font-bold ${agent.status === 'ACTIVE'
                                                     ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
                                                     : 'bg-rose-50 text-rose-700 border border-rose-200'
-                                            }`}>
+                                                }`}>
                                                 {agent.status}
                                             </span>
                                         </td>
 
                                         {/* ACTION BUTTON */}
                                         <td className="py-2.5 px-4 text-right whitespace-nowrap">
-                                            {appliedStatus === 'InActive' ? (
+                                            {statusFilter === 'InActive' ? (
                                                 <button
                                                     type="button"
                                                     onClick={() => {
@@ -728,11 +642,10 @@ const DeactivatedAgentListTab: React.FC = () => {
                                 key={page}
                                 type="button"
                                 onClick={() => setCurrentPage(page)}
-                                className={`w-8 h-8 flex items-center justify-center text-xs font-bold rounded-md transition-all cursor-pointer ${
-                                    currentPage === page
+                                className={`w-8 h-8 flex items-center justify-center text-xs font-bold rounded-md transition-all cursor-pointer ${currentPage === page
                                         ? 'bg-brand-primary text-white shadow-sm'
                                         : 'bg-white text-slate-700 border border-slate-300 hover:bg-slate-100'
-                                }`}
+                                    }`}
                             >
                                 {page}
                             </button>
