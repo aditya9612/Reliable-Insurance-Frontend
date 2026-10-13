@@ -2,9 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import Sidebar from '../components/sidebar/Sidebar';
 import TopHeader from '../components/header/TopHeader';
+import { OperationsMatrixBanner } from '../components/operations/OperationsMatrixBanner';
+import { useAuthContext } from '../context/AuthContext';
 import './AdminLayout.css';
 
 const AdminLayout = () => {
+    const { user } = useAuthContext();
+    const isAdmin = user?.role === 'admin';
+
     // Start collapsed on mobile, open on desktop
     const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(window.innerWidth < 768);
     const location = useLocation();
@@ -28,6 +33,8 @@ const AdminLayout = () => {
         setIsSidebarCollapsed(!isSidebarCollapsed);
     };
 
+    const isDashboardPage = location.pathname === '/dashboard' || location.pathname === '/';
+
     return (
         <div className="admin-layout flex h-screen w-full relative">
 
@@ -45,6 +52,7 @@ const AdminLayout = () => {
                     isCollapsed={isSidebarCollapsed}
                     toggleSidebar={toggleSidebar}
                 />
+                {isAdmin && !isDashboardPage && <OperationsMatrixBanner />}
                 <main className="admin-content">
                     <div key={location.pathname} className="page-transition-wrapper">
                         <Outlet />
