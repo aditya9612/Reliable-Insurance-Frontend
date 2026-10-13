@@ -66,6 +66,8 @@ const Breadcrumbs = () => {
         'transactions': 'Transactions',
         'accounts': 'Accounts',
         'reports': 'Reports',
+        'mis': 'MIS Reports',
+        'general': 'General Reports',
     };
 
     return (

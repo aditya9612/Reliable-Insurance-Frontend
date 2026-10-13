@@ -58,6 +58,7 @@ import OnlineAppRequest from '../pages/admin/operations/transactions/OnlineAppRe
 // Reports & Other Modules
 import MyPage from '../pages/admin/other_modules/MyPage'
 import MisReports from '../pages/admin/reports_analysis/MisReports'
+import GeneralReports from '../pages/admin/reports_analysis/GeneralReports'
 import Recon from '../pages/admin/reports_analysis/Recon'
 import TargetPage from '../pages/admin/reports_analysis/TargetPage'
 
@@ -145,7 +146,8 @@ const AppRoutes = () => {
             <Route path="/reports/recon" element={<Recon />} />
             <Route path="/reports/target" element={<TargetPage />} />
             <Route path="/target" element={<TargetPage />} />
-            <Route path="/reports" element={<MisReports />} />
+            <Route path="/reports" element={<GeneralReports />} />
+            <Route path="/reports/general" element={<GeneralReports />} />
 
             {/* Other Modules */}
             <Route path="/other/my-page" element={<MyPage />} />

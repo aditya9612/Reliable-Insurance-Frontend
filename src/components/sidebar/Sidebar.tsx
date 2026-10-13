@@ -115,6 +115,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
             icon: FileSpreadsheet,
             children: [
                 { name: 'Reports', path: '/reports' },
+                { name: 'MIS Reports', path: '/reports/mis' },
                 { name: 'Recon', path: '/reports/recon' },
                 { name: 'Target', path: '/reports/target' },
             ]
@@ -146,6 +147,9 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
         if (location.pathname === child.path) return true;
         if (child.matchPaths && child.matchPaths.some(p => location.pathname === p || location.pathname.startsWith(p))) {
             return true;
+        }
+        if (child.path === '/reports') {
+            return location.pathname === '/reports';
         }
         return location.pathname.startsWith(child.path);
     };
