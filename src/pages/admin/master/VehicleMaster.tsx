@@ -332,7 +332,7 @@ const VehicleMaster: React.FC = () => {
 
               {/* Form Card embedded directly in place of deleted table */}
               <div className="border border-slate-200 rounded-xl overflow-hidden bg-white shadow-sm">
-                <div className="bg-[#17A2B8] text-white px-5 py-3 font-semibold text-sm">
+                <div className="bg-brand-primary text-white px-5 py-1.5 font-semibold text-sm">
                   » Vehicle Variant Form
                 </div>
 

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import { useParams, useNavigate } from 'react-router-dom';
 import PageHeader from '../../../components/page-header/PageHeader';
@@ -8,7 +8,8 @@ import DeactivatedAgentListTab from './DeactivatedAgentListTab';
 import {
     Search, Plus, Trash2, X, CheckCircle2,
     RefreshCw, Download, AlertTriangle, Eye, EyeOff,
-    ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Edit2
+    ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Edit2, LogOut,
+    Filter, ChevronDown
 } from 'lucide-react';
 
 export type RegistrationSubTab =
@@ -1341,8 +1342,10 @@ const Registration: React.FC = () => {
         }
     ]);
     const [agentForm, setAgentForm] = useState({ fullName: '', type: 'POSP' as 'POSP' | 'DIRECT' | 'FRANCHISE' | 'BROKER', branch: 'BARAMATI', mobile: '', email: '', panNo: '' });
-    const [agentViewFilter, setAgentViewFilter] = useState<'ACTIVE' | 'INACTIVE'>('ACTIVE');
+    const [agentViewFilter, setAgentViewFilter] = useState<'ACTIVE' | 'INACTIVE' | 'ALL'>('ACTIVE');
     const [agentSearchQuery, setAgentSearchQuery] = useState('');
+    const [agentCurrentPage, setAgentCurrentPage] = useState(1);
+    const [agentItemsPerPage, setAgentItemsPerPage] = useState(10);
     const [showPasswords, setShowPasswords] = useState(false);
     const agentTableScrollRef = useRef<HTMLDivElement>(null);
 
@@ -1373,7 +1376,7 @@ const Registration: React.FC = () => {
     };
 
     const handleExportAgents = () => {
-        const targetAgents = agents.filter(a => a.status === agentViewFilter);
+        const targetAgents = agents.filter(a => agentViewFilter === 'ALL' ? true : a.status === agentViewFilter);
         const headers = [
             'STATUS', 'CODE', 'AGENT NAME', 'ADDRESS', 'EMAILID', 'GENDER',
             'ADHAR NO', 'PAN NO', 'SELF BANK NAME', 'SELF ACC HOLDER NAME',
@@ -1412,18 +1415,20 @@ const Registration: React.FC = () => {
         const encodedUri = encodeURI(csvContent);
         const link = document.createElement("a");
         link.setAttribute("href", encodedUri);
-        link.setAttribute("download", `reliable_agents_${agentViewFilter.toLowerCase()}_${new Date().toISOString().split('T')[0]}.csv`);
+        link.setAttribute("download", `reliable_agents_${agentViewFilter === 'ALL' ? 'all' : agentViewFilter.toLowerCase()}_${new Date().toISOString().split('T')[0]}.csv`);
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-        showToast(`Exported ${targetAgents.length} ${agentViewFilter.toLowerCase()} agents to CSV`);
+        showToast(`Exported ${targetAgents.length} ${agentViewFilter === 'ALL' ? 'all' : agentViewFilter.toLowerCase()} agents to CSV`);
     };
 
     // ==========================================
     // VIEW EMPLOYEE ERP STATE & HANDLERS (37 COLUMNS)
     // ==========================================
-    const [empViewFilter, setEmpViewFilter] = useState<'ACTIVE' | 'INACTIVE'>('ACTIVE');
+    const [empViewFilter, setEmpViewFilter] = useState<'ACTIVE' | 'INACTIVE' | 'ALL'>('ACTIVE');
     const [empSearchQuery, setEmpSearchQuery] = useState('');
+    const [empCurrentPage, setEmpCurrentPage] = useState(1);
+    const [empItemsPerPage, setEmpItemsPerPage] = useState(10);
     const [showEmpPasswords, setShowEmpPasswords] = useState(false);
     const empTableScrollRef = useRef<HTMLDivElement>(null);
 
@@ -1462,7 +1467,7 @@ const Registration: React.FC = () => {
     };
 
     const handleExportEmployees = () => {
-        const targetEmps = employees.filter(e => e.status === empViewFilter);
+        const targetEmps = employees.filter(e => empViewFilter === 'ALL' ? true : e.status === empViewFilter);
         const headers = [
             'EMP CODE', 'EMPLOYEE NAME', 'ADDRESS', 'GENDER', 'MARITAL STATUS',
             'OFFICE NO', 'MOBLIE NO', 'EMAIL ID', 'PAN NO', 'AADHAR NO',
@@ -1517,7 +1522,7 @@ const Registration: React.FC = () => {
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-        showToast(`Exported ${targetEmps.length} ${empViewFilter.toLowerCase()} employees to CSV`);
+        showToast(`Exported ${targetEmps.length} ${empViewFilter === 'ALL' ? 'all' : empViewFilter.toLowerCase()} employees to CSV`);
     };
 
     const initialAgentInfoState = {
@@ -1985,9 +1990,33 @@ const Registration: React.FC = () => {
     ]);
     const [beneficiaryTypeFilter, setBeneficiaryTypeFilter] = useState<'AGENT' | 'FRANCHISE' | 'FRANCHISE_AGENT'>('FRANCHISE');
     const [beneficiarySearchQuery, setBeneficiarySearchQuery] = useState('');
+    const [beneficiaryCurrentPage, setBeneficiaryCurrentPage] = useState(1);
+    const [beneficiaryItemsPerPage, setBeneficiaryItemsPerPage] = useState(10);
     const [viewingBeneficiary, setViewingBeneficiary] = useState<BankBeneficiaryItem | null>(null);
     const [selectedDocPreview, setSelectedDocPreview] = useState<{ title: string; type: string } | null>(null);
     const beneficiaryTableScrollRef = useRef<HTMLDivElement>(null);
+
+    const filteredBeneficiaries = useMemo(() => {
+        return beneficiaries.filter(b => {
+            if (b.entityType !== beneficiaryTypeFilter) return false;
+            if (!beneficiarySearchQuery.trim()) return true;
+            const q = beneficiarySearchQuery.toLowerCase();
+            return (
+                b.beneficiaryName?.toLowerCase().includes(q) ||
+                b.entityCode?.toLowerCase().includes(q) ||
+                b.mobile?.includes(q) ||
+                b.address?.toLowerCase().includes(q) ||
+                b.branchName?.toLowerCase().includes(q) ||
+                b.branch?.toLowerCase().includes(q)
+            );
+        });
+    }, [beneficiaries, beneficiaryTypeFilter, beneficiarySearchQuery]);
+
+    const totalBeneficiaryPages = Math.ceil(filteredBeneficiaries.length / beneficiaryItemsPerPage) || 1;
+    const paginatedBeneficiaries = useMemo(() => {
+        const start = (beneficiaryCurrentPage - 1) * beneficiaryItemsPerPage;
+        return filteredBeneficiaries.slice(start, start + beneficiaryItemsPerPage);
+    }, [filteredBeneficiaries, beneficiaryCurrentPage, beneficiaryItemsPerPage]);
 
     const scrollBeneficiaryTable = (amount: number) => {
         if (beneficiaryTableScrollRef.current) {
@@ -2367,7 +2396,7 @@ const Registration: React.FC = () => {
                                 setEmployeeForm({ fullName: '', designation: 'Operations Executive', department: 'Operations', branch: 'BARAMATI', mobile: '', email: '', doj: new Date().toISOString().split('T')[0] });
                                 setModalType('EMPLOYEE');
                             }}
-                            className="inline-flex items-center gap-2 px-4 py-2 bg-brand-primary text-white rounded-[8px] text-[14px] font-semibold hover:bg-[#1D4ED8] shadow-sm transition-all cursor-pointer border-none"
+                            className="inline-flex items-center gap-2 px-4 py-2 bg-brand-primary text-white rounded-lg text-[14px] font-semibold hover:bg-[#1D4ED8] shadow-sm transition-all cursor-pointer border-none"
                         >
                             <Plus size={16} /> Register New Employee
                         </button>
@@ -2377,7 +2406,7 @@ const Registration: React.FC = () => {
                                 setAgentForm({ fullName: '', type: 'POSP', branch: 'BARAMATI', mobile: '', email: '', panNo: '' });
                                 setModalType('AGENT');
                             }}
-                            className="inline-flex items-center gap-2 px-4 py-2 bg-brand-primary text-white rounded-[8px] text-[14px] font-semibold hover:bg-[#1D4ED8] shadow-sm transition-all cursor-pointer border-none"
+                            className="inline-flex items-center gap-2 px-4 py-2 bg-brand-primary text-white rounded-lg text-[14px] font-semibold hover:bg-[#1D4ED8] shadow-sm transition-all cursor-pointer border-none"
                         >
                             <Plus size={16} /> Register New Agent
                         </button>
@@ -2399,21 +2428,21 @@ const Registration: React.FC = () => {
                                 });
                                 setModalType('BENEFICIARY');
                             }}
-                            className="inline-flex items-center gap-2 px-4 py-2 bg-brand-primary text-white rounded-[8px] text-[14px] font-semibold hover:bg-[#1D4ED8] shadow-sm transition-all cursor-pointer border-none"
+                            className="inline-flex items-center gap-2 px-4 py-2 bg-brand-primary text-white rounded-lg text-[14px] font-semibold hover:bg-[#1D4ED8] shadow-sm transition-all cursor-pointer border-none"
                         >
                             <Plus size={16} /> Add Beneficiary
                         </button>
                     ) : activeTab === 'delete-vehicle' ? (
                         <button
                             onClick={() => showToast('Vehicle database synced')}
-                            className="inline-flex items-center gap-2 px-4 py-2 bg-slate-800 text-white rounded-[8px] text-[14px] font-semibold hover:bg-slate-900 shadow-sm transition-all cursor-pointer border-none"
+                            className="inline-flex items-center gap-2 px-4 py-2 bg-brand-primary text-white rounded-lg text-[14px] font-semibold hover:bg-[#0654B0] shadow-sm transition-all cursor-pointer border-none"
                         >
                             <RefreshCw size={16} /> Refresh Vehicle List
                         </button>
                     ) : (
                         <button
                             onClick={() => showToast('Deactivated agent records exported as CSV')}
-                            className="inline-flex items-center gap-2 px-4 py-2 bg-slate-800 text-white rounded-[8px] text-[14px] font-semibold hover:bg-slate-900 shadow-sm transition-all cursor-pointer border-none"
+                            className="inline-flex items-center gap-2 px-4 py-2 bg-brand-primary text-white rounded-lg text-[14px] font-semibold hover:bg-[#0654B0] shadow-sm transition-all cursor-pointer border-none"
                         >
                             <Download size={16} /> Export List
                         </button>
@@ -2431,9 +2460,9 @@ const Registration: React.FC = () => {
                 <div key={activeTab} className="tab-transition-wrapper space-y-6">
                     <form onSubmit={handleSaveEmpInfo} className="space-y-6 w-full min-w-0">
                         {/* 1. » Employee Details */}
-                        <div className="bg-white rounded-[10px] p-6 sm:p-7 shadow-sm border border-slate-200/80">
+                        <div className="bg-white rounded-xl p-6 sm:p-7 shadow-sm border border-slate-200/80">
                             {/* Blue Banner Header */}
-                            <div className="bg-brand-primary text-white px-4 py-2.5 rounded-[6px] font-normal text-[15px] flex items-center shadow-xs mb-6">
+                            <div className="bg-brand-primary text-white px-5 py-1.5 rounded-lg font-semibold text-sm flex items-center shadow-xs mb-6">
                                 <span className="mr-0.5 text-base font-serif">&raquo;</span>Employee Details
                             </div>
 
@@ -2446,7 +2475,7 @@ const Registration: React.FC = () => {
                                             <select
                                                 value={empInfoForm.branch}
                                                 onChange={(e) => setEmpInfoForm({ ...empInfoForm, branch: e.target.value })}
-                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
+                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
                                             >
                                                 <option value="">--Select Branch Name--</option>
                                                 {empBranchOptions.map(b => (
@@ -2467,7 +2496,7 @@ const Registration: React.FC = () => {
                                             <select
                                                 value={empInfoForm.role}
                                                 onChange={(e) => setEmpInfoForm({ ...empInfoForm, role: e.target.value })}
-                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
+                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
                                             >
                                                 <option value="">--Select Role Name--</option>
                                                 {empRoleOptions.map(r => (
@@ -2492,7 +2521,7 @@ const Registration: React.FC = () => {
                                             placeholder=""
                                             value={empInfoForm.empCode}
                                             onChange={(e) => setEmpInfoForm({ ...empInfoForm, empCode: e.target.value })}
-                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                         />
                                     </div>
 
@@ -2503,7 +2532,7 @@ const Registration: React.FC = () => {
                                             placeholder="dd/MM/yyyy"
                                             value={empInfoForm.dateOfJoining}
                                             onChange={(e) => setEmpInfoForm({ ...empInfoForm, dateOfJoining: e.target.value })}
-                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                         />
                                     </div>
                                 </div>
@@ -2516,7 +2545,7 @@ const Registration: React.FC = () => {
                                             <select
                                                 value={empInfoForm.executiveType}
                                                 onChange={(e) => setEmpInfoForm({ ...empInfoForm, executiveType: e.target.value })}
-                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
+                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
                                             >
                                                 <option value="">--SELECT EXECTIVE TYPE--</option>
                                                 {empExecutiveTypeOptions.map(t => (
@@ -2535,9 +2564,9 @@ const Registration: React.FC = () => {
                         </div>
 
                         {/* 2. » Personal Details */}
-                        <div className="bg-white rounded-[10px] p-6 sm:p-7 shadow-sm border border-slate-200/80">
+                        <div className="bg-white rounded-xl p-6 sm:p-7 shadow-sm border border-slate-200/80">
                             {/* Blue Banner Header */}
-                            <div className="bg-brand-primary text-white px-4 py-2.5 rounded-[6px] font-normal text-[15px] flex items-center shadow-xs mb-6">
+                            <div className="bg-brand-primary text-white px-5 py-1.5 rounded-lg font-semibold text-sm flex items-center shadow-xs mb-6">
                                 <span className="mr-0.5 text-base font-serif">&raquo;</span>Personal Details
                             </div>
 
@@ -2553,7 +2582,7 @@ const Registration: React.FC = () => {
                                             required
                                             value={empInfoForm.firstName}
                                             onChange={(e) => setEmpInfoForm({ ...empInfoForm, firstName: e.target.value })}
-                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                         />
                                     </div>
 
@@ -2566,7 +2595,7 @@ const Registration: React.FC = () => {
                                             required
                                             value={empInfoForm.middleName}
                                             onChange={(e) => setEmpInfoForm({ ...empInfoForm, middleName: e.target.value })}
-                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                         />
                                     </div>
 
@@ -2579,7 +2608,7 @@ const Registration: React.FC = () => {
                                             required
                                             value={empInfoForm.lastName}
                                             onChange={(e) => setEmpInfoForm({ ...empInfoForm, lastName: e.target.value })}
-                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                         />
                                     </div>
                                 </div>
@@ -2596,7 +2625,7 @@ const Registration: React.FC = () => {
                                             placeholder="dd/mm/yyyy"
                                             value={empInfoForm.dateOfBirth}
                                             onChange={(e) => setEmpInfoForm({ ...empInfoForm, dateOfBirth: e.target.value })}
-                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                         />
                                     </div>
 
@@ -2606,7 +2635,7 @@ const Registration: React.FC = () => {
                                             <select
                                                 value={empInfoForm.gender}
                                                 onChange={(e) => setEmpInfoForm({ ...empInfoForm, gender: e.target.value })}
-                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
+                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
                                             >
                                                 <option value="">SELECT</option>
                                                 {empGenderOptions.map(g => (
@@ -2627,7 +2656,7 @@ const Registration: React.FC = () => {
                                             <select
                                                 value={empInfoForm.maritalStatus}
                                                 onChange={(e) => setEmpInfoForm({ ...empInfoForm, maritalStatus: e.target.value })}
-                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
+                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
                                             >
                                                 <option value="">SELECT</option>
                                                 {empMaritalStatusOptions.map(m => (
@@ -2656,7 +2685,7 @@ const Registration: React.FC = () => {
                                             maxLength={10}
                                             value={empInfoForm.officeMobile}
                                             onChange={(e) => setEmpInfoForm({ ...empInfoForm, officeMobile: e.target.value })}
-                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                         />
                                     </div>
 
@@ -2667,7 +2696,7 @@ const Registration: React.FC = () => {
                                             maxLength={10}
                                             value={empInfoForm.mobile}
                                             onChange={(e) => setEmpInfoForm({ ...empInfoForm, mobile: e.target.value })}
-                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                         />
                                     </div>
                                 </div>
@@ -2680,7 +2709,7 @@ const Registration: React.FC = () => {
                                             type="text"
                                             value={empInfoForm.addressLine1}
                                             onChange={(e) => setEmpInfoForm({ ...empInfoForm, addressLine1: e.target.value })}
-                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                         />
                                     </div>
 
@@ -2690,7 +2719,7 @@ const Registration: React.FC = () => {
                                             type="text"
                                             value={empInfoForm.addressLine2}
                                             onChange={(e) => setEmpInfoForm({ ...empInfoForm, addressLine2: e.target.value })}
-                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                         />
                                     </div>
                                 </div>
@@ -2703,7 +2732,7 @@ const Registration: React.FC = () => {
                                             <select
                                                 value={empInfoForm.state}
                                                 onChange={(e) => setEmpInfoForm({ ...empInfoForm, state: e.target.value })}
-                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
+                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
                                             >
                                                 <option value="">--Select State--</option>
                                                 {empStateOptions.map(s => (
@@ -2724,7 +2753,7 @@ const Registration: React.FC = () => {
                                             <select
                                                 value={empInfoForm.district}
                                                 onChange={(e) => setEmpInfoForm({ ...empInfoForm, district: e.target.value })}
-                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
+                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
                                             >
                                                 <option value="">--Select District--</option>
                                                 {empDistrictOptions.map(d => (
@@ -2745,7 +2774,7 @@ const Registration: React.FC = () => {
                                             <select
                                                 value={empInfoForm.taluka}
                                                 onChange={(e) => setEmpInfoForm({ ...empInfoForm, taluka: e.target.value })}
-                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
+                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
                                             >
                                                 {empTalukaOptions.map(t => (
                                                     <option key={t} value={t}>{t}</option>
@@ -2769,7 +2798,7 @@ const Registration: React.FC = () => {
                                             maxLength={10}
                                             value={empInfoForm.panNo}
                                             onChange={(e) => setEmpInfoForm({ ...empInfoForm, panNo: e.target.value.toUpperCase() })}
-                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] font-mono text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] font-mono text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                         />
                                     </div>
 
@@ -2780,7 +2809,7 @@ const Registration: React.FC = () => {
                                             maxLength={12}
                                             value={empInfoForm.aadharNo}
                                             onChange={(e) => setEmpInfoForm({ ...empInfoForm, aadharNo: e.target.value })}
-                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] font-mono text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] font-mono text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                         />
                                     </div>
 
@@ -2790,7 +2819,7 @@ const Registration: React.FC = () => {
                                             type="email"
                                             value={empInfoForm.email}
                                             onChange={(e) => setEmpInfoForm({ ...empInfoForm, email: e.target.value })}
-                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                         />
                                     </div>
                                 </div>
@@ -2798,9 +2827,9 @@ const Registration: React.FC = () => {
                         </div>
 
                         {/* 3. » Bank Details */}
-                        <div className="bg-white rounded-[10px] p-6 sm:p-7 shadow-sm border border-slate-200/80">
+                        <div className="bg-white rounded-xl p-6 sm:p-7 shadow-sm border border-slate-200/80">
                             {/* Blue Banner Header */}
-                            <div className="bg-brand-primary text-white px-4 py-2.5 rounded-[6px] font-normal text-[15px] flex items-center shadow-xs mb-6">
+                            <div className="bg-brand-primary text-white px-5 py-1.5 rounded-lg font-semibold text-sm flex items-center shadow-xs mb-6">
                                 <span className="mr-0.5 text-base font-serif">&raquo;</span>Bank Details
                             </div>
 
@@ -2811,7 +2840,7 @@ const Registration: React.FC = () => {
                                         <select
                                             value={empInfoForm.bankName}
                                             onChange={(e) => setEmpInfoForm({ ...empInfoForm, bankName: e.target.value })}
-                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
+                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
                                         >
                                             <option value="">--Select Bank Type--</option>
                                             {empBankOptions.map(b => (
@@ -2832,7 +2861,7 @@ const Registration: React.FC = () => {
                                         type="text"
                                         value={empInfoForm.bankBranch}
                                         onChange={(e) => setEmpInfoForm({ ...empInfoForm, bankBranch: e.target.value })}
-                                        className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                        className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                     />
                                 </div>
 
@@ -2843,7 +2872,7 @@ const Registration: React.FC = () => {
                                         maxLength={11}
                                         value={empInfoForm.ifscCode}
                                         onChange={(e) => setEmpInfoForm({ ...empInfoForm, ifscCode: e.target.value.toUpperCase() })}
-                                        className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] font-mono text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                        className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] font-mono text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                     />
                                 </div>
 
@@ -2853,16 +2882,16 @@ const Registration: React.FC = () => {
                                         type="text"
                                         value={empInfoForm.bankAccountNo}
                                         onChange={(e) => setEmpInfoForm({ ...empInfoForm, bankAccountNo: e.target.value })}
-                                        className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] font-mono text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                        className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] font-mono text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                     />
                                 </div>
                             </div>
                         </div>
 
                         {/* 4. » User Details */}
-                        <div className="bg-white rounded-[10px] p-6 sm:p-7 shadow-sm border border-slate-200/80">
+                        <div className="bg-white rounded-xl p-6 sm:p-7 shadow-sm border border-slate-200/80">
                             {/* Blue Banner Header */}
-                            <div className="bg-brand-primary text-white px-4 py-2.5 rounded-[6px] font-normal text-[15px] flex items-center shadow-xs mb-6">
+                            <div className="bg-brand-primary text-white px-5 py-1.5 rounded-lg font-semibold text-sm flex items-center shadow-xs mb-6">
                                 <span className="mr-0.5 text-base font-serif">&raquo;</span>User Details
                             </div>
 
@@ -2877,7 +2906,7 @@ const Registration: React.FC = () => {
                                                 setEmpInfoForm({ ...empInfoForm, username: e.target.value });
                                                 setUsernameChecked(null);
                                             }}
-                                            className="flex-1 px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                            className="flex-1 px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                         />
                                         <button
                                             type="button"
@@ -2901,7 +2930,7 @@ const Registration: React.FC = () => {
                                         type="password"
                                         value={empInfoForm.password}
                                         onChange={(e) => setEmpInfoForm({ ...empInfoForm, password: e.target.value })}
-                                        className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                        className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                     />
                                 </div>
 
@@ -2911,16 +2940,16 @@ const Registration: React.FC = () => {
                                         type="password"
                                         value={empInfoForm.rePassword}
                                         onChange={(e) => setEmpInfoForm({ ...empInfoForm, rePassword: e.target.value })}
-                                        className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                        className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                     />
                                 </div>
                             </div>
                         </div>
 
                         {/* 5. » KYC Details */}
-                        <div className="bg-white rounded-[10px] p-6 sm:p-7 shadow-sm border border-slate-200/80">
+                        <div className="bg-white rounded-xl p-6 sm:p-7 shadow-sm border border-slate-200/80">
                             {/* Blue Banner Header */}
-                            <div className="bg-brand-primary text-white px-4 py-2.5 rounded-[6px] font-normal text-[15px] flex items-center shadow-xs mb-6">
+                            <div className="bg-brand-primary text-white px-5 py-1.5 rounded-lg font-semibold text-sm flex items-center shadow-xs mb-6">
                                 <span className="mr-0.5 text-base font-serif">&raquo;</span>KYC Details
                             </div>
 
@@ -3042,9 +3071,9 @@ const Registration: React.FC = () => {
                 <div key={activeTab} className="tab-transition-wrapper space-y-6">
                     <form onSubmit={handleSaveAgentInfo} className="space-y-6 w-full min-w-0">
                         {/* 1. » Agent Details */}
-                        <div className="bg-white rounded-[10px] p-6 sm:p-7 shadow-sm border border-slate-200/80">
+                        <div className="bg-white rounded-xl p-6 sm:p-7 shadow-sm border border-slate-200/80">
                             {/* Blue Banner Header */}
-                            <div className="bg-brand-primary text-white px-4 py-2.5 rounded-[6px] font-normal text-[15px] flex items-center shadow-xs mb-6">
+                            <div className="bg-brand-primary text-white px-5 py-1.5 rounded-lg font-semibold text-sm flex items-center shadow-xs mb-6">
                                 <span className="mr-0.5 text-base font-serif">&raquo;</span>Agent Details
                             </div>
 
@@ -3060,7 +3089,7 @@ const Registration: React.FC = () => {
                                                 required
                                                 value={agentInfoForm.branch}
                                                 onChange={(e) => setAgentInfoForm({ ...agentInfoForm, branch: e.target.value })}
-                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
+                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
                                             >
                                                 <option value="">--Select Branch Name--</option>
                                                 {empBranchOptions.map(b => (
@@ -3084,7 +3113,7 @@ const Registration: React.FC = () => {
                                                 required
                                                 value={agentInfoForm.role}
                                                 onChange={(e) => setAgentInfoForm({ ...agentInfoForm, role: e.target.value })}
-                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
+                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
                                             >
                                                 {agentRoleOptions.map(r => (
                                                     <option key={r} value={r}>{r}</option>
@@ -3107,7 +3136,7 @@ const Registration: React.FC = () => {
                                             required
                                             value={agentInfoForm.agentCode}
                                             onChange={(e) => setAgentInfoForm({ ...agentInfoForm, agentCode: e.target.value })}
-                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] font-mono text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] font-mono text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                         />
                                     </div>
                                 </div>
@@ -3123,7 +3152,7 @@ const Registration: React.FC = () => {
                                                 required
                                                 value={agentInfoForm.salesExecutive}
                                                 onChange={(e) => setAgentInfoForm({ ...agentInfoForm, salesExecutive: e.target.value })}
-                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
+                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
                                             >
                                                 <option value="">--Select Sales Executive--</option>
                                                 {agentSalesExecutiveOptions.map(se => (
@@ -3147,7 +3176,7 @@ const Registration: React.FC = () => {
                                                 required
                                                 value={agentInfoForm.coordinator}
                                                 onChange={(e) => setAgentInfoForm({ ...agentInfoForm, coordinator: e.target.value })}
-                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
+                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
                                             >
                                                 <option value="">--Select Coordinate--</option>
                                                 {agentCoordinatorOptions.map(co => (
@@ -3171,7 +3200,7 @@ const Registration: React.FC = () => {
                                                 required
                                                 value={agentInfoForm.quotationCoordinator}
                                                 onChange={(e) => setAgentInfoForm({ ...agentInfoForm, quotationCoordinator: e.target.value })}
-                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
+                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
                                             >
                                                 <option value="">--Select Quotation Cordinator --</option>
                                                 {agentQuotationCoordinatorOptions.map(qc => (
@@ -3198,7 +3227,7 @@ const Registration: React.FC = () => {
                                                 required
                                                 value={agentInfoForm.inspectionCoordinator}
                                                 onChange={(e) => setAgentInfoForm({ ...agentInfoForm, inspectionCoordinator: e.target.value })}
-                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
+                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
                                             >
                                                 <option value="">--Select Inspection Cordinator --</option>
                                                 {agentInspectionCoordinatorOptions.map(ic => (
@@ -3222,7 +3251,7 @@ const Registration: React.FC = () => {
                                                 required
                                                 value={agentInfoForm.endorsementCoordinator}
                                                 onChange={(e) => setAgentInfoForm({ ...agentInfoForm, endorsementCoordinator: e.target.value })}
-                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
+                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
                                             >
                                                 <option value="">--Select Endrosment Cordinator --</option>
                                                 {agentEndorsementCoordinatorOptions.map(ec => (
@@ -3247,7 +3276,7 @@ const Registration: React.FC = () => {
                                             placeholder="dd/MM/yyyy"
                                             value={agentInfoForm.dateOfJoining}
                                             onChange={(e) => setAgentInfoForm({ ...agentInfoForm, dateOfJoining: e.target.value })}
-                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                         />
                                     </div>
                                 </div>
@@ -3263,7 +3292,7 @@ const Registration: React.FC = () => {
                                             required
                                             value={agentInfoForm.agentTds}
                                             onChange={(e) => setAgentInfoForm({ ...agentInfoForm, agentTds: e.target.value })}
-                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                         />
                                     </div>
 
@@ -3276,7 +3305,7 @@ const Registration: React.FC = () => {
                                                 required
                                                 value={agentInfoForm.campaign}
                                                 onChange={(e) => setAgentInfoForm({ ...agentInfoForm, campaign: e.target.value })}
-                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
+                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
                                             >
                                                 <option value="">--Select Champaign--</option>
                                                 {agentCampaignOptions.map(c => (
@@ -3300,7 +3329,7 @@ const Registration: React.FC = () => {
                                                 required
                                                 value={agentInfoForm.location}
                                                 onChange={(e) => setAgentInfoForm({ ...agentInfoForm, location: e.target.value })}
-                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
+                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
                                             >
                                                 <option value="">--Select Location--</option>
                                                 {agentLocationOptions.map(l => (
@@ -3327,7 +3356,7 @@ const Registration: React.FC = () => {
                                                 required
                                                 value={agentInfoForm.category}
                                                 onChange={(e) => setAgentInfoForm({ ...agentInfoForm, category: e.target.value })}
-                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
+                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
                                             >
                                                 <option value="">--Select Category--</option>
                                                 {agentCategoryOptions.map(cat => (
@@ -3351,7 +3380,7 @@ const Registration: React.FC = () => {
                                                 required
                                                 value={agentInfoForm.pospType}
                                                 onChange={(e) => setAgentInfoForm({ ...agentInfoForm, pospType: e.target.value })}
-                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
+                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
                                             >
                                                 <option value="">--Select POSP Type--</option>
                                                 {agentPospTypeOptions.map(pt => (
@@ -3375,7 +3404,7 @@ const Registration: React.FC = () => {
                                             required
                                             value={agentInfoForm.pospName}
                                             onChange={(e) => setAgentInfoForm({ ...agentInfoForm, pospName: e.target.value })}
-                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                         />
                                     </div>
                                 </div>
@@ -3391,7 +3420,7 @@ const Registration: React.FC = () => {
                                                 required
                                                 value={agentInfoForm.franchiseCode}
                                                 onChange={(e) => setAgentInfoForm({ ...agentInfoForm, franchiseCode: e.target.value })}
-                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
+                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
                                             >
                                                 {agentFranchiseOptions.map(fc => (
                                                     <option key={fc} value={fc}>{fc}</option>
@@ -3409,9 +3438,9 @@ const Registration: React.FC = () => {
                         </div>
 
                         {/* 2. » Personal Details */}
-                        <div className="bg-white rounded-[10px] p-6 sm:p-7 shadow-sm border border-slate-200/80">
+                        <div className="bg-white rounded-xl p-6 sm:p-7 shadow-sm border border-slate-200/80">
                             {/* Blue Banner Header */}
-                            <div className="bg-brand-primary text-white px-4 py-2.5 rounded-[6px] font-normal text-[15px] flex items-center shadow-xs mb-6">
+                            <div className="bg-brand-primary text-white px-5 py-1.5 rounded-lg font-semibold text-sm flex items-center shadow-xs mb-6">
                                 <span className="mr-0.5 text-base font-serif">&raquo;</span>Personal Details
                             </div>
 
@@ -3427,7 +3456,7 @@ const Registration: React.FC = () => {
                                             required
                                             value={agentInfoForm.firstName}
                                             onChange={(e) => setAgentInfoForm({ ...agentInfoForm, firstName: e.target.value })}
-                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                         />
                                     </div>
 
@@ -3439,7 +3468,7 @@ const Registration: React.FC = () => {
                                             type="text"
                                             value={agentInfoForm.middleName}
                                             onChange={(e) => setAgentInfoForm({ ...agentInfoForm, middleName: e.target.value })}
-                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                         />
                                     </div>
 
@@ -3452,7 +3481,7 @@ const Registration: React.FC = () => {
                                             required
                                             value={agentInfoForm.lastName}
                                             onChange={(e) => setAgentInfoForm({ ...agentInfoForm, lastName: e.target.value })}
-                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                         />
                                     </div>
                                 </div>
@@ -3465,7 +3494,7 @@ const Registration: React.FC = () => {
                                             type="text"
                                             value={agentInfoForm.nickName}
                                             onChange={(e) => setAgentInfoForm({ ...agentInfoForm, nickName: e.target.value })}
-                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                         />
                                     </div>
 
@@ -3478,7 +3507,7 @@ const Registration: React.FC = () => {
                                                 required
                                                 value={agentInfoForm.gender}
                                                 onChange={(e) => setAgentInfoForm({ ...agentInfoForm, gender: e.target.value })}
-                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
+                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
                                             >
                                                 <option value="">SELECT</option>
                                                 {empGenderOptions.map(g => (
@@ -3503,7 +3532,7 @@ const Registration: React.FC = () => {
                                             maxLength={10}
                                             value={agentInfoForm.mobile}
                                             onChange={(e) => setAgentInfoForm({ ...agentInfoForm, mobile: e.target.value })}
-                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                         />
                                     </div>
 
@@ -3517,7 +3546,7 @@ const Registration: React.FC = () => {
                                             maxLength={10}
                                             value={agentInfoForm.alternateMobile}
                                             onChange={(e) => setAgentInfoForm({ ...agentInfoForm, alternateMobile: e.target.value })}
-                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                         />
                                     </div>
                                 </div>
@@ -3534,7 +3563,7 @@ const Registration: React.FC = () => {
                                             maxLength={12}
                                             value={agentInfoForm.aadharNo}
                                             onChange={(e) => setAgentInfoForm({ ...agentInfoForm, aadharNo: e.target.value })}
-                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] font-mono text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] font-mono text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                         />
                                     </div>
 
@@ -3547,7 +3576,7 @@ const Registration: React.FC = () => {
                                             required
                                             value={agentInfoForm.addressLine1}
                                             onChange={(e) => setAgentInfoForm({ ...agentInfoForm, addressLine1: e.target.value })}
-                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                         />
                                     </div>
                                 </div>
@@ -3563,7 +3592,7 @@ const Registration: React.FC = () => {
                                             required
                                             value={agentInfoForm.addressLine2}
                                             onChange={(e) => setAgentInfoForm({ ...agentInfoForm, addressLine2: e.target.value })}
-                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                         />
                                     </div>
 
@@ -3576,7 +3605,7 @@ const Registration: React.FC = () => {
                                                 required
                                                 value={agentInfoForm.state}
                                                 onChange={(e) => setAgentInfoForm({ ...agentInfoForm, state: e.target.value })}
-                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
+                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
                                             >
                                                 <option value="">--Select State--</option>
                                                 {empStateOptions.map(s => (
@@ -3603,7 +3632,7 @@ const Registration: React.FC = () => {
                                                 required
                                                 value={agentInfoForm.district}
                                                 onChange={(e) => setAgentInfoForm({ ...agentInfoForm, district: e.target.value })}
-                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
+                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
                                             >
                                                 <option value="">--Select District--</option>
                                                 {empDistrictOptions.map(d => (
@@ -3624,7 +3653,7 @@ const Registration: React.FC = () => {
                                             <select
                                                 value={agentInfoForm.taluka}
                                                 onChange={(e) => setAgentInfoForm({ ...agentInfoForm, taluka: e.target.value })}
-                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
+                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
                                             >
                                                 {empTalukaOptions.map(t => (
                                                     <option key={t} value={t}>{t}</option>
@@ -3648,7 +3677,7 @@ const Registration: React.FC = () => {
                                             maxLength={6}
                                             value={agentInfoForm.pincode}
                                             onChange={(e) => setAgentInfoForm({ ...agentInfoForm, pincode: e.target.value })}
-                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] font-mono text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] font-mono text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                         />
                                     </div>
                                 </div>
@@ -3664,7 +3693,7 @@ const Registration: React.FC = () => {
                                             required
                                             value={agentInfoForm.email}
                                             onChange={(e) => setAgentInfoForm({ ...agentInfoForm, email: e.target.value })}
-                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                         />
                                     </div>
 
@@ -3678,7 +3707,7 @@ const Registration: React.FC = () => {
                                             maxLength={10}
                                             value={agentInfoForm.panNo}
                                             onChange={(e) => setAgentInfoForm({ ...agentInfoForm, panNo: e.target.value.toUpperCase() })}
-                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] font-mono text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] font-mono text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                         />
                                     </div>
                                 </div>
@@ -3686,9 +3715,9 @@ const Registration: React.FC = () => {
                         </div>
 
                         {/* 3. » Bank Details */}
-                        <div className="bg-white rounded-[10px] p-6 sm:p-7 shadow-sm border border-slate-200/80">
+                        <div className="bg-white rounded-xl p-6 sm:p-7 shadow-sm border border-slate-200/80">
                             {/* Blue Banner Header */}
-                            <div className="bg-brand-primary text-white px-4 py-2.5 rounded-[6px] font-normal text-[15px] flex items-center shadow-xs mb-6">
+                            <div className="bg-brand-primary text-white px-5 py-1.5 rounded-lg font-semibold text-sm flex items-center shadow-xs mb-6">
                                 <span className="mr-0.5 text-base font-serif">&raquo;</span>Bank Details
                             </div>
 
@@ -3705,7 +3734,7 @@ const Registration: React.FC = () => {
                                                 required
                                                 value={agentInfoForm.bankName}
                                                 onChange={(e) => setAgentInfoForm({ ...agentInfoForm, bankName: e.target.value })}
-                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
+                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
                                             >
                                                 <option value="">--Select Bank Type--</option>
                                                 {empBankOptions.map(b => (
@@ -3729,7 +3758,7 @@ const Registration: React.FC = () => {
                                             required
                                             value={agentInfoForm.accountHolderName}
                                             onChange={(e) => setAgentInfoForm({ ...agentInfoForm, accountHolderName: e.target.value })}
-                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                         />
                                     </div>
 
@@ -3742,7 +3771,7 @@ const Registration: React.FC = () => {
                                             required
                                             value={agentInfoForm.bankBranch}
                                             onChange={(e) => setAgentInfoForm({ ...agentInfoForm, bankBranch: e.target.value })}
-                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                         />
                                     </div>
 
@@ -3756,7 +3785,7 @@ const Registration: React.FC = () => {
                                             maxLength={11}
                                             value={agentInfoForm.ifscCode}
                                             onChange={(e) => setAgentInfoForm({ ...agentInfoForm, ifscCode: e.target.value.toUpperCase() })}
-                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] font-mono text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] font-mono text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                         />
                                     </div>
 
@@ -3769,7 +3798,7 @@ const Registration: React.FC = () => {
                                             required
                                             value={agentInfoForm.bankAccountNo}
                                             onChange={(e) => setAgentInfoForm({ ...agentInfoForm, bankAccountNo: e.target.value })}
-                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] font-mono text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] font-mono text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                         />
                                     </div>
                                 </div>
@@ -3785,7 +3814,7 @@ const Registration: React.FC = () => {
                                             <select
                                                 value={agentInfoForm.otherBankName}
                                                 onChange={(e) => setAgentInfoForm({ ...agentInfoForm, otherBankName: e.target.value })}
-                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
+                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
                                             >
                                                 <option value="">--Select Bank Type--</option>
                                                 {empBankOptions.map(b => (
@@ -3806,7 +3835,7 @@ const Registration: React.FC = () => {
                                             type="text"
                                             value={agentInfoForm.otherAccountHolderName}
                                             onChange={(e) => setAgentInfoForm({ ...agentInfoForm, otherAccountHolderName: e.target.value })}
-                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                         />
                                     </div>
 
@@ -3816,7 +3845,7 @@ const Registration: React.FC = () => {
                                             type="text"
                                             value={agentInfoForm.otherBankBranch}
                                             onChange={(e) => setAgentInfoForm({ ...agentInfoForm, otherBankBranch: e.target.value })}
-                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                         />
                                     </div>
 
@@ -3827,7 +3856,7 @@ const Registration: React.FC = () => {
                                             maxLength={11}
                                             value={agentInfoForm.otherIfscCode}
                                             onChange={(e) => setAgentInfoForm({ ...agentInfoForm, otherIfscCode: e.target.value.toUpperCase() })}
-                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] font-mono text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] font-mono text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                         />
                                     </div>
 
@@ -3837,7 +3866,7 @@ const Registration: React.FC = () => {
                                             type="text"
                                             value={agentInfoForm.otherBankAccountNo}
                                             onChange={(e) => setAgentInfoForm({ ...agentInfoForm, otherBankAccountNo: e.target.value })}
-                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] font-mono text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] font-mono text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                         />
                                     </div>
                                 </div>
@@ -3845,9 +3874,9 @@ const Registration: React.FC = () => {
                         </div>
 
                         {/* 4. » Login Details */}
-                        <div className="bg-white rounded-[10px] p-6 sm:p-7 shadow-sm border border-slate-200/80">
+                        <div className="bg-white rounded-xl p-6 sm:p-7 shadow-sm border border-slate-200/80">
                             {/* Blue Banner Header */}
-                            <div className="bg-brand-primary text-white px-4 py-2.5 rounded-[6px] font-normal text-[15px] flex items-center shadow-xs mb-6">
+                            <div className="bg-brand-primary text-white px-5 py-1.5 rounded-lg font-semibold text-sm flex items-center shadow-xs mb-6">
                                 <span className="mr-0.5 text-base font-serif">&raquo;</span>Login Details
                             </div>
 
@@ -3865,7 +3894,7 @@ const Registration: React.FC = () => {
                                                 setAgentInfoForm({ ...agentInfoForm, username: e.target.value });
                                                 setAgentUsernameChecked(null);
                                             }}
-                                            className="flex-1 px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                            className="flex-1 px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                         />
                                         <button
                                             type="button"
@@ -3892,7 +3921,7 @@ const Registration: React.FC = () => {
                                         required
                                         value={agentInfoForm.password}
                                         onChange={(e) => setAgentInfoForm({ ...agentInfoForm, password: e.target.value })}
-                                        className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                        className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                     />
                                 </div>
 
@@ -3905,16 +3934,16 @@ const Registration: React.FC = () => {
                                         required
                                         value={agentInfoForm.rePassword}
                                         onChange={(e) => setAgentInfoForm({ ...agentInfoForm, rePassword: e.target.value })}
-                                        className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                        className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                     />
                                 </div>
                             </div>
                         </div>
 
                         {/* 5. » KYC Details */}
-                        <div className="bg-white rounded-[10px] p-6 sm:p-7 shadow-sm border border-slate-200/80">
+                        <div className="bg-white rounded-xl p-6 sm:p-7 shadow-sm border border-slate-200/80">
                             {/* Blue Banner Header */}
-                            <div className="bg-brand-primary text-white px-4 py-2.5 rounded-[6px] font-normal text-[15px] flex items-center shadow-xs mb-6">
+                            <div className="bg-brand-primary text-white px-5 py-1.5 rounded-lg font-semibold text-sm flex items-center shadow-xs mb-6">
                                 <span className="mr-0.5 text-base font-serif">&raquo;</span>KYC Details
                             </div>
 
@@ -4049,1218 +4078,1177 @@ const Registration: React.FC = () => {
                 </div>
             )}
 
-
             {/* TAB 3: VIEW AGENT */}
-            {activeTab === 'view-agent' && (
-                <div key={activeTab} className="tab-transition-wrapper flex flex-col w-full min-w-0">
-                    {/* Top Tab Switcher: Active Agent | Inactive Agent */}
-                    <div className="flex justify-center mb-6">
-                        <div className="inline-flex rounded-lg overflow-hidden border border-brand-border bg-white shadow-sm p-1 gap-1">
-                            <button
-                                type="button"
-                                onClick={() => setAgentViewFilter('ACTIVE')}
-                                className={`px-10 py-2.5 text-[15px] font-bold tracking-wide transition-all cursor-pointer rounded-[6px] flex items-center gap-2.5 ${agentViewFilter === 'ACTIVE'
-                                    ? 'bg-brand-primary text-white shadow-sm'
-                                    : 'bg-transparent text-slate-600 hover:text-brand-primary hover:bg-blue-50/60'
-                                    }`}
-                            >
-                                <span>Active Agent</span>
-                                <span className={`px-2 py-0.5 text-xs font-semibold rounded-full ${agentViewFilter === 'ACTIVE'
-                                    ? 'bg-white text-brand-primary'
-                                    : 'bg-slate-100 text-slate-600'
-                                    }`}>
-                                    {agents.filter(a => a.status === 'ACTIVE').length}
-                                </span>
-                            </button>
-                            <button
-                                type="button"
-                                onClick={() => setAgentViewFilter('INACTIVE')}
-                                className={`px-10 py-2.5 text-[15px] font-bold tracking-wide transition-all cursor-pointer rounded-[6px] flex items-center gap-2.5 ${agentViewFilter === 'INACTIVE'
-                                    ? 'bg-brand-primary text-white shadow-sm'
-                                    : 'bg-transparent text-slate-600 hover:text-brand-primary hover:bg-blue-50/60'
-                                    }`}
-                            >
-                                <span>Inactive Agent</span>
-                                <span className={`px-2 py-0.5 text-xs font-semibold rounded-full ${agentViewFilter === 'INACTIVE'
-                                    ? 'bg-white text-brand-primary'
-                                    : 'bg-slate-100 text-slate-600'
-                                    }`}>
-                                    {agents.filter(a => a.status === 'INACTIVE').length}
-                                </span>
-                            </button>
-                        </div>
-                    </div>
+            {activeTab === 'view-agent' && (() => {
+                const filteredAgents = agents.filter(a => {
+                    const matchesStatus = agentViewFilter === 'ALL' || a.status === agentViewFilter;
+                    if (!matchesStatus) return false;
+                    if (!agentSearchQuery.trim()) return true;
+                    const q = agentSearchQuery.toLowerCase();
+                    return (
+                        (a.fullName && a.fullName.toLowerCase().includes(q)) ||
+                        (a.agentCode && a.agentCode.toLowerCase().includes(q)) ||
+                        (a.email && a.email.toLowerCase().includes(q)) ||
+                        (a.mobile && a.mobile.includes(q)) ||
+                        (a.branch && a.branch.toLowerCase().includes(q)) ||
+                        (a.address && a.address.toLowerCase().includes(q)) ||
+                        (a.userName && a.userName.toLowerCase().includes(q)) ||
+                        (a.bankName && a.bankName.toLowerCase().includes(q)) ||
+                        (a.salesExecutive && a.salesExecutive.toLowerCase().includes(q))
+                    );
+                });
+                const agentTotalPages = Math.ceil(filteredAgents.length / agentItemsPerPage) || 1;
+                const paginatedAgents = filteredAgents.slice(
+                    (agentCurrentPage - 1) * agentItemsPerPage,
+                    agentCurrentPage * agentItemsPerPage
+                );
 
-                    {/* Toolbar: Search Agent Name Here + Export Button + Actions */}
-                    <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
-                        <div className="flex items-center gap-3 flex-wrap">
-                            <div className="relative w-72 sm:w-80">
-                                <input
-                                    type="text"
-                                    value={agentSearchQuery}
-                                    onChange={(e) => setAgentSearchQuery(e.target.value)}
-                                    placeholder="Search Agent Name Here"
-                                    className="w-full px-4 py-2 bg-white border border-[#CBD5E1] rounded-[6px] text-[14px] text-slate-800 placeholder-[#94A3B8] shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all"
-                                />
-                                {agentSearchQuery && (
+                return (
+                    <div key={activeTab} className="tab-transition-wrapper">
+                        {/* Table Card Container with Integrated Toolbar & Horizontal Scroll */}
+                        <div className="bg-white rounded-[10px] border border-brand-border shadow-sm overflow-hidden flex flex-col w-full min-w-0">
+                            {/* Table Header Toolbar: Search + Status Filter Dropdown + Navigation + Actions + Export */}
+                            <div className="p-3.5 sm:p-4 bg-white border-b border-brand-border flex flex-wrap items-center justify-between gap-4">
+                                <div className="flex items-center gap-3 flex-wrap">
+                                    {/* Search Input */}
+                                    <div className="relative w-72 sm:w-80 md:w-[380px] h-[38px]">
+                                        <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" size={15} />
+                                        <input
+                                            type="text"
+                                            value={agentSearchQuery}
+                                            onChange={(e) => {
+                                                setAgentSearchQuery(e.target.value);
+                                                setAgentCurrentPage(1);
+                                            }}
+                                            placeholder="Search Agent Name Here"
+                                            className="w-full h-[38px] pl-10 pr-9 bg-white border border-[#CBD5E1] rounded-[6px] text-[13px] text-slate-800 placeholder-[#94A3B8] shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all"
+                                        />
+                                        {agentSearchQuery && (
+                                            <button
+                                                type="button"
+                                                onClick={() => {
+                                                    setAgentSearchQuery('');
+                                                    setAgentCurrentPage(1);
+                                                }}
+                                                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1 cursor-pointer"
+                                            >
+                                                <X size={14} />
+                                            </button>
+                                        )}
+                                    </div>
+
+                                    {/* Status Filter Dropdown */}
+                                    <div className="relative inline-flex items-center h-[38px]">
+                                        <Filter size={14} className="absolute left-3 text-slate-400 pointer-events-none" />
+                                        <select
+                                            value={agentViewFilter}
+                                            onChange={(e) => {
+                                                setAgentViewFilter(e.target.value as 'ACTIVE' | 'INACTIVE' | 'ALL');
+                                                setAgentCurrentPage(1);
+                                            }}
+                                            className="h-[38px] pl-9 pr-8 bg-white border border-[#CBD5E1] rounded-[6px] text-[13px] font-semibold text-slate-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent cursor-pointer transition-all appearance-none"
+                                        >
+                                            <option value="ACTIVE">Active Agent ({agents.filter(a => a.status === 'ACTIVE').length})</option>
+                                            <option value="INACTIVE">Inactive Agent ({agents.filter(a => a.status === 'INACTIVE').length})</option>
+                                            <option value="ALL">All Agents ({agents.length})</option>
+                                        </select>
+                                        <ChevronDown size={14} className="absolute right-2.5 text-slate-400 pointer-events-none" />
+                                    </div>
+                                </div>
+
+                                <div className="flex items-center gap-3 flex-wrap">
+                                    {/* Horizontal Quick Scroll Navigation Controls */}
+                                    <div className="inline-flex items-center h-[38px] bg-white border border-brand-border rounded-[6px] p-0.5 shadow-sm">
+                                        <button
+                                            type="button"
+                                            onClick={() => scrollAgentTableToEdge('start')}
+                                            className="h-full px-2 text-slate-600 hover:text-brand-primary hover:bg-blue-50 rounded cursor-pointer border-none transition-colors flex items-center justify-center"
+                                            title="Scroll to beginning (Column 1: STATUS)"
+                                        >
+                                            <ChevronsLeft size={15} />
+                                        </button>
+                                        <button
+                                            type="button"
+                                            onClick={() => scrollAgentTable(-600)}
+                                            className="h-full px-2.5 text-[13px] font-medium text-slate-600 hover:text-brand-primary hover:bg-blue-50 rounded flex items-center gap-1 cursor-pointer border-none transition-colors"
+                                            title="Scroll left by 600px"
+                                        >
+                                            <ChevronLeft size={14} />
+                                            <span>Scroll Left</span>
+                                        </button>
+                                        <span className="h-4 w-px bg-slate-200 mx-0.5"></span>
+                                        <button
+                                            type="button"
+                                            onClick={() => scrollAgentTable(600)}
+                                            className="h-full px-2.5 text-[13px] font-medium text-slate-600 hover:text-brand-primary hover:bg-blue-50 rounded flex items-center gap-1 cursor-pointer border-none transition-colors"
+                                            title="Scroll right by 600px"
+                                        >
+                                            <span>Scroll Right</span>
+                                            <ChevronRight size={14} />
+                                        </button>
+                                        <button
+                                            type="button"
+                                            onClick={() => scrollAgentTableToEdge('end')}
+                                            className="h-full px-2 text-slate-600 hover:text-brand-primary hover:bg-blue-50 rounded cursor-pointer border-none transition-colors flex items-center justify-center"
+                                            title="Scroll to end (Column 25: LOCATION)"
+                                        >
+                                            <ChevronsRight size={15} />
+                                        </button>
+                                    </div>
+
+                                    {/* Show/Hide Passwords Toggle */}
                                     <button
                                         type="button"
-                                        onClick={() => setAgentSearchQuery('')}
-                                        className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1 cursor-pointer"
+                                        onClick={() => setShowPasswords(prev => !prev)}
+                                        className="h-[38px] flex items-center gap-1.5 px-3.5 bg-white hover:bg-blue-50/50 text-slate-700 border border-brand-border rounded-[6px] text-[13px] font-semibold shadow-sm transition-colors cursor-pointer"
+                                        title="Toggle password masking in table"
                                     >
-                                        <X size={14} />
+                                        {showPasswords ? <EyeOff size={15} className="text-amber-600" /> : <Eye size={15} className="text-brand-primary" />}
+                                        <span>{showPasswords ? 'Hide Passwords' : 'Show Passwords'}</span>
                                     </button>
-                                )}
-                            </div>
-                            <button
-                                type="button"
-                                onClick={handleExportAgents}
-                                className="px-6 py-2 bg-brand-primary hover:bg-[#1D4ED8] text-white font-semibold text-[14px] rounded-[6px] shadow-sm transition-all duration-150 cursor-pointer border-none flex items-center gap-2"
-                            >
-                                <Download size={15} />
-                                <span>Export</span>
-                            </button>
-                        </div>
 
-                        <div className="flex items-center gap-3 flex-wrap">
-                            {/* Horizontal Quick Scroll Navigation Controls */}
-                            <div className="inline-flex items-center bg-white border border-brand-border rounded-[6px] p-0.5 shadow-sm">
-                                <button
-                                    type="button"
-                                    onClick={() => scrollAgentTableToEdge('start')}
-                                    className="p-1.5 text-slate-600 hover:text-brand-primary hover:bg-blue-50 rounded cursor-pointer border-none transition-colors"
-                                    title="Scroll to beginning (Column 1: STATUS)"
-                                >
-                                    <ChevronsLeft size={16} />
-                                </button>
-                                <button
-                                    type="button"
-                                    onClick={() => scrollAgentTable(-600)}
-                                    className="px-2.5 py-1 text-xs font-medium text-slate-600 hover:text-brand-primary hover:bg-blue-50 rounded flex items-center gap-1 cursor-pointer border-none transition-colors"
-                                    title="Scroll left by 600px"
-                                >
-                                    <ChevronLeft size={14} />
-                                    <span>Scroll Left</span>
-                                </button>
-                                <span className="h-4 w-px bg-slate-200 mx-0.5"></span>
-                                <button
-                                    type="button"
-                                    onClick={() => scrollAgentTable(600)}
-                                    className="px-2.5 py-1 text-xs font-medium text-slate-600 hover:text-brand-primary hover:bg-blue-50 rounded flex items-center gap-1 cursor-pointer border-none transition-colors"
-                                    title="Scroll right by 600px"
-                                >
-                                    <span>Scroll Right</span>
-                                    <ChevronRight size={14} />
-                                </button>
-                                <button
-                                    type="button"
-                                    onClick={() => scrollAgentTableToEdge('end')}
-                                    className="p-1.5 text-slate-600 hover:text-brand-primary hover:bg-blue-50 rounded cursor-pointer border-none transition-colors"
-                                    title="Scroll to end (Column 25: LOCATION)"
-                                >
-                                    <ChevronsRight size={16} />
-                                </button>
-                            </div>
-
-                            <button
-                                type="button"
-                                onClick={() => setShowPasswords(prev => !prev)}
-                                className="flex items-center gap-1.5 px-3.5 py-2 bg-white hover:bg-blue-50/50 text-slate-700 border border-brand-border rounded-[6px] text-xs font-semibold shadow-sm transition-colors cursor-pointer"
-                                title="Toggle password masking in table"
-                            >
-                                {showPasswords ? <EyeOff size={14} className="text-amber-600" /> : <Eye size={14} className="text-brand-primary" />}
-                                <span>{showPasswords ? 'Hide Passwords' : 'Show Passwords'}</span>
-                            </button>
-                            <button
-                                type="button"
-                                onClick={() => {
-                                    setAgentForm({ fullName: '', type: 'POSP', branch: 'BARAMATI', mobile: '', email: '', panNo: '' });
-                                    setModalType('AGENT');
-                                }}
-                                className="flex items-center gap-1.5 px-4 py-2 bg-brand-primary hover:bg-[#1D4ED8] text-white font-semibold text-[13px] rounded-[6px] shadow-sm transition-colors cursor-pointer border-none"
-                            >
-                                <Plus size={15} />
-                                <span>Add New Agent</span>
-                            </button>
-                        </div>
-                    </div>
-
-                    {/* Table Card Container with Horizontal Scroll */}
-                    <div className="bg-white rounded-[8px] border border-brand-border shadow-sm overflow-hidden flex flex-col w-full min-w-0">
-                        {/* Notice & Horizontal Scroll Indicator */}
-                        <div className="bg-white px-4 py-2.5 border-b border-brand-border flex items-center justify-between text-xs text-brand-navy">
-                            <div className="flex items-center gap-2 font-medium">
-                                <span className="inline-block w-2 h-2 rounded-full bg-brand-primary animate-pulse"></span>
-                                <span>
-                                    Displaying <strong className="text-slate-900">{
-                                        agents.filter(a => {
-                                            const matchesStatus = a.status === agentViewFilter;
-                                            if (!matchesStatus) return false;
-                                            if (!agentSearchQuery.trim()) return true;
-                                            const q = agentSearchQuery.toLowerCase();
-                                            return (
-                                                (a.fullName && a.fullName.toLowerCase().includes(q)) ||
-                                                (a.agentCode && a.agentCode.toLowerCase().includes(q)) ||
-                                                (a.email && a.email.toLowerCase().includes(q)) ||
-                                                (a.mobile && a.mobile.includes(q)) ||
-                                                (a.branch && a.branch.toLowerCase().includes(q)) ||
-                                                (a.address && a.address.toLowerCase().includes(q)) ||
-                                                (a.userName && a.userName.toLowerCase().includes(q)) ||
-                                                (a.bankName && a.bankName.toLowerCase().includes(q)) ||
-                                                (a.salesExecutive && a.salesExecutive.toLowerCase().includes(q))
-                                            );
-                                        }).length
-                                    }</strong> {agentViewFilter.toLowerCase()} agents
-                                </span>
-                            </div>
-                            <div className="flex items-center gap-2 text-[11px] text-brand-primary bg-white px-2.5 py-1 rounded border border-blue-200/80 font-medium">
-                                <span>↔</span>
-                                <span>Use scrollbar below or navigation buttons above to scroll fully across all 25 ERP columns</span>
-                            </div>
-                        </div>
-
-                        {/* Horizontally scrolling table area */}
-                        <div
-                            ref={agentTableScrollRef}
-                            className="w-full overflow-x-auto min-w-0 erp-horizontal-scrollbar"
-                            style={{ maxWidth: '100%' }}
-                        >
-                            <table className="text-left border-collapse min-w-[5000px] w-full text-[13px]">
-                                <thead>
-                                    <tr className="bg-brand-primary text-white font-bold text-[12px] tracking-wider uppercase border-b-2 border-blue-700">
-                                        {/* Column 1: STATUS */}
-                                        <th className="py-3.5 px-3.5 w-[100px] min-w-[100px] text-center border-r border-white/20 whitespace-nowrap">
-                                            STATUS
-                                        </th>
-                                        {/* Column 2: CODE */}
-                                        <th className="py-3.5 px-3.5 w-[110px] min-w-[110px] border-r border-white/20 whitespace-nowrap">
-                                            CODE
-                                        </th>
-                                        {/* Column 3: AGENT NAME */}
-                                        <th className="py-3.5 px-3.5 w-[270px] min-w-[270px] border-r border-white/20 whitespace-nowrap">
-                                            AGENT NAME
-                                        </th>
-                                        {/* Column 4: ADDRESS */}
-                                        <th className="py-3.5 px-3.5 w-[440px] min-w-[440px] border-r border-white/20 whitespace-nowrap">
-                                            ADDRESS
-                                        </th>
-                                        {/* Column 5: EMAILID */}
-                                        <th className="py-3.5 px-3.5 w-[290px] min-w-[290px] border-r border-white/20 whitespace-nowrap">
-                                            EMAILID
-                                        </th>
-                                        {/* Column 6: GENDER */}
-                                        <th className="py-3.5 px-3.5 w-[110px] min-w-[110px] text-center border-r border-white/20 whitespace-nowrap">
-                                            GENDER
-                                        </th>
-                                        {/* Column 7: ADHAR NO */}
-                                        <th className="py-3.5 px-3.5 w-[150px] min-w-[150px] border-r border-white/20 whitespace-nowrap">
-                                            ADHAR NO
-                                        </th>
-                                        {/* Column 8: PAN NO */}
-                                        <th className="py-3.5 px-3.5 w-[130px] min-w-[130px] border-r border-white/20 whitespace-nowrap">
-                                            PAN NO
-                                        </th>
-                                        {/* Column 9: SELF BANK NAME */}
-                                        <th className="py-3.5 px-3.5 w-[210px] min-w-[210px] border-r border-white/20 whitespace-nowrap">
-                                            SELF BANK NAME
-                                        </th>
-                                        {/* Column 10: SELF ACC HOLDER NAME */}
-                                        <th className="py-3.5 px-3.5 w-[260px] min-w-[260px] border-r border-white/20 whitespace-nowrap">
-                                            SELF ACC HOLDER NAME
-                                        </th>
-                                        {/* Column 11: SELF BANK BRANCH */}
-                                        <th className="py-3.5 px-3.5 w-[160px] min-w-[160px] border-r border-white/20 whitespace-nowrap">
-                                            SELF BANK BRANCH
-                                        </th>
-                                        {/* Column 12: SELF IFSC_CODE */}
-                                        <th className="py-3.5 px-3.5 w-[150px] min-w-[150px] border-r border-white/20 whitespace-nowrap">
-                                            SELF IFSC_CODE
-                                        </th>
-                                        {/* Column 13: SELF ACCOUNT NO */}
-                                        <th className="py-3.5 px-3.5 w-[180px] min-w-[180px] border-r border-white/20 whitespace-nowrap">
-                                            SELF ACCOUNT NO
-                                        </th>
-                                        {/* Column 14: BRANCH NAME */}
-                                        <th className="py-3.5 px-3.5 w-[140px] min-w-[140px] border-r border-white/20 whitespace-nowrap">
-                                            BRANCH NAME
-                                        </th>
-                                        {/* Column 15: USER NAME */}
-                                        <th className="py-3.5 px-3.5 w-[170px] min-w-[170px] border-r border-white/20 whitespace-nowrap">
-                                            USER NAME
-                                        </th>
-                                        {/* Column 16: USER PASSWORD */}
-                                        <th className="py-3.5 px-3.5 w-[170px] min-w-[170px] border-r border-white/20 whitespace-nowrap">
-                                            USER PASSWORD
-                                        </th>
-                                        {/* Column 17: SALES EXECUTIVE NAME */}
-                                        <th className="py-3.5 px-3.5 w-[250px] min-w-[250px] border-r border-white/20 whitespace-nowrap">
-                                            SALES EXECUTIVE NAME
-                                        </th>
-                                        {/* Column 18: CO-ORDINATOR NAME */}
-                                        <th className="py-3.5 px-3.5 w-[250px] min-w-[250px] border-r border-white/20 whitespace-nowrap">
-                                            CO-ORDINATOR NAME
-                                        </th>
-                                        {/* Column 19: QUOTATION CO-ORDINATOR NAME */}
-                                        <th className="py-3.5 px-3.5 w-[250px] min-w-[250px] border-r border-white/20 whitespace-nowrap">
-                                            QUOTATION CO-ORDINATOR NAME
-                                        </th>
-                                        {/* Column 20: INSPECTION CO-ORDINATOR NAME */}
-                                        <th className="py-3.5 px-3.5 w-[250px] min-w-[250px] border-r border-white/20 whitespace-nowrap">
-                                            INSPECTION CO-ORDINATOR NAME
-                                        </th>
-                                        {/* Column 21: ENDROSMENT CO-ORDINATOR NAME */}
-                                        <th className="py-3.5 px-3.5 w-[250px] min-w-[250px] border-r border-white/20 whitespace-nowrap">
-                                            ENDROSMENT CO-ORDINATOR NAME
-                                        </th>
-                                        {/* Column 22: AGENT TSDS */}
-                                        <th className="py-3.5 px-3.5 w-[120px] min-w-[120px] text-center border-r border-white/20 whitespace-nowrap">
-                                            AGENT TSDS
-                                        </th>
-                                        {/* Column 23: EXIT DATE */}
-                                        <th className="py-3.5 px-3.5 w-[190px] min-w-[190px] border-r border-white/20 whitespace-nowrap">
-                                            EXIT DATE
-                                        </th>
-                                        {/* Column 24: ID */}
-                                        <th className="py-3.5 px-3.5 w-[80px] min-w-[80px] text-center border-r border-white/20 whitespace-nowrap">
-                                            ID
-                                        </th>
-                                        {/* Column 25: LOCATION */}
-                                        <th className="py-3.5 px-3.5 w-[140px] min-w-[140px] whitespace-nowrap">
-                                            LOCATION
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody className="text-[13px]">
-                                    {(() => {
-                                        const visibleAgents = agents.filter(a => {
-                                            const matchesStatus = a.status === agentViewFilter;
-                                            if (!matchesStatus) return false;
-                                            if (!agentSearchQuery.trim()) return true;
-                                            const q = agentSearchQuery.toLowerCase();
-                                            return (
-                                                (a.fullName && a.fullName.toLowerCase().includes(q)) ||
-                                                (a.agentCode && a.agentCode.toLowerCase().includes(q)) ||
-                                                (a.email && a.email.toLowerCase().includes(q)) ||
-                                                (a.mobile && a.mobile.includes(q)) ||
-                                                (a.branch && a.branch.toLowerCase().includes(q)) ||
-                                                (a.address && a.address.toLowerCase().includes(q)) ||
-                                                (a.userName && a.userName.toLowerCase().includes(q)) ||
-                                                (a.bankName && a.bankName.toLowerCase().includes(q)) ||
-                                                (a.salesExecutive && a.salesExecutive.toLowerCase().includes(q))
-                                            );
-                                        });
-
-                                        if (visibleAgents.length === 0) {
-                                            return (
-                                                <tr>
-                                                    <td colSpan={25} className="py-12 text-center text-slate-500 bg-white">
-                                                        <div className="flex flex-col items-center justify-center gap-2">
-                                                            <Search className="w-8 h-8 text-slate-300" />
-                                                            <p className="font-medium text-slate-700 text-sm">
-                                                                No {agentViewFilter.toLowerCase()} agents found matching "{agentSearchQuery}"
-                                                            </p>
-                                                            <p className="text-xs text-slate-400">
-                                                                Try searching by agent name, code, bank, location or clear the search input.
-                                                            </p>
-                                                            {agentSearchQuery && (
-                                                                <button
-                                                                    type="button"
-                                                                    onClick={() => setAgentSearchQuery('')}
-                                                                    className="mt-2 text-xs font-semibold text-brand-primary hover:underline cursor-pointer"
-                                                                >
-                                                                    Clear Search Query
-                                                                </button>
-                                                            )}
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            );
-                                        }
-
-                                        return visibleAgents.map((a, idx) => {
-                                            const isEven = idx % 2 === 0;
-                                            const rowBg = isEven ? 'bg-white' : 'bg-[#F8FAFC]';
-
-                                            return (
-                                                <tr
-                                                    key={a.id}
-                                                    className={`hover:bg-[#EAF2FF] ${rowBg} transition-colors border-b border-slate-200`}
-                                                >
-                                                    {/* 1: STATUS */}
-                                                    <td className="py-2.5 px-3.5 text-center border-r border-slate-200 whitespace-nowrap">
-                                                        <button
-                                                            type="button"
-                                                            onClick={() => handleToggleAgentStatus(a.id)}
-                                                            className="text-brand-primary hover:text-blue-900 hover:underline font-bold text-[12px] tracking-wider uppercase transition-colors cursor-pointer"
-                                                            title={`Click to toggle: ${a.status === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE'}`}
-                                                        >
-                                                            {a.status}
-                                                        </button>
-                                                    </td>
-
-                                                    {/* 2: CODE */}
-                                                    <td className="py-2.5 px-3.5 font-mono font-medium text-slate-700 border-r border-slate-200 whitespace-nowrap">
-                                                        {a.agentCode}
-                                                    </td>
-
-                                                    {/* 3: AGENT NAME */}
-                                                    <td className="py-2.5 px-3.5 font-semibold text-slate-900 border-r border-slate-200 whitespace-nowrap">
-                                                        {a.fullName}
-                                                    </td>
-
-                                                    {/* 4: ADDRESS */}
-                                                    <td className="py-2.5 px-3.5 text-slate-700 border-r border-slate-200 whitespace-nowrap">
-                                                        {a.address || '-'}
-                                                    </td>
-
-                                                    {/* 5: EMAILID */}
-                                                    <td className="py-2.5 px-3.5 text-slate-700 font-medium border-r border-slate-200 whitespace-nowrap">
-                                                        {a.email}
-                                                    </td>
-
-                                                    {/* 6: GENDER */}
-                                                    <td className="py-2.5 px-3.5 text-center text-slate-700 border-r border-slate-200 whitespace-nowrap">
-                                                        {a.gender || 'MALE'}
-                                                    </td>
-
-                                                    {/* 7: ADHAR NO */}
-                                                    <td className="py-2.5 px-3.5 font-mono text-slate-700 border-r border-slate-200 whitespace-nowrap">
-                                                        {a.aadharNo || '-'}
-                                                    </td>
-
-                                                    {/* 8: PAN NO */}
-                                                    <td className="py-2.5 px-3.5 font-mono text-slate-700 border-r border-slate-200 whitespace-nowrap">
-                                                        {a.panNo || '-'}
-                                                    </td>
-
-                                                    {/* 9: SELF BANK NAME */}
-                                                    <td className="py-2.5 px-3.5 font-medium text-slate-800 border-r border-slate-200 whitespace-nowrap">
-                                                        {a.bankName || '-'}
-                                                    </td>
-
-                                                    {/* 10: SELF ACC HOLDER NAME */}
-                                                    <td className="py-2.5 px-3.5 text-slate-700 border-r border-slate-200 whitespace-nowrap">
-                                                        {a.accHolderName || a.fullName}
-                                                    </td>
-
-                                                    {/* 11: SELF BANK BRANCH */}
-                                                    <td className="py-2.5 px-3.5 text-slate-700 border-r border-slate-200 whitespace-nowrap">
-                                                        {a.bankBranch || '0'}
-                                                    </td>
-
-                                                    {/* 12: SELF IFSC_CODE */}
-                                                    <td className="py-2.5 px-3.5 font-mono text-slate-700 border-r border-slate-200 whitespace-nowrap">
-                                                        {a.ifscCode || '-'}
-                                                    </td>
-
-                                                    {/* 13: SELF ACCOUNT NO */}
-                                                    <td className="py-2.5 px-3.5 font-mono text-slate-700 border-r border-slate-200 whitespace-nowrap">
-                                                        {a.accountNo || '-'}
-                                                    </td>
-
-                                                    {/* 14: BRANCH NAME */}
-                                                    <td className="py-2.5 px-3.5 text-slate-800 font-medium border-r border-slate-200 whitespace-nowrap">
-                                                        {a.branchName || a.branch || 'BARAMATI'}
-                                                    </td>
-
-                                                    {/* 15: USER NAME */}
-                                                    <td className="py-2.5 px-3.5 font-mono text-slate-700 border-r border-slate-200 whitespace-nowrap">
-                                                        {a.userName || `${a.agentCode.toLowerCase()}`}
-                                                    </td>
-
-                                                    {/* 16: USER PASSWORD */}
-                                                    <td className="py-2.5 px-3.5 font-mono border-r border-slate-200 whitespace-nowrap">
-                                                        {showPasswords ? (
-                                                            <span className="text-slate-800 font-semibold">{a.userPassword || '******'}</span>
-                                                        ) : (
-                                                            <span className="text-slate-400 tracking-widest text-xs">••••••••</span>
-                                                        )}
-                                                    </td>
-
-                                                    {/* 17: SALES EXECUTIVE NAME */}
-                                                    <td className="py-2.5 px-3.5 text-slate-700 border-r border-slate-200 whitespace-nowrap">
-                                                        {a.salesExecutive || '-'}
-                                                    </td>
-
-                                                    {/* 18: CO-ORDINATOR NAME */}
-                                                    <td className="py-2.5 px-3.5 text-slate-700 border-r border-slate-200 whitespace-nowrap">
-                                                        {a.coordinator || '-'}
-                                                    </td>
-
-                                                    {/* 19: QUOTATION CO-ORDINATOR NAME */}
-                                                    <td className="py-2.5 px-3.5 text-slate-700 border-r border-slate-200 whitespace-nowrap">
-                                                        {a.quotationCoordinator || '-'}
-                                                    </td>
-
-                                                    {/* 20: INSPECTION CO-ORDINATOR NAME */}
-                                                    <td className="py-2.5 px-3.5 text-slate-700 border-r border-slate-200 whitespace-nowrap">
-                                                        {a.inspectionCoordinator || '-'}
-                                                    </td>
-
-                                                    {/* 21: ENDROSMENT CO-ORDINATOR NAME */}
-                                                    <td className="py-2.5 px-3.5 text-slate-700 border-r border-slate-200 whitespace-nowrap">
-                                                        {a.endorsementCoordinator || '-'}
-                                                    </td>
-
-                                                    {/* 22: AGENT TSDS */}
-                                                    <td className="py-2.5 px-3.5 text-center font-mono text-slate-700 border-r border-slate-200 whitespace-nowrap">
-                                                        {a.agentTsds || '2'}
-                                                    </td>
-
-                                                    {/* 23: EXIT DATE */}
-                                                    <td className="py-2.5 px-3.5 font-mono text-xs text-slate-700 border-r border-slate-200 whitespace-nowrap">
-                                                        {a.exitDate || '-'}
-                                                    </td>
-
-                                                    {/* 24: ID */}
-                                                    <td className="py-2.5 px-3.5 text-center font-mono font-medium text-slate-800 border-r border-slate-200 whitespace-nowrap">
-                                                        {a.erpId || a.id}
-                                                    </td>
-
-                                                    {/* 25: LOCATION */}
-                                                    <td className="py-2.5 px-3.5 text-slate-800 font-medium whitespace-nowrap">
-                                                        {a.location || a.branch || 'BARAMATI'}
-                                                    </td>
-                                                </tr>
-                                            );
-                                        });
-                                    })()}
-                                </tbody>
-                            </table>
-                        </div>
-
-                        {/* Footer Bar */}
-                        <div className="p-3 bg-white border-t border-brand-border flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-600">
-                            <div className="flex items-center gap-3">
-                                <span>Showing <strong>{agents.filter(a => a.status === agentViewFilter).length}</strong> {agentViewFilter.toLowerCase()} agents</span>
-                                <span>•</span>
-                                <span>All 25 ERP Columns Loaded</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <button
-                                    type="button"
-                                    onClick={() => scrollAgentTableToEdge('start')}
-                                    className="px-2.5 py-1 text-xs font-semibold text-brand-primary bg-white hover:bg-blue-50 border border-blue-200 rounded cursor-pointer transition-colors"
-                                >
-                                    ⏮ To Start
-                                </button>
-                                <button
-                                    type="button"
-                                    onClick={() => scrollAgentTable(-600)}
-                                    className="px-2.5 py-1 text-xs font-semibold text-brand-primary bg-white hover:bg-blue-50 border border-blue-200 rounded cursor-pointer transition-colors"
-                                >
-                                    ◀ Scroll Left
-                                </button>
-                                <button
-                                    type="button"
-                                    onClick={() => scrollAgentTable(600)}
-                                    className="px-2.5 py-1 text-xs font-semibold text-brand-primary bg-white hover:bg-blue-50 border border-blue-200 rounded cursor-pointer transition-colors"
-                                >
-                                    Scroll Right ▶
-                                </button>
-                                <button
-                                    type="button"
-                                    onClick={() => scrollAgentTableToEdge('end')}
-                                    className="px-2.5 py-1 text-xs font-semibold text-brand-primary bg-white hover:bg-blue-50 border border-blue-200 rounded cursor-pointer transition-colors"
-                                >
-                                    To End (Col 25) ⏭
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            )}
-
-            {/* TAB 4: VIEW EMPLOYEE (ERP 37 COLUMNS) */}
-            {activeTab === 'view-employee' && (
-                <div key={activeTab} className="tab-transition-wrapper">
-                    {/* Top Tab Bar: Active Employee / Inactive Employee in Blue Theme */}
-                    <div className="flex items-center justify-start border-b border-brand-border bg-white p-2 rounded-t-[10px] mb-4">
-                        <div className="inline-flex p-1 bg-slate-100/80 rounded-[8px] gap-1">
-                            <button
-                                type="button"
-                                onClick={() => setEmpViewFilter('ACTIVE')}
-                                className={`px-10 py-2.5 text-[15px] font-bold tracking-wide transition-all cursor-pointer rounded-[6px] flex items-center gap-2.5 ${empViewFilter === 'ACTIVE'
-                                    ? 'bg-brand-primary text-white shadow-sm'
-                                    : 'bg-transparent text-slate-600 hover:text-brand-primary hover:bg-blue-50/60'
-                                    }`}
-                            >
-                                <span>Active Employee</span>
-                                <span className={`px-2 py-0.5 text-xs font-semibold rounded-full ${empViewFilter === 'ACTIVE'
-                                    ? 'bg-white text-brand-primary'
-                                    : 'bg-slate-200 text-slate-700'
-                                    }`}>
-                                    {employees.filter(e => e.status === 'ACTIVE').length}
-                                </span>
-                            </button>
-                            <button
-                                type="button"
-                                onClick={() => setEmpViewFilter('INACTIVE')}
-                                className={`px-10 py-2.5 text-[15px] font-bold tracking-wide transition-all cursor-pointer rounded-[6px] flex items-center gap-2.5 ${empViewFilter === 'INACTIVE'
-                                    ? 'bg-brand-primary text-white shadow-sm'
-                                    : 'bg-transparent text-slate-600 hover:text-brand-primary hover:bg-blue-50/60'
-                                    }`}
-                            >
-                                <span>Inactive Employee</span>
-                                <span className={`px-2 py-0.5 text-xs font-semibold rounded-full ${empViewFilter === 'INACTIVE'
-                                    ? 'bg-white text-brand-primary'
-                                    : 'bg-slate-100 text-slate-600'
-                                    }`}>
-                                    {employees.filter(e => e.status === 'INACTIVE').length}
-                                </span>
-                            </button>
-                        </div>
-                    </div>
-
-                    {/* Toolbar: Search Employee Name Here + Export Button + Navigation + Actions */}
-                    <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
-                        <div className="flex items-center gap-3 flex-wrap">
-                            <div className="relative w-72 sm:w-80">
-                                <input
-                                    type="text"
-                                    value={empSearchQuery}
-                                    onChange={(e) => setEmpSearchQuery(e.target.value)}
-                                    placeholder="Search Employee Name Here"
-                                    className="w-full px-4 py-2 bg-white border border-[#CBD5E1] rounded-[6px] text-[14px] text-slate-800 placeholder-[#94A3B8] shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all"
-                                />
-                                {empSearchQuery && (
+                                    {/* Add New Agent */}
                                     <button
                                         type="button"
-                                        onClick={() => setEmpSearchQuery('')}
-                                        className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1 cursor-pointer"
+                                        onClick={() => {
+                                            setAgentForm({ fullName: '', type: 'POSP', branch: 'BARAMATI', mobile: '', email: '', panNo: '' });
+                                            setModalType('AGENT');
+                                        }}
+                                        className="h-[38px] flex items-center gap-1.5 px-4 bg-brand-primary hover:bg-[#1D4ED8] text-white font-semibold text-[13px] rounded-[6px] shadow-sm transition-colors cursor-pointer border-none"
                                     >
-                                        <X size={14} />
+                                        <Plus size={15} />
+                                        <span>Add New Agent</span>
                                     </button>
-                                )}
+
+                                    {/* Export */}
+                                    <button
+                                        type="button"
+                                        onClick={handleExportAgents}
+                                        className="h-[38px] flex items-center gap-1.5 px-4 bg-brand-primary hover:bg-[#1D4ED8] text-white font-semibold text-[13px] rounded-[6px] shadow-sm transition-colors cursor-pointer border-none"
+                                    >
+                                        <Download size={15} />
+                                        <span>Export</span>
+                                    </button>
+                                </div>
                             </div>
-                            <button
-                                type="button"
-                                onClick={handleExportEmployees}
-                                className="px-6 py-2 bg-brand-primary hover:bg-[#1D4ED8] text-white font-semibold text-[14px] rounded-[6px] shadow-sm transition-all duration-150 cursor-pointer border-none flex items-center gap-2"
+
+                            {/* Horizontally scrolling table area */}
+                            <div
+                                ref={agentTableScrollRef}
+                                className="w-full overflow-x-auto min-w-0 erp-horizontal-scrollbar"
+                                style={{ maxWidth: '100%' }}
                             >
-                                <Download size={15} />
-                                <span>Export</span>
-                            </button>
-                        </div>
+                                <table className="text-left border-collapse min-w-[5000px] w-full text-[13px]">
+                                    <thead>
+                                        <tr className="bg-brand-lightbg text-brand-navy text-[13px] font-semibold uppercase border-b border-brand-border whitespace-nowrap">
+                                            {/* Column 1: STATUS */}
+                                            <th className="py-3 px-4 w-[100px] min-w-[100px] text-center whitespace-nowrap">
+                                                STATUS
+                                            </th>
+                                            {/* Column 2: CODE */}
+                                            <th className="py-3 px-4 w-[110px] min-w-[110px] whitespace-nowrap">
+                                                CODE
+                                            </th>
+                                            {/* Column 3: AGENT NAME */}
+                                            <th className="py-3 px-4 w-[270px] min-w-[270px] whitespace-nowrap">
+                                                AGENT NAME
+                                            </th>
+                                            {/* Column 4: ADDRESS */}
+                                            <th className="py-3 px-4 w-[440px] min-w-[440px] whitespace-nowrap">
+                                                ADDRESS
+                                            </th>
+                                            {/* Column 5: EMAILID */}
+                                            <th className="py-3 px-4 w-[290px] min-w-[290px] whitespace-nowrap">
+                                                EMAILID
+                                            </th>
+                                            {/* Column 6: GENDER */}
+                                            <th className="py-3 px-4 w-[110px] min-w-[110px] text-center whitespace-nowrap">
+                                                GENDER
+                                            </th>
+                                            {/* Column 7: ADHAR NO */}
+                                            <th className="py-3 px-4 w-[150px] min-w-[150px] whitespace-nowrap">
+                                                ADHAR NO
+                                            </th>
+                                            {/* Column 8: PAN NO */}
+                                            <th className="py-3 px-4 w-[130px] min-w-[130px] whitespace-nowrap">
+                                                PAN NO
+                                            </th>
+                                            {/* Column 9: SELF BANK NAME */}
+                                            <th className="py-3 px-4 w-[210px] min-w-[210px] whitespace-nowrap">
+                                                SELF BANK NAME
+                                            </th>
+                                            {/* Column 10: SELF ACC HOLDER NAME */}
+                                            <th className="py-3 px-4 w-[260px] min-w-[260px] whitespace-nowrap">
+                                                SELF ACC HOLDER NAME
+                                            </th>
+                                            {/* Column 11: SELF BANK BRANCH */}
+                                            <th className="py-3 px-4 w-[160px] min-w-[160px] whitespace-nowrap">
+                                                SELF BANK BRANCH
+                                            </th>
+                                            {/* Column 12: SELF IFSC_CODE */}
+                                            <th className="py-3 px-4 w-[150px] min-w-[150px] whitespace-nowrap">
+                                                SELF IFSC_CODE
+                                            </th>
+                                            {/* Column 13: SELF ACCOUNT NO */}
+                                            <th className="py-3 px-4 w-[180px] min-w-[180px] whitespace-nowrap">
+                                                SELF ACCOUNT NO
+                                            </th>
+                                            {/* Column 14: BRANCH NAME */}
+                                            <th className="py-3 px-4 w-[140px] min-w-[140px] whitespace-nowrap">
+                                                BRANCH NAME
+                                            </th>
+                                            {/* Column 15: USER NAME */}
+                                            <th className="py-3 px-4 w-[170px] min-w-[170px] whitespace-nowrap">
+                                                USER NAME
+                                            </th>
+                                            {/* Column 16: USER PASSWORD */}
+                                            <th className="py-3 px-4 w-[170px] min-w-[170px] whitespace-nowrap">
+                                                USER PASSWORD
+                                            </th>
+                                            {/* Column 17: SALES EXECUTIVE NAME */}
+                                            <th className="py-3 px-4 w-[250px] min-w-[250px] whitespace-nowrap">
+                                                SALES EXECUTIVE NAME
+                                            </th>
+                                            {/* Column 18: CO-ORDINATOR NAME */}
+                                            <th className="py-3 px-4 w-[250px] min-w-[250px] whitespace-nowrap">
+                                                CO-ORDINATOR NAME
+                                            </th>
+                                            {/* Column 19: QUOTATION CO-ORDINATOR NAME */}
+                                            <th className="py-3 px-4 w-[250px] min-w-[250px] whitespace-nowrap">
+                                                QUOTATION CO-ORDINATOR NAME
+                                            </th>
+                                            {/* Column 20: INSPECTION CO-ORDINATOR NAME */}
+                                            <th className="py-3 px-4 w-[250px] min-w-[250px] whitespace-nowrap">
+                                                INSPECTION CO-ORDINATOR NAME
+                                            </th>
+                                            {/* Column 21: ENDROSMENT CO-ORDINATOR NAME */}
+                                            <th className="py-3 px-4 w-[250px] min-w-[250px] whitespace-nowrap">
+                                                ENDROSMENT CO-ORDINATOR NAME
+                                            </th>
+                                            {/* Column 22: AGENT TSDS */}
+                                            <th className="py-3 px-4 w-[120px] min-w-[120px] text-center whitespace-nowrap">
+                                                AGENT TSDS
+                                            </th>
+                                            {/* Column 23: EXIT DATE */}
+                                            <th className="py-3 px-4 w-[190px] min-w-[190px] whitespace-nowrap">
+                                                EXIT DATE
+                                            </th>
+                                            {/* Column 24: ID */}
+                                            <th className="py-3 px-4 w-[80px] min-w-[80px] text-center whitespace-nowrap">
+                                                ID
+                                            </th>
+                                            {/* Column 25: LOCATION */}
+                                            <th className="py-3 px-4 w-[140px] min-w-[140px] whitespace-nowrap">
+                                                LOCATION
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="divide-y divide-brand-border text-[13px]">
+                                        {(() => {
+                                            if (filteredAgents.length === 0) {
+                                                return (
+                                                    <tr>
+                                                        <td colSpan={25} className="py-12 text-center text-slate-500 bg-white">
+                                                            <div className="flex flex-col items-center justify-center gap-2">
+                                                                <Search className="w-8 h-8 text-slate-300" />
+                                                                <p className="font-medium text-slate-700 text-sm">
+                                                                    No {agentViewFilter === 'ALL' ? '' : agentViewFilter.toLowerCase()} agents found matching "{agentSearchQuery}"
+                                                                </p>
+                                                                <p className="text-xs text-slate-400">
+                                                                    Try searching by agent name, code, bank, location or clear the search input.
+                                                                </p>
+                                                                {agentSearchQuery && (
+                                                                    <button
+                                                                        type="button"
+                                                                        onClick={() => {
+                                                                            setAgentSearchQuery('');
+                                                                            setAgentCurrentPage(1);
+                                                                        }}
+                                                                        className="mt-2 text-xs font-semibold text-brand-primary hover:underline cursor-pointer"
+                                                                    >
+                                                                        Clear Search Query
+                                                                    </button>
+                                                                )}
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                );
+                                            }
 
-                        <div className="flex items-center gap-3 flex-wrap">
-                            {/* Horizontal Quick Scroll Navigation Controls */}
-                            <div className="inline-flex items-center bg-white border border-brand-border rounded-[6px] p-0.5 shadow-sm">
-                                <button
-                                    type="button"
-                                    onClick={() => scrollEmpTableToEdge('start')}
-                                    className="p-1.5 text-slate-600 hover:text-brand-primary hover:bg-blue-50 rounded cursor-pointer border-none transition-colors"
-                                    title="Scroll to beginning (Column 1: VIEW)"
-                                >
-                                    <ChevronsLeft size={16} />
-                                </button>
-                                <button
-                                    type="button"
-                                    onClick={() => scrollEmpTable(-600)}
-                                    className="px-2.5 py-1 text-xs font-medium text-slate-600 hover:text-brand-primary hover:bg-blue-50 rounded flex items-center gap-1 cursor-pointer border-none transition-colors"
-                                    title="Scroll left by 600px"
-                                >
-                                    <ChevronLeft size={14} />
-                                    <span>Scroll Left</span>
-                                </button>
-                                <span className="h-4 w-px bg-slate-200 mx-0.5"></span>
-                                <button
-                                    type="button"
-                                    onClick={() => scrollEmpTable(600)}
-                                    className="px-2.5 py-1 text-xs font-medium text-slate-600 hover:text-brand-primary hover:bg-blue-50 rounded flex items-center gap-1 cursor-pointer border-none transition-colors"
-                                    title="Scroll right by 600px"
-                                >
-                                    <span>Scroll Right</span>
-                                    <ChevronRight size={14} />
-                                </button>
-                                <button
-                                    type="button"
-                                    onClick={() => scrollEmpTableToEdge('end')}
-                                    className="p-1.5 text-slate-600 hover:text-brand-primary hover:bg-blue-50 rounded cursor-pointer border-none transition-colors"
-                                    title="Scroll to end (Column 37: DELETE)"
-                                >
-                                    <ChevronsRight size={16} />
-                                </button>
-                            </div>
-
-                            <button
-                                type="button"
-                                onClick={() => setShowEmpPasswords(prev => !prev)}
-                                className="flex items-center gap-1.5 px-3.5 py-2 bg-white hover:bg-blue-50/50 text-slate-700 border border-brand-border rounded-[6px] text-xs font-semibold shadow-sm transition-colors cursor-pointer"
-                                title="Toggle password masking in table"
-                            >
-                                {showEmpPasswords ? <EyeOff size={14} className="text-amber-600" /> : <Eye size={14} className="text-brand-primary" />}
-                                <span>{showEmpPasswords ? 'Hide Passwords' : 'Show Passwords'}</span>
-                            </button>
-                            <button
-                                type="button"
-                                onClick={() => {
-                                    setEmployeeForm({ fullName: '', designation: 'Operations Executive', department: 'Operations', branch: 'BARAMATI', mobile: '', email: '', doj: new Date().toISOString().split('T')[0] });
-                                    setModalType('EMPLOYEE');
-                                }}
-                                className="flex items-center gap-1.5 px-4 py-2 bg-brand-primary hover:bg-[#1D4ED8] text-white font-semibold text-[13px] rounded-[6px] shadow-sm transition-colors cursor-pointer border-none"
-                            >
-                                <Plus size={15} />
-                                <span>Add New Employee</span>
-                            </button>
-                        </div>
-                    </div>
-
-                    {/* Table Card Container with Full Horizontal Scroll */}
-                    <div className="bg-white rounded-[8px] border border-brand-border shadow-sm overflow-hidden flex flex-col w-full min-w-0">
-                        {/* Notice & Horizontal Scroll Indicator */}
-                        <div className="bg-white px-4 py-2.5 border-b border-brand-border flex items-center justify-between text-xs text-brand-navy">
-                            <div className="flex items-center gap-2 font-medium">
-                                <span className="inline-block w-2 h-2 rounded-full bg-brand-primary animate-pulse"></span>
-                                <span>
-                                    Displaying <strong className="text-slate-900">{
-                                        employees.filter(e => {
-                                            const matchesStatus = e.status === empViewFilter;
-                                            if (!matchesStatus) return false;
-                                            if (!empSearchQuery.trim()) return true;
-                                            const q = empSearchQuery.toLowerCase();
-                                            return (
-                                                (e.fullName && e.fullName.toLowerCase().includes(q)) ||
-                                                (e.empCode && e.empCode.toLowerCase().includes(q)) ||
-                                                (e.email && e.email.toLowerCase().includes(q)) ||
-                                                (e.mobile && e.mobile.includes(q)) ||
-                                                (e.branch && e.branch.toLowerCase().includes(q)) ||
-                                                (e.address && e.address.toLowerCase().includes(q)) ||
-                                                (e.designation && e.designation.toLowerCase().includes(q)) ||
-                                                (e.panNo && e.panNo.toLowerCase().includes(q)) ||
-                                                (e.bankName && e.bankName.toLowerCase().includes(q)) ||
-                                                (e.reporting && e.reporting.toLowerCase().includes(q)) ||
-                                                (e.userName && e.userName.toLowerCase().includes(q))
-                                            );
-                                        }).length
-                                    }</strong> {empViewFilter.toLowerCase()} employees
-                                </span>
-                            </div>
-                            <div className="flex items-center gap-2 text-[11px] text-brand-primary bg-white px-2.5 py-1 rounded border border-blue-200/80 font-medium">
-                                <span>↔</span>
-                                <span>Use scrollbar below or navigation buttons above to scroll fully across all 37 ERP columns</span>
-                            </div>
-                        </div>
-
-                        {/* Horizontally scrolling table area */}
-                        <div
-                            ref={empTableScrollRef}
-                            className="w-full overflow-x-auto min-w-0 erp-horizontal-scrollbar"
-                            style={{ maxWidth: '100%' }}
-                        >
-                            <table className="text-left border-collapse min-w-[6300px] w-full text-[13px]">
-                                <thead>
-                                    <tr className="bg-brand-primary text-white font-bold text-[12px] tracking-wider uppercase border-b-2 border-blue-700">
-                                        {/* Column 1: VIEW */}
-                                        <th className="py-3.5 px-3.5 w-[70px] min-w-[70px] text-center border-r border-white/20 whitespace-nowrap">
-                                            VIEW
-                                        </th>
-                                        {/* Column 2: EDIT */}
-                                        <th className="py-3.5 px-3.5 w-[65px] min-w-[65px] text-center border-r border-white/20 whitespace-nowrap">
-                                            EDIT
-                                        </th>
-                                        {/* Column 3: EMP CODE */}
-                                        <th className="py-3.5 px-3.5 w-[120px] min-w-[120px] border-r border-white/20 whitespace-nowrap">
-                                            EMP CODE
-                                        </th>
-                                        {/* Column 4: EMPLOYEE NAME */}
-                                        <th className="py-3.5 px-3.5 w-[260px] min-w-[260px] border-r border-white/20 whitespace-nowrap">
-                                            EMPLOYEE NAME
-                                        </th>
-                                        {/* Column 5: ADDRESS */}
-                                        <th className="py-3.5 px-3.5 w-[420px] min-w-[420px] border-r border-white/20 whitespace-nowrap">
-                                            ADDRESS
-                                        </th>
-                                        {/* Column 6: GENDER */}
-                                        <th className="py-3.5 px-3.5 w-[90px] min-w-[90px] text-center border-r border-white/20 whitespace-nowrap">
-                                            GENDER
-                                        </th>
-                                        {/* Column 7: MARITAL STATUS */}
-                                        <th className="py-3.5 px-3.5 w-[130px] min-w-[130px] text-center border-r border-white/20 whitespace-nowrap">
-                                            MARITAL STATUS
-                                        </th>
-                                        {/* Column 8: OFFICE NO */}
-                                        <th className="py-3.5 px-3.5 w-[130px] min-w-[130px] border-r border-white/20 whitespace-nowrap">
-                                            OFFICE NO
-                                        </th>
-                                        {/* Column 9: MOBLIE NO */}
-                                        <th className="py-3.5 px-3.5 w-[130px] min-w-[130px] border-r border-white/20 whitespace-nowrap">
-                                            MOBLIE NO
-                                        </th>
-                                        {/* Column 10: EMAIL ID */}
-                                        <th className="py-3.5 px-3.5 w-[250px] min-w-[250px] border-r border-white/20 whitespace-nowrap">
-                                            EMAIL ID
-                                        </th>
-                                        {/* Column 11: PAN NO */}
-                                        <th className="py-3.5 px-3.5 w-[130px] min-w-[130px] border-r border-white/20 whitespace-nowrap">
-                                            PAN NO
-                                        </th>
-                                        {/* Column 12: AADHAR NO */}
-                                        <th className="py-3.5 px-3.5 w-[160px] min-w-[160px] border-r border-white/20 whitespace-nowrap">
-                                            AADHAR NO
-                                        </th>
-                                        {/* Column 13: BANK NAME */}
-                                        <th className="py-3.5 px-3.5 w-[240px] min-w-[240px] border-r border-white/20 whitespace-nowrap">
-                                            BANK NAME
-                                        </th>
-                                        {/* Column 14: BANK BRANCH */}
-                                        <th className="py-3.5 px-3.5 w-[150px] min-w-[150px] border-r border-white/20 whitespace-nowrap">
-                                            BANK BRANCH
-                                        </th>
-                                        {/* Column 15: IFSC CODE */}
-                                        <th className="py-3.5 px-3.5 w-[140px] min-w-[140px] border-r border-white/20 whitespace-nowrap">
-                                            IFSC CODE
-                                        </th>
-                                        {/* Column 16: ACCOUNT NO */}
-                                        <th className="py-3.5 px-3.5 w-[170px] min-w-[170px] border-r border-white/20 whitespace-nowrap">
-                                            ACCOUNT NO
-                                        </th>
-                                        {/* Column 17: BRANCH NAME */}
-                                        <th className="py-3.5 px-3.5 w-[140px] min-w-[140px] border-r border-white/20 whitespace-nowrap">
-                                            BRANCH NAME
-                                        </th>
-                                        {/* Column 18: USER NAME */}
-                                        <th className="py-3.5 px-3.5 w-[150px] min-w-[150px] border-r border-white/20 whitespace-nowrap">
-                                            USER NAME
-                                        </th>
-                                        {/* Column 19: USER PASSWORD */}
-                                        <th className="py-3.5 px-3.5 w-[150px] min-w-[150px] border-r border-white/20 whitespace-nowrap">
-                                            USER PASSWORD
-                                        </th>
-                                        {/* Column 20: CO-ORDINATOR NAME */}
-                                        <th className="py-3.5 px-3.5 w-[230px] min-w-[230px] border-r border-white/20 whitespace-nowrap">
-                                            CO-ORDINATOR NAME
-                                        </th>
-                                        {/* Column 21: QUOTATION CO-ORDINATOR NAME */}
-                                        <th className="py-3.5 px-3.5 w-[240px] min-w-[240px] border-r border-white/20 whitespace-nowrap">
-                                            QUOTATION CO-ORDINATOR NAME
-                                        </th>
-                                        {/* Column 22: INSPECTION CO-ORDINATOR NAME */}
-                                        <th className="py-3.5 px-3.5 w-[240px] min-w-[240px] border-r border-white/20 whitespace-nowrap">
-                                            INSPECTION CO-ORDINATOR NAME
-                                        </th>
-                                        {/* Column 23: ENDROSMENT CO-ORDINATOR NAME */}
-                                        <th className="py-3.5 px-3.5 w-[240px] min-w-[240px] border-r border-white/20 whitespace-nowrap">
-                                            ENDROSMENT CO-ORDINATOR NAME
-                                        </th>
-                                        {/* Column 24: LOCATION HEAD NAME */}
-                                        <th className="py-3.5 px-3.5 w-[280px] min-w-[280px] border-r border-white/20 whitespace-nowrap">
-                                            LOCATION HEAD NAME
-                                        </th>
-                                        {/* Column 25: BUSINESS PROCESS */}
-                                        <th className="py-3.5 px-3.5 w-[160px] min-w-[160px] border-r border-white/20 whitespace-nowrap">
-                                            BUSINESS PROCESS
-                                        </th>
-                                        {/* Column 26: LINE OF BUSINESS */}
-                                        <th className="py-3.5 px-3.5 w-[150px] min-w-[150px] border-r border-white/20 whitespace-nowrap">
-                                            LINE OF BUSINESS
-                                        </th>
-                                        {/* Column 27: FUNCTION TYPE */}
-                                        <th className="py-3.5 px-3.5 w-[140px] min-w-[140px] border-r border-white/20 whitespace-nowrap">
-                                            FUNCTION TYPE
-                                        </th>
-                                        {/* Column 28: DESIGNATION */}
-                                        <th className="py-3.5 px-3.5 w-[190px] min-w-[190px] border-r border-white/20 whitespace-nowrap">
-                                            DESIGNATION
-                                        </th>
-                                        {/* Column 29: CLASS */}
-                                        <th className="py-3.5 px-3.5 w-[100px] min-w-[100px] border-r border-white/20 whitespace-nowrap">
-                                            CLASS
-                                        </th>
-                                        {/* Column 30: REPORTING */}
-                                        <th className="py-3.5 px-3.5 w-[260px] min-w-[260px] border-r border-white/20 whitespace-nowrap">
-                                            REPORTING
-                                        </th>
-                                        {/* Column 31: JOINING DATE */}
-                                        <th className="py-3.5 px-3.5 w-[170px] min-w-[170px] border-r border-white/20 whitespace-nowrap">
-                                            JOINING DATE
-                                        </th>
-                                        {/* Column 32: DOCS */}
-                                        <th className="py-3.5 px-3.5 w-[100px] min-w-[100px] text-center border-r border-white/20 whitespace-nowrap">
-                                            DOCS
-                                        </th>
-                                        {/* Column 33: ID */}
-                                        <th className="py-3.5 px-3.5 w-[70px] min-w-[70px] text-center border-r border-white/20 whitespace-nowrap">
-                                            ID
-                                        </th>
-                                        {/* Column 34: EXECUTIVE TYPE */}
-                                        <th className="py-3.5 px-3.5 w-[190px] min-w-[190px] border-r border-white/20 whitespace-nowrap">
-                                            EXECUTIVE TYPE
-                                        </th>
-                                        {/* Column 35: DATE OF BIRTH */}
-                                        <th className="py-3.5 px-3.5 w-[170px] min-w-[170px] border-r border-white/20 whitespace-nowrap">
-                                            DATE OF BIRTH
-                                        </th>
-                                        {/* Column 36: EXIT */}
-                                        <th className="py-3.5 px-3.5 w-[80px] min-w-[80px] text-center border-r border-white/20 whitespace-nowrap">
-                                            EXIT
-                                        </th>
-                                        {/* Column 37: DELETE */}
-                                        <th className="py-3.5 px-3.5 w-[100px] min-w-[100px] text-center whitespace-nowrap">
-                                            DELETE
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {(() => {
-                                        const visibleEmployees = employees.filter(e => {
-                                            const matchesStatus = e.status === empViewFilter;
-                                            if (!matchesStatus) return false;
-                                            if (!empSearchQuery.trim()) return true;
-                                            const q = empSearchQuery.toLowerCase();
-                                            return (
-                                                (e.fullName && e.fullName.toLowerCase().includes(q)) ||
-                                                (e.empCode && e.empCode.toLowerCase().includes(q)) ||
-                                                (e.email && e.email.toLowerCase().includes(q)) ||
-                                                (e.mobile && e.mobile.includes(q)) ||
-                                                (e.branch && e.branch.toLowerCase().includes(q)) ||
-                                                (e.address && e.address.toLowerCase().includes(q)) ||
-                                                (e.designation && e.designation.toLowerCase().includes(q)) ||
-                                                (e.panNo && e.panNo.toLowerCase().includes(q)) ||
-                                                (e.bankName && e.bankName.toLowerCase().includes(q)) ||
-                                                (e.reporting && e.reporting.toLowerCase().includes(q)) ||
-                                                (e.userName && e.userName.toLowerCase().includes(q))
-                                            );
-                                        });
-
-                                        if (visibleEmployees.length === 0) {
-                                            return (
-                                                <tr>
-                                                    <td colSpan={37} className="py-12 text-center text-slate-500 bg-white">
-                                                        <div className="flex flex-col items-center justify-center gap-2">
-                                                            <Search className="w-8 h-8 text-slate-300" />
-                                                            <p className="font-medium text-slate-700 text-sm">
-                                                                No {empViewFilter.toLowerCase()} employees found matching "{empSearchQuery}"
-                                                            </p>
-                                                            <p className="text-xs text-slate-400">
-                                                                Try searching by employee name, code, designation, bank, or clear the search input.
-                                                            </p>
-                                                            {empSearchQuery && (
-                                                                <button
-                                                                    type="button"
-                                                                    onClick={() => setEmpSearchQuery('')}
-                                                                    className="mt-2 text-xs font-semibold text-brand-primary hover:underline cursor-pointer"
-                                                                >
-                                                                    Clear Search Query
-                                                                </button>
-                                                            )}
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            );
-                                        }
-
-                                        return visibleEmployees.map((e, idx) => {
-                                            const isEven = idx % 2 === 0;
-                                            const rowBg = isEven ? 'bg-white' : 'bg-[#F8FAFC]';
-
-                                            return (
-                                                <tr
-                                                    key={e.id}
-                                                    className={`hover:bg-[#EAF2FF] ${rowBg} transition-colors border-b border-slate-200`}
-                                                >
-                                                    {/* 1: VIEW */}
-                                                    <td className="py-2.5 px-3 text-center border-r border-slate-200 whitespace-nowrap">
-                                                        <button
-                                                            type="button"
-                                                            onClick={() => showToast(`Viewing profile for ${e.fullName} (${e.empCode})`)}
-                                                            className="text-brand-primary hover:text-blue-900 hover:underline font-bold text-xs uppercase cursor-pointer"
-                                                        >
-                                                            VIEW
-                                                        </button>
-                                                    </td>
-
-                                                    {/* 2: EDIT */}
-                                                    <td className="py-2.5 px-2 text-center border-r border-slate-200 whitespace-nowrap">
-                                                        <button
-                                                            type="button"
-                                                            onClick={() => {
-                                                                setEmployeeForm({
-                                                                    fullName: e.fullName,
-                                                                    designation: e.designation || 'Operations Executive',
-                                                                    department: e.department || 'Operations',
-                                                                    branch: e.branch || 'BARAMATI',
-                                                                    mobile: e.mobile || '',
-                                                                    email: e.email || '',
-                                                                    doj: e.doj || new Date().toISOString().split('T')[0]
-                                                                });
-                                                                setModalType('EMPLOYEE');
-                                                            }}
-                                                            className="text-brand-primary hover:text-blue-900 hover:bg-blue-50 p-1.5 rounded transition-colors cursor-pointer inline-flex items-center justify-center"
-                                                            title={`Edit ${e.fullName}`}
-                                                        >
-                                                            <Edit2 size={14} />
-                                                        </button>
-                                                    </td>
-
-                                                    {/* 3: EMP CODE */}
-                                                    <td className="py-2.5 px-3.5 font-mono font-medium text-slate-800 border-r border-slate-200 whitespace-nowrap">
-                                                        {e.empCode}
-                                                    </td>
-
-                                                    {/* 4: EMPLOYEE NAME */}
-                                                    <td className="py-2.5 px-3.5 font-bold text-slate-900 border-r border-slate-200 whitespace-nowrap">
-                                                        {e.fullName}
-                                                    </td>
-
-                                                    {/* 5: ADDRESS */}
-                                                    <td className="py-2.5 px-3.5 text-slate-700 border-r border-slate-200 whitespace-nowrap">
-                                                        {e.address || '-'}
-                                                    </td>
-
-                                                    {/* 6: GENDER */}
-                                                    <td className="py-2.5 px-3.5 text-center text-slate-700 border-r border-slate-200 whitespace-nowrap">
-                                                        {e.gender || 'MALE'}
-                                                    </td>
-
-                                                    {/* 7: MARITAL STATUS */}
-                                                    <td className="py-2.5 px-3.5 text-center text-slate-700 border-r border-slate-200 whitespace-nowrap">
-                                                        {e.maritalStatus || 'MARRIED'}
-                                                    </td>
-
-                                                    {/* 8: OFFICE NO */}
-                                                    <td className="py-2.5 px-3.5 font-mono text-slate-700 border-r border-slate-200 whitespace-nowrap">
-                                                        {e.officeNo || '-'}
-                                                    </td>
-
-                                                    {/* 9: MOBLIE NO */}
-                                                    <td className="py-2.5 px-3.5 font-mono font-medium text-slate-800 border-r border-slate-200 whitespace-nowrap">
-                                                        {e.mobile || '-'}
-                                                    </td>
-
-                                                    {/* 10: EMAIL ID */}
-                                                    <td className="py-2.5 px-3.5 text-slate-700 font-medium border-r border-slate-200 whitespace-nowrap">
-                                                        {e.email || '-'}
-                                                    </td>
-
-                                                    {/* 11: PAN NO */}
-                                                    <td className="py-2.5 px-3.5 font-mono text-slate-700 border-r border-slate-200 whitespace-nowrap">
-                                                        {e.panNo || '-'}
-                                                    </td>
-
-                                                    {/* 12: AADHAR NO */}
-                                                    <td className="py-2.5 px-3.5 font-mono text-slate-700 border-r border-slate-200 whitespace-nowrap">
-                                                        {e.aadharNo || '-'}
-                                                    </td>
-
-                                                    {/* 13: BANK NAME */}
-                                                    <td className="py-2.5 px-3.5 font-medium text-slate-800 border-r border-slate-200 whitespace-nowrap">
-                                                        {e.bankName || '-'}
-                                                    </td>
-
-                                                    {/* 14: BANK BRANCH */}
-                                                    <td className="py-2.5 px-3.5 text-slate-700 border-r border-slate-200 whitespace-nowrap">
-                                                        {e.bankBranch || '-'}
-                                                    </td>
-
-                                                    {/* 15: IFSC CODE */}
-                                                    <td className="py-2.5 px-3.5 font-mono text-slate-700 border-r border-slate-200 whitespace-nowrap">
-                                                        {e.ifscCode || '-'}
-                                                    </td>
-
-                                                    {/* 16: ACCOUNT NO */}
-                                                    <td className="py-2.5 px-3.5 font-mono text-slate-700 border-r border-slate-200 whitespace-nowrap">
-                                                        {e.accountNo || '-'}
-                                                    </td>
-
-                                                    {/* 17: BRANCH NAME */}
-                                                    <td className="py-2.5 px-3.5 font-medium text-slate-800 border-r border-slate-200 whitespace-nowrap">
-                                                        {e.branchName || e.branch || 'BARAMATI'}
-                                                    </td>
-
-                                                    {/* 18: USER NAME */}
-                                                    <td className="py-2.5 px-3.5 font-mono font-medium text-brand-primary border-r border-slate-200 whitespace-nowrap">
-                                                        {e.userName || '-'}
-                                                    </td>
-
-                                                    {/* 19: USER PASSWORD */}
-                                                    <td className="py-2.5 px-3.5 font-mono text-slate-700 border-r border-slate-200 whitespace-nowrap">
-                                                        {showEmpPasswords ? (
-                                                            <span className="text-slate-800">{e.userPassword || '••••••••'}</span>
-                                                        ) : (
-                                                            <span className="text-slate-400 tracking-widest font-mono">••••••••</span>
-                                                        )}
-                                                    </td>
-
-                                                    {/* 20: CO-ORDINATOR NAME */}
-                                                    <td className="py-2.5 px-3.5 text-slate-700 border-r border-slate-200 whitespace-nowrap">
-                                                        {e.coordinator || '-'}
-                                                    </td>
-
-                                                    {/* 21: QUOTATION CO-ORDINATOR NAME */}
-                                                    <td className="py-2.5 px-3.5 text-slate-700 border-r border-slate-200 whitespace-nowrap">
-                                                        {e.quotationCoordinator || '-'}
-                                                    </td>
-
-                                                    {/* 22: INSPECTION CO-ORDINATOR NAME */}
-                                                    <td className="py-2.5 px-3.5 text-slate-700 border-r border-slate-200 whitespace-nowrap">
-                                                        {e.inspectionCoordinator || '-'}
-                                                    </td>
-
-                                                    {/* 23: ENDROSMENT CO-ORDINATOR NAME */}
-                                                    <td className="py-2.5 px-3.5 text-slate-700 border-r border-slate-200 whitespace-nowrap">
-                                                        {e.endorsementCoordinator || '-'}
-                                                    </td>
-
-                                                    {/* 24: LOCATION HEAD NAME */}
-                                                    <td className="py-2.5 px-3.5 text-slate-700 border-r border-slate-200 whitespace-nowrap">
-                                                        {e.locationHead || '-'}
-                                                    </td>
-
-                                                    {/* 25: BUSINESS PROCESS */}
-                                                    <td className="py-2.5 px-3.5 text-slate-700 border-r border-slate-200 whitespace-nowrap">
-                                                        {e.businessProcess || '-'}
-                                                    </td>
-
-                                                    {/* 26: LINE OF BUSINESS */}
-                                                    <td className="py-2.5 px-3.5 text-slate-700 border-r border-slate-200 whitespace-nowrap">
-                                                        {e.lineOfBusiness || '-'}
-                                                    </td>
-
-                                                    {/* 27: FUNCTION TYPE */}
-                                                    <td className="py-2.5 px-3.5 text-slate-700 border-r border-slate-200 whitespace-nowrap">
-                                                        {e.functionType || 'OPERATIONS'}
-                                                    </td>
-
-                                                    {/* 28: DESIGNATION */}
-                                                    <td className="py-2.5 px-3.5 font-medium text-slate-800 border-r border-slate-200 whitespace-nowrap">
-                                                        {e.designation || '-'}
-                                                    </td>
-
-                                                    {/* 29: CLASS */}
-                                                    <td className="py-2.5 px-3.5 text-slate-700 border-r border-slate-200 whitespace-nowrap">
-                                                        {e.employeeClass || 'CLASS 5'}
-                                                    </td>
-
-                                                    {/* 30: REPORTING */}
-                                                    <td className="py-2.5 px-3.5 font-medium text-slate-800 border-r border-slate-200 whitespace-nowrap">
-                                                        {e.reporting || '-'}
-                                                    </td>
-
-                                                    {/* 31: JOINING DATE */}
-                                                    <td className="py-2.5 px-3.5 font-mono text-slate-700 border-r border-slate-200 whitespace-nowrap">
-                                                        {e.joiningDate || e.doj || '-'}
-                                                    </td>
-
-                                                    {/* 32: DOCS */}
-                                                    <td className="py-2.5 px-3.5 text-center border-r border-slate-200 whitespace-nowrap">
-                                                        {e.docsStatus === 'VIEW' ? (
+                                            return paginatedAgents.map((a) => {
+                                                return (
+                                                    <tr
+                                                        key={a.id}
+                                                        className="hover:bg-brand-mainbg h-[48px] transition-colors bg-white border-b border-brand-border"
+                                                    >
+                                                        {/* 1: STATUS */}
+                                                        <td className="py-2 px-4 text-center whitespace-nowrap">
                                                             <button
                                                                 type="button"
-                                                                onClick={() => showToast(`Viewing uploaded documents for ${e.fullName}`)}
-                                                                className="text-red-600 hover:text-red-800 font-bold text-xs uppercase hover:underline cursor-pointer"
+                                                                onClick={() => handleToggleAgentStatus(a.id)}
+                                                                className="text-brand-primary hover:text-blue-900 hover:underline font-bold text-[12px] tracking-wider uppercase transition-colors cursor-pointer"
+                                                                title={`Click to toggle: ${a.status === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE'}`}
                                                             >
-                                                                VIEW
+                                                                {a.status}
                                                             </button>
-                                                        ) : (
-                                                            <span className="text-red-500 font-bold text-xs">NA</span>
-                                                        )}
-                                                    </td>
+                                                        </td>
 
-                                                    {/* 33: ID */}
-                                                    <td className="py-2.5 px-3.5 text-center font-mono font-medium text-slate-800 border-r border-slate-200 whitespace-nowrap">
-                                                        {e.erpId || e.id}
-                                                    </td>
+                                                        {/* 2: CODE */}
+                                                        <td className="py-2 px-4 font-mono font-medium text-slate-700 whitespace-nowrap">
+                                                            {a.agentCode}
+                                                        </td>
 
-                                                    {/* 34: EXECUTIVE TYPE */}
-                                                    <td className="py-2.5 px-3.5 text-slate-700 border-r border-slate-200 whitespace-nowrap">
-                                                        {e.executiveType || 'OPERATIONAL SUPPORT'}
-                                                    </td>
+                                                        {/* 3: AGENT NAME */}
+                                                        <td className="py-2 px-4 font-semibold text-slate-900 whitespace-nowrap">
+                                                            {a.fullName}
+                                                        </td>
 
-                                                    {/* 35: DATE OF BIRTH */}
-                                                    <td className="py-2.5 px-3.5 font-mono text-slate-700 border-r border-slate-200 whitespace-nowrap">
-                                                        {e.dateOfBirth || '-'}
-                                                    </td>
+                                                        {/* 4: ADDRESS */}
+                                                        <td className="py-2 px-4 text-slate-700 whitespace-nowrap">
+                                                            {a.address || '-'}
+                                                        </td>
 
-                                                    {/* 36: EXIT */}
-                                                    <td className="py-2.5 px-3.5 text-center border-r border-slate-200 whitespace-nowrap">
-                                                        <button
-                                                            type="button"
-                                                            onClick={() => handleToggleEmpStatus(e.id)}
-                                                            className="text-brand-primary hover:text-blue-900 hover:underline font-bold text-xs tracking-wider uppercase cursor-pointer"
-                                                            title={`Click to mark as ${e.status === 'ACTIVE' ? 'INACTIVE (Exit)' : 'ACTIVE'}`}
-                                                        >
-                                                            EXIT
-                                                        </button>
-                                                    </td>
+                                                        {/* 5: EMAILID */}
+                                                        <td className="py-2 px-4 text-slate-700 font-medium whitespace-nowrap">
+                                                            {a.email}
+                                                        </td>
 
-                                                    {/* 37: DELETE */}
-                                                    <td className="py-2.5 px-3.5 text-center whitespace-nowrap">
-                                                        <button
-                                                            type="button"
-                                                            onClick={() => handleDeleteEmp(e.id)}
-                                                            className="text-brand-primary hover:text-red-600 hover:underline font-bold text-xs inline-flex items-center gap-1 cursor-pointer transition-colors"
-                                                            title={`Delete ${e.fullName}`}
-                                                        >
-                                                            <Trash2 size={13} className="text-brand-primary" />
-                                                            <span>DELETE</span>
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                            );
-                                        });
-                                    })()}
-                                </tbody>
-                            </table>
-                        </div>
+                                                        {/* 6: GENDER */}
+                                                        <td className="py-2 px-4 text-center text-slate-700 whitespace-nowrap">
+                                                            {a.gender || 'MALE'}
+                                                        </td>
 
-                        {/* Footer Bar */}
-                        <div className="p-3 bg-white border-t border-brand-border flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-600">
-                            <div className="flex items-center gap-3">
-                                <span>Showing <strong>{employees.filter(e => e.status === empViewFilter).length}</strong> {empViewFilter.toLowerCase()} employees</span>
-                                <span>•</span>
-                                <span>All 37 ERP Columns Loaded</span>
+                                                        {/* 7: ADHAR NO */}
+                                                        <td className="py-2 px-4 font-mono text-slate-700 whitespace-nowrap">
+                                                            {a.aadharNo || '-'}
+                                                        </td>
+
+                                                        {/* 8: PAN NO */}
+                                                        <td className="py-2 px-4 font-mono text-slate-700 whitespace-nowrap">
+                                                            {a.panNo || '-'}
+                                                        </td>
+
+                                                        {/* 9: SELF BANK NAME */}
+                                                        <td className="py-2 px-4 font-medium text-slate-800 whitespace-nowrap">
+                                                            {a.bankName || '-'}
+                                                        </td>
+
+                                                        {/* 10: SELF ACC HOLDER NAME */}
+                                                        <td className="py-2 px-4 text-slate-700 whitespace-nowrap">
+                                                            {a.accHolderName || a.fullName}
+                                                        </td>
+
+                                                        {/* 11: SELF BANK BRANCH */}
+                                                        <td className="py-2 px-4 text-slate-700 whitespace-nowrap">
+                                                            {a.bankBranch || '0'}
+                                                        </td>
+
+                                                        {/* 12: SELF IFSC_CODE */}
+                                                        <td className="py-2 px-4 font-mono text-slate-700 whitespace-nowrap">
+                                                            {a.ifscCode || '-'}
+                                                        </td>
+
+                                                        {/* 13: SELF ACCOUNT NO */}
+                                                        <td className="py-2 px-4 font-mono text-slate-700 whitespace-nowrap">
+                                                            {a.accountNo || '-'}
+                                                        </td>
+
+                                                        {/* 14: BRANCH NAME */}
+                                                        <td className="py-2 px-4 text-slate-800 font-medium whitespace-nowrap">
+                                                            {a.branchName || a.branch || 'BARAMATI'}
+                                                        </td>
+
+                                                        {/* 15: USER NAME */}
+                                                        <td className="py-2 px-4 font-mono text-slate-700 whitespace-nowrap">
+                                                            {a.userName || `${a.agentCode.toLowerCase()}`}
+                                                        </td>
+
+                                                        {/* 16: USER PASSWORD */}
+                                                        <td className="py-2 px-4 font-mono whitespace-nowrap">
+                                                            {showPasswords ? (
+                                                                <span className="text-slate-800 font-semibold">{a.userPassword || '******'}</span>
+                                                            ) : (
+                                                                <span className="text-slate-400 tracking-widest text-xs">••••••••</span>
+                                                            )}
+                                                        </td>
+
+                                                        {/* 17: SALES EXECUTIVE NAME */}
+                                                        <td className="py-2 px-4 text-slate-700 whitespace-nowrap">
+                                                            {a.salesExecutive || '-'}
+                                                        </td>
+
+                                                        {/* 18: CO-ORDINATOR NAME */}
+                                                        <td className="py-2 px-4 text-slate-700 whitespace-nowrap">
+                                                            {a.coordinator || '-'}
+                                                        </td>
+
+                                                        {/* 19: QUOTATION CO-ORDINATOR NAME */}
+                                                        <td className="py-2 px-4 text-slate-700 whitespace-nowrap">
+                                                            {a.quotationCoordinator || '-'}
+                                                        </td>
+
+                                                        {/* 20: INSPECTION CO-ORDINATOR NAME */}
+                                                        <td className="py-2 px-4 text-slate-700 whitespace-nowrap">
+                                                            {a.inspectionCoordinator || '-'}
+                                                        </td>
+
+                                                        {/* 21: ENDROSMENT CO-ORDINATOR NAME */}
+                                                        <td className="py-2 px-4 text-slate-700 whitespace-nowrap">
+                                                            {a.endorsementCoordinator || '-'}
+                                                        </td>
+
+                                                        {/* 22: AGENT TSDS */}
+                                                        <td className="py-2 px-4 text-center font-mono text-slate-700 whitespace-nowrap">
+                                                            {a.agentTsds || '2'}
+                                                        </td>
+
+                                                        {/* 23: EXIT DATE */}
+                                                        <td className="py-2 px-4 font-mono text-xs text-slate-700 whitespace-nowrap">
+                                                            {a.exitDate || '-'}
+                                                        </td>
+
+                                                        {/* 24: ID */}
+                                                        <td className="py-2 px-4 text-center font-mono font-medium text-slate-800 whitespace-nowrap">
+                                                            {a.erpId || a.id}
+                                                        </td>
+
+                                                        {/* 25: LOCATION */}
+                                                        <td className="py-2 px-4 text-slate-800 font-medium whitespace-nowrap">
+                                                            {a.location || a.branch || 'BARAMATI'}
+                                                        </td>
+                                                    </tr>
+                                                );
+                                            });
+                                        })()}
+                                    </tbody>
+                                </table>
                             </div>
-                            <div className="flex items-center gap-2">
-                                <button
-                                    type="button"
-                                    onClick={() => scrollEmpTableToEdge('start')}
-                                    className="px-2.5 py-1 text-xs font-semibold text-brand-primary bg-white hover:bg-blue-50 border border-blue-200 rounded cursor-pointer transition-colors"
-                                >
-                                    ⏮ To Start
-                                </button>
-                                <button
-                                    type="button"
-                                    onClick={() => scrollEmpTable(-600)}
-                                    className="px-2.5 py-1 text-xs font-semibold text-brand-primary bg-white hover:bg-blue-50 border border-blue-200 rounded cursor-pointer transition-colors"
-                                >
-                                    ◀ Scroll Left
-                                </button>
-                                <button
-                                    type="button"
-                                    onClick={() => scrollEmpTable(600)}
-                                    className="px-2.5 py-1 text-xs font-semibold text-brand-primary bg-white hover:bg-blue-50 border border-blue-200 rounded cursor-pointer transition-colors"
-                                >
-                                    Scroll Right ▶
-                                </button>
-                                <button
-                                    type="button"
-                                    onClick={() => scrollEmpTableToEdge('end')}
-                                    className="px-2.5 py-1 text-xs font-semibold text-brand-primary bg-white hover:bg-blue-50 border border-blue-200 rounded cursor-pointer transition-colors"
-                                >
-                                    To End (Col 37) ⏭
-                                </button>
+
+                            {/* Standard Master Page Pagination Bar */}
+                            <div className="p-4 bg-white border-t border-brand-border flex flex-col sm:flex-row items-center justify-between gap-4">
+                                <div className="flex items-center gap-2 text-sm text-brand-muted font-medium">
+                                    <span>Records per page:</span>
+                                    <select
+                                        value={agentItemsPerPage}
+                                        onChange={(e) => {
+                                            setAgentItemsPerPage(Number(e.target.value));
+                                            setAgentCurrentPage(1);
+                                        }}
+                                        className="px-2 py-1 bg-white border border-brand-border rounded-md text-sm font-semibold text-brand-navy focus:outline-none focus:ring-1 focus:ring-brand-primary cursor-pointer"
+                                    >
+                                        <option value={10}>10</option>
+                                        <option value={20}>20</option>
+                                        <option value={50}>50</option>
+                                        <option value={100}>100</option>
+                                    </select>
+                                </div>
+
+                                <span className="text-sm text-brand-muted font-medium">
+                                    Showing {filteredAgents.length === 0 ? 0 : (agentCurrentPage - 1) * agentItemsPerPage + 1} - {Math.min(agentCurrentPage * agentItemsPerPage, filteredAgents.length)} of {filteredAgents.length} records
+                                </span>
+
+                                <div className="flex items-center gap-1">
+                                    <button
+                                        type="button"
+                                        onClick={() => setAgentCurrentPage(prev => Math.max(prev - 1, 1))}
+                                        disabled={agentCurrentPage === 1}
+                                        className="w-8 h-8 flex items-center justify-center text-sm font-semibold text-brand-navy bg-white border border-brand-border rounded-md hover:bg-brand-mainbg disabled:opacity-40 disabled:cursor-not-allowed transition-all cursor-pointer"
+                                    >
+                                        &lt;
+                                    </button>
+                                    {Array.from({ length: agentTotalPages || 1 }, (_, i) => i + 1).map((page) => (
+                                        <button
+                                            key={page}
+                                            type="button"
+                                            onClick={() => setAgentCurrentPage(page)}
+                                            className={`w-8 h-8 flex items-center justify-center text-sm font-semibold rounded-md transition-all cursor-pointer ${agentCurrentPage === page
+                                                ? 'bg-brand-primary text-white shadow-sm'
+                                                : 'bg-white text-brand-navy border border-brand-border hover:bg-brand-mainbg'
+                                                }`}
+                                        >
+                                            {page}
+                                        </button>
+                                    ))}
+                                    <button
+                                        type="button"
+                                        onClick={() => setAgentCurrentPage(prev => Math.min(prev + 1, agentTotalPages))}
+                                        disabled={agentCurrentPage === agentTotalPages || agentTotalPages === 0}
+                                        className="w-8 h-8 flex items-center justify-center text-sm font-semibold text-brand-navy bg-white border border-brand-border rounded-md hover:bg-brand-mainbg disabled:opacity-40 disabled:cursor-not-allowed transition-all cursor-pointer"
+                                    >
+                                        &gt;
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            )}
+                );
+            })()}
+
+            {/* TAB 4: VIEW EMPLOYEE (ERP 37 COLUMNS) */}
+            {activeTab === 'view-employee' && (() => {
+                const filteredEmployees = employees.filter(e => {
+                    const matchesStatus = empViewFilter === 'ALL' || e.status === empViewFilter;
+                    if (!matchesStatus) return false;
+                    if (!empSearchQuery.trim()) return true;
+                    const q = empSearchQuery.toLowerCase();
+                    return (
+                        (e.fullName && e.fullName.toLowerCase().includes(q)) ||
+                        (e.empCode && e.empCode.toLowerCase().includes(q)) ||
+                        (e.email && e.email.toLowerCase().includes(q)) ||
+                        (e.mobile && e.mobile.includes(q)) ||
+                        (e.branch && e.branch.toLowerCase().includes(q)) ||
+                        (e.address && e.address.toLowerCase().includes(q)) ||
+                        (e.designation && e.designation.toLowerCase().includes(q)) ||
+                        (e.panNo && e.panNo.toLowerCase().includes(q)) ||
+                        (e.bankName && e.bankName.toLowerCase().includes(q)) ||
+                        (e.reporting && e.reporting.toLowerCase().includes(q)) ||
+                        (e.userName && e.userName.toLowerCase().includes(q))
+                    );
+                });
+                const empTotalPages = Math.ceil(filteredEmployees.length / empItemsPerPage) || 1;
+                const paginatedEmployees = filteredEmployees.slice(
+                    (empCurrentPage - 1) * empItemsPerPage,
+                    empCurrentPage * empItemsPerPage
+                );
+
+                return (
+                    <div key={activeTab} className="tab-transition-wrapper">
+                        {/* Table Card Container with Integrated Toolbar & Horizontal Scroll */}
+                        <div className="bg-white rounded-[10px] border border-brand-border shadow-sm overflow-hidden flex flex-col w-full min-w-0">
+                            {/* Table Header Toolbar: Search + Status Filter Dropdown + Navigation + Actions + Export */}
+                            <div className="p-3.5 sm:p-4 bg-white border-b border-brand-border flex flex-wrap items-center justify-between gap-4">
+                                <div className="flex items-center gap-3 flex-wrap">
+                                    {/* Search Input */}
+                                    <div className="relative w-72 sm:w-80 md:w-[380px] h-[38px]">
+                                        <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" size={15} />
+                                        <input
+                                            type="text"
+                                            value={empSearchQuery}
+                                            onChange={(e) => {
+                                                setEmpSearchQuery(e.target.value);
+                                                setEmpCurrentPage(1);
+                                            }}
+                                            placeholder="Search Employee Name Here"
+                                            className="w-full h-[38px] pl-10 pr-9 bg-white border border-[#CBD5E1] rounded-[6px] text-[13px] text-slate-800 placeholder-[#94A3B8] shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all"
+                                        />
+                                        {empSearchQuery && (
+                                            <button
+                                                type="button"
+                                                onClick={() => {
+                                                    setEmpSearchQuery('');
+                                                    setEmpCurrentPage(1);
+                                                }}
+                                                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1 cursor-pointer"
+                                            >
+                                                <X size={14} />
+                                            </button>
+                                        )}
+                                    </div>
+
+                                    {/* Status Filter Dropdown */}
+                                    <div className="relative inline-flex items-center h-[38px]">
+                                        <Filter size={14} className="absolute left-3 text-slate-400 pointer-events-none" />
+                                        <select
+                                            value={empViewFilter}
+                                            onChange={(e) => {
+                                                setEmpViewFilter(e.target.value as 'ACTIVE' | 'INACTIVE' | 'ALL');
+                                                setEmpCurrentPage(1);
+                                            }}
+                                            className="h-[38px] pl-9 pr-8 bg-white border border-[#CBD5E1] rounded-[6px] text-[13px] font-semibold text-slate-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent cursor-pointer transition-all appearance-none"
+                                        >
+                                            <option value="ACTIVE">Active Employee ({employees.filter(e => e.status === 'ACTIVE').length})</option>
+                                            <option value="INACTIVE">Inactive Employee ({employees.filter(e => e.status === 'INACTIVE').length})</option>
+                                            <option value="ALL">All Employees ({employees.length})</option>
+                                        </select>
+                                        <ChevronDown size={14} className="absolute right-2.5 text-slate-400 pointer-events-none" />
+                                    </div>
+                                </div>
+
+                                <div className="flex items-center gap-3 flex-wrap">
+                                    {/* Horizontal Quick Scroll Navigation Controls */}
+                                    <div className="inline-flex items-center h-[38px] bg-white border border-brand-border rounded-[6px] p-0.5 shadow-sm">
+                                        <button
+                                            type="button"
+                                            onClick={() => scrollEmpTableToEdge('start')}
+                                            className="h-full px-2 text-slate-600 hover:text-brand-primary hover:bg-blue-50 rounded cursor-pointer border-none transition-colors flex items-center justify-center"
+                                            title="Scroll to beginning (Column 1: EMP CODE)"
+                                        >
+                                            <ChevronsLeft size={15} />
+                                        </button>
+                                        <button
+                                            type="button"
+                                            onClick={() => scrollEmpTable(-600)}
+                                            className="h-full px-2.5 text-[13px] font-medium text-slate-600 hover:text-brand-primary hover:bg-blue-50 rounded flex items-center gap-1 cursor-pointer border-none transition-colors"
+                                            title="Scroll left by 600px"
+                                        >
+                                            <ChevronLeft size={14} />
+                                            <span>Scroll Left</span>
+                                        </button>
+                                        <span className="h-4 w-px bg-slate-200 mx-0.5"></span>
+                                        <button
+                                            type="button"
+                                            onClick={() => scrollEmpTable(600)}
+                                            className="h-full px-2.5 text-[13px] font-medium text-slate-600 hover:text-brand-primary hover:bg-blue-50 rounded flex items-center gap-1 cursor-pointer border-none transition-colors"
+                                            title="Scroll right by 600px"
+                                        >
+                                            <span>Scroll Right</span>
+                                            <ChevronRight size={14} />
+                                        </button>
+                                        <button
+                                            type="button"
+                                            onClick={() => scrollEmpTableToEdge('end')}
+                                            className="h-full px-2 text-slate-600 hover:text-brand-primary hover:bg-blue-50 rounded cursor-pointer border-none transition-colors flex items-center justify-center"
+                                            title="Scroll to end (ACTIONS column)"
+                                        >
+                                            <ChevronsRight size={15} />
+                                        </button>
+                                    </div>
+
+                                    {/* Show/Hide Passwords Toggle */}
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowEmpPasswords(prev => !prev)}
+                                        className="h-[38px] flex items-center gap-1.5 px-3.5 bg-white hover:bg-blue-50/50 text-slate-700 border border-brand-border rounded-[6px] text-[13px] font-semibold shadow-sm transition-colors cursor-pointer"
+                                        title="Toggle password masking in table"
+                                    >
+                                        {showEmpPasswords ? <EyeOff size={15} className="text-amber-600" /> : <Eye size={15} className="text-brand-primary" />}
+                                        <span>{showEmpPasswords ? 'Hide Passwords' : 'Show Passwords'}</span>
+                                    </button>
+
+                                    {/* Add New Employee */}
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            setEmployeeForm({ fullName: '', designation: 'Operations Executive', department: 'Operations', branch: 'BARAMATI', mobile: '', email: '', doj: new Date().toISOString().split('T')[0] });
+                                            setModalType('EMPLOYEE');
+                                        }}
+                                        className="h-[38px] flex items-center gap-1.5 px-4 bg-brand-primary hover:bg-[#1D4ED8] text-white font-semibold text-[13px] rounded-[6px] shadow-sm transition-colors cursor-pointer border-none"
+                                    >
+                                        <Plus size={15} />
+                                        <span>Add New Employee</span>
+                                    </button>
+
+                                    {/* Export */}
+                                    <button
+                                        type="button"
+                                        onClick={handleExportEmployees}
+                                        className="h-[38px] flex items-center gap-1.5 px-4 bg-brand-primary hover:bg-[#1D4ED8] text-white font-semibold text-[13px] rounded-[6px] shadow-sm transition-colors cursor-pointer border-none"
+                                    >
+                                        <Download size={15} />
+                                        <span>Export</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            {/* Horizontally scrolling table area */}
+                            <div
+                                ref={empTableScrollRef}
+                                className="w-full overflow-x-auto min-w-0 erp-horizontal-scrollbar"
+                                style={{ maxWidth: '100%' }}
+                            >
+                                <table className="text-left border-collapse min-w-[6300px] w-full text-[13px]">
+                                    <thead>
+                                        <tr className="bg-brand-lightbg text-brand-navy text-[13px] font-semibold uppercase border-b border-brand-border whitespace-nowrap">
+                                            {/* Column 1: EMP CODE */}
+                                            <th className="py-3 px-4 w-[120px] min-w-[120px] whitespace-nowrap">
+                                                EMP CODE
+                                            </th>
+                                            {/* Column 4: EMPLOYEE NAME */}
+                                            <th className="py-3 px-4 w-[260px] min-w-[260px] whitespace-nowrap">
+                                                EMPLOYEE NAME
+                                            </th>
+                                            {/* Column 5: ADDRESS */}
+                                            <th className="py-3 px-4 w-[420px] min-w-[420px] whitespace-nowrap">
+                                                ADDRESS
+                                            </th>
+                                            {/* Column 6: GENDER */}
+                                            <th className="py-3 px-4 w-[90px] min-w-[90px] text-center whitespace-nowrap">
+                                                GENDER
+                                            </th>
+                                            {/* Column 7: MARITAL STATUS */}
+                                            <th className="py-3 px-4 w-[130px] min-w-[130px] text-center whitespace-nowrap">
+                                                MARITAL STATUS
+                                            </th>
+                                            {/* Column 8: OFFICE NO */}
+                                            <th className="py-3 px-4 w-[130px] min-w-[130px] whitespace-nowrap">
+                                                OFFICE NO
+                                            </th>
+                                            {/* Column 9: MOBLIE NO */}
+                                            <th className="py-3 px-4 w-[130px] min-w-[130px] whitespace-nowrap">
+                                                MOBLIE NO
+                                            </th>
+                                            {/* Column 10: EMAIL ID */}
+                                            <th className="py-3 px-4 w-[250px] min-w-[250px] whitespace-nowrap">
+                                                EMAIL ID
+                                            </th>
+                                            {/* Column 11: PAN NO */}
+                                            <th className="py-3 px-4 w-[130px] min-w-[130px] whitespace-nowrap">
+                                                PAN NO
+                                            </th>
+                                            {/* Column 12: AADHAR NO */}
+                                            <th className="py-3 px-4 w-[160px] min-w-[160px] whitespace-nowrap">
+                                                AADHAR NO
+                                            </th>
+                                            {/* Column 13: BANK NAME */}
+                                            <th className="py-3 px-4 w-[240px] min-w-[240px] whitespace-nowrap">
+                                                BANK NAME
+                                            </th>
+                                            {/* Column 14: BANK BRANCH */}
+                                            <th className="py-3 px-4 w-[150px] min-w-[150px] whitespace-nowrap">
+                                                BANK BRANCH
+                                            </th>
+                                            {/* Column 15: IFSC CODE */}
+                                            <th className="py-3 px-4 w-[140px] min-w-[140px] whitespace-nowrap">
+                                                IFSC CODE
+                                            </th>
+                                            {/* Column 16: ACCOUNT NO */}
+                                            <th className="py-3 px-4 w-[170px] min-w-[170px] whitespace-nowrap">
+                                                ACCOUNT NO
+                                            </th>
+                                            {/* Column 17: BRANCH NAME */}
+                                            <th className="py-3 px-4 w-[140px] min-w-[140px] whitespace-nowrap">
+                                                BRANCH NAME
+                                            </th>
+                                            {/* Column 18: USER NAME */}
+                                            <th className="py-3 px-4 w-[150px] min-w-[150px] whitespace-nowrap">
+                                                USER NAME
+                                            </th>
+                                            {/* Column 19: USER PASSWORD */}
+                                            <th className="py-3 px-4 w-[150px] min-w-[150px] whitespace-nowrap">
+                                                USER PASSWORD
+                                            </th>
+                                            {/* Column 20: CO-ORDINATOR NAME */}
+                                            <th className="py-3 px-4 w-[230px] min-w-[230px] whitespace-nowrap">
+                                                CO-ORDINATOR NAME
+                                            </th>
+                                            {/* Column 21: QUOTATION CO-ORDINATOR NAME */}
+                                            <th className="py-3 px-4 w-[240px] min-w-[240px] whitespace-nowrap">
+                                                QUOTATION CO-ORDINATOR NAME
+                                            </th>
+                                            {/* Column 22: INSPECTION CO-ORDINATOR NAME */}
+                                            <th className="py-3 px-4 w-[240px] min-w-[240px] whitespace-nowrap">
+                                                INSPECTION CO-ORDINATOR NAME
+                                            </th>
+                                            {/* Column 23: ENDROSMENT CO-ORDINATOR NAME */}
+                                            <th className="py-3 px-4 w-[240px] min-w-[240px] whitespace-nowrap">
+                                                ENDROSMENT CO-ORDINATOR NAME
+                                            </th>
+                                            {/* Column 24: LOCATION HEAD NAME */}
+                                            <th className="py-3 px-4 w-[280px] min-w-[280px] whitespace-nowrap">
+                                                LOCATION HEAD NAME
+                                            </th>
+                                            {/* Column 25: BUSINESS PROCESS */}
+                                            <th className="py-3 px-4 w-[160px] min-w-[160px] whitespace-nowrap">
+                                                BUSINESS PROCESS
+                                            </th>
+                                            {/* Column 26: LINE OF BUSINESS */}
+                                            <th className="py-3 px-4 w-[150px] min-w-[150px] whitespace-nowrap">
+                                                LINE OF BUSINESS
+                                            </th>
+                                            {/* Column 27: FUNCTION TYPE */}
+                                            <th className="py-3 px-4 w-[140px] min-w-[140px] whitespace-nowrap">
+                                                FUNCTION TYPE
+                                            </th>
+                                            {/* Column 28: DESIGNATION */}
+                                            <th className="py-3 px-4 w-[190px] min-w-[190px] whitespace-nowrap">
+                                                DESIGNATION
+                                            </th>
+                                            {/* Column 29: CLASS */}
+                                            <th className="py-3 px-4 w-[100px] min-w-[100px] whitespace-nowrap">
+                                                CLASS
+                                            </th>
+                                            {/* Column 30: REPORTING */}
+                                            <th className="py-3 px-4 w-[260px] min-w-[260px] whitespace-nowrap">
+                                                REPORTING
+                                            </th>
+                                            {/* Column 31: JOINING DATE */}
+                                            <th className="py-3 px-4 w-[170px] min-w-[170px] whitespace-nowrap">
+                                                JOINING DATE
+                                            </th>
+                                            {/* Column 32: DOCS */}
+                                            <th className="py-3 px-4 w-[100px] min-w-[100px] text-center whitespace-nowrap">
+                                                DOCS
+                                            </th>
+                                            {/* Column 33: ID */}
+                                            <th className="py-3 px-4 w-[70px] min-w-[70px] text-center whitespace-nowrap">
+                                                ID
+                                            </th>
+                                            {/* Column 33: EXECUTIVE TYPE */}
+                                            <th className="py-3 px-4 w-[190px] min-w-[190px] whitespace-nowrap">
+                                                EXECUTIVE TYPE
+                                            </th>
+                                            {/* Column 34: DATE OF BIRTH */}
+                                            <th className="py-3 px-4 w-[170px] min-w-[170px] whitespace-nowrap">
+                                                DATE OF BIRTH
+                                            </th>
+                                            {/* Column 35: ACTIONS (Frozen at the end) */}
+                                            <th className="py-3 px-4 w-[160px] min-w-[160px] text-center whitespace-nowrap sticky right-0 bg-brand-lightbg z-20 shadow-[-3px_0_6px_rgba(0,0,0,0.06)] border-l border-brand-border">
+                                                ACTIONS
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {(() => {
+                                            if (filteredEmployees.length === 0) {
+                                                return (
+                                                    <tr>
+                                                        <td colSpan={35} className="py-12 text-center text-slate-500 bg-white">
+                                                            <div className="flex flex-col items-center justify-center gap-2">
+                                                                <Search className="w-8 h-8 text-slate-300" />
+                                                                <p className="font-medium text-slate-700 text-sm">
+                                                                    No {empViewFilter === 'ALL' ? '' : empViewFilter.toLowerCase()} employees found matching "{empSearchQuery}"
+                                                                </p>
+                                                                <p className="text-xs text-slate-400">
+                                                                    Try searching by employee name, code, designation, bank, or clear the search input.
+                                                                </p>
+                                                                {empSearchQuery && (
+                                                                    <button
+                                                                        type="button"
+                                                                        onClick={() => {
+                                                                            setEmpSearchQuery('');
+                                                                            setEmpCurrentPage(1);
+                                                                        }}
+                                                                        className="mt-2 text-xs font-semibold text-brand-primary hover:underline cursor-pointer"
+                                                                    >
+                                                                        Clear Search Query
+                                                                    </button>
+                                                                )}
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                );
+                                            }
+
+                                            return paginatedEmployees.map((e, idx) => {
+                                                const isEven = idx % 2 === 0;
+                                                const rowBg = isEven ? 'bg-white' : 'bg-[#F8FAFC]';
+
+                                                return (
+                                                    <tr
+                                                        key={e.id}
+                                                        className={`hover:bg-brand-mainbg h-[48px] transition-colors bg-white border-b border-brand-border group`}
+                                                    >
+                                                        {/* 1: EMP CODE */}
+                                                        <td className="py-2 px-4 font-mono font-medium text-slate-800 whitespace-nowrap">
+                                                            {e.empCode}
+                                                        </td>
+
+                                                        {/* 4: EMPLOYEE NAME */}
+                                                        <td className="py-2 px-4 font-bold text-slate-900 whitespace-nowrap">
+                                                            {e.fullName}
+                                                        </td>
+
+                                                        {/* 5: ADDRESS */}
+                                                        <td className="py-2 px-4 text-slate-700 whitespace-nowrap">
+                                                            {e.address || '-'}
+                                                        </td>
+
+                                                        {/* 6: GENDER */}
+                                                        <td className="py-2 px-4 text-center text-slate-700 whitespace-nowrap">
+                                                            {e.gender || 'MALE'}
+                                                        </td>
+
+                                                        {/* 7: MARITAL STATUS */}
+                                                        <td className="py-2 px-4 text-center text-slate-700 whitespace-nowrap">
+                                                            {e.maritalStatus || 'MARRIED'}
+                                                        </td>
+
+                                                        {/* 8: OFFICE NO */}
+                                                        <td className="py-2 px-4 font-mono text-slate-700 whitespace-nowrap">
+                                                            {e.officeNo || '-'}
+                                                        </td>
+
+                                                        {/* 9: MOBLIE NO */}
+                                                        <td className="py-2 px-4 font-mono font-medium text-slate-800 whitespace-nowrap">
+                                                            {e.mobile || '-'}
+                                                        </td>
+
+                                                        {/* 10: EMAIL ID */}
+                                                        <td className="py-2 px-4 text-slate-700 font-medium whitespace-nowrap">
+                                                            {e.email || '-'}
+                                                        </td>
+
+                                                        {/* 11: PAN NO */}
+                                                        <td className="py-2 px-4 font-mono text-slate-700 whitespace-nowrap">
+                                                            {e.panNo || '-'}
+                                                        </td>
+
+                                                        {/* 12: AADHAR NO */}
+                                                        <td className="py-2 px-4 font-mono text-slate-700 whitespace-nowrap">
+                                                            {e.aadharNo || '-'}
+                                                        </td>
+
+                                                        {/* 13: BANK NAME */}
+                                                        <td className="py-2 px-4 font-medium text-slate-800 whitespace-nowrap">
+                                                            {e.bankName || '-'}
+                                                        </td>
+
+                                                        {/* 14: BANK BRANCH */}
+                                                        <td className="py-2 px-4 text-slate-700 whitespace-nowrap">
+                                                            {e.bankBranch || '-'}
+                                                        </td>
+
+                                                        {/* 15: IFSC CODE */}
+                                                        <td className="py-2 px-4 font-mono text-slate-700 whitespace-nowrap">
+                                                            {e.ifscCode || '-'}
+                                                        </td>
+
+                                                        {/* 16: ACCOUNT NO */}
+                                                        <td className="py-2 px-4 font-mono text-slate-700 whitespace-nowrap">
+                                                            {e.accountNo || '-'}
+                                                        </td>
+
+                                                        {/* 17: BRANCH NAME */}
+                                                        <td className="py-2 px-4 font-medium text-slate-800 whitespace-nowrap">
+                                                            {e.branchName || e.branch || 'BARAMATI'}
+                                                        </td>
+
+                                                        {/* 18: USER NAME */}
+                                                        <td className="py-2 px-4 font-mono font-medium text-brand-primary whitespace-nowrap">
+                                                            {e.userName || '-'}
+                                                        </td>
+
+                                                        {/* 19: USER PASSWORD */}
+                                                        <td className="py-2 px-4 font-mono text-slate-700 whitespace-nowrap">
+                                                            {showEmpPasswords ? (
+                                                                <span className="text-slate-800">{e.userPassword || '••••••••'}</span>
+                                                            ) : (
+                                                                <span className="text-slate-400 tracking-widest font-mono">••••••••</span>
+                                                            )}
+                                                        </td>
+
+                                                        {/* 20: CO-ORDINATOR NAME */}
+                                                        <td className="py-2 px-4 text-slate-700 whitespace-nowrap">
+                                                            {e.coordinator || '-'}
+                                                        </td>
+
+                                                        {/* 21: QUOTATION CO-ORDINATOR NAME */}
+                                                        <td className="py-2 px-4 text-slate-700 whitespace-nowrap">
+                                                            {e.quotationCoordinator || '-'}
+                                                        </td>
+
+                                                        {/* 22: INSPECTION CO-ORDINATOR NAME */}
+                                                        <td className="py-2 px-4 text-slate-700 whitespace-nowrap">
+                                                            {e.inspectionCoordinator || '-'}
+                                                        </td>
+
+                                                        {/* 23: ENDROSMENT CO-ORDINATOR NAME */}
+                                                        <td className="py-2 px-4 text-slate-700 whitespace-nowrap">
+                                                            {e.endorsementCoordinator || '-'}
+                                                        </td>
+
+                                                        {/* 24: LOCATION HEAD NAME */}
+                                                        <td className="py-2 px-4 text-slate-700 whitespace-nowrap">
+                                                            {e.locationHead || '-'}
+                                                        </td>
+
+                                                        {/* 25: BUSINESS PROCESS */}
+                                                        <td className="py-2 px-4 text-slate-700 whitespace-nowrap">
+                                                            {e.businessProcess || '-'}
+                                                        </td>
+
+                                                        {/* 26: LINE OF BUSINESS */}
+                                                        <td className="py-2 px-4 text-slate-700 whitespace-nowrap">
+                                                            {e.lineOfBusiness || '-'}
+                                                        </td>
+
+                                                        {/* 27: FUNCTION TYPE */}
+                                                        <td className="py-2 px-4 text-slate-700 whitespace-nowrap">
+                                                            {e.functionType || 'OPERATIONS'}
+                                                        </td>
+
+                                                        {/* 28: DESIGNATION */}
+                                                        <td className="py-2 px-4 font-medium text-slate-800 whitespace-nowrap">
+                                                            {e.designation || '-'}
+                                                        </td>
+
+                                                        {/* 29: CLASS */}
+                                                        <td className="py-2 px-4 text-slate-700 whitespace-nowrap">
+                                                            {e.employeeClass || 'CLASS 5'}
+                                                        </td>
+
+                                                        {/* 30: REPORTING */}
+                                                        <td className="py-2 px-4 font-medium text-slate-800 whitespace-nowrap">
+                                                            {e.reporting || '-'}
+                                                        </td>
+
+                                                        {/* 31: JOINING DATE */}
+                                                        <td className="py-2 px-4 font-mono text-slate-700 whitespace-nowrap">
+                                                            {e.joiningDate || e.doj || '-'}
+                                                        </td>
+
+                                                        {/* 32: DOCS */}
+                                                        <td className="py-2 px-4 text-center whitespace-nowrap">
+                                                            {e.docsStatus === 'VIEW' ? (
+                                                                <button
+                                                                    type="button"
+                                                                    onClick={() => showToast(`Viewing uploaded documents for ${e.fullName}`)}
+                                                                    className="text-red-600 hover:text-red-800 font-bold text-xs uppercase hover:underline cursor-pointer"
+                                                                >
+                                                                    VIEW
+                                                                </button>
+                                                            ) : (
+                                                                <span className="text-red-500 font-bold text-xs">NA</span>
+                                                            )}
+                                                        </td>
+
+                                                        {/* 33: ID */}
+                                                        <td className="py-2 px-4 text-center font-mono font-medium text-slate-800 whitespace-nowrap">
+                                                            {e.erpId || e.id}
+                                                        </td>
+
+                                                        {/* 34: EXECUTIVE TYPE */}
+                                                        <td className="py-2 px-4 text-slate-700 whitespace-nowrap">
+                                                            {e.executiveType || 'OPERATIONAL SUPPORT'}
+                                                        </td>
+
+                                                        {/* 34: DATE OF BIRTH */}
+                                                        <td className="py-2 px-4 font-mono text-slate-700 whitespace-nowrap">
+                                                            {e.dateOfBirth || '-'}
+                                                        </td>
+
+                                                        {/* 35: ACTIONS (Frozen at the end) */}
+                                                        <td className="py-2.5 px-3 text-center whitespace-nowrap sticky right-0 bg-white group-hover:bg-[#F8FAFC] z-10 shadow-[-3px_0_6px_rgba(0,0,0,0.06)] border-l border-brand-border">
+                                                            <div className="flex items-center justify-center gap-1.5">
+                                                                {/* View Profile */}
+                                                                <button
+                                                                    type="button"
+                                                                    onClick={() => showToast(`Viewing profile for ${e.fullName} (${e.empCode})`)}
+                                                                    className="p-1.5 text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded transition-colors cursor-pointer border-none inline-flex items-center justify-center"
+                                                                    title={`View Profile - ${e.fullName}`}
+                                                                >
+                                                                    <Eye size={15} />
+                                                                </button>
+
+                                                                {/* Edit Employee */}
+                                                                <button
+                                                                    type="button"
+                                                                    onClick={() => {
+                                                                        setEmployeeForm({
+                                                                            fullName: e.fullName,
+                                                                            designation: e.designation || 'Operations Executive',
+                                                                            department: e.department || 'Operations',
+                                                                            branch: e.branch || 'BARAMATI',
+                                                                            mobile: e.mobile || '',
+                                                                            email: e.email || '',
+                                                                            doj: e.doj || new Date().toISOString().split('T')[0]
+                                                                        });
+                                                                        setModalType('EMPLOYEE');
+                                                                    }}
+                                                                    className="p-1.5 text-amber-600 hover:text-amber-800 hover:bg-amber-50 rounded transition-colors cursor-pointer border-none inline-flex items-center justify-center"
+                                                                    title={`Edit ${e.fullName}`}
+                                                                >
+                                                                    <Edit2 size={15} />
+                                                                </button>
+
+                                                                {/* Exit / Status Toggle */}
+                                                                <button
+                                                                    type="button"
+                                                                    onClick={() => handleToggleEmpStatus(e.id)}
+                                                                    className={`p-1.5 rounded transition-colors cursor-pointer border-none inline-flex items-center justify-center ${e.status === 'ACTIVE'
+                                                                        ? 'text-orange-600 hover:text-orange-800 hover:bg-orange-50'
+                                                                        : 'text-emerald-600 hover:text-emerald-800 hover:bg-emerald-50'
+                                                                        }`}
+                                                                    title={`Click to mark as ${e.status === 'ACTIVE' ? 'INACTIVE (Exit)' : 'ACTIVE'}`}
+                                                                >
+                                                                    <LogOut size={15} />
+                                                                </button>
+
+                                                                {/* Delete Employee */}
+                                                                <button
+                                                                    type="button"
+                                                                    onClick={() => handleDeleteEmp(e.id)}
+                                                                    className="p-1.5 text-red-600 hover:text-red-800 hover:bg-red-50 rounded transition-colors cursor-pointer border-none inline-flex items-center justify-center"
+                                                                    title={`Delete ${e.fullName}`}
+                                                                >
+                                                                    <Trash2 size={15} />
+                                                                </button>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                );
+                                            });
+                                        })()}
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            {/* Standard Master Page Pagination Bar */}
+                            <div className="p-4 bg-white border-t border-brand-border flex flex-col sm:flex-row items-center justify-between gap-4">
+                                <div className="flex items-center gap-2 text-sm text-brand-muted font-medium">
+                                    <span>Records per page:</span>
+                                    <select
+                                        value={empItemsPerPage}
+                                        onChange={(e) => {
+                                            setEmpItemsPerPage(Number(e.target.value));
+                                            setEmpCurrentPage(1);
+                                        }}
+                                        className="px-2 py-1 bg-white border border-brand-border rounded-md text-sm font-semibold text-brand-navy focus:outline-none focus:ring-1 focus:ring-brand-primary cursor-pointer"
+                                    >
+                                        <option value={10}>10</option>
+                                        <option value={20}>20</option>
+                                        <option value={50}>50</option>
+                                        <option value={100}>100</option>
+                                    </select>
+                                </div>
+
+                                <span className="text-sm text-brand-muted font-medium">
+                                    Showing {filteredEmployees.length === 0 ? 0 : (empCurrentPage - 1) * empItemsPerPage + 1} - {Math.min(empCurrentPage * empItemsPerPage, filteredEmployees.length)} of {filteredEmployees.length} records
+                                </span>
+
+                                <div className="flex items-center gap-1">
+                                    <button
+                                        type="button"
+                                        onClick={() => setEmpCurrentPage(prev => Math.max(prev - 1, 1))}
+                                        disabled={empCurrentPage === 1}
+                                        className="w-8 h-8 flex items-center justify-center text-sm font-semibold text-brand-navy bg-white border border-brand-border rounded-md hover:bg-brand-mainbg disabled:opacity-40 disabled:cursor-not-allowed transition-all cursor-pointer"
+                                    >
+                                        &lt;
+                                    </button>
+                                    {Array.from({ length: empTotalPages || 1 }, (_, i) => i + 1).map((page) => (
+                                        <button
+                                            key={page}
+                                            type="button"
+                                            onClick={() => setEmpCurrentPage(page)}
+                                            className={`w-8 h-8 flex items-center justify-center text-sm font-semibold rounded-md transition-all cursor-pointer ${empCurrentPage === page
+                                                ? 'bg-brand-primary text-white shadow-sm'
+                                                : 'bg-white text-brand-navy border border-brand-border hover:bg-brand-mainbg'
+                                                }`}
+                                        >
+                                            {page}
+                                        </button>
+                                    ))}
+                                    <button
+                                        type="button"
+                                        onClick={() => setEmpCurrentPage(prev => Math.min(prev + 1, empTotalPages))}
+                                        disabled={empCurrentPage === empTotalPages || empTotalPages === 0}
+                                        className="w-8 h-8 flex items-center justify-center text-sm font-semibold text-brand-navy bg-white border border-brand-border rounded-md hover:bg-brand-mainbg disabled:opacity-40 disabled:cursor-not-allowed transition-all cursor-pointer"
+                                    >
+                                        &gt;
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                );
+            })()}
 
             {/* TAB 5: BANK BENEFICIARY */}
 
             {activeTab === 'bank-beneficiary' && (
                 <div key={activeTab} className="tab-transition-wrapper space-y-6">
-                    {/* Top Selector Card: » Bank Beneficiary Details (Matches Legacy ERP with Modern Blue Theme) */}
-                    <div className="bg-white rounded-[12px] border border-brand-border shadow-sm overflow-hidden">
-                        <div className="bg-brand-primary px-4 py-2.5 flex items-center justify-between text-white">
-                            <span className="font-bold text-[14px] tracking-wide flex items-center gap-1.5">
-                                <span className="text-blue-200 font-extrabold text-base">»</span> Bank Beneficiary Details
-                            </span>
+                    {/* Top Selector Card: » Bank Beneficiary Details (Matches Agent tab) */}
+                    <div className="bg-white rounded-xl p-6 sm:p-7 shadow-sm border border-slate-200/80">
+                        {/* Blue Banner Header */}
+                        <div className="bg-brand-primary text-white px-5 py-1.5 rounded-lg font-semibold text-sm flex items-center justify-between shadow-xs mb-6">
+                            <div className="flex items-center">
+                                <span className="mr-0.5 text-base font-serif">&raquo;</span>Bank Beneficiary Details
+                            </div>
                             <span className="text-xs bg-white/20 px-2.5 py-0.5 rounded-full font-semibold">
                                 {beneficiaryTypeFilter === 'FRANCHISE' ? 'Franchise View' : beneficiaryTypeFilter === 'AGENT' ? 'Agent View' : 'Franchise Agent View'}
                             </span>
                         </div>
-                        <div className="p-4 sm:p-5 flex flex-wrap items-center gap-8 bg-white border-b border-brand-border/60">
+                        <div className="flex flex-wrap items-center gap-8">
                             <label className="flex items-center gap-2.5 cursor-pointer text-sm font-semibold text-brand-navy select-none hover:text-brand-primary transition-colors">
                                 <input
                                     type="radio"
@@ -5269,6 +5257,7 @@ const Registration: React.FC = () => {
                                     checked={beneficiaryTypeFilter === 'AGENT'}
                                     onChange={() => {
                                         setBeneficiaryTypeFilter('AGENT');
+                                        setBeneficiaryCurrentPage(1);
                                         setViewingBeneficiary(null);
                                     }}
                                     className="w-4 h-4 text-brand-primary focus:ring-brand-primary cursor-pointer accent-blue-600"
@@ -5283,6 +5272,7 @@ const Registration: React.FC = () => {
                                     checked={beneficiaryTypeFilter === 'FRANCHISE'}
                                     onChange={() => {
                                         setBeneficiaryTypeFilter('FRANCHISE');
+                                        setBeneficiaryCurrentPage(1);
                                         setViewingBeneficiary(null);
                                     }}
                                     className="w-4 h-4 text-brand-primary focus:ring-brand-primary cursor-pointer accent-blue-600"
@@ -5297,6 +5287,7 @@ const Registration: React.FC = () => {
                                     checked={beneficiaryTypeFilter === 'FRANCHISE_AGENT'}
                                     onChange={() => {
                                         setBeneficiaryTypeFilter('FRANCHISE_AGENT');
+                                        setBeneficiaryCurrentPage(1);
                                         setViewingBeneficiary(null);
                                     }}
                                     className="w-4 h-4 text-brand-primary focus:ring-brand-primary cursor-pointer accent-blue-600"
@@ -5308,12 +5299,12 @@ const Registration: React.FC = () => {
 
                     {/* VIEW BENEFICIARY BANK DETAILS CARD (When viewing a specific record) */}
                     {viewingBeneficiary ? (
-                        <div className="bg-white rounded-[12px] border border-brand-border shadow-sm overflow-hidden animate-in fade-in duration-200">
-                            {/* Blue Header: » Bank Details */}
-                            <div className="bg-brand-primary px-4 py-2.5 flex items-center justify-between text-white">
-                                <span className="font-bold text-[14px] tracking-wide flex items-center gap-1.5">
-                                    <span className="text-blue-200 font-extrabold text-base">»</span> Bank Details
-                                </span>
+                        <div className="bg-white rounded-xl p-6 sm:p-7 shadow-sm border border-slate-200/80 animate-in fade-in duration-200">
+                            {/* Blue Banner Header */}
+                            <div className="bg-brand-primary text-white px-5 py-1.5 rounded-lg font-semibold text-sm flex items-center justify-between shadow-xs mb-6">
+                                <div className="flex items-center">
+                                    <span className="mr-0.5 text-base font-serif">&raquo;</span>Bank Details
+                                </div>
                                 <div className="flex items-center gap-2">
                                     <span className="text-xs bg-white/20 px-2.5 py-0.5 rounded-full font-semibold">
                                         {viewingBeneficiary.entityCode}
@@ -5326,7 +5317,7 @@ const Registration: React.FC = () => {
 
                             <div className="p-4 sm:p-6 space-y-6">
                                 {/* Beneficiary Meta Header */}
-                                <div className="bg-[#F8FAFC] border border-blue-100 rounded-[10px] p-4 flex flex-wrap items-center justify-between gap-4">
+                                <div className="bg-[#F8FAFC] border border-blue-100 rounded-xl p-4 flex flex-wrap items-center justify-between gap-4">
                                     <div>
                                         <div className="text-xs font-semibold uppercase text-brand-muted tracking-wider">Beneficiary Name & Code</div>
                                         <div className="text-base font-bold text-brand-navy flex items-center gap-2 mt-0.5">
@@ -5348,11 +5339,11 @@ const Registration: React.FC = () => {
                                         <table className="w-full text-left border-collapse min-w-[700px]">
                                             <thead>
                                                 <tr className="bg-brand-primary text-white text-[12px] font-bold uppercase tracking-wider">
-                                                    <th className="py-2.5 px-3.5 border-r border-blue-500/40 w-[24%]">Account Holder Name</th>
-                                                    <th className="py-2.5 px-3.5 border-r border-blue-500/40 w-[24%]">Bank Name</th>
-                                                    <th className="py-2.5 px-3.5 border-r border-blue-500/40 w-[18%]">Branch</th>
-                                                    <th className="py-2.5 px-3.5 border-r border-blue-500/40 w-[20%]">Account No.</th>
-                                                    <th className="py-2.5 px-3.5 w-[14%]">Ifsc_code</th>
+                                                    <th className="py-2 px-4 border-r border-blue-500/40 w-[24%]">Account Holder Name</th>
+                                                    <th className="py-2 px-4 border-r border-blue-500/40 w-[24%]">Bank Name</th>
+                                                    <th className="py-2 px-4 border-r border-blue-500/40 w-[18%]">Branch</th>
+                                                    <th className="py-2 px-4 border-r border-blue-500/40 w-[20%]">Account No.</th>
+                                                    <th className="py-2 px-4 w-[14%]">Ifsc_code</th>
                                                 </tr>
                                             </thead>
                                             <tbody className="text-[13px] text-brand-navy divide-y divide-brand-border bg-white">
@@ -5387,11 +5378,11 @@ const Registration: React.FC = () => {
                                         <table className="w-full text-left border-collapse min-w-[700px]">
                                             <thead>
                                                 <tr className="bg-brand-primary text-white text-[12px] font-bold uppercase tracking-wider">
-                                                    <th className="py-2.5 px-3.5 border-r border-blue-500/40 w-[24%]">Account Holder Name</th>
-                                                    <th className="py-2.5 px-3.5 border-r border-blue-500/40 w-[24%]">Bank Name</th>
-                                                    <th className="py-2.5 px-3.5 border-r border-blue-500/40 w-[18%]">Branch</th>
-                                                    <th className="py-2.5 px-3.5 border-r border-blue-500/40 w-[20%]">Account No.</th>
-                                                    <th className="py-2.5 px-3.5 w-[14%]">Ifsc_code</th>
+                                                    <th className="py-2 px-4 border-r border-blue-500/40 w-[24%]">Account Holder Name</th>
+                                                    <th className="py-2 px-4 border-r border-blue-500/40 w-[24%]">Bank Name</th>
+                                                    <th className="py-2 px-4 border-r border-blue-500/40 w-[18%]">Branch</th>
+                                                    <th className="py-2 px-4 border-r border-blue-500/40 w-[20%]">Account No.</th>
+                                                    <th className="py-2 px-4 w-[14%]">Ifsc_code</th>
                                                 </tr>
                                             </thead>
                                             <tbody className="text-[13px] text-brand-navy divide-y divide-brand-border bg-white">
@@ -5427,7 +5418,7 @@ const Registration: React.FC = () => {
                                     </div>
                                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                                         {/* Aadhar Card Card */}
-                                        <div className="border border-brand-border rounded-[10px] p-3.5 bg-white hover:border-brand-primary hover:shadow-sm transition-all group">
+                                        <div className="border border-brand-border rounded-xl p-3.5 bg-white hover:border-brand-primary hover:shadow-sm transition-all group">
                                             <div className="flex items-center justify-between mb-2">
                                                 <span className="text-xs font-bold text-brand-navy">Aadhar Card</span>
                                                 <span className="text-[10px] bg-blue-50 text-brand-primary px-2 py-0.5 rounded font-semibold">ID PROOF</span>
@@ -5446,7 +5437,7 @@ const Registration: React.FC = () => {
                                         </div>
 
                                         {/* PAN Card Card */}
-                                        <div className="border border-brand-border rounded-[10px] p-3.5 bg-white hover:border-brand-primary hover:shadow-sm transition-all group">
+                                        <div className="border border-brand-border rounded-xl p-3.5 bg-white hover:border-brand-primary hover:shadow-sm transition-all group">
                                             <div className="flex items-center justify-between mb-2">
                                                 <span className="text-xs font-bold text-brand-navy">PAN Card</span>
                                                 <span className="text-[10px] bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded font-semibold">TAX ID</span>
@@ -5465,7 +5456,7 @@ const Registration: React.FC = () => {
                                         </div>
 
                                         {/* Cancel Cheque / Passbook Card */}
-                                        <div className="border border-brand-border rounded-[10px] p-3.5 bg-white hover:border-brand-primary hover:shadow-sm transition-all group">
+                                        <div className="border border-brand-border rounded-xl p-3.5 bg-white hover:border-brand-primary hover:shadow-sm transition-all group">
                                             <div className="flex items-center justify-between mb-2">
                                                 <span className="text-xs font-bold text-brand-navy">Cancelled Cheque</span>
                                                 <span className="text-[10px] bg-amber-50 text-amber-700 px-2 py-0.5 rounded font-semibold">BANK PROOF</span>
@@ -5511,59 +5502,72 @@ const Registration: React.FC = () => {
                         </div>
                     ) : (
                         /* BENEFICIARY LIST / TABLE VIEW */
-                        <div className="bg-white rounded-[12px] border border-brand-border shadow-sm overflow-hidden flex flex-col w-full min-w-0">
-                            {/* Table Toolbar */}
-                            <div className="p-4 bg-white border-b border-brand-border flex flex-col lg:flex-row items-center justify-between gap-4">
-                                <div className="flex flex-col sm:flex-row items-center gap-3 w-full lg:w-auto">
-                                    <div className="relative w-full sm:w-80">
-                                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-brand-primary" size={17} />
-                                        <input
-                                            type="text"
-                                            placeholder={`Search ${beneficiaryTypeFilter === 'FRANCHISE' ? 'Franchise' : 'Agent'} Name / Code / Mobile...`}
-                                            value={beneficiarySearchQuery}
-                                            onChange={(e) => setBeneficiarySearchQuery(e.target.value)}
-                                            className="w-full pl-9 pr-4 py-2 bg-white border border-brand-border rounded-[8px] text-[13px] text-brand-navy placeholder-[#66809F] focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all"
-                                        />
-                                    </div>
-                                    <div className="text-xs font-semibold text-brand-muted whitespace-nowrap bg-brand-lightbg px-3 py-2 rounded-[8px]">
-                                        Total {beneficiaryTypeFilter.replace('_', ' ')}: <span className="text-brand-primary font-bold">{beneficiaries.filter(b => b.entityType === beneficiaryTypeFilter).length}</span>
-                                    </div>
+                        <div className="bg-white rounded-[10px] border border-brand-border shadow-sm overflow-hidden flex flex-col w-full min-w-0">
+                            {/* Table Header Toolbar */}
+                            <div className="p-3.5 sm:p-4 bg-white border-b border-brand-border flex flex-wrap items-center justify-between gap-4">
+                                {/* Search Input */}
+                                <div className="relative w-72 sm:w-80 md:w-[380px] h-[38px]">
+                                    <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" size={15} />
+                                    <input
+                                        type="text"
+                                        placeholder={`Search ${beneficiaryTypeFilter === 'FRANCHISE' ? 'Franchise' : 'Agent'} Name / Code / Mobile`}
+                                        value={beneficiarySearchQuery}
+                                        onChange={(e) => {
+                                            setBeneficiarySearchQuery(e.target.value);
+                                            setBeneficiaryCurrentPage(1);
+                                        }}
+                                        className="w-full h-[38px] pl-10 pr-9 bg-white border border-[#CBD5E1] rounded-[6px] text-[13px] text-slate-800 placeholder-[#94A3B8] shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all"
+                                    />
+                                    {beneficiarySearchQuery && (
+                                        <button
+                                            type="button"
+                                            onClick={() => { setBeneficiarySearchQuery(''); setBeneficiaryCurrentPage(1); }}
+                                            className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1 cursor-pointer"
+                                            title="Clear search"
+                                        >
+                                            <X size={14} />
+                                        </button>
+                                    )}
                                 </div>
 
-                                <div className="flex flex-wrap items-center gap-2 w-full lg:w-auto justify-end">
-                                    {/* Horizontal Scroll Quick Controls */}
-                                    <div className="hidden sm:flex items-center gap-1 bg-[#F1F5F9] p-1 rounded-[8px] border border-brand-border">
+                                {/* Actions on right: Horizontal Scroll + Export + Add Beneficiary */}
+                                <div className="flex items-center gap-3 flex-wrap">
+                                    {/* Horizontal Quick Scroll Navigation Controls */}
+                                    <div className="inline-flex items-center h-[38px] bg-white border border-brand-border rounded-[6px] p-0.5 shadow-sm">
                                         <button
                                             type="button"
                                             onClick={() => scrollBeneficiaryTableToEdge('start')}
-                                            title="Scroll to Start"
-                                            className="px-2 py-1 text-xs font-semibold text-brand-navy hover:text-brand-primary hover:bg-white rounded cursor-pointer transition-all border-none bg-transparent"
+                                            className="h-full px-2 text-slate-600 hover:text-brand-primary hover:bg-blue-50 rounded cursor-pointer border-none transition-colors flex items-center justify-center"
+                                            title="Scroll to beginning"
                                         >
-                                            ⏮ Start
+                                            <ChevronsLeft size={15} />
                                         </button>
                                         <button
                                             type="button"
-                                            onClick={() => scrollBeneficiaryTable(-300)}
-                                            title="Scroll Left"
-                                            className="px-2 py-1 text-xs font-semibold text-brand-navy hover:text-brand-primary hover:bg-white rounded cursor-pointer transition-all border-none bg-transparent"
+                                            onClick={() => scrollBeneficiaryTable(-400)}
+                                            className="h-full px-2.5 text-[13px] font-medium text-slate-600 hover:text-brand-primary hover:bg-blue-50 rounded flex items-center gap-1 cursor-pointer border-none transition-colors"
+                                            title="Scroll left"
                                         >
-                                            ◀ Left
+                                            <ChevronLeft size={14} />
+                                            <span>Left</span>
                                         </button>
+                                        <span className="h-4 w-px bg-slate-200 mx-0.5"></span>
                                         <button
                                             type="button"
-                                            onClick={() => scrollBeneficiaryTable(300)}
-                                            title="Scroll Right"
-                                            className="px-2 py-1 text-xs font-semibold text-brand-navy hover:text-brand-primary hover:bg-white rounded cursor-pointer transition-all border-none bg-transparent"
+                                            onClick={() => scrollBeneficiaryTable(400)}
+                                            className="h-full px-2.5 text-[13px] font-medium text-slate-600 hover:text-brand-primary hover:bg-blue-50 rounded flex items-center gap-1 cursor-pointer border-none transition-colors"
+                                            title="Scroll right"
                                         >
-                                            Right ▶
+                                            <span>Right</span>
+                                            <ChevronRight size={14} />
                                         </button>
                                         <button
                                             type="button"
                                             onClick={() => scrollBeneficiaryTableToEdge('end')}
-                                            title="Scroll to End"
-                                            className="px-2 py-1 text-xs font-semibold text-brand-navy hover:text-brand-primary hover:bg-white rounded cursor-pointer transition-all border-none bg-transparent"
+                                            className="h-full px-2 text-slate-600 hover:text-brand-primary hover:bg-blue-50 rounded cursor-pointer border-none transition-colors flex items-center justify-center"
+                                            title="Scroll to end"
                                         >
-                                            End ⏭
+                                            <ChevronsRight size={15} />
                                         </button>
                                     </div>
 
@@ -5571,11 +5575,11 @@ const Registration: React.FC = () => {
                                     <button
                                         type="button"
                                         onClick={handleExportBeneficiaries}
-                                        className="flex items-center gap-1.5 px-3 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-[8px] font-semibold text-xs transition-colors cursor-pointer border-none shadow-sm"
+                                        className="h-[38px] flex items-center gap-1.5 px-4 bg-brand-primary hover:bg-[#1D4ED8] text-white font-semibold text-[13px] rounded-[6px] shadow-sm transition-colors cursor-pointer border-none"
                                         title="Export records to CSV"
                                     >
-                                        <Download size={14} />
-                                        <span>Export</span>
+                                        <Download size={15} />
+                                        <span>Export CSV</span>
                                     </button>
 
                                     {/* Add Beneficiary Button */}
@@ -5597,9 +5601,9 @@ const Registration: React.FC = () => {
                                             });
                                             setModalType('BENEFICIARY');
                                         }}
-                                        className="flex items-center gap-1.5 px-3.5 py-2 bg-brand-primary hover:bg-[#1D4ED8] text-white rounded-[8px] font-semibold text-xs shadow-sm transition-all cursor-pointer border-none"
+                                        className="h-[38px] flex items-center gap-1.5 px-4 bg-brand-primary hover:bg-[#1D4ED8] text-white font-semibold text-[13px] rounded-[6px] shadow-sm transition-colors cursor-pointer border-none"
                                     >
-                                        <Plus size={14} />
+                                        <Plus size={15} />
                                         <span>Add Beneficiary</span>
                                     </button>
                                 </div>
@@ -5612,70 +5616,57 @@ const Registration: React.FC = () => {
                             >
                                 <table className="w-full text-left border-collapse min-w-[1250px]">
                                     <thead>
-                                        <tr className="bg-brand-primary text-white text-[12px] font-bold uppercase tracking-wider sticky top-0 z-10 select-none shadow-sm">
-                                            <th className="py-3 px-3 text-center border-r border-blue-500/30 w-[80px]">VIEW</th>
-                                            <th className="py-3 px-3 border-r border-blue-500/30 w-[110px]">CODE</th>
-                                            <th className="py-3 px-4 border-r border-blue-500/30 w-[280px]">
+                                        <tr className="bg-brand-lightbg text-brand-navy text-[13px] font-semibold uppercase border-b border-brand-border whitespace-nowrap">
+                                            <th className="py-3.5 px-4 text-center w-[80px]">ACTION</th>
+                                            <th className="py-3.5 px-4 w-[110px]">CODE</th>
+                                            <th className="py-3.5 px-4 w-[280px]">
                                                 {beneficiaryTypeFilter === 'FRANCHISE' ? 'FRANCHISE' : 'AGENT NAME'}
                                             </th>
-                                            <th className="py-3 px-3 border-r border-blue-500/30 w-[160px]">BRANCH NAME</th>
-                                            <th className="py-3 px-4 border-r border-blue-500/30 min-w-[420px]">ADDRESS</th>
-                                            <th className="py-3 px-3 w-[150px]">MOBLIE NO</th>
+                                            <th className="py-3.5 px-4 w-[160px]">BRANCH NAME</th>
+                                            <th className="py-3.5 px-4 min-w-[420px]">ADDRESS</th>
+                                            <th className="py-3.5 px-4 w-[150px]">MOBILE NO</th>
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-brand-border text-[13px] bg-white">
-                                        {beneficiaries
-                                            .filter(b => {
-                                                if (b.entityType !== beneficiaryTypeFilter) return false;
-                                                if (!beneficiarySearchQuery.trim()) return true;
-                                                const q = beneficiarySearchQuery.toLowerCase();
-                                                return (
-                                                    b.beneficiaryName?.toLowerCase().includes(q) ||
-                                                    b.entityCode?.toLowerCase().includes(q) ||
-                                                    b.mobile?.includes(q) ||
-                                                    b.address?.toLowerCase().includes(q) ||
-                                                    b.branchName?.toLowerCase().includes(q) ||
-                                                    b.branch?.toLowerCase().includes(q)
-                                                );
-                                            })
-                                            .map((b) => (
-                                                <tr
-                                                    key={b.id}
-                                                    className="hover:bg-blue-50/50 transition-colors h-[48px]"
-                                                >
-                                                    {/* VIEW Link (Matches ERP blue VIEW action) */}
-                                                    <td className="py-2.5 px-3 text-center border-r border-brand-border/60">
-                                                        <button
-                                                            type="button"
-                                                            onClick={() => setViewingBeneficiary(b)}
-                                                            className="text-brand-primary hover:text-blue-800 font-bold text-xs underline cursor-pointer bg-transparent border-none p-0 tracking-wide"
-                                                        >
-                                                            VIEW
-                                                        </button>
-                                                    </td>
-                                                    {/* CODE */}
-                                                    <td className="py-2.5 px-3 font-semibold text-brand-navy border-r border-brand-border/60 whitespace-nowrap">
-                                                        {b.entityCode}
-                                                    </td>
-                                                    {/* FRANCHISE / AGENT NAME */}
-                                                    <td className="py-2.5 px-4 font-semibold text-brand-navy border-r border-brand-border/60">
-                                                        {b.beneficiaryName}
-                                                    </td>
-                                                    {/* BRANCH NAME */}
-                                                    <td className="py-2.5 px-3 text-brand-navy border-r border-brand-border/60 whitespace-nowrap">
-                                                        {b.branchName || b.branch || 'FRANCHISES'}
-                                                    </td>
-                                                    {/* ADDRESS */}
-                                                    <td className="py-2.5 px-4 text-xs text-brand-muted border-r border-brand-border/60 leading-relaxed">
-                                                        {b.address || 'NA,NA,PUNE,MAHARASHTRA'}
-                                                    </td>
-                                                    {/* MOBLIE NO */}
-                                                    <td className="py-2.5 px-3 font-mono text-xs text-brand-navy whitespace-nowrap">
-                                                        {b.mobile || 'N/A'}
-                                                    </td>
-                                                </tr>
-                                            ))}
-                                        {beneficiaries.filter(b => b.entityType === beneficiaryTypeFilter).length === 0 && (
+                                        {paginatedBeneficiaries.map((b) => (
+                                            <tr
+                                                key={b.id}
+                                                className="hover:bg-brand-mainbg h-[48px] transition-colors bg-white group"
+                                            >
+                                                {/* View Action Button with Eye Icon */}
+                                                <td className="py-2 px-4 text-center">
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => setViewingBeneficiary(b)}
+                                                        className="p-1.5 text-brand-primary hover:text-blue-800 hover:bg-blue-50 rounded-[6px] transition-colors cursor-pointer border-none inline-flex items-center justify-center"
+                                                        title={`View Bank Details - ${b.beneficiaryName}`}
+                                                    >
+                                                        <Eye size={16} />
+                                                    </button>
+                                                </td>
+                                                {/* CODE */}
+                                                <td className="py-2 px-4 font-semibold text-brand-navy whitespace-nowrap">
+                                                    {b.entityCode}
+                                                </td>
+                                                {/* FRANCHISE / AGENT NAME */}
+                                                <td className="py-2 px-4 font-semibold text-brand-navy">
+                                                    {b.beneficiaryName}
+                                                </td>
+                                                {/* BRANCH NAME */}
+                                                <td className="py-2 px-4 text-brand-navy whitespace-nowrap">
+                                                    {b.branchName || b.branch || 'FRANCHISES'}
+                                                </td>
+                                                {/* ADDRESS */}
+                                                <td className="py-2 px-4 text-xs text-brand-muted leading-relaxed">
+                                                    {b.address || 'NA,NA,PUNE,MAHARASHTRA'}
+                                                </td>
+                                                {/* MOBILE NO */}
+                                                <td className="py-2 px-4 font-mono text-xs text-brand-navy whitespace-nowrap">
+                                                    {b.mobile || 'N/A'}
+                                                </td>
+                                            </tr>
+                                        ))}
+                                        {filteredBeneficiaries.length === 0 && (
                                             <tr>
                                                 <td colSpan={6} className="py-12 text-center text-brand-muted">
                                                     No {beneficiaryTypeFilter.replace('_', ' ').toLowerCase()} records found.
@@ -5686,39 +5677,58 @@ const Registration: React.FC = () => {
                                 </table>
                             </div>
 
-                            {/* Table Footer with scroll buttons & counter */}
-                            <div className="p-3 bg-[#F8FAFC] border-t border-brand-border flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-brand-muted">
-                                <div>
-                                    Showing <strong className="text-brand-navy">{beneficiaries.filter(b => b.entityType === beneficiaryTypeFilter).length}</strong> {beneficiaryTypeFilter.replace('_', ' ').toLowerCase()} records
+                            {/* Standard Master Page Pagination Bar */}
+                            <div className="p-4 bg-white border-t border-brand-border flex flex-col sm:flex-row items-center justify-between gap-4">
+                                <div className="flex items-center gap-2 text-sm text-brand-muted font-medium">
+                                    <span>Records per page:</span>
+                                    <select
+                                        value={beneficiaryItemsPerPage}
+                                        onChange={(e) => {
+                                            setBeneficiaryItemsPerPage(Number(e.target.value));
+                                            setBeneficiaryCurrentPage(1);
+                                        }}
+                                        className="px-2 py-1 bg-white border border-brand-border rounded-md text-sm font-semibold text-brand-navy focus:outline-none focus:ring-1 focus:ring-brand-primary cursor-pointer"
+                                    >
+                                        <option value={10}>10</option>
+                                        <option value={20}>20</option>
+                                        <option value={50}>50</option>
+                                        <option value={100}>100</option>
+                                    </select>
                                 </div>
-                                <div className="flex items-center gap-1.5">
+
+                                <span className="text-sm text-brand-muted font-medium">
+                                    Showing {filteredBeneficiaries.length === 0 ? 0 : (beneficiaryCurrentPage - 1) * beneficiaryItemsPerPage + 1} - {Math.min(beneficiaryCurrentPage * beneficiaryItemsPerPage, filteredBeneficiaries.length)} of {filteredBeneficiaries.length} records
+                                </span>
+
+                                <div className="flex items-center gap-1">
                                     <button
                                         type="button"
-                                        onClick={() => scrollBeneficiaryTableToEdge('start')}
-                                        className="px-2 py-1 text-xs font-semibold text-brand-primary bg-white hover:bg-blue-50 border border-blue-200 rounded cursor-pointer transition-colors"
+                                        onClick={() => setBeneficiaryCurrentPage(prev => Math.max(prev - 1, 1))}
+                                        disabled={beneficiaryCurrentPage === 1}
+                                        className="w-8 h-8 flex items-center justify-center text-sm font-semibold text-brand-navy bg-white border border-brand-border rounded-md hover:bg-brand-mainbg disabled:opacity-40 disabled:cursor-not-allowed transition-all cursor-pointer"
                                     >
-                                        ⏮ Start
+                                        &lt;
                                     </button>
+                                    {Array.from({ length: totalBeneficiaryPages }, (_, i) => i + 1).map((page) => (
+                                        <button
+                                            key={page}
+                                            type="button"
+                                            onClick={() => setBeneficiaryCurrentPage(page)}
+                                            className={`w-8 h-8 flex items-center justify-center text-sm font-semibold rounded-md transition-all cursor-pointer ${beneficiaryCurrentPage === page
+                                                ? 'bg-brand-primary text-white shadow-sm'
+                                                : 'bg-white text-brand-navy border border-brand-border hover:bg-brand-mainbg'
+                                                }`}
+                                        >
+                                            {page}
+                                        </button>
+                                    ))}
                                     <button
                                         type="button"
-                                        onClick={() => scrollBeneficiaryTable(-400)}
-                                        className="px-2 py-1 text-xs font-semibold text-brand-primary bg-white hover:bg-blue-50 border border-blue-200 rounded cursor-pointer transition-colors"
+                                        onClick={() => setBeneficiaryCurrentPage(prev => Math.min(prev + 1, totalBeneficiaryPages))}
+                                        disabled={beneficiaryCurrentPage === totalBeneficiaryPages || totalBeneficiaryPages === 0}
+                                        className="w-8 h-8 flex items-center justify-center text-sm font-semibold text-brand-navy bg-white border border-brand-border rounded-md hover:bg-brand-mainbg disabled:opacity-40 disabled:cursor-not-allowed transition-all cursor-pointer"
                                     >
-                                        ◀ Left
-                                    </button>
-                                    <button
-                                        type="button"
-                                        onClick={() => scrollBeneficiaryTable(400)}
-                                        className="px-2 py-1 text-xs font-semibold text-brand-primary bg-white hover:bg-blue-50 border border-blue-200 rounded cursor-pointer transition-colors"
-                                    >
-                                        Right ▶
-                                    </button>
-                                    <button
-                                        type="button"
-                                        onClick={() => scrollBeneficiaryTableToEdge('end')}
-                                        className="px-2 py-1 text-xs font-semibold text-brand-primary bg-white hover:bg-blue-50 border border-blue-200 rounded cursor-pointer transition-colors"
-                                    >
-                                        End ⏭
+                                        &gt;
                                     </button>
                                 </div>
                             </div>

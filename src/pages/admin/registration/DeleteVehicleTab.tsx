@@ -323,8 +323,7 @@ const INITIAL_VEHICLES: VehicleRecord[] = [
 
 const DeleteVehicleTab: React.FC = () => {
     const [vehicles, setVehicles] = useState<VehicleRecord[]>(INITIAL_VEHICLES);
-    const [custNameSearch, setCustNameSearch] = useState('');
-    const [vehicleNoSearch, setVehicleNoSearch] = useState('');
+    const [searchQuery, setSearchQuery] = useState('');
     const [selectedVehicleToDelete, setSelectedVehicleToDelete] = useState<VehicleRecord | null>(null);
     const [deleteReason, setDeleteReason] = useState('Duplicate registration entry');
     const [customReason, setCustomReason] = useState('');
@@ -356,16 +355,15 @@ const DeleteVehicleTab: React.FC = () => {
         }
     };
 
-    // Filter vehicles by customer name and vehicle number
+    // Filter vehicles by search query (customer name or vehicle number)
     const filteredVehicles = useMemo(() => {
-        return vehicles.filter(v => {
-            const matchesCustName = !custNameSearch.trim() ||
-                (v.custName && v.custName.toLowerCase().includes(custNameSearch.trim().toLowerCase()));
-            const matchesVehNo = !vehicleNoSearch.trim() ||
-                (v.regNo && v.regNo.toLowerCase().includes(vehicleNoSearch.trim().toLowerCase()));
-            return matchesCustName && matchesVehNo;
-        });
-    }, [vehicles, custNameSearch, vehicleNoSearch]);
+        if (!searchQuery.trim()) return vehicles;
+        const q = searchQuery.trim().toLowerCase();
+        return vehicles.filter(v =>
+            (v.custName && v.custName.toLowerCase().includes(q)) ||
+            (v.regNo && v.regNo.toLowerCase().includes(q))
+        );
+    }, [vehicles, searchQuery]);
 
     // Paginated records
     const totalPages = Math.ceil(filteredVehicles.length / itemsPerPage) || 1;
@@ -434,8 +432,7 @@ const DeleteVehicleTab: React.FC = () => {
     };
 
     const handleResetFilters = () => {
-        setCustNameSearch('');
-        setVehicleNoSearch('');
+        setSearchQuery('');
         setCurrentPage(1);
     };
 
@@ -449,180 +446,85 @@ const DeleteVehicleTab: React.FC = () => {
                 </div>
             )}
 
-            {/* ERP Header Information Stats Ribbon (Matches Legacy ERP Top Stats in Blue Theme) */}
-            <div className="bg-white rounded-xl border border-brand-border shadow-sm p-4 flex flex-wrap items-center justify-between gap-4">
-                <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-blue-50 text-brand-primary flex items-center justify-center font-bold">
-                        <Car size={22} />
-                    </div>
-                    <div>
-                        <h3 className="text-base font-bold text-brand-navy">Delete Vehicle Record</h3>
-                        <p className="text-xs text-brand-muted">
-                            Search customer or vehicle registration number to identify and safely purge vehicle details
-                        </p>
-                    </div>
-                </div>
-
-                <div className="flex items-center gap-2 sm:gap-4 flex-wrap">
-                    {/* Completed Entries Badge matching screenshot */}
-                    <div className="flex items-center gap-2 px-3.5 py-1.5 bg-blue-50/80 border border-blue-200/80 rounded-lg">
-                        <span className="text-xs font-semibold text-slate-600">Completed Entries</span>
-                        <span className="px-2 py-0.5 bg-brand-primary text-white text-xs font-bold rounded-full">
-                            {vehicles.length}
-                        </span>
-                    </div>
-
-                    {/* Support Request Badge */}
-                    <div className="hidden md:flex items-center gap-2 px-3.5 py-1.5 bg-slate-50 border border-slate-200 rounded-lg">
-                        <span className="text-xs font-semibold text-slate-600">Support Request</span>
-                        <span className="px-2 py-0.5 bg-slate-600 text-white text-xs font-bold rounded-full">
-                            0
-                        </span>
-                    </div>
-
-                    {/* Current System Status */}
-                    <div className="hidden lg:flex items-center gap-2 px-3 py-1.5 bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-semibold rounded-lg">
-                        <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                        <span>Current Grid / System Grid Active</span>
-                    </div>
-                </div>
-            </div>
-
-            {/* Search Toolbar with the 2 exact search inputs from the screenshot */}
-            <div className="bg-white rounded-xl border border-brand-border shadow-sm p-4">
-                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-                    {/* The 2 search inputs from the screenshot */}
-                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 flex-1 max-w-3xl">
-                        {/* 1. Search customer name Here */}
-                        <div className="relative flex-1">
-                            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" size={17} />
-                            <input
-                                type="text"
-                                value={custNameSearch}
-                                onChange={(e) => {
-                                    setCustNameSearch(e.target.value);
-                                    setCurrentPage(1);
-                                }}
-                                placeholder="Search customer name Here"
-                                className="w-full pl-10 pr-9 py-2.5 bg-white border border-[#CBD5E1] rounded-lg text-sm text-slate-800 placeholder-[#94A3B8] shadow-2xs focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-brand-primary transition-all font-medium"
-                            />
-                            {custNameSearch && (
-                                <button
-                                    type="button"
-                                    onClick={() => setCustNameSearch('')}
-                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-0.5 cursor-pointer"
-                                    title="Clear customer name search"
-                                >
-                                    <X size={15} />
-                                </button>
-                            )}
-                        </div>
-
-                        {/* 2. Search Vehicle No Here */}
-                        <div className="relative flex-1">
-                            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" size={17} />
-                            <input
-                                type="text"
-                                value={vehicleNoSearch}
-                                onChange={(e) => {
-                                    setVehicleNoSearch(e.target.value);
-                                    setCurrentPage(1);
-                                }}
-                                placeholder="Search Vehicle No Here"
-                                className="w-full pl-10 pr-9 py-2.5 bg-white border border-[#CBD5E1] rounded-lg text-sm text-slate-800 placeholder-[#94A3B8] shadow-2xs focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-brand-primary transition-all font-mono uppercase font-medium"
-                            />
-                            {vehicleNoSearch && (
-                                <button
-                                    type="button"
-                                    onClick={() => setVehicleNoSearch('')}
-                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-0.5 cursor-pointer"
-                                    title="Clear vehicle number search"
-                                >
-                                    <X size={15} />
-                                </button>
-                            )}
-                        </div>
-
-                        {(custNameSearch || vehicleNoSearch) && (
+            {/* Table Card Container with Integrated Toolbar & Horizontal Scroll */}
+            <div className="bg-white rounded-[10px] border border-brand-border shadow-sm overflow-hidden flex flex-col w-full min-w-0">
+                {/* Table Header Toolbar */}
+                <div className="p-3.5 sm:p-4 bg-white border-b border-brand-border flex flex-wrap items-center justify-between gap-4">
+                    {/* Search Input */}
+                    <div className="relative w-72 sm:w-80 md:w-[380px] h-[38px]">
+                        <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" size={15} />
+                        <input
+                            type="text"
+                            value={searchQuery}
+                            onChange={(e) => {
+                                setSearchQuery(e.target.value);
+                                setCurrentPage(1);
+                            }}
+                            placeholder="Search customer name or vehicle no"
+                            className="w-full h-[38px] pl-10 pr-9 bg-white border border-[#CBD5E1] rounded-[6px] text-[13px] text-slate-800 placeholder-[#94A3B8] shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all"
+                        />
+                        {searchQuery && (
                             <button
                                 type="button"
-                                onClick={handleResetFilters}
-                                className="px-3.5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg transition-colors cursor-pointer shrink-0 flex items-center justify-center gap-1.5"
+                                onClick={() => { setSearchQuery(''); setCurrentPage(1); }}
+                                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1 cursor-pointer"
+                                title="Clear search"
                             >
-                                <RefreshCw size={13} />
-                                <span>Reset</span>
+                                <X size={14} />
                             </button>
                         )}
                     </div>
 
-                    {/* Action buttons on the right: Export + Horizontal Scroll Navigator */}
-                    <div className="flex items-center gap-3 flex-wrap justify-between lg:justify-end">
+                    {/* Action buttons on the right: Horizontal Scroll + Export */}
+                    <div className="flex items-center gap-3 flex-wrap">
                         {/* Horizontal Quick Scroll Navigation Controls */}
-                        <div className="inline-flex items-center bg-white border border-brand-border rounded-lg p-0.5 shadow-2xs">
+                        <div className="inline-flex items-center h-[38px] bg-white border border-brand-border rounded-[6px] p-0.5 shadow-sm">
                             <button
                                 type="button"
                                 onClick={() => scrollTableToEdge('start')}
-                                className="p-1.5 text-slate-600 hover:text-brand-primary hover:bg-blue-50 rounded cursor-pointer border-none transition-colors"
-                                title="Scroll to beginning (Column 1: DELETE)"
+                                className="h-full px-2 text-slate-600 hover:text-brand-primary hover:bg-blue-50 rounded cursor-pointer border-none transition-colors flex items-center justify-center"
+                                title="Scroll to beginning"
                             >
-                                <ChevronsLeft size={16} />
+                                <ChevronsLeft size={15} />
                             </button>
                             <button
                                 type="button"
-                                onClick={() => scrollTable(-500)}
-                                className="px-2 py-1 text-xs font-medium text-slate-600 hover:text-brand-primary hover:bg-blue-50 rounded flex items-center gap-1 cursor-pointer border-none transition-colors"
+                                onClick={() => scrollTable(-600)}
+                                className="h-full px-2.5 text-[13px] font-medium text-slate-600 hover:text-brand-primary hover:bg-blue-50 rounded flex items-center gap-1 cursor-pointer border-none transition-colors"
                                 title="Scroll left"
                             >
                                 <ChevronLeft size={14} />
-                                <span className="hidden sm:inline">Left</span>
+                                <span>Left</span>
                             </button>
                             <span className="h-4 w-px bg-slate-200 mx-0.5"></span>
                             <button
                                 type="button"
-                                onClick={() => scrollTable(500)}
-                                className="px-2 py-1 text-xs font-medium text-slate-600 hover:text-brand-primary hover:bg-blue-50 rounded flex items-center gap-1 cursor-pointer border-none transition-colors"
+                                onClick={() => scrollTable(600)}
+                                className="h-full px-2.5 text-[13px] font-medium text-slate-600 hover:text-brand-primary hover:bg-blue-50 rounded flex items-center gap-1 cursor-pointer border-none transition-colors"
                                 title="Scroll right"
                             >
-                                <span className="hidden sm:inline">Right</span>
+                                <span>Right</span>
                                 <ChevronRight size={14} />
                             </button>
                             <button
                                 type="button"
                                 onClick={() => scrollTableToEdge('end')}
-                                className="p-1.5 text-slate-600 hover:text-brand-primary hover:bg-blue-50 rounded cursor-pointer border-none transition-colors"
-                                title="Scroll to end (Column 22: BRANCHNAME)"
+                                className="h-full px-2 text-slate-600 hover:text-brand-primary hover:bg-blue-50 rounded cursor-pointer border-none transition-colors flex items-center justify-center"
+                                title="Scroll to end"
                             >
-                                <ChevronsRight size={16} />
+                                <ChevronsRight size={15} />
                             </button>
                         </div>
 
+                        {/* Export Button */}
                         <button
                             type="button"
                             onClick={handleExportCSV}
-                            className="inline-flex items-center gap-2 px-4 py-2 bg-brand-primary hover:bg-[#1D4ED8] text-white rounded-lg text-xs sm:text-sm font-semibold shadow-sm transition-all cursor-pointer border-none"
+                            className="h-[38px] flex items-center gap-1.5 px-4 bg-brand-primary hover:bg-[#1D4ED8] text-white font-semibold text-[13px] rounded-[6px] shadow-sm transition-colors cursor-pointer border-none"
                         >
                             <Download size={15} />
                             <span>Export CSV</span>
                         </button>
-                    </div>
-                </div>
-            </div>
-
-            {/* Table Container Card */}
-            <div className="bg-white rounded-xl border border-brand-border shadow-sm overflow-hidden flex flex-col w-full min-w-0">
-                {/* Table Header Status Banner */}
-                <div className="bg-blue-50/60 px-4 py-2.5 border-b border-brand-border flex items-center justify-between text-xs text-brand-navy">
-                    <div className="flex items-center gap-2 font-medium">
-                        <span className="inline-block w-2 h-2 rounded-full bg-brand-primary animate-pulse"></span>
-                        <span>
-                            Showing <strong className="text-slate-900 font-bold">{filteredVehicles.length}</strong> matching records
-                            {custNameSearch && <span> for customer "<strong className="text-brand-primary">{custNameSearch}</strong>"</span>}
-                            {vehicleNoSearch && <span> with vehicle number "<strong className="text-brand-primary">{vehicleNoSearch}</strong>"</span>}
-                        </span>
-                    </div>
-                    <div className="flex items-center gap-2 text-[11px] text-brand-primary bg-white px-2.5 py-1 rounded border border-blue-200/80 font-medium">
-                        <span>↔</span>
-                        <span>Scroll horizontally to view all 22 columns</span>
                     </div>
                 </div>
 
@@ -635,89 +537,89 @@ const DeleteVehicleTab: React.FC = () => {
                     <table className="text-left border-collapse min-w-[3400px] w-full text-[13px]">
                         <thead>
                             {/* Blue Header Theme matching the application style */}
-                            <tr className="bg-brand-primary text-white font-bold text-[12px] tracking-wider uppercase border-b-2 border-blue-700 select-none">
-                                {/* Col 1: DELETE (Matches legacy screenshot) */}
-                                <th className="py-3.5 px-4 w-[110px] min-w-[110px] text-center border-r border-white/20 whitespace-nowrap sticky left-0 z-20 bg-brand-primary shadow-[2px_0_4px_rgba(0,0,0,0.1)]">
-                                    DELETE
+                            <tr className="bg-brand-lightbg text-brand-navy text-[13px] font-semibold uppercase border-b border-brand-border whitespace-nowrap select-none">
+                                {/* Col 1: ACTION */}
+                                <th className="py-3 px-4 w-[80px] min-w-[80px] text-center whitespace-nowrap sticky left-0 z-20 bg-brand-lightbg shadow-[2px_0_4px_rgba(0,0,0,0.06)]">
+                                    ACTION
                                 </th>
                                 {/* Col 2: ID */}
-                                <th className="py-3.5 px-4 w-[90px] min-w-[90px] text-center border-r border-white/20 whitespace-nowrap">
+                                <th className="py-3.5 px-4 w-[90px] min-w-[90px] text-center whitespace-nowrap">
                                     ID
                                 </th>
                                 {/* Col 3: CUSTNAME */}
-                                <th className="py-3.5 px-4 w-[280px] min-w-[280px] border-r border-white/20 whitespace-nowrap">
+                                <th className="py-3.5 px-4 w-[280px] min-w-[280px] whitespace-nowrap">
                                     CUSTNAME
                                 </th>
                                 {/* Col 4: REGISTRATIONNO */}
-                                <th className="py-3.5 px-4 w-[180px] min-w-[180px] border-r border-white/20 whitespace-nowrap">
+                                <th className="py-3.5 px-4 w-[180px] min-w-[180px] whitespace-nowrap">
                                     REGISTRATIONNO
                                 </th>
                                 {/* Col 5: CHAISENO */}
-                                <th className="py-3.5 px-4 w-[200px] min-w-[200px] border-r border-white/20 whitespace-nowrap">
+                                <th className="py-3.5 px-4 w-[200px] min-w-[200px] whitespace-nowrap">
                                     CHAISENO
                                 </th>
                                 {/* Col 6: ENGINENO */}
-                                <th className="py-3.5 px-4 w-[180px] min-w-[180px] border-r border-white/20 whitespace-nowrap">
+                                <th className="py-3.5 px-4 w-[180px] min-w-[180px] whitespace-nowrap">
                                     ENGINENO
                                 </th>
                                 {/* Col 7: MFGMONTH */}
-                                <th className="py-3.5 px-4 w-[120px] min-w-[120px] text-center border-r border-white/20 whitespace-nowrap">
+                                <th className="py-3.5 px-4 w-[120px] min-w-[120px] text-center whitespace-nowrap">
                                     MFGMONTH
                                 </th>
                                 {/* Col 8: MFGYEAR */}
-                                <th className="py-3.5 px-4 w-[110px] min-w-[110px] text-center border-r border-white/20 whitespace-nowrap">
+                                <th className="py-3.5 px-4 w-[110px] min-w-[110px] text-center whitespace-nowrap">
                                     MFGYEAR
                                 </th>
                                 {/* Col 9: EX_SHOWROOMPRICE */}
-                                <th className="py-3.5 px-4 w-[180px] min-w-[180px] border-r border-white/20 whitespace-nowrap text-right">
+                                <th className="py-3.5 px-4 w-[180px] min-w-[180px] whitespace-nowrap text-right">
                                     EX_SHOWROOMPRICE
                                 </th>
                                 {/* Col 10: FUELTYPE */}
-                                <th className="py-3.5 px-4 w-[130px] min-w-[130px] border-r border-white/20 whitespace-nowrap">
+                                <th className="py-3.5 px-4 w-[130px] min-w-[130px] whitespace-nowrap">
                                     FUELTYPE
                                 </th>
                                 {/* Col 11: VEH_TYPE_NAME */}
-                                <th className="py-3.5 px-4 w-[160px] min-w-[160px] border-r border-white/20 whitespace-nowrap">
+                                <th className="py-3.5 px-4 w-[160px] min-w-[160px] whitespace-nowrap">
                                     VEH_TYPE_NAME
                                 </th>
                                 {/* Col 12: VEH_SUB_TYPE_NAME */}
-                                <th className="py-3.5 px-4 w-[180px] min-w-[180px] border-r border-white/20 whitespace-nowrap">
+                                <th className="py-3.5 px-4 w-[180px] min-w-[180px] whitespace-nowrap">
                                     VEH_SUB_TYPE_NAME
                                 </th>
                                 {/* Col 13: MAKE_NAME */}
-                                <th className="py-3.5 px-4 w-[180px] min-w-[180px] border-r border-white/20 whitespace-nowrap">
+                                <th className="py-3.5 px-4 w-[180px] min-w-[180px] whitespace-nowrap">
                                     MAKE_NAME
                                 </th>
                                 {/* Col 14: MODEL_NAME */}
-                                <th className="py-3.5 px-4 w-[200px] min-w-[200px] border-r border-white/20 whitespace-nowrap">
+                                <th className="py-3.5 px-4 w-[200px] min-w-[200px] whitespace-nowrap">
                                     MODEL_NAME
                                 </th>
                                 {/* Col 15: VARIANCE */}
-                                <th className="py-3.5 px-4 w-[180px] min-w-[180px] border-r border-white/20 whitespace-nowrap">
+                                <th className="py-3.5 px-4 w-[180px] min-w-[180px] whitespace-nowrap">
                                     VARIANCE
                                 </th>
                                 {/* Col 16: VEHICLEPURDATE */}
-                                <th className="py-3.5 px-4 w-[190px] min-w-[190px] border-r border-white/20 whitespace-nowrap">
+                                <th className="py-3.5 px-4 w-[190px] min-w-[190px] whitespace-nowrap">
                                     VEHICLEPURDATE
                                 </th>
                                 {/* Col 17: SEATSCAPACITY */}
-                                <th className="py-3.5 px-4 w-[130px] min-w-[130px] text-center border-r border-white/20 whitespace-nowrap">
+                                <th className="py-3.5 px-4 w-[130px] min-w-[130px] text-center whitespace-nowrap">
                                     SEATSCAPACITY
                                 </th>
                                 {/* Col 18: TRANSTONNAGECAPACITY */}
-                                <th className="py-3.5 px-4 w-[200px] min-w-[200px] border-r border-white/20 whitespace-nowrap">
+                                <th className="py-3.5 px-4 w-[200px] min-w-[200px] whitespace-nowrap">
                                     TRANSTONNAGECAPACITY
                                 </th>
                                 {/* Col 19: VEHICLEWEIGHT */}
-                                <th className="py-3.5 px-4 w-[150px] min-w-[150px] text-center border-r border-white/20 whitespace-nowrap">
+                                <th className="py-3.5 px-4 w-[150px] min-w-[150px] text-center whitespace-nowrap">
                                     VEHICLEWEIGHT
                                 </th>
                                 {/* Col 20: VEHICLEREGDATE */}
-                                <th className="py-3.5 px-4 w-[190px] min-w-[190px] border-r border-white/20 whitespace-nowrap">
+                                <th className="py-3.5 px-4 w-[190px] min-w-[190px] whitespace-nowrap">
                                     VEHICLEREGDATE
                                 </th>
                                 {/* Col 21: RTOLOCATION */}
-                                <th className="py-3.5 px-4 w-[210px] min-w-[210px] border-r border-white/20 whitespace-nowrap">
+                                <th className="py-3.5 px-4 w-[210px] min-w-[210px] whitespace-nowrap">
                                     RTOLOCATION
                                 </th>
                                 {/* Col 22: BRANCHNAME */}
@@ -748,129 +650,125 @@ const DeleteVehicleTab: React.FC = () => {
                                 paginatedVehicles.map((v, idx) => (
                                     <tr
                                         key={v.id}
-                                        className={`h-[52px] transition-colors ${
-                                            idx % 2 === 0 ? 'bg-white' : 'bg-slate-50/40'
-                                        } hover:bg-blue-50/40`}
+                                        className={`h-[52px] transition-colors ${idx % 2 === 0 ? 'bg-white' : 'bg-slate-50/40'
+                                            } hover:bg-blue-50/40`}
                                     >
-                                        {/* Col 1: DELETE (Sticky action button matching screenshot trash link) */}
-                                        <td className={`py-2 px-3 text-center border-r border-slate-200 sticky left-0 z-10 shadow-[2px_0_4px_rgba(0,0,0,0.06)] ${
-                                            idx % 2 === 0 ? 'bg-white' : 'bg-[#FAFCFE]'
-                                        }`}>
+                                        {/* Col 1: ACTION */}
+                                        <td className={`py-2 px-3 text-center sticky left-0 z-10 shadow-[2px_0_4px_rgba(0,0,0,0.06)] ${idx % 2 === 0 ? 'bg-white' : 'bg-[#FAFCFE]'
+                                            }`}>
                                             <button
                                                 type="button"
                                                 onClick={() => setSelectedVehicleToDelete(v)}
-                                                className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-bold text-brand-primary hover:text-rose-600 hover:bg-rose-50 rounded-md border border-blue-200/90 hover:border-rose-300 transition-colors cursor-pointer"
+                                                className="inline-flex items-center justify-center w-8 h-8 text-rose-500 hover:text-rose-700 hover:bg-rose-50 rounded-md border border-slate-200 hover:border-rose-300 transition-colors cursor-pointer"
                                                 title={`Delete vehicle ${v.regNo}`}
                                             >
-                                                <Trash2 size={13} strokeWidth={2.2} />
-                                                <span className="tracking-wide">DELETE</span>
+                                                <Trash2 size={15} strokeWidth={2} />
                                             </button>
                                         </td>
 
                                         {/* Col 2: ID */}
-                                        <td className="py-2 px-4 text-center border-r border-slate-200 font-mono font-semibold text-slate-700">
+                                        <td className="py-2 px-4 text-center font-mono font-semibold text-slate-700">
                                             {v.erpId}
                                         </td>
 
                                         {/* Col 3: CUSTNAME */}
-                                        <td className="py-2 px-4 border-r border-slate-200 font-semibold text-brand-navy whitespace-nowrap">
+                                        <td className="py-2 px-4 font-semibold text-brand-navy whitespace-nowrap">
                                             {v.custName}
                                         </td>
 
                                         {/* Col 4: REGISTRATIONNO */}
-                                        <td className="py-2 px-4 border-r border-slate-200 font-mono font-bold text-brand-primary whitespace-nowrap">
+                                        <td className="py-2 px-4 font-mono font-bold text-brand-primary whitespace-nowrap">
                                             {v.regNo}
                                         </td>
 
                                         {/* Col 5: CHAISENO */}
-                                        <td className="py-2 px-4 border-r border-slate-200 font-mono text-xs text-slate-600 whitespace-nowrap">
+                                        <td className="py-2 px-4 font-mono text-xs text-slate-600 whitespace-nowrap">
                                             {v.chassisNo}
                                         </td>
 
                                         {/* Col 6: ENGINENO */}
-                                        <td className="py-2 px-4 border-r border-slate-200 font-mono text-xs text-slate-600 whitespace-nowrap">
+                                        <td className="py-2 px-4 font-mono text-xs text-slate-600 whitespace-nowrap">
                                             {v.engineNo}
                                         </td>
 
                                         {/* Col 7: MFGMONTH */}
-                                        <td className="py-2 px-4 text-center border-r border-slate-200 text-slate-600">
+                                        <td className="py-2 px-4 text-center text-slate-600">
                                             {v.mfgMonth}
                                         </td>
 
                                         {/* Col 8: MFGYEAR */}
-                                        <td className="py-2 px-4 text-center border-r border-slate-200 font-medium text-slate-700">
+                                        <td className="py-2 px-4 text-center font-medium text-slate-700">
                                             {v.mfgYear}
                                         </td>
 
                                         {/* Col 9: EX_SHOWROOMPRICE */}
-                                        <td className="py-2 px-4 text-right border-r border-slate-200 font-medium text-slate-700 whitespace-nowrap">
+                                        <td className="py-2 px-4 text-right font-medium text-slate-700 whitespace-nowrap">
                                             {v.exShowroomPrice ? `₹ ${v.exShowroomPrice}` : '-'}
                                         </td>
 
                                         {/* Col 10: FUELTYPE */}
-                                        <td className="py-2 px-4 border-r border-slate-200 font-semibold text-xs whitespace-nowrap">
-                                            <span className={`inline-block px-2 py-0.5 rounded text-[11px] font-bold ${
-                                                v.fuelType === 'PETROL' ? 'bg-amber-50 text-amber-800 border border-amber-200' :
+                                        <td className="py-2 px-4 font-semibold text-xs whitespace-nowrap">
+                                            <span className={`inline-block px-2 py-0.5 rounded text-[11px] font-bold ${v.fuelType === 'PETROL' ? 'bg-amber-50 text-amber-800 border border-amber-200' :
                                                 v.fuelType === 'DIESEL' ? 'bg-blue-50 text-blue-800 border border-blue-200' :
-                                                v.fuelType === 'CNG' ? 'bg-emerald-50 text-emerald-800 border border-emerald-200' :
-                                                'bg-purple-50 text-purple-800 border border-purple-200'
-                                            }`}>
+                                                    v.fuelType === 'CNG' ? 'bg-emerald-50 text-emerald-800 border border-emerald-200' :
+                                                        'bg-purple-50 text-purple-800 border border-purple-200'
+                                                }`}>
                                                 {v.fuelType}
                                             </span>
                                         </td>
 
                                         {/* Col 11: VEH_TYPE_NAME */}
-                                        <td className="py-2 px-4 border-r border-slate-200 font-medium text-slate-700 whitespace-nowrap">
+                                        <td className="py-2 px-4 font-medium text-slate-700 whitespace-nowrap">
                                             {v.vehTypeName}
                                         </td>
 
                                         {/* Col 12: VEH_SUB_TYPE_NAME */}
-                                        <td className="py-2 px-4 border-r border-slate-200 text-slate-600 whitespace-nowrap">
+                                        <td className="py-2 px-4 text-slate-600 whitespace-nowrap">
                                             {v.vehSubTypeName}
                                         </td>
 
                                         {/* Col 13: MAKE_NAME */}
-                                        <td className="py-2 px-4 border-r border-slate-200 font-semibold text-brand-navy whitespace-nowrap">
+                                        <td className="py-2 px-4 font-semibold text-brand-navy whitespace-nowrap">
                                             {v.makeName}
                                         </td>
 
                                         {/* Col 14: MODEL_NAME */}
-                                        <td className="py-2 px-4 border-r border-slate-200 font-medium text-slate-800 whitespace-nowrap">
+                                        <td className="py-2 px-4 font-medium text-slate-800 whitespace-nowrap">
                                             {v.modelName}
                                         </td>
 
                                         {/* Col 15: VARIANCE */}
-                                        <td className="py-2 px-4 border-r border-slate-200 text-slate-700 whitespace-nowrap">
+                                        <td className="py-2 px-4 text-slate-700 whitespace-nowrap">
                                             {v.variance}
                                         </td>
 
                                         {/* Col 16: VEHICLEPURDATE */}
-                                        <td className="py-2 px-4 border-r border-slate-200 font-mono text-xs text-slate-600 whitespace-nowrap">
+                                        <td className="py-2 px-4 font-mono text-xs text-slate-600 whitespace-nowrap">
                                             {v.vehiclePurDate}
                                         </td>
 
                                         {/* Col 17: SEATSCAPACITY */}
-                                        <td className="py-2 px-4 text-center border-r border-slate-200 font-medium text-slate-700">
+                                        <td className="py-2 px-4 text-center font-medium text-slate-700">
                                             {v.seatsCapacity}
                                         </td>
 
                                         {/* Col 18: TRANSTONNAGECAPACITY */}
-                                        <td className="py-2 px-4 border-r border-slate-200 text-slate-600 whitespace-nowrap">
+                                        <td className="py-2 px-4 text-slate-600 whitespace-nowrap">
                                             {v.transTonnageCapacity || '-'}
                                         </td>
 
                                         {/* Col 19: VEHICLEWEIGHT */}
-                                        <td className="py-2 px-4 text-center border-r border-slate-200 font-mono text-xs text-slate-700">
+                                        <td className="py-2 px-4 text-center font-mono text-xs text-slate-700">
                                             {v.vehicleWeight ? `${v.vehicleWeight} kg` : '-'}
                                         </td>
 
                                         {/* Col 20: VEHICLEREGDATE */}
-                                        <td className="py-2 px-4 border-r border-slate-200 font-mono text-xs text-slate-600 whitespace-nowrap">
+                                        <td className="py-2 px-4 font-mono text-xs text-slate-600 whitespace-nowrap">
                                             {v.vehicleRegDate}
                                         </td>
 
                                         {/* Col 21: RTOLOCATION */}
-                                        <td className="py-2 px-4 border-r border-slate-200 font-medium text-slate-700 whitespace-nowrap">
+                                        <td className="py-2 px-4 font-medium text-slate-700 whitespace-nowrap">
                                             {v.rtoLocation}
                                         </td>
 
@@ -885,9 +783,9 @@ const DeleteVehicleTab: React.FC = () => {
                     </table>
                 </div>
 
-                {/* Table Footer: Pagination & Record Count (Matching BranchMaster and other pages) */}
-                <div className="p-4 bg-slate-50 border-t border-brand-border flex flex-col sm:flex-row items-center justify-between gap-4">
-                    <div className="flex items-center gap-2 text-xs text-slate-600 font-medium">
+                {/* Standard Master Page Pagination Bar */}
+                <div className="p-4 bg-white border-t border-brand-border flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div className="flex items-center gap-2 text-sm text-brand-muted font-medium">
                         <span>Records per page:</span>
                         <select
                             value={itemsPerPage}
@@ -895,7 +793,7 @@ const DeleteVehicleTab: React.FC = () => {
                                 setItemsPerPage(Number(e.target.value));
                                 setCurrentPage(1);
                             }}
-                            className="px-2.5 py-1 bg-white border border-slate-300 rounded-md text-xs font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-brand-primary cursor-pointer"
+                            className="px-2 py-1 bg-white border border-brand-border rounded-md text-sm font-semibold text-brand-navy focus:outline-none focus:ring-1 focus:ring-brand-primary cursor-pointer"
                         >
                             <option value={10}>10</option>
                             <option value={20}>20</option>
@@ -904,7 +802,7 @@ const DeleteVehicleTab: React.FC = () => {
                         </select>
                     </div>
 
-                    <span className="text-xs text-slate-500 font-medium">
+                    <span className="text-sm text-brand-muted font-medium">
                         Showing {filteredVehicles.length === 0 ? 0 : (currentPage - 1) * itemsPerPage + 1} - {Math.min(currentPage * itemsPerPage, filteredVehicles.length)} of {filteredVehicles.length} records
                     </span>
 
@@ -913,7 +811,7 @@ const DeleteVehicleTab: React.FC = () => {
                             type="button"
                             onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                             disabled={currentPage === 1}
-                            className="w-8 h-8 flex items-center justify-center text-xs font-semibold text-slate-600 bg-white border border-slate-300 rounded-md hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed transition-all cursor-pointer"
+                            className="w-8 h-8 flex items-center justify-center text-sm font-semibold text-brand-navy bg-white border border-brand-border rounded-md hover:bg-brand-mainbg disabled:opacity-40 disabled:cursor-not-allowed transition-all cursor-pointer"
                         >
                             &lt;
                         </button>
@@ -922,11 +820,10 @@ const DeleteVehicleTab: React.FC = () => {
                                 key={page}
                                 type="button"
                                 onClick={() => setCurrentPage(page)}
-                                className={`w-8 h-8 flex items-center justify-center text-xs font-bold rounded-md transition-all cursor-pointer ${
-                                    currentPage === page
+                                className={`w-8 h-8 flex items-center justify-center text-sm font-semibold rounded-md transition-all cursor-pointer ${currentPage === page
                                         ? 'bg-brand-primary text-white shadow-sm'
-                                        : 'bg-white text-slate-700 border border-slate-300 hover:bg-slate-100'
-                                }`}
+                                        : 'bg-white text-brand-navy border border-brand-border hover:bg-brand-mainbg'
+                                    }`}
                             >
                                 {page}
                             </button>
@@ -935,7 +832,7 @@ const DeleteVehicleTab: React.FC = () => {
                             type="button"
                             onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
                             disabled={currentPage === totalPages || totalPages === 0}
-                            className="w-8 h-8 flex items-center justify-center text-xs font-semibold text-slate-600 bg-white border border-slate-300 rounded-md hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed transition-all cursor-pointer"
+                            className="w-8 h-8 flex items-center justify-center text-sm font-semibold text-brand-navy bg-white border border-brand-border rounded-md hover:bg-brand-mainbg disabled:opacity-40 disabled:cursor-not-allowed transition-all cursor-pointer"
                         >
                             &gt;
                         </button>
