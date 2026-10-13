@@ -61,6 +61,7 @@ import MisReports from '../pages/admin/reports_analysis/MisReports'
 import GeneralReports from '../pages/admin/reports_analysis/GeneralReports'
 import Recon from '../pages/admin/reports_analysis/Recon'
 import TargetPage from '../pages/admin/reports_analysis/TargetPage'
+import AppModulePage from '../pages/admin/app_module/AppModulePage'
 
 const AppRoutes = () => {
   return (
@@ -148,6 +149,10 @@ const AppRoutes = () => {
             <Route path="/target" element={<TargetPage />} />
             <Route path="/reports" element={<GeneralReports />} />
             <Route path="/reports/general" element={<GeneralReports />} />
+
+            {/* App Module */}
+            <Route path="/app" element={<AppModulePage />} />
+            <Route path="/other/app" element={<Navigate to="/app" replace />} />
 
             {/* Other Modules */}
             <Route path="/other/my-page" element={<MyPage />} />

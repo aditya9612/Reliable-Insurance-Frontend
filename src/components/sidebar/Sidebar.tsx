@@ -3,7 +3,8 @@ import { NavLink, useLocation } from 'react-router-dom';
 import {
     LayoutDashboard, Database, Users, Briefcase, FileText, Settings,
     ChevronDown, ChevronRight, UserPlus, FileSpreadsheet, Building2,
-    Shield, Map, MessageSquare, Download, Layers, UserCheck, Percent
+    Shield, Map, MessageSquare, Download, Layers, UserCheck, Percent, BarChart2,
+    Smartphone
 } from 'lucide-react';
 import { useAuthContext } from '../../context/AuthContext';
 
@@ -31,7 +32,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
 
     const navGroups: NavGroup[] = isAdmin ? [
         {
-            title: 'MAIN',
+            title: 'DASHBOARD',
             icon: LayoutDashboard,
             path: '/dashboard'
         },
@@ -112,19 +113,33 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
         },
         {
             title: 'REPORTS',
+            icon: BarChart2,
+            path: '/reports'
+        },
+        {
+            title: 'MIS REPORTS',
             icon: FileSpreadsheet,
-            children: [
-                { name: 'Reports', path: '/reports' },
-                { name: 'MIS Reports', path: '/reports/mis' },
-                { name: 'Recon', path: '/reports/recon' },
-                { name: 'Target', path: '/reports/target' },
-            ]
+            path: '/reports/mis'
+        },
+        {
+            title: 'RECON',
+            icon: Shield,
+            path: '/reports/recon'
+        },
+        {
+            title: 'TARGET',
+            icon: Map,
+            path: '/reports/target'
+        },
+        {
+            title: 'APP',
+            icon: Smartphone,
+            path: '/app'
         },
         {
             title: 'OTHER MODULES',
             icon: Layers,
             children: [
-                { name: 'App', path: '/other/app' },
                 { name: 'Non Motor', path: '/other/non-motor' },
                 { name: 'My Page', path: '/other/my-page' },
                 { name: 'Download App', path: '/other/download' },

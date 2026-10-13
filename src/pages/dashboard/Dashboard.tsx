@@ -1,73 +1,67 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PageHeader from '../../components/page-header/PageHeader';
-import Breadcrumbs from '../../components/breadcrumbs/Breadcrumbs';
 import {
-    Clock, Lock, Zap, ArrowUpRight, ArrowRight,
-    CreditCard, CheckCircle2, Headphones, FileText, Percent, Search,
-    LayoutGrid, Layers
+    ArrowUpRight, FileText, Percent, Search, BarChart2,
+    Users, DollarSign, TrendingUp, Building2, Clock
 } from 'lucide-react';
 import { useAuthContext } from '../../context/AuthContext';
+
+const dashboardTabs = [
+    { id: 'view-dashboard',        label: 'View Dashboard' },
+    { id: 'commission-summary',    label: 'Commission Summary' },
+    { id: 'agent-payment',         label: 'Agent Payment' },
+    { id: 'analytic-agent',        label: 'Analytic Dashboard Agent' },
+    { id: 'analytic-executive',    label: 'Analytic Dashboard Executive' },
+    { id: 'analytic-location',     label: 'Analytic Dashboard Location' },
+    { id: 'agent-business',        label: 'Agent Business' },
+    { id: 'executive-business',    label: 'Executive Business' },
+    { id: 'insurance-outstanding', label: 'Insurance Company Outstanding' },
+    { id: 'broker-report',         label: 'Broker Report' },
+    { id: 'direct-business',       label: 'Direct Business' },
+    { id: 'agent-pending-comm',    label: 'Agent Pending Comm Report' },
+];
+
+const quickActions = [
+    { id: 'view-policy',       label: 'View Policy',                  desc: 'Search & view policy documents',          icon: FileText,    to: '/transactions/view-policy-document' },
+    { id: 'commission-grid',   label: 'Current Grid / System Grid',   desc: 'Broker & agent commission grids',          icon: Percent,     to: '/commission-grid' },
+    { id: 'search-posp',       label: 'Search POSP by Agent',         desc: 'Find POSP registration & agents',          icon: Search,      to: '/registration/agent' },
+    { id: 'reports',           label: 'Reports',                      desc: 'Cut N Pay, TDS, Endorsement & more',       icon: BarChart2,   to: '/reports' },
+    { id: 'agent-commission',  label: 'View All Agent Commission',     desc: 'Commission summary by agent',              icon: Users,       to: '/reports?tab=viewAllAgentCommission' },
+    { id: 'agent-payment-qa',  label: 'Agent Payment',                desc: 'View & process agent payments',            icon: DollarSign,  to: '/commission-grid/agent-commission' },
+    { id: 'mis-reports',       label: 'MIS Reports',                  desc: 'Management information system reports',    icon: TrendingUp,  to: '/reports/mis' },
+    { id: 'hr-module',         label: 'HR Module',                    desc: 'Attendance, salary & employee data',       icon: Building2,   to: '/hr' },
+];
+
+// Placeholder panel for tabs that don't have a dedicated page yet
+const ComingSoonPanel: React.FC<{ label: string }> = ({ label }) => (
+    <div className="bg-white rounded-xl border border-brand-border p-12 text-center shadow-sm">
+        <div className="w-14 h-14 rounded-2xl bg-brand-lightbg text-brand-primary flex items-center justify-center mx-auto mb-4">
+            <Clock size={28} />
+        </div>
+        <h3 className="text-base font-bold text-brand-navy mb-1">{label}</h3>
+        <p className="text-sm text-brand-muted">This dashboard view is coming soon.</p>
+    </div>
+);
 
 const Dashboard = () => {
     const navigate = useNavigate();
     const { user } = useAuthContext();
     const isAdmin = user?.role === 'admin';
+    const [activeTab, setActiveTab] = useState('view-dashboard');
 
-    // View mode: 'matrix' (Consolidated Grid) or 'cards' (Executive Hub)
-    const [viewMode, setViewMode] = useState<'cards' | 'matrix'>('matrix');
-
-    const digitalMetrics = [
-        { id: 'pre-broker-cash', label: 'Pre Online Broker/Cash', count: 0, amount: '0', to: '/transactions/pending-premium-cash' },
-        { id: 'pre-ewallet', label: 'Pre E-Wallet', count: 0, amount: '0', to: '/transactions/online-app-request' },
-        { id: 'broker-cash-approval', label: 'Online Broker/Cash Approval', count: 4, amount: '79,977', to: '/transactions/online-app-request' },
-        { id: 'insta-pay', label: 'Insta Pay', count: 120, amount: '22,77,811', to: '/transactions/online-app-request', highlight: true },
-        { id: 'quotation', label: 'Quotation', count: 12, to: '/transactions/self-quotation' },
-    ];
-
-    const chequeMetrics = [
-        { id: 'attended', label: 'Attended', count: 4, to: '/transactions/pending-premium-cheque' },
-        { id: 'pre-cheque-app', label: 'Pre Cheque Approval', count: null, actionLabel: 'View Queue', to: '/transactions/premium-cheque-bounce', urgent: true },
-        { id: 'cash-back-app', label: 'Cash Back Approval', count: 75, to: '/transactions/cashback-neft-search' },
-        { id: 'cust-cheq-dep', label: 'Cust Cheq Deposit', count: 3, to: '/transactions/premium-cheque-bounce' },
-    ];
-
-    const serviceMetrics = [
-        { id: 'pending-trans', label: 'Pending Trans', count: 42, amount: '6,54,583', to: '/transactions/all-transaction-report' },
-        { id: 'receiving-amt', label: 'Receiving Amt', count: 36, to: '/transactions/all-transaction-report' },
-        { id: 'send-link', label: 'Send Link', count: 30, amount: '58,121', to: '/transactions/all-user-trans' },
-        { id: 'completed-entries', label: 'Completed Entries', count: 8, to: '/transactions/all-user-trans' },
-        { id: 'lock-id', label: 'LOCK ID', count: null, actionLabel: 'Secured', to: '/other/lock-id', status: 'active' },
-        { id: 'support-req', label: 'Support Request', count: 0, to: '/support' },
-    ];
-
-    // For non-admin roles, remove all operational data, queues, and cards
     if (!isAdmin) {
         return (
-            <div className="w-full h-full pb-10 space-y-6">
-                <Breadcrumbs />
-
-                {/* Page Header */}
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-brand-border">
-                    <PageHeader
-                        title="Dashboard"
-                        description={`Operational dashboard for ${user?.name || 'User'} (${user?.roleTitle || user?.role || 'Employee'})`}
-                    />
-                </div>
-
-                {/* Non-Admin Empty Dashboard Display */}
-                <div className="bg-white rounded-2xl border border-brand-border p-12 text-center shadow-sm max-w-xl mx-auto mt-10">
-                    <div className="w-16 h-16 rounded-2xl bg-brand-lightbg text-brand-primary flex items-center justify-center mx-auto mb-4 border border-blue-100">
-                        <LayoutGrid size={32} />
-                    </div>
-                    <h3 className="text-lg font-bold text-brand-navy mb-1">
+            <div className="w-full h-full flex items-center justify-center py-20">
+                <div className="bg-white rounded-2xl border border-brand-border p-12 text-center shadow-sm max-w-xl">
+                    <h3 className="text-lg font-bold text-brand-navy mb-2">
                         Welcome, {user?.name || 'User'}
                     </h3>
                     <p className="text-xs font-semibold uppercase tracking-wider text-brand-primary mb-3">
-                        Role: {user?.roleTitle || user?.role || 'User'} • {user?.branch || 'General'}
+                        {user?.roleTitle || user?.role || 'User'} • {user?.branch || 'General'}
                     </p>
-                    <p className="text-sm text-brand-muted max-w-md mx-auto leading-relaxed">
-                        No active widgets or data are configured for this role. Live transaction counters, priority queues, and executive metrics are reserved for Administrator accounts.
+                    <p className="text-sm text-brand-muted leading-relaxed">
+                        No active widgets are configured for this role.
                     </p>
                 </div>
             </div>
@@ -75,573 +69,103 @@ const Dashboard = () => {
     }
 
     return (
-        <div className="w-full h-full pb-10 space-y-6">
-            <Breadcrumbs />
+        <div className="w-full h-full pb-10 space-y-5">
 
-            {/* Page Header with Dual View Controls */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-brand-border">
+            {/* Page Header */}
+            <div className="pb-4 border-b border-brand-border">
                 <PageHeader
-                    title="Executive Operations Hub"
-                    description="Real-time transaction queues, payment verifications & quick inquiry workflows"
+                    title="Dashboard"
+                    description="Live operational overview, analytics, commission and business performance reports"
                 />
+            </div>
 
-                {/* View Mode Toggle: Quick Matrix vs Executive Cards */}
-                <div className="flex items-center gap-1.5 p-1 bg-brand-lightbg/60 border border-brand-border rounded-xl self-start sm:self-auto">
-                    <button
-                        onClick={() => setViewMode('matrix')}
-                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${viewMode === 'matrix'
-                            ? 'bg-white text-brand-navy shadow-sm border border-brand-border/60'
-                            : 'text-brand-muted hover:text-brand-navy'
-                            }`}
-                    >
-                        <LayoutGrid size={14} />
-                        <span>Quick Matrix</span>
-                    </button>
-                    <button
-                        onClick={() => setViewMode('cards')}
-                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${viewMode === 'cards'
-                            ? 'bg-white text-brand-navy shadow-sm border border-brand-border/60'
-                            : 'text-brand-muted hover:text-brand-navy'
-                            }`}
-                    >
-                        <Layers size={14} />
-                        <span>Executive Cards</span>
-                    </button>
+            {/* 2-Row Full-Width Sub-Tabs Navigation — Exact Policy Master UI */}
+            <div className="bg-white rounded-2xl border border-brand-border p-3 space-y-2.5 shadow-sm w-full max-w-full">
+                {/* Row 1: First 6 Tabs */}
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 w-full border-b border-slate-200 pb-2.5">
+                    {dashboardTabs.slice(0, 6).map((tab) => {
+                        const isActive = activeTab === tab.id;
+                        return (
+                            <button
+                                key={tab.id}
+                                onClick={() => setActiveTab(tab.id)}
+                                className={`w-full py-2.5 px-2 rounded-xl text-[11px] xl:text-[12px] transition-all cursor-pointer border-none text-center font-bold flex items-center justify-center ${isActive
+                                    ? 'bg-brand-primary text-white shadow-sm'
+                                    : 'bg-[#F1F5F9] hover:bg-slate-200 text-[#0F172A]'
+                                }`}
+                                title={tab.label}
+                            >
+                                <span className="truncate">{tab.label}</span>
+                            </button>
+                        );
+                    })}
+                </div>
+
+                {/* Row 2: Remaining 6 Tabs */}
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 w-full">
+                    {dashboardTabs.slice(6).map((tab) => {
+                        const isActive = activeTab === tab.id;
+                        return (
+                            <button
+                                key={tab.id}
+                                onClick={() => setActiveTab(tab.id)}
+                                className={`w-full py-2.5 px-2 rounded-xl text-[11px] xl:text-[12px] transition-all cursor-pointer border-none text-center font-bold flex items-center justify-center ${isActive
+                                    ? 'bg-brand-primary text-white shadow-sm'
+                                    : 'bg-[#F1F5F9] hover:bg-slate-200 text-[#0F172A]'
+                                }`}
+                                title={tab.label}
+                            >
+                                <span className="truncate">{tab.label}</span>
+                            </button>
+                        );
+                    })}
                 </div>
             </div>
 
-            {/* Operational Priority Ribbon */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {/* 1. Pre Cheque Approval Urgent Alert */}
-                <div
-                    onClick={() => navigate('/transactions/premium-cheque-bounce')}
-                    className="bg-white border-2 border-red-100 hover:border-brand-error/40 rounded-2xl p-4 shadow-xs transition-all cursor-pointer group flex items-center justify-between"
-                >
-                    <div className="flex items-center gap-3.5">
-                        <div className="w-10 h-10 rounded-xl bg-red-50 text-brand-error flex items-center justify-center shrink-0">
-                            <Clock size={20} />
-                        </div>
-                        <div>
-                            <span className="text-[10px] font-bold text-brand-error uppercase tracking-wider block">Priority Queue</span>
-                            <h4 className="text-sm font-bold text-brand-navy group-hover:text-brand-primary transition-colors">
-                                Pre Cheque Approval
-                            </h4>
-                        </div>
-                    </div>
-                    <span className="px-2.5 py-1 rounded-full text-xs font-semibold bg-red-50 text-brand-error border border-red-100 flex items-center gap-1">
-                        Action Required
-                        <ArrowRight size={12} />
-                    </span>
-                </div>
-
-                {/* 2. Security Status / LOCK ID */}
-                <div
-                    onClick={() => navigate('/other/lock-id')}
-                    className="bg-white border border-brand-border hover:border-brand-primary/40 rounded-2xl p-4 shadow-xs transition-all cursor-pointer group flex items-center justify-between"
-                >
-                    <div className="flex items-center gap-3.5">
-                        <div className="w-10 h-10 rounded-xl bg-blue-50 text-brand-primary flex items-center justify-center shrink-0">
-                            <Lock size={20} />
-                        </div>
-                        <div>
-                            <span className="text-[10px] font-bold text-brand-muted uppercase tracking-wider block">Security Status</span>
-                            <div className="flex items-center gap-2">
-                                <h4 className="text-sm font-bold text-brand-navy group-hover:text-brand-primary transition-colors">
-                                    LOCK ID
-                                </h4>
-                                <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-green-50 text-brand-success border border-green-200">
-                                    ACTIVE
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                    <span className="text-xs font-mono text-brand-muted bg-slate-50 px-2.5 py-1 rounded-md border border-slate-100">
-                        SYS - SECURED
-                    </span>
-                </div>
-
-                {/* 3. Today's Insta Pay Hero Counter */}
-                <div
-                    onClick={() => navigate('/transactions/online-app-request')}
-                    className="bg-gradient-to-r from-brand-navy to-[#1a3d6b] text-white rounded-2xl p-4 shadow-sm flex items-center justify-between cursor-pointer group"
-                >
-                    <div className="flex items-center gap-3.5">
-                        <div className="w-10 h-10 rounded-xl bg-white/10 text-white flex items-center justify-center shrink-0">
-                            <Zap size={22} className="text-yellow-400" />
-                        </div>
-                        <div>
-                            <span className="text-[11px] font-medium text-blue-200 block">Today's Insta Pay</span>
-                            <h4 className="text-base font-bold text-white flex items-center gap-2">
-                                120 Trans <span className="text-xs font-normal text-blue-200">|</span> ₹22,77,811
-                            </h4>
-                        </div>
-                    </div>
-                    <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-brand-primary transition-colors">
-                        <ArrowUpRight size={16} />
-                    </div>
-                </div>
-            </div>
-
-            {/* VIEW MODE 1: EXECUTIVE CATEGORIZED CARDS */}
-            {viewMode === 'cards' && (
-                <div className="space-y-6">
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                        {/* Card 1: Digital Collections & Instant Payments */}
-                        <div className="bg-white rounded-xl border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden flex flex-col">
-                            <div className="px-5 py-4 bg-brand-lightbg/40 border-b border-brand-border flex items-center justify-between">
-                                <div className="flex items-center gap-2.5">
-                                    <div className="p-2 bg-brand-lightbg text-brand-primary rounded-lg">
-                                        <CreditCard size={18} />
-                                    </div>
-                                    <div>
-                                        <h3 className="text-sm font-bold text-brand-navy">Digital & Broker Collections</h3>
-                                        <p className="text-xs text-brand-muted">Instant payment queues & approvals</p>
-                                    </div>
-                                </div>
-                                <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-brand-lightbg text-brand-primary">
-                                    5 Items
-                                </span>
-                            </div>
-
-                            <div className="p-4 divide-y divide-brand-border/60">
-                                {digitalMetrics.map((item) => (
-                                    <div
-                                        key={item.id}
-                                        onClick={() => navigate(item.to)}
-                                        className="py-2.5 first:pt-1 last:pb-1 flex items-center justify-between hover:bg-slate-50/80 px-2 rounded-lg cursor-pointer transition-colors group"
-                                    >
-                                        <span className="text-xs font-medium text-brand-navy group-hover:text-brand-primary transition-colors">
-                                            {item.label}
-                                        </span>
-                                        <div className="flex items-center gap-2">
-                                            {item.amount && (
-                                                <span className="text-xs font-mono font-semibold text-brand-navy">
-                                                    ₹{item.amount}
-                                                </span>
-                                            )}
-                                            <span className={`text-xs px-2 py-0.5 rounded-full font-bold ${item.highlight
-                                                ? 'bg-blue-600 text-white'
-                                                : 'bg-brand-lightbg text-brand-primary'
-                                                }`}>
-                                                {item.count}
-                                            </span>
+            {/* Tab Content */}
+            {activeTab === 'view-dashboard' && (
+                <div className="space-y-5">
+                    {/* Quick Actions Grid */}
+                    <div>
+                        <h2 className="text-sm font-bold text-brand-navy mb-3">Quick Actions</h2>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                            {quickActions.map((action) => (
+                                <button
+                                    key={action.id}
+                                    onClick={() => navigate(action.to)}
+                                    className="p-4 rounded-xl border border-brand-border bg-white hover:border-brand-primary hover:bg-brand-lightbg/30 flex items-center justify-between transition-all group text-left cursor-pointer shadow-[0_1px_2px_rgba(0,0,0,0.02)]"
+                                >
+                                    <div className="flex items-center gap-3">
+                                        <div className="p-2.5 bg-brand-lightbg text-brand-primary rounded-lg group-hover:bg-brand-primary group-hover:text-white transition-colors shrink-0">
+                                            <action.icon size={18} />
+                                        </div>
+                                        <div className="min-w-0">
+                                            <h4 className="text-sm font-bold text-brand-navy group-hover:text-brand-primary transition-colors leading-tight">
+                                                {action.label}
+                                            </h4>
+                                            <p className="text-xs text-brand-muted mt-0.5 leading-tight">{action.desc}</p>
                                         </div>
                                     </div>
-                                ))}
-                            </div>
-                        </div>
-
-                        {/* Card 2: Cheque & Account Processing */}
-                        <div className="bg-white rounded-xl border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden flex flex-col">
-                            <div className="px-5 py-4 bg-brand-lightbg/40 border-b border-brand-border flex items-center justify-between">
-                                <div className="flex items-center gap-2.5">
-                                    <div className="p-2 bg-green-50 text-brand-success rounded-lg">
-                                        <CheckCircle2 size={18} />
-                                    </div>
-                                    <div>
-                                        <h3 className="text-sm font-bold text-brand-navy">Cheque & Account Processing</h3>
-                                        <p className="text-xs text-brand-muted">Deposit verifications & settlements</p>
-                                    </div>
-                                </div>
-                                <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-green-50 text-brand-success">
-                                    4 Items
-                                </span>
-                            </div>
-
-                            <div className="p-4 divide-y divide-brand-border/60">
-                                {chequeMetrics.map((item) => (
-                                    <div
-                                        key={item.id}
-                                        onClick={() => navigate(item.to)}
-                                        className="py-2.5 first:pt-1 last:pb-1 flex items-center justify-between hover:bg-slate-50/80 px-2 rounded-lg cursor-pointer transition-colors group"
-                                    >
-                                        <span className="text-xs font-medium text-brand-navy group-hover:text-brand-primary transition-colors">
-                                            {item.label}
-                                        </span>
-                                        <div>
-                                            {item.count !== null ? (
-                                                <span className="text-xs px-2 py-0.5 rounded-full font-bold bg-brand-lightbg text-brand-primary">
-                                                    {item.count}
-                                                </span>
-                                            ) : (
-                                                <span className={`text-xs px-2.5 py-0.5 rounded-full font-semibold ${item.urgent
-                                                    ? 'bg-red-50 text-brand-error border border-red-200'
-                                                    : 'bg-brand-lightbg text-brand-primary'
-                                                    }`}>
-                                                    {item.actionLabel}
-                                                </span>
-                                            )}
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-
-                        {/* Card 3: Service Desk & Brokerage Operations */}
-                        <div className="bg-white rounded-xl border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden flex flex-col">
-                            <div className="px-5 py-4 bg-brand-lightbg/40 border-b border-brand-border flex items-center justify-between">
-                                <div className="flex items-center gap-2.5">
-                                    <div className="p-2 bg-purple-50 text-purple-600 rounded-lg">
-                                        <Headphones size={18} />
-                                    </div>
-                                    <div>
-                                        <h3 className="text-sm font-bold text-brand-navy">Service Operations</h3>
-                                        <p className="text-xs text-brand-muted">Support tickets & entry tracking</p>
-                                    </div>
-                                </div>
-                                <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-purple-50 text-purple-600">
-                                    6 Items
-                                </span>
-                            </div>
-
-                            <div className="p-4 divide-y divide-brand-border/60">
-                                {serviceMetrics.map((item) => (
-                                    <div
-                                        key={item.id}
-                                        onClick={() => navigate(item.to)}
-                                        className="py-2.5 first:pt-1 last:pb-1 flex items-center justify-between hover:bg-slate-50/80 px-2 rounded-lg cursor-pointer transition-colors group"
-                                    >
-                                        <span className="text-xs font-medium text-brand-navy group-hover:text-brand-primary transition-colors">
-                                            {item.label}
-                                        </span>
-                                        <div className="flex items-center gap-2">
-                                            {item.amount && (
-                                                <span className="text-xs font-mono font-semibold text-brand-navy">
-                                                    ₹{item.amount}
-                                                </span>
-                                            )}
-                                            {item.count !== null ? (
-                                                <span className="text-xs px-2 py-0.5 rounded-full font-bold bg-brand-lightbg text-brand-primary">
-                                                    {item.count}
-                                                </span>
-                                            ) : (
-                                                <span className="text-[10px] px-2 py-0.5 rounded font-bold bg-green-50 text-brand-success border border-green-200">
-                                                    {item.actionLabel}
-                                                </span>
-                                            )}
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Quick Inquiries & Actions Grid */}
-                    <div className="bg-white rounded-xl border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] p-6">
-                        <div className="mb-4">
-                            <h3 className="text-sm font-bold text-brand-navy">Quick Inquiries & Actions</h3>
-                            <p className="text-xs text-brand-muted">Direct navigation to active policy search, commission grids, and posp lookup</p>
-                        </div>
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <button
-                                onClick={() => navigate('/transactions/view-policy-document')}
-                                className="p-4 rounded-xl border border-brand-border hover:border-brand-primary hover:bg-brand-lightbg/30 flex items-center justify-between transition-all group text-left cursor-pointer"
-                            >
-                                <div className="flex items-center gap-3">
-                                    <div className="p-2.5 bg-brand-lightbg text-brand-primary rounded-lg group-hover:bg-brand-primary group-hover:text-white transition-colors">
-                                        <FileText size={20} />
-                                    </div>
-                                    <div>
-                                        <h4 className="text-sm font-bold text-brand-navy group-hover:text-brand-primary transition-colors">
-                                            View Policy
-                                        </h4>
-                                        <p className="text-xs text-brand-muted">Search & view policy documents</p>
-                                    </div>
-                                </div>
-                                <ArrowUpRight size={18} className="text-brand-muted group-hover:text-brand-primary transition-colors" />
-                            </button>
-
-                            <button
-                                onClick={() => navigate('/commission-grid')}
-                                className="p-4 rounded-xl border border-brand-border hover:border-brand-primary hover:bg-brand-lightbg/30 flex items-center justify-between transition-all group text-left cursor-pointer"
-                            >
-                                <div className="flex items-center gap-3">
-                                    <div className="p-2.5 bg-brand-lightbg text-brand-primary rounded-lg group-hover:bg-brand-primary group-hover:text-white transition-colors">
-                                        <Percent size={20} />
-                                    </div>
-                                    <div>
-                                        <h4 className="text-sm font-bold text-brand-navy group-hover:text-brand-primary transition-colors">
-                                            Current Grid / System Grid
-                                        </h4>
-                                        <p className="text-xs text-brand-muted">Broker & agent commission grids</p>
-                                    </div>
-                                </div>
-                                <ArrowUpRight size={18} className="text-brand-muted group-hover:text-brand-primary transition-colors" />
-                            </button>
-
-                            <button
-                                onClick={() => navigate('/registration/agent')}
-                                className="p-4 rounded-xl border border-brand-border hover:border-brand-primary hover:bg-brand-lightbg/30 flex items-center justify-between transition-all group text-left cursor-pointer"
-                            >
-                                <div className="flex items-center gap-3">
-                                    <div className="p-2.5 bg-brand-lightbg text-brand-primary rounded-lg group-hover:bg-brand-primary group-hover:text-white transition-colors">
-                                        <Search size={20} />
-                                    </div>
-                                    <div>
-                                        <h4 className="text-sm font-bold text-brand-navy group-hover:text-brand-primary transition-colors">
-                                            Search POSP by Agent
-                                        </h4>
-                                        <p className="text-xs text-brand-muted">Find POSP registration & agents</p>
-                                    </div>
-                                </div>
-                                <ArrowUpRight size={18} className="text-brand-muted group-hover:text-brand-primary transition-colors" />
-                            </button>
+                                    <ArrowUpRight size={16} className="text-brand-muted group-hover:text-brand-primary transition-colors shrink-0 ml-2" />
+                                </button>
+                            ))}
                         </div>
                     </div>
                 </div>
             )}
 
-            {/* VIEW MODE 2: QUICK CONSOLIDATED MATRIX */}
-            {viewMode === 'matrix' && (
-                <div className="space-y-6">
-                    <div className="bg-white rounded-xl border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] p-6">
-                        <div className="mb-5 pb-3 border-b border-brand-border flex items-center justify-between">
-                            <div>
-                                <h3 className="text-base font-bold text-brand-navy">Consolidated Grid</h3>
-                                <p className="text-xs text-brand-muted">Complete status board with live transaction counters</p>
-                            </div>
-                            <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-brand-lightbg text-brand-primary border border-blue-100">
-                                18 Summary Items
-                            </span>
-                        </div>
+            {activeTab === 'commission-summary' && <ComingSoonPanel label="Commission Summary" />}
+            {activeTab === 'agent-payment' && <ComingSoonPanel label="Agent Payment" />}
+            {activeTab === 'analytic-agent' && <ComingSoonPanel label="Analytic Dashboard Agent" />}
+            {activeTab === 'analytic-executive' && <ComingSoonPanel label="Analytic Dashboard Executive" />}
+            {activeTab === 'analytic-location' && <ComingSoonPanel label="Analytic Dashboard Location" />}
+            {activeTab === 'agent-business' && <ComingSoonPanel label="Agent Business" />}
+            {activeTab === 'executive-business' && <ComingSoonPanel label="Executive Business" />}
+            {activeTab === 'insurance-outstanding' && <ComingSoonPanel label="Insurance Co. Outstanding" />}
+            {activeTab === 'broker-report' && <ComingSoonPanel label="Broker Report" />}
+            {activeTab === 'direct-business' && <ComingSoonPanel label="Direct Business" />}
+            {activeTab === 'agent-pending-comm' && <ComingSoonPanel label="Agent Pending Comm Rep" />}
 
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-y-5 gap-x-8 items-center">
-                            {/* Row 1 */}
-                            <div
-                                onClick={() => navigate('/transactions/pending-premium-cash')}
-                                className="flex items-center gap-2 cursor-pointer group"
-                            >
-                                <span className="text-sm font-medium text-brand-navy group-hover:text-brand-primary transition-colors">
-                                    Pre Online Broker/Cash
-                                </span>
-                                <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-brand-lightbg text-brand-primary">0</span>
-                                <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-brand-navy text-white">0</span>
-                            </div>
-
-                            <div
-                                onClick={() => navigate('/transactions/online-app-request')}
-                                className="flex items-center gap-2 cursor-pointer group"
-                            >
-                                <span className="text-sm font-medium text-brand-navy group-hover:text-brand-primary transition-colors">
-                                    Pre E-Wallet
-                                </span>
-                                <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-brand-lightbg text-brand-primary">0</span>
-                                <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-brand-navy text-white">0</span>
-                            </div>
-
-                            <div className="hidden lg:block" />
-
-                            <div
-                                onClick={() => navigate('/transactions/online-app-request')}
-                                className="flex items-center gap-2 cursor-pointer group"
-                            >
-                                <span className="text-sm font-medium text-brand-navy group-hover:text-brand-primary transition-colors">
-                                    Online Broker/Cash Approval
-                                </span>
-                                <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-brand-lightbg text-brand-primary">4</span>
-                                <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-brand-navy text-white">79977</span>
-                            </div>
-
-                            {/* Row 2 */}
-                            <div
-                                onClick={() => navigate('/transactions/online-app-request')}
-                                className="flex items-center gap-2 cursor-pointer group"
-                            >
-                                <span className="text-sm font-medium text-brand-navy group-hover:text-brand-primary transition-colors">
-                                    Insta Pay
-                                </span>
-                                <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-brand-lightbg text-brand-primary">120</span>
-                                <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-brand-navy text-white">2277811</span>
-                            </div>
-
-                            <div
-                                onClick={() => navigate('/transactions/self-quotation')}
-                                className="flex items-center gap-2 cursor-pointer group"
-                            >
-                                <span className="text-sm font-medium text-brand-navy group-hover:text-brand-primary transition-colors">
-                                    Quotation
-                                </span>
-                                <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-brand-lightbg text-brand-primary">12</span>
-                            </div>
-
-                            <div className="flex items-center gap-2">
-                                <span className="text-sm font-medium text-brand-navy">Attended</span>
-                                <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-brand-lightbg text-brand-primary">4</span>
-                            </div>
-
-                            <div>
-                                <span
-                                    onClick={() => navigate('/transactions/premium-cheque-bounce')}
-                                    className="text-sm font-semibold text-brand-error hover:underline cursor-pointer"
-                                >
-                                    Pre Cheque Approval
-                                </span>
-                            </div>
-
-                            {/* Row 3 */}
-                            <div className="flex items-center gap-2">
-                                <span className="text-sm font-medium text-brand-navy">Cash Back Approval</span>
-                                <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-brand-lightbg text-brand-primary">75</span>
-                            </div>
-
-                            <div
-                                onClick={() => navigate('/transactions/all-transaction-report')}
-                                className="flex items-center gap-2 cursor-pointer group"
-                            >
-                                <span className="text-sm font-medium text-brand-navy group-hover:text-brand-primary transition-colors">
-                                    Pending Trans
-                                </span>
-                                <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-brand-lightbg text-brand-primary">42</span>
-                                <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-brand-navy text-white">654583</span>
-                            </div>
-
-                            <div
-                                onClick={() => navigate('/transactions/premium-cheque-bounce')}
-                                className="flex items-center gap-2 cursor-pointer group"
-                            >
-                                <span className="text-sm font-medium text-brand-navy group-hover:text-brand-primary transition-colors">
-                                    Cust Cheq Deposit
-                                </span>
-                                <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-brand-lightbg text-brand-primary">3</span>
-                            </div>
-
-                            <div>
-                                <span
-                                    onClick={() => navigate('/transactions/view-policy-document')}
-                                    className="text-sm font-semibold text-brand-primary hover:underline cursor-pointer flex items-center gap-1"
-                                >
-                                    View Policy
-                                    <ArrowUpRight size={14} />
-                                </span>
-                            </div>
-
-                            {/* Row 4 */}
-                            <div className="flex items-center gap-2">
-                                <span className="text-sm font-medium text-brand-navy">Receiving Amt</span>
-                                <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-brand-lightbg text-brand-primary">36</span>
-                            </div>
-
-                            <div className="flex items-center gap-2">
-                                <span className="text-sm font-medium text-brand-navy">Send Link</span>
-                                <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-brand-lightbg text-brand-primary">30</span>
-                                <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-brand-navy text-white">58121</span>
-                            </div>
-
-                            <div>
-                                <span
-                                    onClick={() => navigate('/commission-grid')}
-                                    className="text-sm font-semibold text-brand-primary hover:underline cursor-pointer flex items-center gap-1"
-                                >
-                                    Current Grid/ System Grid
-                                    <ArrowUpRight size={14} />
-                                </span>
-                            </div>
-
-                            <div>
-                                <span
-                                    onClick={() => navigate('/registration/agent')}
-                                    className="text-sm font-semibold text-brand-primary hover:underline cursor-pointer flex items-center gap-1"
-                                >
-                                    Search posp by agent
-                                    <ArrowUpRight size={14} />
-                                </span>
-                            </div>
-
-                            {/* Row 5 */}
-                            <div
-                                onClick={() => navigate('/support')}
-                                className="flex items-center gap-2 cursor-pointer group"
-                            >
-                                <span className="text-sm font-medium text-brand-navy group-hover:text-brand-primary transition-colors">
-                                    Support Request
-                                </span>
-                                <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-brand-lightbg text-brand-primary">0</span>
-                            </div>
-
-                            <div className="flex items-center gap-3">
-                                <div
-                                    onClick={() => navigate('/transactions/all-user-trans')}
-                                    className="flex items-center gap-2 cursor-pointer group"
-                                >
-                                    <span className="text-sm font-medium text-brand-navy group-hover:text-brand-primary transition-colors">
-                                        Completed Entries
-                                    </span>
-                                    <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-brand-lightbg text-brand-primary">8</span>
-                                </div>
-                                <span className="text-sm font-bold text-brand-error tracking-wide ml-2 cursor-pointer hover:underline">
-                                    LOCK ID
-                                </span>
-                            </div>
-
-                            <div className="hidden lg:block" />
-                            <div className="hidden lg:block" />
-                        </div>
-                    </div>
-
-                    {/* Quick Inquiries & Actions Grid */}
-                    <div className="bg-white rounded-xl border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] p-6">
-                        <div className="mb-4">
-                            <h3 className="text-sm font-bold text-brand-navy">Quick Inquiries & Actions</h3>
-                            <p className="text-xs text-brand-muted">Direct navigation to active policy search, commission grids, and posp lookup</p>
-                        </div>
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <button
-                                onClick={() => navigate('/transactions/view-policy-document')}
-                                className="p-4 rounded-xl border border-brand-border hover:border-brand-primary hover:bg-brand-lightbg/30 flex items-center justify-between transition-all group text-left cursor-pointer"
-                            >
-                                <div className="flex items-center gap-3">
-                                    <div className="p-2.5 bg-brand-lightbg text-brand-primary rounded-lg group-hover:bg-brand-primary group-hover:text-white transition-colors">
-                                        <FileText size={20} />
-                                    </div>
-                                    <div>
-                                        <h4 className="text-sm font-bold text-brand-navy group-hover:text-brand-primary transition-colors">
-                                            View Policy
-                                        </h4>
-                                        <p className="text-xs text-brand-muted">Search & view policy documents</p>
-                                    </div>
-                                </div>
-                                <ArrowUpRight size={18} className="text-brand-muted group-hover:text-brand-primary transition-colors" />
-                            </button>
-
-                            <button
-                                onClick={() => navigate('/commission-grid')}
-                                className="p-4 rounded-xl border border-brand-border hover:border-brand-primary hover:bg-brand-lightbg/30 flex items-center justify-between transition-all group text-left cursor-pointer"
-                            >
-                                <div className="flex items-center gap-3">
-                                    <div className="p-2.5 bg-brand-lightbg text-brand-primary rounded-lg group-hover:bg-brand-primary group-hover:text-white transition-colors">
-                                        <Percent size={20} />
-                                    </div>
-                                    <div>
-                                        <h4 className="text-sm font-bold text-brand-navy group-hover:text-brand-primary transition-colors">
-                                            Current Grid / System Grid
-                                        </h4>
-                                        <p className="text-xs text-brand-muted">Broker & agent commission grids</p>
-                                    </div>
-                                </div>
-                                <ArrowUpRight size={18} className="text-brand-muted group-hover:text-brand-primary transition-colors" />
-                            </button>
-
-                            <button
-                                onClick={() => navigate('/registration/agent')}
-                                className="p-4 rounded-xl border border-brand-border hover:border-brand-primary hover:bg-brand-lightbg/30 flex items-center justify-between transition-all group text-left cursor-pointer"
-                            >
-                                <div className="flex items-center gap-3">
-                                    <div className="p-2.5 bg-brand-lightbg text-brand-primary rounded-lg group-hover:bg-brand-primary group-hover:text-white transition-colors">
-                                        <Search size={20} />
-                                    </div>
-                                    <div>
-                                        <h4 className="text-sm font-bold text-brand-navy group-hover:text-brand-primary transition-colors">
-                                            Search POSP by Agent
-                                        </h4>
-                                        <p className="text-xs text-brand-muted">Find POSP registration & agents</p>
-                                    </div>
-                                </div>
-                                <ArrowUpRight size={18} className="text-brand-muted group-hover:text-brand-primary transition-colors" />
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
         </div>
     );
 };

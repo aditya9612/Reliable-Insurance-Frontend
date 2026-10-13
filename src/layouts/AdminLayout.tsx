@@ -52,7 +52,7 @@ const AdminLayout = () => {
                     isCollapsed={isSidebarCollapsed}
                     toggleSidebar={toggleSidebar}
                 />
-                {isAdmin && !isDashboardPage && <OperationsMatrixBanner />}
+                {isAdmin && <OperationsMatrixBanner />}
                 <main className="admin-content">
                     <div key={location.pathname} className="page-transition-wrapper">
                         <Outlet />

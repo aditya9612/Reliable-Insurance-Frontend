@@ -61,20 +61,17 @@ export const OperationsMatrixBanner: React.FC = () => {
                 <div className="flex items-center gap-2 shrink-0">
                     <button
                         onClick={() => setIsMinimized(!isMinimized)}
-                        className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold shadow-xs transition-all duration-200 cursor-pointer group border ${isMinimized
-                            ? 'bg-brand-primary text-white border-brand-primary hover:bg-brand-primary/90'
-                            : 'bg-white hover:bg-slate-50 text-brand-navy border-brand-border'
-                            }`}
+                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-white text-brand-primary border border-brand-primary/40 hover:bg-brand-lightbg hover:border-brand-primary transition-all cursor-pointer shadow-sm"
                         title={isMinimized ? 'Click to Maximize Operational Matrix' : 'Click to Minimize Operational Matrix'}
                     >
                         {isMinimized ? (
                             <>
-                                <Maximize2 size={13} className="text-white group-hover:scale-110 transition-transform" />
+                                <Maximize2 size={13} />
                                 <span>Maximize Matrix</span>
                             </>
                         ) : (
                             <>
-                                <Minimize2 size={13} className="text-brand-muted group-hover:text-brand-navy group-hover:scale-110 transition-transform" />
+                                <Minimize2 size={13} />
                                 <span>Minimize Matrix</span>
                             </>
                         )}
