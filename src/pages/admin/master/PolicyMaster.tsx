@@ -545,7 +545,7 @@ const PolicyMaster: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => showToast(`Viewing TDS Rates for ${selectedBroker}`)}
-                  className="px-5 py-2 bg-[#f39c12] hover:bg-[#e08e0b] text-white font-semibold text-sm rounded-lg shadow-xs transition-all cursor-pointer border-none"
+                  className="px-5 py-2 bg-brand-primary hover:bg-[#0654B0] text-white font-semibold text-sm rounded-lg shadow-xs transition-all cursor-pointer border-none"
                 >
                   View
                 </button>
@@ -555,7 +555,7 @@ const PolicyMaster: React.FC = () => {
                     setSelectedBroker('RELIABLE ASSOCIATES');
                     handleResetBrokerTdsForm();
                   }}
-                  className="px-5 py-2 bg-[#e74c3c] hover:bg-[#c0392b] text-white font-semibold text-sm rounded-lg shadow-xs transition-all cursor-pointer border-none"
+                  className="px-5 py-2 bg-slate-500 hover:bg-slate-600 text-white font-semibold text-sm rounded-lg shadow-xs transition-all cursor-pointer border-none"
                 >
                   Reset
                 </button>
@@ -564,7 +564,7 @@ const PolicyMaster: React.FC = () => {
 
             {/* Details Form Card */}
             <form onSubmit={handleSaveBrokerTds} className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden flex flex-col w-full">
-              <div className="bg-[#009688] text-white px-5 py-3 font-semibold text-sm flex items-center justify-between">
+              <div className="bg-brand-primary text-white px-5 py-1.5 font-semibold text-sm flex items-center justify-between">
                 <span>» Details</span>
                 {editingBrokerTdsItem && (
                   <span className="text-xs bg-white/20 px-2.5 py-1 rounded-md font-medium">
@@ -746,8 +746,8 @@ const PolicyMaster: React.FC = () => {
                           type="button"
                           onClick={() => setBrokerTdsPage(p)}
                           className={`w-7 h-7 rounded text-xs font-semibold transition-colors cursor-pointer ${brokerTdsPage === p
-                              ? 'bg-brand-primary text-white border border-brand-primary'
-                              : 'border border-brand-border hover:bg-slate-50 text-slate-700'
+                            ? 'bg-brand-primary text-white border border-brand-primary'
+                            : 'border border-brand-border hover:bg-slate-50 text-slate-700'
                             }`}
                         >
                           {p}
@@ -826,12 +826,12 @@ const PolicyMaster: React.FC = () => {
               </div>
 
               <div className="flex items-center gap-2 shrink-0 ml-auto">
-                <button className="px-5 py-2 bg-[#f39c12] hover:bg-[#e08e0b] text-white font-medium text-sm rounded-lg shadow-sm transition-all cursor-pointer">
+                <button className="px-5 py-2 bg-brand-primary hover:bg-[#0654B0] text-white font-medium text-sm rounded-lg shadow-sm transition-all cursor-pointer">
                   View
                 </button>
                 <button
                   onClick={() => { setSelectedBroker(''); setTdsTarget('Agent'); }}
-                  className="px-5 py-2 bg-[#e74c3c] hover:bg-[#c0392b] text-white font-medium text-sm rounded-lg shadow-sm transition-all cursor-pointer"
+                  className="px-5 py-2 bg-slate-500 hover:bg-slate-600 text-white font-medium text-sm rounded-lg shadow-sm transition-all cursor-pointer"
                 >
                   Reset
                 </button>
@@ -840,7 +840,7 @@ const PolicyMaster: React.FC = () => {
 
             {/* Details Form Card */}
             <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden flex flex-col w-full">
-              <div className="bg-[#009688] text-white px-5 py-3 font-semibold text-sm">
+              <div className="bg-brand-primary text-white px-5 py-1.5 font-semibold text-sm">
                 » Details
               </div>
               <div className="p-5 grid grid-cols-1 sm:grid-cols-4 gap-4 items-end">
@@ -953,12 +953,12 @@ const PolicyMaster: React.FC = () => {
               </div>
 
               <div className="flex items-center gap-2 shrink-0 ml-auto">
-                <button className="px-5 py-2 bg-[#f39c12] hover:bg-[#e08e0b] text-white font-medium text-sm rounded-lg shadow-sm transition-all cursor-pointer">
+                <button className="px-5 py-2 bg-brand-primary hover:bg-[#0654B0] text-white font-medium text-sm rounded-lg shadow-sm transition-all cursor-pointer">
                   View
                 </button>
                 <button
                   onClick={() => setSelectedBroker('')}
-                  className="px-5 py-2 bg-[#e74c3c] hover:bg-[#c0392b] text-white font-medium text-sm rounded-lg shadow-sm transition-all cursor-pointer"
+                  className="px-5 py-2 bg-slate-500 hover:bg-slate-600 text-white font-medium text-sm rounded-lg shadow-sm transition-all cursor-pointer"
                 >
                   Reset
                 </button>
@@ -967,7 +967,7 @@ const PolicyMaster: React.FC = () => {
 
             {/* Service Charge Details Card */}
             <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden flex flex-col w-full">
-              <div className="bg-brand-navy text-white px-5 py-3 font-semibold text-sm">
+              <div className="bg-brand-primary text-white px-5 py-1.5 font-semibold text-sm">
                 » Service Charge Details
               </div>
               <div className="p-5 flex flex-col space-y-4">
@@ -1025,7 +1025,7 @@ const PolicyMaster: React.FC = () => {
         {activeTab === 'creditMaster' && (
           <div className="flex flex-col space-y-5 w-full">
             <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden flex flex-col w-full">
-              <div className="bg-brand-navy text-white px-5 py-3 font-semibold text-sm">
+              <div className="bg-brand-primary text-white px-5 py-1.5 font-semibold text-sm">
                 » Credit Details
               </div>
               <div className="p-5 grid grid-cols-1 sm:grid-cols-4 gap-4 items-end">

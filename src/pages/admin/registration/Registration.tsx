@@ -2368,7 +2368,7 @@ const Registration: React.FC = () => {
                                 setEmployeeForm({ fullName: '', designation: 'Operations Executive', department: 'Operations', branch: 'BARAMATI', mobile: '', email: '', doj: new Date().toISOString().split('T')[0] });
                                 setModalType('EMPLOYEE');
                             }}
-                            className="inline-flex items-center gap-2 px-4 py-2 bg-brand-primary text-white rounded-[8px] text-[14px] font-semibold hover:bg-[#1D4ED8] shadow-sm transition-all cursor-pointer border-none"
+                            className="inline-flex items-center gap-2 px-4 py-2 bg-brand-primary text-white rounded-lg text-[14px] font-semibold hover:bg-[#1D4ED8] shadow-sm transition-all cursor-pointer border-none"
                         >
                             <Plus size={16} /> Register New Employee
                         </button>
@@ -2378,7 +2378,7 @@ const Registration: React.FC = () => {
                                 setAgentForm({ fullName: '', type: 'POSP', branch: 'BARAMATI', mobile: '', email: '', panNo: '' });
                                 setModalType('AGENT');
                             }}
-                            className="inline-flex items-center gap-2 px-4 py-2 bg-brand-primary text-white rounded-[8px] text-[14px] font-semibold hover:bg-[#1D4ED8] shadow-sm transition-all cursor-pointer border-none"
+                            className="inline-flex items-center gap-2 px-4 py-2 bg-brand-primary text-white rounded-lg text-[14px] font-semibold hover:bg-[#1D4ED8] shadow-sm transition-all cursor-pointer border-none"
                         >
                             <Plus size={16} /> Register New Agent
                         </button>
@@ -2400,21 +2400,21 @@ const Registration: React.FC = () => {
                                 });
                                 setModalType('BENEFICIARY');
                             }}
-                            className="inline-flex items-center gap-2 px-4 py-2 bg-brand-primary text-white rounded-[8px] text-[14px] font-semibold hover:bg-[#1D4ED8] shadow-sm transition-all cursor-pointer border-none"
+                            className="inline-flex items-center gap-2 px-4 py-2 bg-brand-primary text-white rounded-lg text-[14px] font-semibold hover:bg-[#1D4ED8] shadow-sm transition-all cursor-pointer border-none"
                         >
                             <Plus size={16} /> Add Beneficiary
                         </button>
                     ) : activeTab === 'delete-vehicle' ? (
                         <button
                             onClick={() => showToast('Vehicle database synced')}
-                            className="inline-flex items-center gap-2 px-4 py-2 bg-slate-800 text-white rounded-[8px] text-[14px] font-semibold hover:bg-slate-900 shadow-sm transition-all cursor-pointer border-none"
+                            className="inline-flex items-center gap-2 px-4 py-2 bg-brand-primary text-white rounded-lg text-[14px] font-semibold hover:bg-[#0654B0] shadow-sm transition-all cursor-pointer border-none"
                         >
                             <RefreshCw size={16} /> Refresh Vehicle List
                         </button>
                     ) : (
                         <button
                             onClick={() => showToast('Deactivated agent records exported as CSV')}
-                            className="inline-flex items-center gap-2 px-4 py-2 bg-slate-800 text-white rounded-[8px] text-[14px] font-semibold hover:bg-slate-900 shadow-sm transition-all cursor-pointer border-none"
+                            className="inline-flex items-center gap-2 px-4 py-2 bg-brand-primary text-white rounded-lg text-[14px] font-semibold hover:bg-[#0654B0] shadow-sm transition-all cursor-pointer border-none"
                         >
                             <Download size={16} /> Export List
                         </button>
@@ -2432,9 +2432,9 @@ const Registration: React.FC = () => {
                 <div key={activeTab} className="tab-transition-wrapper space-y-6">
                     <form onSubmit={handleSaveEmpInfo} className="space-y-6 w-full min-w-0">
                         {/* 1. » Employee Details */}
-                        <div className="bg-white rounded-[10px] p-6 sm:p-7 shadow-sm border border-slate-200/80">
+                        <div className="bg-white rounded-xl p-6 sm:p-7 shadow-sm border border-slate-200/80">
                             {/* Blue Banner Header */}
-                            <div className="bg-brand-primary text-white px-4 py-2.5 rounded-[6px] font-normal text-[15px] flex items-center shadow-xs mb-6">
+                            <div className="bg-brand-primary text-white px-5 py-1.5 rounded-lg font-semibold text-sm flex items-center shadow-xs mb-6">
                                 <span className="mr-0.5 text-base font-serif">&raquo;</span>Employee Details
                             </div>
 
@@ -2447,7 +2447,7 @@ const Registration: React.FC = () => {
                                             <select
                                                 value={empInfoForm.branch}
                                                 onChange={(e) => setEmpInfoForm({ ...empInfoForm, branch: e.target.value })}
-                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
+                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
                                             >
                                                 <option value="">--Select Branch Name--</option>
                                                 {empBranchOptions.map(b => (
@@ -2468,7 +2468,7 @@ const Registration: React.FC = () => {
                                             <select
                                                 value={empInfoForm.role}
                                                 onChange={(e) => setEmpInfoForm({ ...empInfoForm, role: e.target.value })}
-                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
+                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
                                             >
                                                 <option value="">--Select Role Name--</option>
                                                 {empRoleOptions.map(r => (
@@ -2493,7 +2493,7 @@ const Registration: React.FC = () => {
                                             placeholder=""
                                             value={empInfoForm.empCode}
                                             onChange={(e) => setEmpInfoForm({ ...empInfoForm, empCode: e.target.value })}
-                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                         />
                                     </div>
 
@@ -2504,7 +2504,7 @@ const Registration: React.FC = () => {
                                             placeholder="dd/MM/yyyy"
                                             value={empInfoForm.dateOfJoining}
                                             onChange={(e) => setEmpInfoForm({ ...empInfoForm, dateOfJoining: e.target.value })}
-                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                         />
                                     </div>
                                 </div>
@@ -2517,7 +2517,7 @@ const Registration: React.FC = () => {
                                             <select
                                                 value={empInfoForm.executiveType}
                                                 onChange={(e) => setEmpInfoForm({ ...empInfoForm, executiveType: e.target.value })}
-                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
+                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
                                             >
                                                 <option value="">--SELECT EXECTIVE TYPE--</option>
                                                 {empExecutiveTypeOptions.map(t => (
@@ -2536,9 +2536,9 @@ const Registration: React.FC = () => {
                         </div>
 
                         {/* 2. » Personal Details */}
-                        <div className="bg-white rounded-[10px] p-6 sm:p-7 shadow-sm border border-slate-200/80">
+                        <div className="bg-white rounded-xl p-6 sm:p-7 shadow-sm border border-slate-200/80">
                             {/* Blue Banner Header */}
-                            <div className="bg-brand-primary text-white px-4 py-2.5 rounded-[6px] font-normal text-[15px] flex items-center shadow-xs mb-6">
+                            <div className="bg-brand-primary text-white px-5 py-1.5 rounded-lg font-semibold text-sm flex items-center shadow-xs mb-6">
                                 <span className="mr-0.5 text-base font-serif">&raquo;</span>Personal Details
                             </div>
 
@@ -2554,7 +2554,7 @@ const Registration: React.FC = () => {
                                             required
                                             value={empInfoForm.firstName}
                                             onChange={(e) => setEmpInfoForm({ ...empInfoForm, firstName: e.target.value })}
-                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                         />
                                     </div>
 
@@ -2567,7 +2567,7 @@ const Registration: React.FC = () => {
                                             required
                                             value={empInfoForm.middleName}
                                             onChange={(e) => setEmpInfoForm({ ...empInfoForm, middleName: e.target.value })}
-                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                         />
                                     </div>
 
@@ -2580,7 +2580,7 @@ const Registration: React.FC = () => {
                                             required
                                             value={empInfoForm.lastName}
                                             onChange={(e) => setEmpInfoForm({ ...empInfoForm, lastName: e.target.value })}
-                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                         />
                                     </div>
                                 </div>
@@ -2597,7 +2597,7 @@ const Registration: React.FC = () => {
                                             placeholder="dd/mm/yyyy"
                                             value={empInfoForm.dateOfBirth}
                                             onChange={(e) => setEmpInfoForm({ ...empInfoForm, dateOfBirth: e.target.value })}
-                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                         />
                                     </div>
 
@@ -2607,7 +2607,7 @@ const Registration: React.FC = () => {
                                             <select
                                                 value={empInfoForm.gender}
                                                 onChange={(e) => setEmpInfoForm({ ...empInfoForm, gender: e.target.value })}
-                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
+                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
                                             >
                                                 <option value="">SELECT</option>
                                                 {empGenderOptions.map(g => (
@@ -2628,7 +2628,7 @@ const Registration: React.FC = () => {
                                             <select
                                                 value={empInfoForm.maritalStatus}
                                                 onChange={(e) => setEmpInfoForm({ ...empInfoForm, maritalStatus: e.target.value })}
-                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
+                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
                                             >
                                                 <option value="">SELECT</option>
                                                 {empMaritalStatusOptions.map(m => (
@@ -2657,7 +2657,7 @@ const Registration: React.FC = () => {
                                             maxLength={10}
                                             value={empInfoForm.officeMobile}
                                             onChange={(e) => setEmpInfoForm({ ...empInfoForm, officeMobile: e.target.value })}
-                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                         />
                                     </div>
 
@@ -2668,7 +2668,7 @@ const Registration: React.FC = () => {
                                             maxLength={10}
                                             value={empInfoForm.mobile}
                                             onChange={(e) => setEmpInfoForm({ ...empInfoForm, mobile: e.target.value })}
-                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                         />
                                     </div>
                                 </div>
@@ -2681,7 +2681,7 @@ const Registration: React.FC = () => {
                                             type="text"
                                             value={empInfoForm.addressLine1}
                                             onChange={(e) => setEmpInfoForm({ ...empInfoForm, addressLine1: e.target.value })}
-                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                         />
                                     </div>
 
@@ -2691,7 +2691,7 @@ const Registration: React.FC = () => {
                                             type="text"
                                             value={empInfoForm.addressLine2}
                                             onChange={(e) => setEmpInfoForm({ ...empInfoForm, addressLine2: e.target.value })}
-                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                         />
                                     </div>
                                 </div>
@@ -2704,7 +2704,7 @@ const Registration: React.FC = () => {
                                             <select
                                                 value={empInfoForm.state}
                                                 onChange={(e) => setEmpInfoForm({ ...empInfoForm, state: e.target.value })}
-                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
+                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
                                             >
                                                 <option value="">--Select State--</option>
                                                 {empStateOptions.map(s => (
@@ -2725,7 +2725,7 @@ const Registration: React.FC = () => {
                                             <select
                                                 value={empInfoForm.district}
                                                 onChange={(e) => setEmpInfoForm({ ...empInfoForm, district: e.target.value })}
-                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
+                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
                                             >
                                                 <option value="">--Select District--</option>
                                                 {empDistrictOptions.map(d => (
@@ -2746,7 +2746,7 @@ const Registration: React.FC = () => {
                                             <select
                                                 value={empInfoForm.taluka}
                                                 onChange={(e) => setEmpInfoForm({ ...empInfoForm, taluka: e.target.value })}
-                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
+                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
                                             >
                                                 {empTalukaOptions.map(t => (
                                                     <option key={t} value={t}>{t}</option>
@@ -2770,7 +2770,7 @@ const Registration: React.FC = () => {
                                             maxLength={10}
                                             value={empInfoForm.panNo}
                                             onChange={(e) => setEmpInfoForm({ ...empInfoForm, panNo: e.target.value.toUpperCase() })}
-                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] font-mono text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] font-mono text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                         />
                                     </div>
 
@@ -2781,7 +2781,7 @@ const Registration: React.FC = () => {
                                             maxLength={12}
                                             value={empInfoForm.aadharNo}
                                             onChange={(e) => setEmpInfoForm({ ...empInfoForm, aadharNo: e.target.value })}
-                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] font-mono text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] font-mono text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                         />
                                     </div>
 
@@ -2791,7 +2791,7 @@ const Registration: React.FC = () => {
                                             type="email"
                                             value={empInfoForm.email}
                                             onChange={(e) => setEmpInfoForm({ ...empInfoForm, email: e.target.value })}
-                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                         />
                                     </div>
                                 </div>
@@ -2799,9 +2799,9 @@ const Registration: React.FC = () => {
                         </div>
 
                         {/* 3. » Bank Details */}
-                        <div className="bg-white rounded-[10px] p-6 sm:p-7 shadow-sm border border-slate-200/80">
+                        <div className="bg-white rounded-xl p-6 sm:p-7 shadow-sm border border-slate-200/80">
                             {/* Blue Banner Header */}
-                            <div className="bg-brand-primary text-white px-4 py-2.5 rounded-[6px] font-normal text-[15px] flex items-center shadow-xs mb-6">
+                            <div className="bg-brand-primary text-white px-5 py-1.5 rounded-lg font-semibold text-sm flex items-center shadow-xs mb-6">
                                 <span className="mr-0.5 text-base font-serif">&raquo;</span>Bank Details
                             </div>
 
@@ -2812,7 +2812,7 @@ const Registration: React.FC = () => {
                                         <select
                                             value={empInfoForm.bankName}
                                             onChange={(e) => setEmpInfoForm({ ...empInfoForm, bankName: e.target.value })}
-                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
+                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
                                         >
                                             <option value="">--Select Bank Type--</option>
                                             {empBankOptions.map(b => (
@@ -2833,7 +2833,7 @@ const Registration: React.FC = () => {
                                         type="text"
                                         value={empInfoForm.bankBranch}
                                         onChange={(e) => setEmpInfoForm({ ...empInfoForm, bankBranch: e.target.value })}
-                                        className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                        className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                     />
                                 </div>
 
@@ -2844,7 +2844,7 @@ const Registration: React.FC = () => {
                                         maxLength={11}
                                         value={empInfoForm.ifscCode}
                                         onChange={(e) => setEmpInfoForm({ ...empInfoForm, ifscCode: e.target.value.toUpperCase() })}
-                                        className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] font-mono text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                        className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] font-mono text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                     />
                                 </div>
 
@@ -2854,16 +2854,16 @@ const Registration: React.FC = () => {
                                         type="text"
                                         value={empInfoForm.bankAccountNo}
                                         onChange={(e) => setEmpInfoForm({ ...empInfoForm, bankAccountNo: e.target.value })}
-                                        className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] font-mono text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                        className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] font-mono text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                     />
                                 </div>
                             </div>
                         </div>
 
                         {/* 4. » User Details */}
-                        <div className="bg-white rounded-[10px] p-6 sm:p-7 shadow-sm border border-slate-200/80">
+                        <div className="bg-white rounded-xl p-6 sm:p-7 shadow-sm border border-slate-200/80">
                             {/* Blue Banner Header */}
-                            <div className="bg-brand-primary text-white px-4 py-2.5 rounded-[6px] font-normal text-[15px] flex items-center shadow-xs mb-6">
+                            <div className="bg-brand-primary text-white px-5 py-1.5 rounded-lg font-semibold text-sm flex items-center shadow-xs mb-6">
                                 <span className="mr-0.5 text-base font-serif">&raquo;</span>User Details
                             </div>
 
@@ -2878,7 +2878,7 @@ const Registration: React.FC = () => {
                                                 setEmpInfoForm({ ...empInfoForm, username: e.target.value });
                                                 setUsernameChecked(null);
                                             }}
-                                            className="flex-1 px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                            className="flex-1 px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                         />
                                         <button
                                             type="button"
@@ -2902,7 +2902,7 @@ const Registration: React.FC = () => {
                                         type="password"
                                         value={empInfoForm.password}
                                         onChange={(e) => setEmpInfoForm({ ...empInfoForm, password: e.target.value })}
-                                        className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                        className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                     />
                                 </div>
 
@@ -2912,16 +2912,16 @@ const Registration: React.FC = () => {
                                         type="password"
                                         value={empInfoForm.rePassword}
                                         onChange={(e) => setEmpInfoForm({ ...empInfoForm, rePassword: e.target.value })}
-                                        className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                        className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                     />
                                 </div>
                             </div>
                         </div>
 
                         {/* 5. » KYC Details */}
-                        <div className="bg-white rounded-[10px] p-6 sm:p-7 shadow-sm border border-slate-200/80">
+                        <div className="bg-white rounded-xl p-6 sm:p-7 shadow-sm border border-slate-200/80">
                             {/* Blue Banner Header */}
-                            <div className="bg-brand-primary text-white px-4 py-2.5 rounded-[6px] font-normal text-[15px] flex items-center shadow-xs mb-6">
+                            <div className="bg-brand-primary text-white px-5 py-1.5 rounded-lg font-semibold text-sm flex items-center shadow-xs mb-6">
                                 <span className="mr-0.5 text-base font-serif">&raquo;</span>KYC Details
                             </div>
 
@@ -3043,9 +3043,9 @@ const Registration: React.FC = () => {
                 <div key={activeTab} className="tab-transition-wrapper space-y-6">
                     <form onSubmit={handleSaveAgentInfo} className="space-y-6 w-full min-w-0">
                         {/* 1. » Agent Details */}
-                        <div className="bg-white rounded-[10px] p-6 sm:p-7 shadow-sm border border-slate-200/80">
+                        <div className="bg-white rounded-xl p-6 sm:p-7 shadow-sm border border-slate-200/80">
                             {/* Blue Banner Header */}
-                            <div className="bg-brand-primary text-white px-4 py-2.5 rounded-[6px] font-normal text-[15px] flex items-center shadow-xs mb-6">
+                            <div className="bg-brand-primary text-white px-5 py-1.5 rounded-lg font-semibold text-sm flex items-center shadow-xs mb-6">
                                 <span className="mr-0.5 text-base font-serif">&raquo;</span>Agent Details
                             </div>
 
@@ -3061,7 +3061,7 @@ const Registration: React.FC = () => {
                                                 required
                                                 value={agentInfoForm.branch}
                                                 onChange={(e) => setAgentInfoForm({ ...agentInfoForm, branch: e.target.value })}
-                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
+                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
                                             >
                                                 <option value="">--Select Branch Name--</option>
                                                 {empBranchOptions.map(b => (
@@ -3085,7 +3085,7 @@ const Registration: React.FC = () => {
                                                 required
                                                 value={agentInfoForm.role}
                                                 onChange={(e) => setAgentInfoForm({ ...agentInfoForm, role: e.target.value })}
-                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
+                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
                                             >
                                                 {agentRoleOptions.map(r => (
                                                     <option key={r} value={r}>{r}</option>
@@ -3108,7 +3108,7 @@ const Registration: React.FC = () => {
                                             required
                                             value={agentInfoForm.agentCode}
                                             onChange={(e) => setAgentInfoForm({ ...agentInfoForm, agentCode: e.target.value })}
-                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] font-mono text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] font-mono text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                         />
                                     </div>
                                 </div>
@@ -3124,7 +3124,7 @@ const Registration: React.FC = () => {
                                                 required
                                                 value={agentInfoForm.salesExecutive}
                                                 onChange={(e) => setAgentInfoForm({ ...agentInfoForm, salesExecutive: e.target.value })}
-                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
+                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
                                             >
                                                 <option value="">--Select Sales Executive--</option>
                                                 {agentSalesExecutiveOptions.map(se => (
@@ -3148,7 +3148,7 @@ const Registration: React.FC = () => {
                                                 required
                                                 value={agentInfoForm.coordinator}
                                                 onChange={(e) => setAgentInfoForm({ ...agentInfoForm, coordinator: e.target.value })}
-                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
+                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
                                             >
                                                 <option value="">--Select Coordinate--</option>
                                                 {agentCoordinatorOptions.map(co => (
@@ -3172,7 +3172,7 @@ const Registration: React.FC = () => {
                                                 required
                                                 value={agentInfoForm.quotationCoordinator}
                                                 onChange={(e) => setAgentInfoForm({ ...agentInfoForm, quotationCoordinator: e.target.value })}
-                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
+                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
                                             >
                                                 <option value="">--Select Quotation Cordinator --</option>
                                                 {agentQuotationCoordinatorOptions.map(qc => (
@@ -3199,7 +3199,7 @@ const Registration: React.FC = () => {
                                                 required
                                                 value={agentInfoForm.inspectionCoordinator}
                                                 onChange={(e) => setAgentInfoForm({ ...agentInfoForm, inspectionCoordinator: e.target.value })}
-                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
+                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
                                             >
                                                 <option value="">--Select Inspection Cordinator --</option>
                                                 {agentInspectionCoordinatorOptions.map(ic => (
@@ -3223,7 +3223,7 @@ const Registration: React.FC = () => {
                                                 required
                                                 value={agentInfoForm.endorsementCoordinator}
                                                 onChange={(e) => setAgentInfoForm({ ...agentInfoForm, endorsementCoordinator: e.target.value })}
-                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
+                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
                                             >
                                                 <option value="">--Select Endrosment Cordinator --</option>
                                                 {agentEndorsementCoordinatorOptions.map(ec => (
@@ -3248,7 +3248,7 @@ const Registration: React.FC = () => {
                                             placeholder="dd/MM/yyyy"
                                             value={agentInfoForm.dateOfJoining}
                                             onChange={(e) => setAgentInfoForm({ ...agentInfoForm, dateOfJoining: e.target.value })}
-                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                         />
                                     </div>
                                 </div>
@@ -3264,7 +3264,7 @@ const Registration: React.FC = () => {
                                             required
                                             value={agentInfoForm.agentTds}
                                             onChange={(e) => setAgentInfoForm({ ...agentInfoForm, agentTds: e.target.value })}
-                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                         />
                                     </div>
 
@@ -3277,7 +3277,7 @@ const Registration: React.FC = () => {
                                                 required
                                                 value={agentInfoForm.campaign}
                                                 onChange={(e) => setAgentInfoForm({ ...agentInfoForm, campaign: e.target.value })}
-                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
+                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
                                             >
                                                 <option value="">--Select Champaign--</option>
                                                 {agentCampaignOptions.map(c => (
@@ -3301,7 +3301,7 @@ const Registration: React.FC = () => {
                                                 required
                                                 value={agentInfoForm.location}
                                                 onChange={(e) => setAgentInfoForm({ ...agentInfoForm, location: e.target.value })}
-                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
+                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
                                             >
                                                 <option value="">--Select Location--</option>
                                                 {agentLocationOptions.map(l => (
@@ -3328,7 +3328,7 @@ const Registration: React.FC = () => {
                                                 required
                                                 value={agentInfoForm.category}
                                                 onChange={(e) => setAgentInfoForm({ ...agentInfoForm, category: e.target.value })}
-                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
+                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
                                             >
                                                 <option value="">--Select Category--</option>
                                                 {agentCategoryOptions.map(cat => (
@@ -3352,7 +3352,7 @@ const Registration: React.FC = () => {
                                                 required
                                                 value={agentInfoForm.pospType}
                                                 onChange={(e) => setAgentInfoForm({ ...agentInfoForm, pospType: e.target.value })}
-                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
+                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
                                             >
                                                 <option value="">--Select POSP Type--</option>
                                                 {agentPospTypeOptions.map(pt => (
@@ -3376,7 +3376,7 @@ const Registration: React.FC = () => {
                                             required
                                             value={agentInfoForm.pospName}
                                             onChange={(e) => setAgentInfoForm({ ...agentInfoForm, pospName: e.target.value })}
-                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                         />
                                     </div>
                                 </div>
@@ -3392,7 +3392,7 @@ const Registration: React.FC = () => {
                                                 required
                                                 value={agentInfoForm.franchiseCode}
                                                 onChange={(e) => setAgentInfoForm({ ...agentInfoForm, franchiseCode: e.target.value })}
-                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
+                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
                                             >
                                                 {agentFranchiseOptions.map(fc => (
                                                     <option key={fc} value={fc}>{fc}</option>
@@ -3410,9 +3410,9 @@ const Registration: React.FC = () => {
                         </div>
 
                         {/* 2. » Personal Details */}
-                        <div className="bg-white rounded-[10px] p-6 sm:p-7 shadow-sm border border-slate-200/80">
+                        <div className="bg-white rounded-xl p-6 sm:p-7 shadow-sm border border-slate-200/80">
                             {/* Blue Banner Header */}
-                            <div className="bg-brand-primary text-white px-4 py-2.5 rounded-[6px] font-normal text-[15px] flex items-center shadow-xs mb-6">
+                            <div className="bg-brand-primary text-white px-5 py-1.5 rounded-lg font-semibold text-sm flex items-center shadow-xs mb-6">
                                 <span className="mr-0.5 text-base font-serif">&raquo;</span>Personal Details
                             </div>
 
@@ -3428,7 +3428,7 @@ const Registration: React.FC = () => {
                                             required
                                             value={agentInfoForm.firstName}
                                             onChange={(e) => setAgentInfoForm({ ...agentInfoForm, firstName: e.target.value })}
-                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                         />
                                     </div>
 
@@ -3440,7 +3440,7 @@ const Registration: React.FC = () => {
                                             type="text"
                                             value={agentInfoForm.middleName}
                                             onChange={(e) => setAgentInfoForm({ ...agentInfoForm, middleName: e.target.value })}
-                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                         />
                                     </div>
 
@@ -3453,7 +3453,7 @@ const Registration: React.FC = () => {
                                             required
                                             value={agentInfoForm.lastName}
                                             onChange={(e) => setAgentInfoForm({ ...agentInfoForm, lastName: e.target.value })}
-                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                         />
                                     </div>
                                 </div>
@@ -3466,7 +3466,7 @@ const Registration: React.FC = () => {
                                             type="text"
                                             value={agentInfoForm.nickName}
                                             onChange={(e) => setAgentInfoForm({ ...agentInfoForm, nickName: e.target.value })}
-                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                         />
                                     </div>
 
@@ -3479,7 +3479,7 @@ const Registration: React.FC = () => {
                                                 required
                                                 value={agentInfoForm.gender}
                                                 onChange={(e) => setAgentInfoForm({ ...agentInfoForm, gender: e.target.value })}
-                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
+                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
                                             >
                                                 <option value="">SELECT</option>
                                                 {empGenderOptions.map(g => (
@@ -3504,7 +3504,7 @@ const Registration: React.FC = () => {
                                             maxLength={10}
                                             value={agentInfoForm.mobile}
                                             onChange={(e) => setAgentInfoForm({ ...agentInfoForm, mobile: e.target.value })}
-                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                         />
                                     </div>
 
@@ -3518,7 +3518,7 @@ const Registration: React.FC = () => {
                                             maxLength={10}
                                             value={agentInfoForm.alternateMobile}
                                             onChange={(e) => setAgentInfoForm({ ...agentInfoForm, alternateMobile: e.target.value })}
-                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                         />
                                     </div>
                                 </div>
@@ -3535,7 +3535,7 @@ const Registration: React.FC = () => {
                                             maxLength={12}
                                             value={agentInfoForm.aadharNo}
                                             onChange={(e) => setAgentInfoForm({ ...agentInfoForm, aadharNo: e.target.value })}
-                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] font-mono text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] font-mono text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                         />
                                     </div>
 
@@ -3548,7 +3548,7 @@ const Registration: React.FC = () => {
                                             required
                                             value={agentInfoForm.addressLine1}
                                             onChange={(e) => setAgentInfoForm({ ...agentInfoForm, addressLine1: e.target.value })}
-                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                         />
                                     </div>
                                 </div>
@@ -3564,7 +3564,7 @@ const Registration: React.FC = () => {
                                             required
                                             value={agentInfoForm.addressLine2}
                                             onChange={(e) => setAgentInfoForm({ ...agentInfoForm, addressLine2: e.target.value })}
-                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                         />
                                     </div>
 
@@ -3577,7 +3577,7 @@ const Registration: React.FC = () => {
                                                 required
                                                 value={agentInfoForm.state}
                                                 onChange={(e) => setAgentInfoForm({ ...agentInfoForm, state: e.target.value })}
-                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
+                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
                                             >
                                                 <option value="">--Select State--</option>
                                                 {empStateOptions.map(s => (
@@ -3604,7 +3604,7 @@ const Registration: React.FC = () => {
                                                 required
                                                 value={agentInfoForm.district}
                                                 onChange={(e) => setAgentInfoForm({ ...agentInfoForm, district: e.target.value })}
-                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
+                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
                                             >
                                                 <option value="">--Select District--</option>
                                                 {empDistrictOptions.map(d => (
@@ -3625,7 +3625,7 @@ const Registration: React.FC = () => {
                                             <select
                                                 value={agentInfoForm.taluka}
                                                 onChange={(e) => setAgentInfoForm({ ...agentInfoForm, taluka: e.target.value })}
-                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
+                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
                                             >
                                                 {empTalukaOptions.map(t => (
                                                     <option key={t} value={t}>{t}</option>
@@ -3649,7 +3649,7 @@ const Registration: React.FC = () => {
                                             maxLength={6}
                                             value={agentInfoForm.pincode}
                                             onChange={(e) => setAgentInfoForm({ ...agentInfoForm, pincode: e.target.value })}
-                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] font-mono text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] font-mono text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                         />
                                     </div>
                                 </div>
@@ -3665,7 +3665,7 @@ const Registration: React.FC = () => {
                                             required
                                             value={agentInfoForm.email}
                                             onChange={(e) => setAgentInfoForm({ ...agentInfoForm, email: e.target.value })}
-                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                         />
                                     </div>
 
@@ -3679,7 +3679,7 @@ const Registration: React.FC = () => {
                                             maxLength={10}
                                             value={agentInfoForm.panNo}
                                             onChange={(e) => setAgentInfoForm({ ...agentInfoForm, panNo: e.target.value.toUpperCase() })}
-                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] font-mono text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] font-mono text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                         />
                                     </div>
                                 </div>
@@ -3687,9 +3687,9 @@ const Registration: React.FC = () => {
                         </div>
 
                         {/* 3. » Bank Details */}
-                        <div className="bg-white rounded-[10px] p-6 sm:p-7 shadow-sm border border-slate-200/80">
+                        <div className="bg-white rounded-xl p-6 sm:p-7 shadow-sm border border-slate-200/80">
                             {/* Blue Banner Header */}
-                            <div className="bg-brand-primary text-white px-4 py-2.5 rounded-[6px] font-normal text-[15px] flex items-center shadow-xs mb-6">
+                            <div className="bg-brand-primary text-white px-5 py-1.5 rounded-lg font-semibold text-sm flex items-center shadow-xs mb-6">
                                 <span className="mr-0.5 text-base font-serif">&raquo;</span>Bank Details
                             </div>
 
@@ -3706,7 +3706,7 @@ const Registration: React.FC = () => {
                                                 required
                                                 value={agentInfoForm.bankName}
                                                 onChange={(e) => setAgentInfoForm({ ...agentInfoForm, bankName: e.target.value })}
-                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
+                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
                                             >
                                                 <option value="">--Select Bank Type--</option>
                                                 {empBankOptions.map(b => (
@@ -3730,7 +3730,7 @@ const Registration: React.FC = () => {
                                             required
                                             value={agentInfoForm.accountHolderName}
                                             onChange={(e) => setAgentInfoForm({ ...agentInfoForm, accountHolderName: e.target.value })}
-                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                         />
                                     </div>
 
@@ -3743,7 +3743,7 @@ const Registration: React.FC = () => {
                                             required
                                             value={agentInfoForm.bankBranch}
                                             onChange={(e) => setAgentInfoForm({ ...agentInfoForm, bankBranch: e.target.value })}
-                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                         />
                                     </div>
 
@@ -3757,7 +3757,7 @@ const Registration: React.FC = () => {
                                             maxLength={11}
                                             value={agentInfoForm.ifscCode}
                                             onChange={(e) => setAgentInfoForm({ ...agentInfoForm, ifscCode: e.target.value.toUpperCase() })}
-                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] font-mono text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] font-mono text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                         />
                                     </div>
 
@@ -3770,7 +3770,7 @@ const Registration: React.FC = () => {
                                             required
                                             value={agentInfoForm.bankAccountNo}
                                             onChange={(e) => setAgentInfoForm({ ...agentInfoForm, bankAccountNo: e.target.value })}
-                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] font-mono text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] font-mono text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                         />
                                     </div>
                                 </div>
@@ -3786,7 +3786,7 @@ const Registration: React.FC = () => {
                                             <select
                                                 value={agentInfoForm.otherBankName}
                                                 onChange={(e) => setAgentInfoForm({ ...agentInfoForm, otherBankName: e.target.value })}
-                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
+                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
                                             >
                                                 <option value="">--Select Bank Type--</option>
                                                 {empBankOptions.map(b => (
@@ -3807,7 +3807,7 @@ const Registration: React.FC = () => {
                                             type="text"
                                             value={agentInfoForm.otherAccountHolderName}
                                             onChange={(e) => setAgentInfoForm({ ...agentInfoForm, otherAccountHolderName: e.target.value })}
-                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                         />
                                     </div>
 
@@ -3817,7 +3817,7 @@ const Registration: React.FC = () => {
                                             type="text"
                                             value={agentInfoForm.otherBankBranch}
                                             onChange={(e) => setAgentInfoForm({ ...agentInfoForm, otherBankBranch: e.target.value })}
-                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                         />
                                     </div>
 
@@ -3828,7 +3828,7 @@ const Registration: React.FC = () => {
                                             maxLength={11}
                                             value={agentInfoForm.otherIfscCode}
                                             onChange={(e) => setAgentInfoForm({ ...agentInfoForm, otherIfscCode: e.target.value.toUpperCase() })}
-                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] font-mono text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] font-mono text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                         />
                                     </div>
 
@@ -3838,7 +3838,7 @@ const Registration: React.FC = () => {
                                             type="text"
                                             value={agentInfoForm.otherBankAccountNo}
                                             onChange={(e) => setAgentInfoForm({ ...agentInfoForm, otherBankAccountNo: e.target.value })}
-                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] font-mono text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] font-mono text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                         />
                                     </div>
                                 </div>
@@ -3846,9 +3846,9 @@ const Registration: React.FC = () => {
                         </div>
 
                         {/* 4. » Login Details */}
-                        <div className="bg-white rounded-[10px] p-6 sm:p-7 shadow-sm border border-slate-200/80">
+                        <div className="bg-white rounded-xl p-6 sm:p-7 shadow-sm border border-slate-200/80">
                             {/* Blue Banner Header */}
-                            <div className="bg-brand-primary text-white px-4 py-2.5 rounded-[6px] font-normal text-[15px] flex items-center shadow-xs mb-6">
+                            <div className="bg-brand-primary text-white px-5 py-1.5 rounded-lg font-semibold text-sm flex items-center shadow-xs mb-6">
                                 <span className="mr-0.5 text-base font-serif">&raquo;</span>Login Details
                             </div>
 
@@ -3866,7 +3866,7 @@ const Registration: React.FC = () => {
                                                 setAgentInfoForm({ ...agentInfoForm, username: e.target.value });
                                                 setAgentUsernameChecked(null);
                                             }}
-                                            className="flex-1 px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                            className="flex-1 px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                         />
                                         <button
                                             type="button"
@@ -3893,7 +3893,7 @@ const Registration: React.FC = () => {
                                         required
                                         value={agentInfoForm.password}
                                         onChange={(e) => setAgentInfoForm({ ...agentInfoForm, password: e.target.value })}
-                                        className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                        className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                     />
                                 </div>
 
@@ -3906,16 +3906,16 @@ const Registration: React.FC = () => {
                                         required
                                         value={agentInfoForm.rePassword}
                                         onChange={(e) => setAgentInfoForm({ ...agentInfoForm, rePassword: e.target.value })}
-                                        className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                        className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                     />
                                 </div>
                             </div>
                         </div>
 
                         {/* 5. » KYC Details */}
-                        <div className="bg-white rounded-[10px] p-6 sm:p-7 shadow-sm border border-slate-200/80">
+                        <div className="bg-white rounded-xl p-6 sm:p-7 shadow-sm border border-slate-200/80">
                             {/* Blue Banner Header */}
-                            <div className="bg-brand-primary text-white px-4 py-2.5 rounded-[6px] font-normal text-[15px] flex items-center shadow-xs mb-6">
+                            <div className="bg-brand-primary text-white px-5 py-1.5 rounded-lg font-semibold text-sm flex items-center shadow-xs mb-6">
                                 <span className="mr-0.5 text-base font-serif">&raquo;</span>KYC Details
                             </div>
 
@@ -5335,7 +5335,7 @@ const Registration: React.FC = () => {
 
                             <div className="p-4 sm:p-6 space-y-6">
                                 {/* Beneficiary Meta Header */}
-                                <div className="bg-[#F8FAFC] border border-blue-100 rounded-[10px] p-4 flex flex-wrap items-center justify-between gap-4">
+                                <div className="bg-[#F8FAFC] border border-blue-100 rounded-xl p-4 flex flex-wrap items-center justify-between gap-4">
                                     <div>
                                         <div className="text-xs font-semibold uppercase text-brand-muted tracking-wider">Beneficiary Name & Code</div>
                                         <div className="text-base font-bold text-brand-navy flex items-center gap-2 mt-0.5">
@@ -5436,7 +5436,7 @@ const Registration: React.FC = () => {
                                     </div>
                                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                                         {/* Aadhar Card Card */}
-                                        <div className="border border-brand-border rounded-[10px] p-3.5 bg-white hover:border-brand-primary hover:shadow-sm transition-all group">
+                                        <div className="border border-brand-border rounded-xl p-3.5 bg-white hover:border-brand-primary hover:shadow-sm transition-all group">
                                             <div className="flex items-center justify-between mb-2">
                                                 <span className="text-xs font-bold text-brand-navy">Aadhar Card</span>
                                                 <span className="text-[10px] bg-blue-50 text-brand-primary px-2 py-0.5 rounded font-semibold">ID PROOF</span>
@@ -5455,7 +5455,7 @@ const Registration: React.FC = () => {
                                         </div>
 
                                         {/* PAN Card Card */}
-                                        <div className="border border-brand-border rounded-[10px] p-3.5 bg-white hover:border-brand-primary hover:shadow-sm transition-all group">
+                                        <div className="border border-brand-border rounded-xl p-3.5 bg-white hover:border-brand-primary hover:shadow-sm transition-all group">
                                             <div className="flex items-center justify-between mb-2">
                                                 <span className="text-xs font-bold text-brand-navy">PAN Card</span>
                                                 <span className="text-[10px] bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded font-semibold">TAX ID</span>
@@ -5474,7 +5474,7 @@ const Registration: React.FC = () => {
                                         </div>
 
                                         {/* Cancel Cheque / Passbook Card */}
-                                        <div className="border border-brand-border rounded-[10px] p-3.5 bg-white hover:border-brand-primary hover:shadow-sm transition-all group">
+                                        <div className="border border-brand-border rounded-xl p-3.5 bg-white hover:border-brand-primary hover:shadow-sm transition-all group">
                                             <div className="flex items-center justify-between mb-2">
                                                 <span className="text-xs font-bold text-brand-navy">Cancelled Cheque</span>
                                                 <span className="text-[10px] bg-amber-50 text-amber-700 px-2 py-0.5 rounded font-semibold">BANK PROOF</span>
