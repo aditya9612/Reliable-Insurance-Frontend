@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react';
 import {
     Search, X, Download, RefreshCw, UserCheck, UserX,
     AlertTriangle, CheckCircle2, Filter, Eye, ShieldAlert,
-    ChevronLeft, ChevronRight
+    ChevronLeft, ChevronRight, ChevronDown
 } from 'lucide-react';
 
 export interface AgentItemRecord {
@@ -344,61 +344,64 @@ const DeactivatedAgentListTab: React.FC = () => {
                 </div>
             )}
 
-            {/* Search Toolbar: Search + Dropdown + Export in one line */}
-            <div className="bg-white rounded-xl border border-brand-border shadow-sm p-4">
-                <div className="flex items-center gap-3 flex-wrap">
-                    {/* Search Input */}
-                    <div className="relative flex-1 min-w-[200px] max-w-md">
-                        <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" size={17} />
-                        <input
-                            type="text"
-                            value={searchQuery}
-                            onChange={(e) => {
-                                setSearchQuery(e.target.value);
-                                setCurrentPage(1);
-                            }}
-                            placeholder="Search agent name, code or branch"
-                            className="w-full pl-10 pr-9 py-2.5 bg-white border border-[#CBD5E1] rounded-lg text-sm text-slate-800 placeholder-[#94A3B8] shadow-2xs focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-brand-primary transition-all font-medium"
-                        />
-                        {searchQuery && (
-                            <button
-                                type="button"
-                                onClick={() => { setSearchQuery(''); setCurrentPage(1); }}
-                                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-0.5 cursor-pointer"
-                                title="Clear search"
-                            >
-                                <X size={15} />
-                            </button>
-                        )}
-                    </div>
+            {/* Table Card Container with Integrated Toolbar & Horizontal Scroll */}
+            <div className="bg-white rounded-[10px] border border-brand-border shadow-sm overflow-hidden flex flex-col w-full min-w-0">
+                {/* Table Header Toolbar: Search + Status Filter Dropdown + Export */}
+                <div className="p-3.5 sm:p-4 bg-white border-b border-brand-border flex flex-wrap items-center justify-between gap-4">
+                    <div className="flex items-center gap-3 flex-wrap">
+                        {/* Search Input */}
+                        <div className="relative w-72 sm:w-80 md:w-[380px] h-[38px]">
+                            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" size={15} />
+                            <input
+                                type="text"
+                                value={searchQuery}
+                                onChange={(e) => {
+                                    setSearchQuery(e.target.value);
+                                    setCurrentPage(1);
+                                }}
+                                placeholder="Search agent name, code or branch"
+                                className="w-full h-[38px] pl-10 pr-9 bg-white border border-[#CBD5E1] rounded-[6px] text-[13px] text-slate-800 placeholder-[#94A3B8] shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all"
+                            />
+                            {searchQuery && (
+                                <button
+                                    type="button"
+                                    onClick={() => { setSearchQuery(''); setCurrentPage(1); }}
+                                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1 cursor-pointer"
+                                    title="Clear search"
+                                >
+                                    <X size={14} />
+                                </button>
+                            )}
+                        </div>
 
-                    {/* Status Dropdown */}
-                    <select
-                        value={statusFilter}
-                        onChange={(e) => {
-                            setStatusFilter(e.target.value as 'Active' | 'InActive');
-                            setCurrentPage(1);
-                        }}
-                        className="px-4 py-2.5 bg-white border border-[#CBD5E1] rounded-lg text-sm font-semibold text-slate-700 shadow-2xs focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-brand-primary cursor-pointer"
-                    >
-                        <option value="Active">Active</option>
-                        <option value="InActive">InActive</option>
-                    </select>
+                        {/* Status Filter Dropdown */}
+                        <div className="relative inline-flex items-center h-[38px]">
+                            <Filter size={14} className="absolute left-3 text-slate-400 pointer-events-none" />
+                            <select
+                                value={statusFilter}
+                                onChange={(e) => {
+                                    setStatusFilter(e.target.value as 'Active' | 'InActive');
+                                    setCurrentPage(1);
+                                }}
+                                className="h-[38px] pl-9 pr-8 bg-white border border-[#CBD5E1] rounded-[6px] text-[13px] font-semibold text-slate-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent cursor-pointer transition-all appearance-none"
+                            >
+                                <option value="Active">Active ({activeAgents.length})</option>
+                                <option value="InActive">InActive ({inactiveAgents.length})</option>
+                            </select>
+                            <ChevronDown size={14} className="absolute right-2.5 text-slate-400 pointer-events-none" />
+                        </div>
+                    </div>
 
                     {/* Export Button */}
                     <button
                         type="button"
                         onClick={handleExportCSV}
-                        className="inline-flex items-center gap-2 px-4 py-2.5 bg-brand-primary hover:bg-[#1D4ED8] text-white rounded-lg text-sm font-semibold shadow-sm transition-all cursor-pointer border-none"
+                        className="h-[38px] flex items-center gap-1.5 px-4 bg-brand-primary hover:bg-[#1D4ED8] text-white font-semibold text-[13px] rounded-[6px] shadow-sm transition-colors cursor-pointer border-none"
                     >
                         <Download size={15} />
                         <span>Export CSV</span>
                     </button>
                 </div>
-            </div>
-
-            {/* DATA TABLE */}
-            <div className="bg-white rounded-xl border border-brand-border shadow-sm overflow-hidden flex flex-col w-full min-w-0">
 
                 {/* Table with Blue Header Theme */}
                 <div className="w-full overflow-x-auto min-w-0 erp-horizontal-scrollbar">
@@ -606,9 +609,9 @@ const DeactivatedAgentListTab: React.FC = () => {
                     </table>
                 </div>
 
-                {/* Table Footer: Pagination & Record Count */}
-                <div className="p-4 bg-slate-50 border-t border-brand-border flex flex-col sm:flex-row items-center justify-between gap-4">
-                    <div className="flex items-center gap-2 text-xs text-slate-600 font-medium">
+                {/* Standard Master Page Pagination Bar */}
+                <div className="p-4 bg-white border-t border-brand-border flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div className="flex items-center gap-2 text-sm text-brand-muted font-medium">
                         <span>Records per page:</span>
                         <select
                             value={itemsPerPage}
@@ -616,15 +619,16 @@ const DeactivatedAgentListTab: React.FC = () => {
                                 setItemsPerPage(Number(e.target.value));
                                 setCurrentPage(1);
                             }}
-                            className="px-2.5 py-1 bg-white border border-slate-300 rounded-md text-xs font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-brand-primary cursor-pointer"
+                            className="px-2 py-1 bg-white border border-brand-border rounded-md text-sm font-semibold text-brand-navy focus:outline-none focus:ring-1 focus:ring-brand-primary cursor-pointer"
                         >
                             <option value={10}>10</option>
                             <option value={20}>20</option>
                             <option value={50}>50</option>
+                            <option value={100}>100</option>
                         </select>
                     </div>
 
-                    <span className="text-xs text-slate-500 font-medium">
+                    <span className="text-sm text-brand-muted font-medium">
                         Showing {filteredAgents.length === 0 ? 0 : (currentPage - 1) * itemsPerPage + 1} - {Math.min(currentPage * itemsPerPage, filteredAgents.length)} of {filteredAgents.length} records
                     </span>
 
@@ -633,7 +637,7 @@ const DeactivatedAgentListTab: React.FC = () => {
                             type="button"
                             onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                             disabled={currentPage === 1}
-                            className="w-8 h-8 flex items-center justify-center text-xs font-semibold text-slate-600 bg-white border border-slate-300 rounded-md hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed transition-all cursor-pointer"
+                            className="w-8 h-8 flex items-center justify-center text-sm font-semibold text-brand-navy bg-white border border-brand-border rounded-md hover:bg-brand-mainbg disabled:opacity-40 disabled:cursor-not-allowed transition-all cursor-pointer"
                         >
                             &lt;
                         </button>
@@ -642,9 +646,9 @@ const DeactivatedAgentListTab: React.FC = () => {
                                 key={page}
                                 type="button"
                                 onClick={() => setCurrentPage(page)}
-                                className={`w-8 h-8 flex items-center justify-center text-xs font-bold rounded-md transition-all cursor-pointer ${currentPage === page
+                                className={`w-8 h-8 flex items-center justify-center text-sm font-semibold rounded-md transition-all cursor-pointer ${currentPage === page
                                         ? 'bg-brand-primary text-white shadow-sm'
-                                        : 'bg-white text-slate-700 border border-slate-300 hover:bg-slate-100'
+                                        : 'bg-white text-brand-navy border border-brand-border hover:bg-brand-mainbg'
                                     }`}
                             >
                                 {page}
@@ -654,7 +658,7 @@ const DeactivatedAgentListTab: React.FC = () => {
                             type="button"
                             onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
                             disabled={currentPage === totalPages || totalPages === 0}
-                            className="w-8 h-8 flex items-center justify-center text-xs font-semibold text-slate-600 bg-white border border-slate-300 rounded-md hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed transition-all cursor-pointer"
+                            className="w-8 h-8 flex items-center justify-center text-sm font-semibold text-brand-navy bg-white border border-brand-border rounded-md hover:bg-brand-mainbg disabled:opacity-40 disabled:cursor-not-allowed transition-all cursor-pointer"
                         >
                             &gt;
                         </button>
