@@ -20,7 +20,7 @@ const Dashboard = () => {
     const digitalMetrics = [
         { id: 'pre-broker-cash', label: 'Pre Online Broker/Cash', count: 0, amount: '0', to: '/transactions/pending-premium-cash' },
         { id: 'pre-ewallet', label: 'Pre E-Wallet', count: 0, amount: '0', to: '/transactions/online-app-request' },
-        { id: 'broker-cash-approval', label: 'Online Broker/Cash Approval', count: 4, amount: '79,977', to: '/transactions/online-app-request' },
+        { id: 'broker-cash-approval', label: 'Online Broker/Cash Approval', count: 4, amount: '79,977', to: '/accounts/cash-approval' },
         { id: 'insta-pay', label: 'Insta Pay', count: 120, amount: '22,77,811', to: '/transactions/online-app-request', highlight: true },
         { id: 'quotation', label: 'Quotation', count: 12, to: '/transactions/self-quotation' },
     ];

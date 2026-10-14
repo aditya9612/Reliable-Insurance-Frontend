@@ -3,7 +3,7 @@ import { NavLink, useLocation } from 'react-router-dom';
 import {
     LayoutDashboard, Database, Users, Briefcase, FileText, Settings,
     ChevronDown, ChevronRight, UserPlus, FileSpreadsheet, Building2,
-    Shield, Map, MessageSquare, Download, Layers, UserCheck, Percent
+    Shield, Map, MessageSquare, Download, Layers, UserCheck, Percent, Landmark
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -93,10 +93,14 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
             ]
         },
         {
+            title: 'ACCOUNT',
+            icon: Landmark,
+            path: '/accounts'
+        },
+        {
             title: 'OPERATIONS',
             icon: Briefcase,
             children: [
-                { name: 'Account', path: '/accounts' },
                 { name: 'Claims', path: '/operations/claims' },
                 { name: 'Renewal', path: '/operations/renewal' },
                 { name: 'Caliber Policy', path: '/operations/caliber-policy' },

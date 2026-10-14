@@ -550,11 +550,45 @@ const EmployeeMasterTab: React.FC = () => {
                                 className="w-full px-3.5 py-2 bg-white border border-[#CBD5E1] rounded-full text-[13px] text-slate-800 shadow-2xs focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-brand-primary cursor-pointer font-medium"
                             >
                                 <option value="">--Select State--</option>
-                                <option value="Maharashtra">Maharashtra</option>
-                                <option value="Gujarat">Gujarat</option>
-                                <option value="Karnataka">Karnataka</option>
-                                <option value="Goa">Goa</option>
-                                <option value="Madhya Pradesh">Madhya Pradesh</option>
+                                {[
+                                    'ANDAMAN NICOBAR ISLANDS',
+                                    'ANDHRA PRADESH',
+                                    'ARUNACHAL PRADESH',
+                                    'ASSAM',
+                                    'BIHAR',
+                                    'CHANDIGARH',
+                                    'CHHATTISGARH',
+                                    'DADRA NAGAR HAVELI',
+                                    'DAMAN DIU',
+                                    'DELHI',
+                                    'GOA',
+                                    'GUJARAT',
+                                    'HARYANA',
+                                    'HIMACHAL PRADESH',
+                                    'JHARKHAND',
+                                    'KARNATAKA',
+                                    'KERALA',
+                                    'LAKSHADWEEP',
+                                    'MADHYA PRADESH',
+                                    'MAHARASHTRA',
+                                    'MANIPUR',
+                                    'MEGHALAYA',
+                                    'MIZORAM',
+                                    'NAGALAND',
+                                    'ODISHA',
+                                    'PUDUCHERRY',
+                                    'PUNJAB',
+                                    'RAJASTHAN',
+                                    'SIKKIM',
+                                    'TAMIL NADU',
+                                    'TELANGANA',
+                                    'TRIPURA',
+                                    'UTTAR PRADESH',
+                                    'UTTARAKHAND',
+                                    'WEST BENGAL',
+                                ].map((s) => (
+                                    <option key={s} value={s}>{s}</option>
+                                ))}
                             </select>
                         </div>
                         <div>
@@ -611,9 +645,8 @@ const EmployeeMasterTab: React.FC = () => {
                                 className="w-full px-3.5 py-2 bg-white border border-[#CBD5E1] rounded-full text-[13px] text-slate-800 shadow-2xs focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-brand-primary cursor-pointer font-medium"
                             >
                                 <option value="">SELECT</option>
-                                <option value="Male">Male</option>
-                                <option value="Female">Female</option>
-                                <option value="Other">Other</option>
+                                <option value="MALE">MALE</option>
+                                <option value="FEMALE">FEMALE</option>
                             </select>
                         </div>
                         <div>
@@ -646,8 +679,9 @@ const EmployeeMasterTab: React.FC = () => {
                                 className="w-full px-3.5 py-2 bg-white border border-[#CBD5E1] rounded-full text-[13px] text-slate-800 shadow-2xs focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-brand-primary cursor-pointer font-medium"
                             >
                                 <option value="">Select</option>
-                                <option value="Single">Single</option>
+                                <option value="Separated">Separated</option>
                                 <option value="Married">Married</option>
+                                <option value="Unmarried">Unmarried</option>
                                 <option value="Divorced">Divorced</option>
                                 <option value="Widowed">Widowed</option>
                             </select>

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useMemo } from 'react';
+import React, { useState, useRef, useMemo, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { useParams, useNavigate } from 'react-router-dom';
 import PageHeader from '../../../components/page-header/PageHeader';
@@ -47,7 +47,7 @@ interface EmployeeItem {
     erpId?: number;
     address?: string;
     gender?: 'MALE' | 'FEMALE';
-    maritalStatus?: 'MARRIED' | 'UNMARRIED' | 'SINGLE';
+    maritalStatus?: 'MARRIED' | 'UNMARRIED' | 'SINGLE' | 'SEPARATED' | 'DIVORCED' | 'WIDOWED';
     officeNo?: string;
     panNo?: string;
     aadharNo?: string;
@@ -212,24 +212,51 @@ const empRoleOptions = [
 ];
 
 const empExecutiveTypeOptions = [
-    'DIRECT',
-    'INHOUSE',
-    'CHANNEL PARTNER',
-    'FIELD EXECUTIVE',
-    'TELECALLING EXECUTIVE',
-    'CORPORATE EXECUTIVE',
+    'FIELD SALES EXECUTIVE',
+    'BACK END SALES',
+    'OPERATIONAL SUPPORT',
+    'RESIGN SUPPORT',
 ];
 
-const empGenderOptions = ['Male', 'Female', 'Other'];
-const empMaritalStatusOptions = ['Married', 'Single', 'Divorced', 'Widowed'];
+const empGenderOptions = ['MALE', 'FEMALE'];
+const empMaritalStatusOptions = ['SEPARATED', 'MARRIED', 'UNMARRIED', 'DIVORCED', 'WIDOWED'];
 
 const empStateOptions = [
-    'Maharashtra',
-    'Gujarat',
-    'Karnataka',
-    'Madhya Pradesh',
-    'Goa',
-    'Telangana',
+    'ANDAMAN NICOBAR ISLANDS',
+    'ANDHRA PRADESH',
+    'ARUNACHAL PRADESH',
+    'ASSAM',
+    'BIHAR',
+    'CHANDIGARH',
+    'CHHATTISGARH',
+    'DADRA NAGAR HAVELI',
+    'DAMAN DIU',
+    'DELHI',
+    'GOA',
+    'GUJARAT',
+    'HARYANA',
+    'HIMACHAL PRADESH',
+    'JHARKHAND',
+    'KARNATAKA',
+    'KERALA',
+    'LAKSHADWEEP',
+    'MADHYA PRADESH',
+    'MAHARASHTRA',
+    'MANIPUR',
+    'MEGHALAYA',
+    'MIZORAM',
+    'NAGALAND',
+    'ODISHA',
+    'PUDUCHERRY',
+    'PUNJAB',
+    'RAJASTHAN',
+    'SIKKIM',
+    'TAMIL NADU',
+    'TELANGANA',
+    'TRIPURA',
+    'UTTAR PRADESH',
+    'UTTARAKHAND',
+    'WEST BENGAL',
 ];
 
 const empDistrictOptions = [
@@ -273,10 +300,8 @@ const empBankOptions = [
 
 const agentRoleOptions = [
     'AGENT',
-    'POSP',
-    'BROKER',
-    'FRANCHISE',
-    'DIRECT',
+    'FRANCHISE AGENT',
+    'Insurance Exective',
 ];
 
 const agentSalesExecutiveOptions = [
@@ -365,6 +390,100 @@ const agentFranchiseOptions = [
     'FC003 - Sambhajinagar East',
     'NA',
 ];
+
+interface CustomSelectDropdownProps {
+    value: string;
+    onChange: (val: string) => void;
+    options: string[];
+    placeholder?: string;
+}
+
+const CustomSelectDropdown: React.FC<CustomSelectDropdownProps> = ({
+    value,
+    onChange,
+    options,
+    placeholder = '--Select State--',
+}) => {
+    const [isOpen, setIsOpen] = useState(false);
+    const [search, setSearch] = useState('');
+    const dropdownRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+                setIsOpen(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
+
+    const filteredOptions = useMemo(() => {
+        if (!search.trim()) return options;
+        return options.filter(opt => opt.toLowerCase().includes(search.toLowerCase()));
+    }, [options, search]);
+
+    return (
+        <div className="relative" ref={dropdownRef}>
+            <button
+                type="button"
+                onClick={() => {
+                    setIsOpen(prev => !prev);
+                    setSearch('');
+                }}
+                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-left text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer flex items-center justify-between"
+            >
+                <span className={value ? 'text-slate-800 font-medium' : 'text-slate-500 font-normal'}>
+                    {value || placeholder}
+                </span>
+                <ChevronDown className={`w-4 h-4 text-slate-500 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
+            </button>
+
+            {isOpen && (
+                <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-slate-300 rounded-lg shadow-xl z-50 overflow-hidden animate-in fade-in duration-100">
+                    <div className="p-2 border-b border-slate-100 bg-slate-50">
+                        <input
+                            type="text"
+                            placeholder="Type to search state..."
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                            onClick={(e) => e.stopPropagation()}
+                            className="w-full px-2.5 py-1.5 text-xs bg-white border border-slate-300 rounded text-slate-700 focus:outline-none focus:border-brand-primary placeholder:text-slate-400"
+                            autoFocus
+                        />
+                    </div>
+                    <div className="max-h-60 overflow-y-auto py-1">
+                        <div
+                            onClick={() => {
+                                onChange('');
+                                setIsOpen(false);
+                            }}
+                            className={`px-4 py-2 text-[13px] cursor-pointer transition-colors ${!value ? 'bg-blue-50 text-brand-primary font-medium' : 'text-slate-500 hover:bg-slate-100'}`}
+                        >
+                            {placeholder}
+                        </div>
+                        {filteredOptions.length === 0 ? (
+                            <div className="px-4 py-2 text-xs text-slate-400 italic">No matching state</div>
+                        ) : (
+                            filteredOptions.map((opt) => (
+                                <div
+                                    key={opt}
+                                    onClick={() => {
+                                        onChange(opt);
+                                        setIsOpen(false);
+                                    }}
+                                    className={`px-4 py-2 text-[13px] cursor-pointer transition-colors ${value === opt ? 'bg-[#0A66C2] text-white font-medium' : 'text-slate-700 hover:bg-slate-100'}`}
+                                >
+                                    {opt}
+                                </div>
+                            ))
+                        )}
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+};
 
 const Registration: React.FC = () => {
     const { tab } = useParams<{ tab?: string }>();
@@ -1346,7 +1465,9 @@ const Registration: React.FC = () => {
     const [agentSearchQuery, setAgentSearchQuery] = useState('');
     const [agentCurrentPage, setAgentCurrentPage] = useState(1);
     const [agentItemsPerPage, setAgentItemsPerPage] = useState(10);
-    const [showPasswords, setShowPasswords] = useState(false);
+    const [selectedViewAgent, setSelectedViewAgent] = useState<{ agent: AgentItem; type: 'OLD' | 'NEW' } | null>(null);
+    const [editingAgentId, setEditingAgentId] = useState<number | null>(null);
+    const [showPasswords] = useState(false);
     const agentTableScrollRef = useRef<HTMLDivElement>(null);
 
     const scrollAgentTable = (amount: number) => {
@@ -1662,16 +1783,81 @@ const Registration: React.FC = () => {
             status: 'ACTIVE'
         };
 
-        setAgents(prev => [newAgent, ...prev]);
-        showToast(`Agent ${fullName} registered successfully!`);
+        if (editingAgentId) {
+            setAgents(prev => prev.map(a => a.id === editingAgentId ? {
+                ...a,
+                fullName,
+                agentCode: code,
+                branch: agentInfoForm.branch,
+                mobile: agentInfoForm.mobile || a.mobile,
+                email: agentInfoForm.email || a.email,
+                panNo: agentInfoForm.panNo || a.panNo,
+                address: agentInfoForm.addressLine1 || a.address,
+                bankName: agentInfoForm.bankName || a.bankName,
+                accHolderName: agentInfoForm.accountHolderName || a.accHolderName,
+                bankBranch: agentInfoForm.bankBranch || a.bankBranch,
+                ifscCode: agentInfoForm.ifscCode || a.ifscCode,
+                accountNo: agentInfoForm.bankAccountNo || a.accountNo,
+                salesExecutive: agentInfoForm.salesExecutive || a.salesExecutive,
+                coordinator: agentInfoForm.coordinator || a.coordinator,
+                quotationCoordinator: agentInfoForm.quotationCoordinator || a.quotationCoordinator,
+                inspectionCoordinator: agentInfoForm.inspectionCoordinator || a.inspectionCoordinator,
+                endorsementCoordinator: agentInfoForm.endorsementCoordinator || a.endorsementCoordinator,
+                agentTsds: agentInfoForm.agentTds || a.agentTsds,
+                location: agentInfoForm.location || a.location
+            } : a));
+            showToast(`Agent ${fullName} updated successfully!`);
+            setEditingAgentId(null);
+        } else {
+            setAgents(prev => [newAgent, ...prev]);
+            showToast(`Agent ${fullName} registered successfully!`);
+        }
         setAgentInfoForm(initialAgentInfoState);
         setAgentUsernameChecked(null);
     };
 
     const handleResetAgentInfo = () => {
+        setEditingAgentId(null);
         setAgentInfoForm(initialAgentInfoState);
         setAgentUsernameChecked(null);
         showToast('Agent registration form has been reset.');
+    };
+
+    const handleEditAgent = (agent: AgentItem) => {
+        setEditingAgentId(agent.id);
+        const parts = (agent.fullName || '').split(' ');
+        setAgentInfoForm({
+            ...initialAgentInfoState,
+            branch: agent.branch || agent.location || 'BARAMATI',
+            role: 'AGENT',
+            agentCode: agent.agentCode || '',
+            firstName: parts[0] || '',
+            middleName: parts.length > 2 ? parts[1] : '',
+            lastName: parts.length > 2 ? parts.slice(2).join(' ') : (parts[1] || ''),
+            gender: agent.gender || 'MALE',
+            mobile: agent.mobile || '',
+            email: agent.email || '',
+            aadharNo: agent.aadharNo || '',
+            panNo: agent.panNo || '',
+            addressLine1: agent.address || '',
+            bankName: agent.bankName || '',
+            accountHolderName: agent.accHolderName || agent.fullName || '',
+            bankBranch: agent.bankBranch || '',
+            ifscCode: agent.ifscCode || '',
+            bankAccountNo: agent.accountNo || '',
+            salesExecutive: agent.salesExecutive || '',
+            coordinator: agent.coordinator || '',
+            quotationCoordinator: agent.quotationCoordinator || '',
+            inspectionCoordinator: agent.inspectionCoordinator || '',
+            endorsementCoordinator: agent.endorsementCoordinator || '',
+            agentTds: agent.agentTsds || '',
+            location: agent.location || agent.branch || 'BARAMATI',
+            username: agent.userName || agent.agentCode || '',
+            password: agent.userPassword || '',
+            rePassword: agent.userPassword || '',
+        });
+        handleTabChange('agent');
+        showToast(`Editing ${agent.fullName} (${agent.agentCode}) in Agent Form`);
     };
 
 
@@ -2729,23 +2915,12 @@ const Registration: React.FC = () => {
                                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                                     <div>
                                         <label className="block text-[13px] text-slate-700 font-normal mb-1.5">State</label>
-                                        <div className="relative">
-                                            <select
-                                                value={empInfoForm.state}
-                                                onChange={(e) => setEmpInfoForm({ ...empInfoForm, state: e.target.value })}
-                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
-                                            >
-                                                <option value="">--Select State--</option>
-                                                {empStateOptions.map(s => (
-                                                    <option key={s} value={s}>{s}</option>
-                                                ))}
-                                            </select>
-                                            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3.5 text-slate-500">
-                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-                                                </svg>
-                                            </div>
-                                        </div>
+                                        <CustomSelectDropdown
+                                            value={empInfoForm.state}
+                                            onChange={(val) => setEmpInfoForm({ ...empInfoForm, state: val })}
+                                            options={empStateOptions}
+                                            placeholder="--Select State--"
+                                        />
                                     </div>
 
                                     <div>
@@ -2896,8 +3071,8 @@ const Registration: React.FC = () => {
                                 <span className="mr-0.5 text-base font-serif">&raquo;</span>User Details
                             </div>
 
-                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-                                <div>
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <div className="min-w-0">
                                     <label className="block text-[13px] text-slate-700 font-normal mb-1.5">Username</label>
                                     <div className="flex items-center gap-2">
                                         <input
@@ -2907,12 +3082,12 @@ const Registration: React.FC = () => {
                                                 setEmpInfoForm({ ...empInfoForm, username: e.target.value });
                                                 setUsernameChecked(null);
                                             }}
-                                            className="flex-1 px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                            className="min-w-0 flex-1 px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                         />
                                         <button
                                             type="button"
                                             onClick={handleCheckUsername}
-                                            className="px-4 py-2 bg-brand-primary hover:bg-[#1D4ED8] text-white text-[13px] font-semibold rounded-[6px] shadow-sm transition-colors cursor-pointer border-none whitespace-nowrap"
+                                            className="shrink-0 px-3.5 py-2 bg-brand-primary hover:bg-[#1D4ED8] text-white text-[13px] font-semibold rounded-[6px] shadow-sm transition-colors cursor-pointer border-none whitespace-nowrap"
                                         >
                                             Check
                                         </button>
@@ -2925,7 +3100,7 @@ const Registration: React.FC = () => {
                                     )}
                                 </div>
 
-                                <div>
+                                <div className="min-w-0">
                                     <label className="block text-[13px] text-slate-700 font-normal mb-1.5">Password</label>
                                     <input
                                         type="password"
@@ -2935,7 +3110,7 @@ const Registration: React.FC = () => {
                                     />
                                 </div>
 
-                                <div>
+                                <div className="min-w-0">
                                     <label className="block text-[13px] text-slate-700 font-normal mb-1.5">Re-Password</label>
                                     <input
                                         type="password"
@@ -3601,24 +3776,12 @@ const Registration: React.FC = () => {
                                         <label className="block text-[13px] text-slate-700 font-normal mb-1.5">
                                             State <span className="text-red-500 font-bold">*</span>
                                         </label>
-                                        <div className="relative">
-                                            <select
-                                                required
-                                                value={agentInfoForm.state}
-                                                onChange={(e) => setAgentInfoForm({ ...agentInfoForm, state: e.target.value })}
-                                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
-                                            >
-                                                <option value="">--Select State--</option>
-                                                {empStateOptions.map(s => (
-                                                    <option key={s} value={s}>{s}</option>
-                                                ))}
-                                            </select>
-                                            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3.5 text-slate-500">
-                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-                                                </svg>
-                                            </div>
-                                        </div>
+                                        <CustomSelectDropdown
+                                            value={agentInfoForm.state}
+                                            onChange={(val) => setAgentInfoForm({ ...agentInfoForm, state: val })}
+                                            options={empStateOptions}
+                                            placeholder="--Select State--"
+                                        />
                                     </div>
                                 </div>
 
@@ -3881,8 +4044,8 @@ const Registration: React.FC = () => {
                                 <span className="mr-0.5 text-base font-serif">&raquo;</span>Login Details
                             </div>
 
-                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-                                <div>
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <div className="min-w-0">
                                     <label className="block text-[13px] text-slate-700 font-normal mb-1.5">
                                         Username <span className="text-red-500 font-bold">*</span>
                                     </label>
@@ -3895,12 +4058,12 @@ const Registration: React.FC = () => {
                                                 setAgentInfoForm({ ...agentInfoForm, username: e.target.value });
                                                 setAgentUsernameChecked(null);
                                             }}
-                                            className="flex-1 px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                            className="min-w-0 flex-1 px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                         />
                                         <button
                                             type="button"
                                             onClick={handleCheckAgentUsername}
-                                            className="px-4 py-2 bg-brand-primary hover:bg-[#1D4ED8] text-white text-[13px] font-semibold rounded-[6px] shadow-sm transition-colors cursor-pointer border-none whitespace-nowrap"
+                                            className="shrink-0 px-3.5 py-2 bg-brand-primary hover:bg-[#1D4ED8] text-white text-[13px] font-semibold rounded-[6px] shadow-sm transition-colors cursor-pointer border-none whitespace-nowrap"
                                         >
                                             Check
                                         </button>
@@ -3913,7 +4076,7 @@ const Registration: React.FC = () => {
                                     )}
                                 </div>
 
-                                <div>
+                                <div className="min-w-0">
                                     <label className="block text-[13px] text-slate-700 font-normal mb-1.5">
                                         Password <span className="text-red-500 font-bold">*</span>
                                     </label>
@@ -3926,7 +4089,7 @@ const Registration: React.FC = () => {
                                     />
                                 </div>
 
-                                <div>
+                                <div className="min-w-0">
                                     <label className="block text-[13px] text-slate-700 font-normal mb-1.5">
                                         Re-Password <span className="text-red-500 font-bold">*</span>
                                     </label>
@@ -4151,76 +4314,12 @@ const Registration: React.FC = () => {
                                         >
                                             <option value="ACTIVE">Active Agent ({agents.filter(a => a.status === 'ACTIVE').length})</option>
                                             <option value="INACTIVE">Inactive Agent ({agents.filter(a => a.status === 'INACTIVE').length})</option>
-                                            <option value="ALL">All Agents ({agents.length})</option>
                                         </select>
                                         <ChevronDown size={14} className="absolute right-2.5 text-slate-400 pointer-events-none" />
                                     </div>
                                 </div>
 
                                 <div className="flex items-center gap-3 flex-wrap">
-                                    {/* Horizontal Quick Scroll Navigation Controls */}
-                                    <div className="inline-flex items-center h-[38px] bg-white border border-brand-border rounded-[6px] p-0.5 shadow-sm">
-                                        <button
-                                            type="button"
-                                            onClick={() => scrollAgentTableToEdge('start')}
-                                            className="h-full px-2 text-slate-600 hover:text-brand-primary hover:bg-blue-50 rounded cursor-pointer border-none transition-colors flex items-center justify-center"
-                                            title="Scroll to beginning (Column 1: STATUS)"
-                                        >
-                                            <ChevronsLeft size={15} />
-                                        </button>
-                                        <button
-                                            type="button"
-                                            onClick={() => scrollAgentTable(-600)}
-                                            className="h-full px-2.5 text-[13px] font-medium text-slate-600 hover:text-brand-primary hover:bg-blue-50 rounded flex items-center gap-1 cursor-pointer border-none transition-colors"
-                                            title="Scroll left by 600px"
-                                        >
-                                            <ChevronLeft size={14} />
-                                            <span>Scroll Left</span>
-                                        </button>
-                                        <span className="h-4 w-px bg-slate-200 mx-0.5"></span>
-                                        <button
-                                            type="button"
-                                            onClick={() => scrollAgentTable(600)}
-                                            className="h-full px-2.5 text-[13px] font-medium text-slate-600 hover:text-brand-primary hover:bg-blue-50 rounded flex items-center gap-1 cursor-pointer border-none transition-colors"
-                                            title="Scroll right by 600px"
-                                        >
-                                            <span>Scroll Right</span>
-                                            <ChevronRight size={14} />
-                                        </button>
-                                        <button
-                                            type="button"
-                                            onClick={() => scrollAgentTableToEdge('end')}
-                                            className="h-full px-2 text-slate-600 hover:text-brand-primary hover:bg-blue-50 rounded cursor-pointer border-none transition-colors flex items-center justify-center"
-                                            title="Scroll to end (Column 25: LOCATION)"
-                                        >
-                                            <ChevronsRight size={15} />
-                                        </button>
-                                    </div>
-
-                                    {/* Show/Hide Passwords Toggle */}
-                                    <button
-                                        type="button"
-                                        onClick={() => setShowPasswords(prev => !prev)}
-                                        className="h-[38px] flex items-center gap-1.5 px-3.5 bg-white hover:bg-blue-50/50 text-slate-700 border border-brand-border rounded-[6px] text-[13px] font-semibold shadow-sm transition-colors cursor-pointer"
-                                        title="Toggle password masking in table"
-                                    >
-                                        {showPasswords ? <EyeOff size={15} className="text-amber-600" /> : <Eye size={15} className="text-brand-primary" />}
-                                        <span>{showPasswords ? 'Hide Passwords' : 'Show Passwords'}</span>
-                                    </button>
-
-                                    {/* Add New Agent */}
-                                    <button
-                                        type="button"
-                                        onClick={() => {
-                                            setAgentForm({ fullName: '', type: 'POSP', branch: 'BARAMATI', mobile: '', email: '', panNo: '' });
-                                            setModalType('AGENT');
-                                        }}
-                                        className="h-[38px] flex items-center gap-1.5 px-4 bg-brand-primary hover:bg-[#1D4ED8] text-white font-semibold text-[13px] rounded-[6px] shadow-sm transition-colors cursor-pointer border-none"
-                                    >
-                                        <Plus size={15} />
-                                        <span>Add New Agent</span>
-                                    </button>
-
                                     {/* Export */}
                                     <button
                                         type="button"
@@ -4242,7 +4341,19 @@ const Registration: React.FC = () => {
                                 <table className="text-left border-collapse min-w-[5000px] w-full text-[13px]">
                                     <thead>
                                         <tr className="bg-brand-lightbg text-brand-navy text-[13px] font-semibold uppercase border-b border-brand-border whitespace-nowrap">
-                                            {/* Column 1: STATUS */}
+                                            {/* Column 1: VIEW OLD */}
+                                            <th className="py-3 px-3 w-[95px] min-w-[95px] text-center whitespace-nowrap border-r border-brand-border">
+                                                <span className="sr-only">VIEW OLD</span>
+                                            </th>
+                                            {/* Column 2: VIEW NEW */}
+                                            <th className="py-3 px-3 w-[95px] min-w-[95px] text-center whitespace-nowrap border-r border-brand-border">
+                                                <span className="sr-only">VIEW NEW</span>
+                                            </th>
+                                            {/* Column 3: EDIT */}
+                                            <th className="py-3 px-3 w-[65px] min-w-[65px] text-center whitespace-nowrap border-r border-brand-border text-brand-navy font-semibold text-[13px]">
+                                                EDIT
+                                            </th>
+                                            {/* Column 4: STATUS */}
                                             <th className="py-3 px-4 w-[100px] min-w-[100px] text-center whitespace-nowrap">
                                                 STATUS
                                             </th>
@@ -4338,7 +4449,7 @@ const Registration: React.FC = () => {
                                             <th className="py-3 px-4 w-[80px] min-w-[80px] text-center whitespace-nowrap">
                                                 ID
                                             </th>
-                                            {/* Column 25: LOCATION */}
+                                            {/* Column 28: LOCATION */}
                                             <th className="py-3 px-4 w-[140px] min-w-[140px] whitespace-nowrap">
                                                 LOCATION
                                             </th>
@@ -4349,7 +4460,7 @@ const Registration: React.FC = () => {
                                             if (filteredAgents.length === 0) {
                                                 return (
                                                     <tr>
-                                                        <td colSpan={25} className="py-12 text-center text-slate-500 bg-white">
+                                                        <td colSpan={28} className="py-12 text-center text-slate-500 bg-white">
                                                             <div className="flex flex-col items-center justify-center gap-2">
                                                                 <Search className="w-8 h-8 text-slate-300" />
                                                                 <p className="font-medium text-slate-700 text-sm">
@@ -4382,7 +4493,47 @@ const Registration: React.FC = () => {
                                                         key={a.id}
                                                         className="hover:bg-brand-mainbg h-[48px] transition-colors bg-white border-b border-brand-border"
                                                     >
-                                                        {/* 1: STATUS */}
+                                                        {/* 1: VIEW OLD */}
+                                                        <td className="py-2 px-3 text-center whitespace-nowrap border-r border-brand-border">
+                                                            <button
+                                                                type="button"
+                                                                onClick={() => {
+                                                                    setSelectedViewAgent({ agent: a, type: 'OLD' });
+                                                                    showToast(`Viewing Old Record for ${a.fullName} (${a.agentCode})`);
+                                                                }}
+                                                                className="text-[#1D4ED8] hover:text-blue-800 font-semibold text-[12px] uppercase cursor-pointer hover:underline border-none bg-transparent transition-colors"
+                                                            >
+                                                                VIEW OLD
+                                                            </button>
+                                                        </td>
+
+                                                        {/* 2: VIEW NEW */}
+                                                        <td className="py-2 px-3 text-center whitespace-nowrap border-r border-brand-border">
+                                                            <button
+                                                                type="button"
+                                                                onClick={() => {
+                                                                    setSelectedViewAgent({ agent: a, type: 'NEW' });
+                                                                    showToast(`Viewing New Record for ${a.fullName} (${a.agentCode})`);
+                                                                }}
+                                                                className="text-[#1D4ED8] hover:text-blue-800 font-semibold text-[12px] uppercase cursor-pointer hover:underline border-none bg-transparent transition-colors"
+                                                            >
+                                                                VIEW NEW
+                                                            </button>
+                                                        </td>
+
+                                                        {/* 3: EDIT */}
+                                                        <td className="py-2 px-3 text-center whitespace-nowrap border-r border-brand-border">
+                                                            <button
+                                                                type="button"
+                                                                onClick={() => handleEditAgent(a)}
+                                                                className="p-1.5 text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded transition-colors cursor-pointer border-none inline-flex items-center justify-center"
+                                                                title={`Edit ${a.fullName}`}
+                                                            >
+                                                                <Edit2 size={15} />
+                                                            </button>
+                                                        </td>
+
+                                                        {/* 4: STATUS */}
                                                         <td className="py-2 px-4 text-center whitespace-nowrap">
                                                             <button
                                                                 type="button"
@@ -4513,7 +4664,7 @@ const Registration: React.FC = () => {
                                                             {a.erpId || a.id}
                                                         </td>
 
-                                                        {/* 25: LOCATION */}
+                                                        {/* 28: LOCATION */}
                                                         <td className="py-2 px-4 text-slate-800 font-medium whitespace-nowrap">
                                                             {a.location || a.branch || 'BARAMATI'}
                                                         </td>
@@ -6298,6 +6449,171 @@ const Registration: React.FC = () => {
                                         <button type="submit" className="px-5 py-2 bg-brand-primary text-white text-sm font-semibold rounded-[8px] hover:bg-[#1D4ED8] cursor-pointer border-none">Register Agent</button>
                                     </div>
                                 </form>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* MODAL: VIEW AGENT RECORD (OLD / NEW) */}
+                    {selectedViewAgent && (
+                        <div className="fixed inset-0 z-[9999] bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+                            <div className="bg-white rounded-[16px] max-w-2xl w-full shadow-2xl border border-brand-border overflow-hidden animate-in fade-in zoom-in-95 duration-150">
+                                <div className="flex items-center justify-between px-6 py-4 bg-brand-lightbg border-b border-brand-border">
+                                    <div className="flex items-center gap-2.5">
+                                        <div className={`px-2.5 py-1 rounded text-xs font-bold tracking-wide uppercase ${selectedViewAgent.type === 'OLD' ? 'bg-amber-100 text-amber-800' : 'bg-blue-100 text-blue-800'}`}>
+                                            {selectedViewAgent.type === 'OLD' ? 'VIEW OLD RECORD' : 'VIEW NEW RECORD'}
+                                        </div>
+                                        <h3 className="font-bold text-brand-navy text-base">
+                                            {selectedViewAgent.agent.fullName}
+                                        </h3>
+                                        <span className="font-mono text-xs px-2 py-0.5 bg-slate-200 text-slate-700 rounded font-semibold">
+                                            {selectedViewAgent.agent.agentCode}
+                                        </span>
+                                    </div>
+                                    <button
+                                        type="button"
+                                        onClick={() => setSelectedViewAgent(null)}
+                                        className="p-1 text-slate-400 hover:text-slate-700 rounded-lg cursor-pointer border-none bg-transparent"
+                                    >
+                                        <X size={18} />
+                                    </button>
+                                </div>
+
+                                <div className="p-6 space-y-5 max-h-[80vh] overflow-y-auto text-[13px]">
+                                    {/* Summary Stats */}
+                                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 p-3 bg-slate-50 rounded-lg border border-slate-200">
+                                        <div>
+                                            <span className="block text-[11px] text-slate-500 uppercase font-semibold">Status</span>
+                                            <span className={`inline-block mt-0.5 px-2 py-0.5 rounded text-xs font-bold ${selectedViewAgent.agent.status === 'ACTIVE' ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'}`}>
+                                                {selectedViewAgent.agent.status}
+                                            </span>
+                                        </div>
+                                        <div>
+                                            <span className="block text-[11px] text-slate-500 uppercase font-semibold">Location / Branch</span>
+                                            <span className="font-medium text-slate-800">{selectedViewAgent.agent.location || selectedViewAgent.agent.branch || 'BARAMATI'}</span>
+                                        </div>
+                                        <div>
+                                            <span className="block text-[11px] text-slate-500 uppercase font-semibold">Gender</span>
+                                            <span className="font-medium text-slate-800">{selectedViewAgent.agent.gender || 'MALE'}</span>
+                                        </div>
+                                        <div>
+                                            <span className="block text-[11px] text-slate-500 uppercase font-semibold">Reg Date</span>
+                                            <span className="font-medium text-slate-800">{selectedViewAgent.agent.regDate || '01/11/2021'}</span>
+                                        </div>
+                                    </div>
+
+                                    {/* Personal & Contact */}
+                                    <div className="border border-slate-200 rounded-lg p-4 space-y-3">
+                                        <h4 className="text-xs font-bold text-brand-navy uppercase tracking-wider border-b border-slate-100 pb-1.5">
+                                            Contact & Identity Details
+                                        </h4>
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                            <div>
+                                                <span className="block text-[11px] text-slate-500">Email Address</span>
+                                                <span className="font-medium text-slate-800">{selectedViewAgent.agent.email || '-'}</span>
+                                            </div>
+                                            <div>
+                                                <span className="block text-[11px] text-slate-500">Mobile Number</span>
+                                                <span className="font-medium text-slate-800">{selectedViewAgent.agent.mobile || '-'}</span>
+                                            </div>
+                                            <div>
+                                                <span className="block text-[11px] text-slate-500">PAN Number</span>
+                                                <span className="font-mono font-medium text-slate-800">{selectedViewAgent.agent.panNo || '-'}</span>
+                                            </div>
+                                            <div>
+                                                <span className="block text-[11px] text-slate-500">Aadhaar Number</span>
+                                                <span className="font-mono font-medium text-slate-800">{selectedViewAgent.agent.aadharNo || '-'}</span>
+                                            </div>
+                                            <div className="sm:col-span-2">
+                                                <span className="block text-[11px] text-slate-500">Address</span>
+                                                <span className="font-medium text-slate-800">{selectedViewAgent.agent.address || '-'}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Bank Details */}
+                                    <div className="border border-slate-200 rounded-lg p-4 space-y-3">
+                                        <h4 className="text-xs font-bold text-brand-navy uppercase tracking-wider border-b border-slate-100 pb-1.5">
+                                            Bank Account Information
+                                        </h4>
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                            <div>
+                                                <span className="block text-[11px] text-slate-500">Bank Name</span>
+                                                <span className="font-medium text-slate-800">{selectedViewAgent.agent.bankName || '-'}</span>
+                                            </div>
+                                            <div>
+                                                <span className="block text-[11px] text-slate-500">Account Holder Name</span>
+                                                <span className="font-medium text-slate-800">{selectedViewAgent.agent.accHolderName || selectedViewAgent.agent.fullName}</span>
+                                            </div>
+                                            <div>
+                                                <span className="block text-[11px] text-slate-500">Account Number</span>
+                                                <span className="font-mono font-medium text-slate-800">{selectedViewAgent.agent.accountNo || '-'}</span>
+                                            </div>
+                                            <div>
+                                                <span className="block text-[11px] text-slate-500">IFSC Code</span>
+                                                <span className="font-mono font-medium text-slate-800">{selectedViewAgent.agent.ifscCode || '-'}</span>
+                                            </div>
+                                            <div>
+                                                <span className="block text-[11px] text-slate-500">Bank Branch</span>
+                                                <span className="font-medium text-slate-800">{selectedViewAgent.agent.bankBranch || '-'}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Operational Coordinators */}
+                                    <div className="border border-slate-200 rounded-lg p-4 space-y-3">
+                                        <h4 className="text-xs font-bold text-brand-navy uppercase tracking-wider border-b border-slate-100 pb-1.5">
+                                            Operations & Coordinators
+                                        </h4>
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                            <div>
+                                                <span className="block text-[11px] text-slate-500">Sales Executive</span>
+                                                <span className="font-medium text-slate-800">{selectedViewAgent.agent.salesExecutive || '-'}</span>
+                                            </div>
+                                            <div>
+                                                <span className="block text-[11px] text-slate-500">Co-ordinator</span>
+                                                <span className="font-medium text-slate-800">{selectedViewAgent.agent.coordinator || '-'}</span>
+                                            </div>
+                                            <div>
+                                                <span className="block text-[11px] text-slate-500">Quotation Co-ordinator</span>
+                                                <span className="font-medium text-slate-800">{selectedViewAgent.agent.quotationCoordinator || '-'}</span>
+                                            </div>
+                                            <div>
+                                                <span className="block text-[11px] text-slate-500">Inspection Co-ordinator</span>
+                                                <span className="font-medium text-slate-800">{selectedViewAgent.agent.inspectionCoordinator || '-'}</span>
+                                            </div>
+                                            <div>
+                                                <span className="block text-[11px] text-slate-500">Endorsement Co-ordinator</span>
+                                                <span className="font-medium text-slate-800">{selectedViewAgent.agent.endorsementCoordinator || '-'}</span>
+                                            </div>
+                                            <div>
+                                                <span className="block text-[11px] text-slate-500">Agent TSDS</span>
+                                                <span className="font-medium text-slate-800">{selectedViewAgent.agent.agentTsds || '-'}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="flex items-center justify-between px-6 py-3.5 bg-slate-50 border-t border-brand-border">
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            const ag = selectedViewAgent.agent;
+                                            setSelectedViewAgent(null);
+                                            handleEditAgent(ag);
+                                        }}
+                                        className="inline-flex items-center gap-1.5 px-4 py-2 bg-blue-50 text-brand-primary hover:bg-blue-100 rounded-lg text-xs font-semibold cursor-pointer border border-blue-200 transition-colors"
+                                    >
+                                        <Edit2 size={14} />
+                                        <span>Edit This Agent</span>
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => setSelectedViewAgent(null)}
+                                        className="px-5 py-2 bg-slate-800 hover:bg-slate-900 text-white text-xs font-semibold rounded-lg cursor-pointer border-none transition-colors"
+                                    >
+                                        Close
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     )}
