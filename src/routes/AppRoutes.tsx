@@ -25,6 +25,9 @@ import Registration from '../pages/admin/registration/Registration'
 import HrModule from '../pages/admin/hr/HrModule'
 import CommissionGrid from '../pages/admin/commission/CommissionGrid'
 
+// Account Module
+import AccountModule from '../pages/admin/accounts/AccountModule'
+
 // Operations
 import ClaimPage from '../pages/admin/operations/ClaimPage'
 import RenewalPage from '../pages/admin/operations/RenewalPage'
@@ -110,6 +113,10 @@ const AppRoutes = () => {
             {/* Commission Grid */}
             <Route path="/commission-grid" element={<Navigate to="/commission-grid/agent-commission" replace />} />
             <Route path="/commission-grid/:tab" element={<CommissionGrid />} />
+
+            {/* Account Module */}
+            <Route path="/accounts" element={<Navigate to="/accounts/cash-approval" replace />} />
+            <Route path="/accounts/:tab" element={<AccountModule />} />
 
             {/* Operations */}
             <Route path="/operations/claims" element={<ClaimPage />} />

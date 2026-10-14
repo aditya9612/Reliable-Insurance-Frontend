@@ -6,7 +6,7 @@ import UnderlineTabs, { TabItem } from '../../../components/tabs/UnderlineTabs';
 import {
     Search, Plus, Edit2, Trash2, X, Shield, Check, CheckCircle2,
     AlertCircle, Key, Smartphone, MapPin, Clock, UserCheck, UserX,
-    Calendar, Download, RefreshCw, Lock, Unlock, Eye, Filter, ArrowUpDown
+    Calendar, Download, RefreshCw, Lock, Unlock, Eye, Filter, ArrowUpDown, ChevronDown
 } from 'lucide-react';
 
 export type UserSubTab =
@@ -203,9 +203,21 @@ const UserMaster: React.FC = () => {
         { id: 3, companyName: 'AMIT ASHOK BHOITE', userName: 'AMIT.BHOITE', password: 'AMIT@2024' },
         { id: 4, companyName: 'DATTA DIGAMBAR CONSTRUCTION', userName: 'DATTA.CONST', password: 'DATTA@567' },
         { id: 5, companyName: 'INFRAPROJECTS PVT LTD', userName: 'INFRA.ADMIN', password: 'INFRA@999' },
+        { id: 6, companyName: 'ANAND PRAKASHRAO KHANDAGALE', userName: 'ANAND.KHANDAGALE', password: 'ANAND@123' },
+        { id: 7, companyName: 'ANIL SHANKAR DOIPHODE', userName: 'ANIL.DOIPHODE', password: 'ANIL@123' },
+        { id: 8, companyName: 'ANIL SHIVAJIRAO DESHMUKH', userName: 'ANIL.DESHMUKH', password: 'ANIL@2024' },
+        { id: 9, companyName: 'ANJU BHAGWANDASS SINGHAL', userName: 'ANJU.SINGHAL', password: 'ANJU@567' },
+        { id: 10, companyName: 'ARVIND JAGANNATH BHOSALE', userName: 'ARVIND.BHOSALE', password: 'ARVIND@999' },
+        { id: 11, companyName: 'AVINASH ARJUN SAWANT', userName: 'AVINASH.SAWANT', password: 'AVINASH@123' },
+        { id: 12, companyName: 'BALKRISHNA HANUMANT JADHAV', userName: 'BALKRISHNA.JADHAV', password: 'BALKRISHNA@123' },
+        { id: 13, companyName: 'CHETAN CHANDRAKANT JAGTAP', userName: 'CHETAN.JAGTAP', password: 'CHETAN@2024' },
+        { id: 14, companyName: 'GAJANAN PRAKASHRAO THAKARE', userName: 'GAJANAN.THAKARE', password: 'GAJANAN@567' },
+        { id: 15, companyName: 'HANUMANT TUKARAM GAVKARE', userName: 'HANUMANT.GAVKARE', password: 'HANUMANT@999' },
     ]);
     const [clientForm, setClientForm] = useState({ companyName: '', userName: '', password: '' });
     const [editingClientId, setEditingClientId] = useState<number | null>(null);
+    const [clientPage, setClientPage] = useState<number>(1);
+    const [clientsPerPage, setClientsPerPage] = useState<number>(10);
 
     // ==========================================
     // 4. ASSIGN PRIVILEGES STATE
@@ -336,6 +348,8 @@ const UserMaster: React.FC = () => {
         { id: 15, name: 'YOGESH DINKAR MORE', mobile: '9860778899' },
     ]);
     const [selectedSalesExIds, setSelectedSalesExIds] = useState<number[]>([]);
+    const [salesExPage, setSalesExPage] = useState<number>(1);
+    const [salesExPerPage, setSalesExPerPage] = useState<number>(10);
 
     // ==========================================
     // 6. TEMPORARY OPERATOR STATE
@@ -390,6 +404,8 @@ const UserMaster: React.FC = () => {
     const [loginToDate, setLoginToDate] = useState('08/10/2026');
     const [loginSelectedRole, setLoginSelectedRole] = useState('--ALL--');
     const [loginUserSearch, setLoginUserSearch] = useState('');
+    const [loginPage, setLoginPage] = useState<number>(1);
+    const [loginsPerPage, setLoginsPerPage] = useState<number>(10);
     const [loginLogs, setLoginLogs] = useState<LoginLogItem[]>([
         { id: 1, loginDate: '08/10/2026', loginTime: '00:02:22', role: 'RELATIONSHIP MANAGER', userName: 'VAIBHAV.SONMALE', name: 'VAIBHAV RAMCHANDRA SONMALE', remark: 'NEW APP', ipAddress: '223.228.32.247' },
         { id: 2, loginDate: '08/10/2026', loginTime: '01:05:08', role: 'RELATIONSHIP MANAGER', userName: 'VAIBHAV.SONMALE', name: 'VAIBHAV RAMCHANDRA SONMALE', remark: 'NEW APP', ipAddress: '223.228.32.247' },
@@ -729,10 +745,10 @@ const UserMaster: React.FC = () => {
             {/* TAB CONTENT 3: CLIENT APP USER */}
             {activeTab === 'client-app-user' && (
                 <div key={activeTab} className="tab-transition-wrapper space-y-6">
-                    {/* Top Card: »APP Client User Form matching Photo 1 & 2 */}
-                    <div className="bg-white rounded-[10px] p-6 sm:p-7 shadow-sm border border-slate-200/80">
+                    {/* Top Card: »APP Client User Form matching Registration Employee Tab */}
+                    <div className="bg-white rounded-xl p-6 sm:p-7 shadow-sm border border-slate-200/80">
                         {/* Blue Banner Header */}
-                        <div className="bg-brand-primary text-white px-4 py-2.5 rounded-[6px] font-normal text-[15px] flex items-center shadow-xs mb-6">
+                        <div className="bg-brand-primary text-white px-5 py-1.5 rounded-lg font-semibold text-sm flex items-center shadow-xs mb-6">
                             <span className="mr-0.5 text-base font-serif">&raquo;</span>APP Client User
                         </div>
 
@@ -772,12 +788,12 @@ const UserMaster: React.FC = () => {
                         >
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
                                 <div>
-                                    <label className="block text-[14px] text-slate-700 font-normal mb-2">Company Name</label>
+                                    <label className="block text-[13px] text-slate-700 font-normal mb-1.5">Company Name</label>
                                     <div className="relative">
                                         <select
                                             value={clientForm.companyName}
                                             onChange={(e) => setClientForm({ ...clientForm, companyName: e.target.value })}
-                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[14px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
+                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
                                         >
                                             <option value="">--Select Company Name--</option>
                                             {clientCompanyOptions.map((opt) => (
@@ -793,24 +809,24 @@ const UserMaster: React.FC = () => {
                                 </div>
 
                                 <div>
-                                    <label className="block text-[14px] text-slate-700 font-normal mb-2">User</label>
+                                    <label className="block text-[13px] text-slate-700 font-normal mb-1.5">User</label>
                                     <input
                                         type="text"
                                         placeholder=""
                                         value={clientForm.userName}
                                         onChange={(e) => setClientForm({ ...clientForm, userName: e.target.value })}
-                                        className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[14px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                        className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                     />
                                 </div>
 
                                 <div>
-                                    <label className="block text-[14px] text-slate-700 font-normal mb-2">Password</label>
+                                    <label className="block text-[13px] text-slate-700 font-normal mb-1.5">Password</label>
                                     <input
                                         type="text"
                                         placeholder=""
                                         value={clientForm.password}
                                         onChange={(e) => setClientForm({ ...clientForm, password: e.target.value })}
-                                        className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[14px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                        className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
                                     />
                                 </div>
                             </div>
@@ -818,7 +834,7 @@ const UserMaster: React.FC = () => {
                             <div className="flex items-center gap-3">
                                 <button
                                     type="submit"
-                                    className="px-6 py-2.5 bg-brand-primary hover:bg-[#1D4ED8] text-white font-semibold text-[14px] rounded-[6px] shadow-sm transition-colors cursor-pointer border-none"
+                                    className="px-6 py-2 bg-brand-primary hover:bg-[#1D4ED8] text-white font-semibold text-[13px] rounded-lg shadow-sm transition-colors cursor-pointer border-none"
                                 >
                                     {editingClientId ? 'Update' : 'Save'}
                                 </button>
@@ -829,7 +845,7 @@ const UserMaster: React.FC = () => {
                                             setEditingClientId(null);
                                             setClientForm({ companyName: '', userName: '', password: '' });
                                         }}
-                                        className="px-6 py-2.5 bg-[#D9534F] hover:bg-[#C9302C] text-white font-semibold text-[14px] rounded-[6px] shadow-sm transition-colors cursor-pointer border-none"
+                                        className="px-6 py-2 bg-[#D9534F] hover:bg-[#C9302C] text-white font-semibold text-[13px] rounded-lg shadow-sm transition-colors cursor-pointer border-none"
                                     >
                                         Cancel
                                     </button>
@@ -838,59 +854,141 @@ const UserMaster: React.FC = () => {
                         </form>
                     </div>
 
-                    {/* Bottom Table: matching BranchMaster */}
+                    {/* Bottom Table: matching Designation Master */}
                     <div className="bg-white rounded-[12px] border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden flex flex-col w-full">
-                        <div className="overflow-x-auto w-full custom-scrollbar min-h-[400px]">
-                            <table className="w-full text-left border-collapse min-w-[1000px]">
-                                <thead>
-                                    <tr className="bg-brand-lightbg text-brand-navy text-[13px] font-semibold uppercase border-b border-brand-border whitespace-nowrap">
-                                        <th className="py-3 px-4">COMPANY NAME</th>
-                                        <th className="py-3 px-4">USER NAME</th>
-                                        <th className="py-3 px-4">PASSWORD</th>
-                                        <th className="py-3 px-4 text-center w-[120px]">ACTION</th>
-                                    </tr>
-                                </thead>
-                                <tbody className="divide-y divide-brand-border text-[13px]">
-                                    {clientUsers.map((user) => (
-                                        <tr key={user.id} className="hover:bg-brand-mainbg h-[48px] transition-colors bg-white">
-                                            <td className="py-2 px-4 font-semibold text-[#12284A]">
-                                                {user.companyName}
-                                            </td>
-                                            <td className="py-2 px-4 text-brand-navy">
-                                                {user.userName}
-                                            </td>
-                                            <td className="py-2 px-4 text-brand-muted font-mono text-xs">
-                                                {user.password}
-                                            </td>
-                                            <td className="py-2 px-4 text-center">
-                                                <button
-                                                    onClick={() => {
-                                                        setEditingClientId(user.id);
-                                                        setClientForm({
-                                                            companyName: user.companyName,
-                                                            userName: user.userName,
-                                                            password: user.password
-                                                        });
-                                                        window.scrollTo({ top: 0, behavior: 'smooth' });
-                                                    }}
-                                                    className="p-1.5 bg-brand-lightbg text-brand-primary hover:bg-[#E2E8F0] rounded-[6px] transition-colors cursor-pointer inline-flex items-center justify-center border-none"
-                                                    title="Edit User"
-                                                >
-                                                    <Edit2 size={16} strokeWidth={1.5} />
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    ))}
-                                    {clientUsers.length === 0 && (
-                                        <tr>
-                                            <td colSpan={4} className="py-12 text-center text-slate-500">
-                                                No client app users found.
-                                            </td>
-                                        </tr>
-                                    )}
-                                </tbody>
-                            </table>
+                        {/* Table Toolbar */}
+                        <div className="p-4 bg-slate-50 border-b border-brand-border flex flex-col sm:flex-row items-center justify-between gap-4">
+                            <div className="relative w-full sm:w-[400px]">
+                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
+                                <input
+                                    type="text"
+                                    placeholder="Search by company or user name..."
+                                    value={searchQuery}
+                                    onChange={(e) => { setSearchQuery(e.target.value); setClientPage(1); }}
+                                    className="w-full pl-9 pr-4 py-2 bg-white border border-slate-300 rounded-lg text-sm text-brand-navy placeholder-[#94a3b8] focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all h-[40px]"
+                                />
+                            </div>
                         </div>
+
+                        {/* Full Width Table View matching Designation Master */}
+                        {(() => {
+                            const filteredClients = clientUsers.filter(u =>
+                                !searchQuery ||
+                                u.companyName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                                u.userName.toLowerCase().includes(searchQuery.toLowerCase())
+                            );
+                            const totalClientPages = Math.max(1, Math.ceil(filteredClients.length / clientsPerPage));
+                            const paginatedClients = filteredClients.slice((clientPage - 1) * clientsPerPage, clientPage * clientsPerPage);
+
+                            return (
+                                <>
+                                    <div className="overflow-x-auto w-full custom-scrollbar min-h-[400px]">
+                                        <table className="w-full text-left border-collapse min-w-[1000px]">
+                                            <thead>
+                                                <tr className="bg-brand-lightbg text-brand-navy text-[13px] font-semibold uppercase border-b border-brand-border whitespace-nowrap">
+                                                    <th className="py-3 px-4">COMPANY NAME</th>
+                                                    <th className="py-3 px-4">USER NAME</th>
+                                                    <th className="py-3 px-4">PASSWORD</th>
+                                                    <th className="py-3 px-4 text-center w-[120px]">ACTION</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody className="divide-y divide-brand-border text-[13px]">
+                                                {paginatedClients.map((user) => (
+                                                    <tr key={user.id} className="hover:bg-brand-mainbg h-[48px] transition-colors bg-white">
+                                                        <td className="py-2 px-4 font-semibold text-[#12284A]">
+                                                            {user.companyName}
+                                                        </td>
+                                                        <td className="py-2 px-4 text-brand-navy">
+                                                            {user.userName}
+                                                        </td>
+                                                        <td className="py-2 px-4 text-brand-muted font-mono text-xs">
+                                                            {user.password}
+                                                        </td>
+                                                        <td className="py-2 px-4 text-center">
+                                                            <button
+                                                                onClick={() => {
+                                                                    setEditingClientId(user.id);
+                                                                    setClientForm({
+                                                                        companyName: user.companyName,
+                                                                        userName: user.userName,
+                                                                        password: user.password
+                                                                    });
+                                                                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                                                                }}
+                                                                className="p-1.5 bg-brand-lightbg text-brand-primary hover:bg-[#E2E8F0] rounded-[6px] transition-colors cursor-pointer inline-flex items-center justify-center border-none"
+                                                                title="Edit User"
+                                                            >
+                                                                <Edit2 size={16} strokeWidth={1.5} />
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                ))}
+                                                {paginatedClients.length === 0 && (
+                                                    <tr>
+                                                        <td colSpan={4} className="py-12 text-center text-slate-500">
+                                                            No client app users found{searchQuery ? ` matching "${searchQuery}"` : ''}.
+                                                        </td>
+                                                    </tr>
+                                                )}
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    {/* Pagination matching Designation Master */}
+                                    <div className="p-4 bg-white border-t border-brand-border flex flex-col sm:flex-row items-center justify-between gap-4">
+                                        <div className="flex items-center gap-2 text-sm text-brand-muted font-medium">
+                                            <span>Records per page:</span>
+                                            <select
+                                                value={clientsPerPage}
+                                                onChange={(e) => {
+                                                    setClientsPerPage(Number(e.target.value));
+                                                    setClientPage(1);
+                                                }}
+                                                className="px-2 py-1 bg-white border border-brand-border rounded-md text-sm font-semibold text-brand-navy focus:outline-none focus:ring-1 focus:ring-brand-primary focus:border-brand-primary cursor-pointer"
+                                            >
+                                                <option value={10}>10</option>
+                                                <option value={20}>20</option>
+                                                <option value={50}>50</option>
+                                                <option value={100}>100</option>
+                                            </select>
+                                        </div>
+
+                                        <span className="text-sm text-brand-muted font-medium">
+                                            Showing {filteredClients.length === 0 ? 0 : (clientPage - 1) * clientsPerPage + 1} - {Math.min(clientPage * clientsPerPage, filteredClients.length)} of {filteredClients.length} records
+                                        </span>
+
+                                        <div className="flex items-center gap-1">
+                                            <button
+                                                onClick={() => setClientPage(prev => Math.max(prev - 1, 1))}
+                                                disabled={clientPage === 1}
+                                                className="w-8 h-8 flex items-center justify-center text-xs font-semibold text-brand-navy bg-white border border-brand-border rounded-md hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+                                            >
+                                                &lt;
+                                            </button>
+                                            {Array.from({ length: totalClientPages || 1 }, (_, i) => i + 1).map((page) => (
+                                                <button
+                                                    key={page}
+                                                    onClick={() => setClientPage(page)}
+                                                    className={`w-8 h-8 flex items-center justify-center text-xs font-bold rounded-md transition-all ${clientPage === page
+                                                        ? 'bg-brand-primary text-white shadow-sm'
+                                                        : 'bg-white text-brand-navy border border-brand-border hover:bg-slate-100'
+                                                        }`}
+                                                >
+                                                    {page}
+                                                </button>
+                                            ))}
+                                            <button
+                                                onClick={() => setClientPage(prev => Math.min(prev + 1, totalClientPages))}
+                                                disabled={clientPage === totalClientPages || totalClientPages === 0}
+                                                className="w-8 h-8 flex items-center justify-center text-xs font-semibold text-brand-navy bg-white border border-brand-border rounded-md hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+                                            >
+                                                &gt;
+                                            </button>
+                                        </div>
+                                    </div>
+                                </>
+                            );
+                        })()}
                     </div>
                 </div>
             )}
@@ -898,23 +996,23 @@ const UserMaster: React.FC = () => {
             {/* TAB CONTENT 4: ASSIGN PRIVILEGES */}
             {activeTab === 'assign-privileges' && (
                 <div key={activeTab} className="tab-transition-wrapper space-y-6">
-                    {/* Top Card: Menus matching Image 1 & 2 */}
-                    <div className="bg-white rounded-[10px] p-6 sm:p-7 shadow-sm border border-slate-200/80">
+                    {/* Top Card: Menus matching Registration Employee Tab */}
+                    <div className="bg-white rounded-xl p-6 sm:p-7 shadow-sm border border-slate-200/80">
                         {/* Blue Banner Header */}
-                        <div className="bg-brand-primary text-white px-4 py-2.5 rounded-[6px] font-normal text-[15px] flex items-center shadow-xs mb-6">
-                            Menus
+                        <div className="bg-brand-primary text-white px-5 py-1.5 rounded-lg font-semibold text-sm flex items-center shadow-xs mb-6">
+                            <span className="mr-0.5 text-base font-serif">&raquo;</span>Menus
                         </div>
 
-                        {/* Form Controls Row matching Image 1 & 2 */}
+                        {/* Form Controls Row matching Registration Employee Tab */}
                         <div className="flex flex-wrap items-end gap-4 sm:gap-6">
                             {/* Branch Field */}
                             <div className="w-full sm:w-[220px]">
-                                <label className="block text-[14px] text-slate-700 font-normal mb-2">Branch</label>
+                                <label className="block text-[13px] text-slate-700 font-normal mb-1.5">Branch</label>
                                 <div className="relative">
                                     <select
                                         value={selectedBranch}
                                         onChange={(e) => setSelectedBranch(e.target.value)}
-                                        className="w-full px-4 py-2.5 bg-white border border-slate-300 rounded-[22px] text-[14px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
+                                        className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
                                     >
                                         <option value="">--Select Branch Name--</option>
                                         {branchOptions.map((branch) => (
@@ -931,12 +1029,12 @@ const UserMaster: React.FC = () => {
 
                             {/* Role Field */}
                             <div className="w-full sm:w-[220px]">
-                                <label className="block text-[14px] text-slate-700 font-normal mb-2">Role</label>
+                                <label className="block text-[13px] text-slate-700 font-normal mb-1.5">Role</label>
                                 <div className="relative">
                                     <select
                                         value={selectedPrivilegeRole}
                                         onChange={(e) => setSelectedPrivilegeRole(e.target.value)}
-                                        className="w-full px-4 py-2.5 bg-white border border-slate-300 rounded-[22px] text-[14px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
+                                        className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
                                     >
                                         <option value="">--Select Role Name--</option>
                                         {privilegeRoleOptions.map((role) => (
@@ -959,7 +1057,7 @@ const UserMaster: React.FC = () => {
                                         setShowPages(true);
                                         showToast(`Loaded pages for ${selectedPrivilegeRole || 'all roles'} at ${selectedBranch || 'all branches'}`);
                                     }}
-                                    className="px-5 py-2.5 bg-[#EAA144] hover:bg-[#d89133] text-white font-medium text-[14px] rounded-[6px] shadow-sm transition-colors cursor-pointer border-none"
+                                    className="px-5 py-2 bg-brand-primary hover:bg-[#1D4ED8] text-white font-semibold text-[13px] rounded-lg shadow-sm transition-colors cursor-pointer border-none"
                                 >
                                     Show Pages
                                 </button>
@@ -975,20 +1073,9 @@ const UserMaster: React.FC = () => {
                                         setShowPages(false);
                                         showToast('Selections reset');
                                     }}
-                                    className="px-5 py-2.5 bg-[#D9534F] hover:bg-[#c9302c] text-white font-medium text-[14px] rounded-[6px] shadow-sm transition-colors cursor-pointer border-none"
+                                    className="px-5 py-2 bg-[#F59E0B] hover:bg-[#D97706] text-white font-semibold text-[13px] rounded-lg shadow-sm transition-colors cursor-pointer border-none"
                                 >
                                     Reset
-                                </button>
-                            </div>
-
-                            {/* Go To Home Link */}
-                            <div className="pb-2.5">
-                                <button
-                                    type="button"
-                                    onClick={() => navigate('/dashboard')}
-                                    className="text-slate-700 hover:text-brand-primary text-[14px] font-normal cursor-pointer bg-transparent border-none transition-colors"
-                                >
-                                    Go To Home
                                 </button>
                             </div>
                         </div>
@@ -1064,7 +1151,7 @@ const UserMaster: React.FC = () => {
                                 <button
                                     type="button"
                                     onClick={() => showToast(`Privileges updated successfully for ${selectedPrivilegeRole || 'selected role'} at ${selectedBranch || 'selected branch'}!`)}
-                                    className="px-6 py-2.5 bg-brand-primary hover:bg-[#1D4ED8] text-white text-sm font-semibold rounded-lg shadow-xs transition-colors cursor-pointer border-none"
+                                    className="px-6 py-2 bg-brand-primary hover:bg-[#1D4ED8] text-white text-[13px] font-semibold rounded-lg shadow-sm transition-colors cursor-pointer border-none"
                                 >
                                     Save Privileges
                                 </button>
@@ -1075,183 +1162,227 @@ const UserMaster: React.FC = () => {
             )}
 
             {/* TAB CONTENT 5: ASSIGN LOCATION HEAD */}
-            {activeTab === 'assign-location-head' && (
-                <div key={activeTab} className="tab-transition-wrapper space-y-4">
-                    {/* Top Card matching Photo 1 */}
-                    <div className="bg-white rounded-[10px] shadow-sm border border-slate-200/80 p-6">
-                        <label className="block text-[14px] text-slate-700 font-semibold mb-2">Location Head</label>
-                        <div className="relative w-full sm:w-80">
-                            <select
-                                value={selectedLocationHead}
-                                onChange={(e) => setSelectedLocationHead(e.target.value)}
-                                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[14px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
-                            >
-                                <option value="">--Select Location Head--</option>
-                                {locationHeadOptions.map((head) => (
-                                    <option key={head} value={head}>{head}</option>
-                                ))}
-                            </select>
-                            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3.5 text-slate-500">
-                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-                                </svg>
+            {activeTab === 'assign-location-head' && (() => {
+                const handleSaveLocationHead = () => {
+                    if (!selectedLocationHead) {
+                        showToast('Please select a Location Head from the dropdown first');
+                        return;
+                    }
+                    if (selectedSalesExIds.length === 0) {
+                        showToast('Please select at least one Sales Executive to assign');
+                        return;
+                    }
+                    showToast(`Assigned ${selectedSalesExIds.length} sales executive(s) to ${selectedLocationHead} successfully!`);
+                    setSelectedSalesExIds([]);
+                };
+
+                const filteredExecutives = salesExecutives.filter(e =>
+                    !salesExSearch ||
+                    e.name.toLowerCase().includes(salesExSearch.toLowerCase()) ||
+                    e.mobile.includes(salesExSearch)
+                );
+                const totalSalesExPages = Math.max(1, Math.ceil(filteredExecutives.length / salesExPerPage));
+                const paginatedExecutives = filteredExecutives.slice((salesExPage - 1) * salesExPerPage, salesExPage * salesExPerPage);
+
+                const isAllSelected = paginatedExecutives.length > 0 && paginatedExecutives.every(e => selectedSalesExIds.includes(e.id));
+
+                const toggleSelectAll = () => {
+                    if (isAllSelected) {
+                        const pageIds = new Set(paginatedExecutives.map(e => e.id));
+                        setSelectedSalesExIds(prev => prev.filter(id => !pageIds.has(id)));
+                    } else {
+                        const pageIds = paginatedExecutives.map(e => e.id);
+                        setSelectedSalesExIds(prev => Array.from(new Set([...prev, ...pageIds])));
+                    }
+                };
+
+                const toggleSelectRow = (id: number) => {
+                    setSelectedSalesExIds(prev =>
+                        prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]
+                    );
+                };
+
+                return (
+                    <div key={activeTab} className="tab-transition-wrapper space-y-4">
+                        {/* Top Card: Assign Location Head matching Registration Employee Tab */}
+                        <div className="bg-white rounded-xl p-6 sm:p-7 shadow-sm border border-slate-200/80">
+                            {/* Blue Banner Header */}
+                            <div className="bg-brand-primary text-white px-5 py-1.5 rounded-lg font-semibold text-sm flex items-center shadow-xs mb-6">
+                                <span className="mr-0.5 text-base font-serif">&raquo;</span>Assign Location Head
+                            </div>
+
+                            <div className="flex flex-wrap items-end gap-4">
+                                <div className="w-full sm:w-80">
+                                    <label className="block text-[13px] text-slate-700 font-normal mb-1.5">Location Head</label>
+                                    <div className="relative">
+                                        <select
+                                            value={selectedLocationHead}
+                                            onChange={(e) => setSelectedLocationHead(e.target.value)}
+                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-9"
+                                        >
+                                            <option value="">--Select Location Head--</option>
+                                            {locationHeadOptions.map((head) => (
+                                                <option key={head} value={head}>{head}</option>
+                                            ))}
+                                        </select>
+                                        <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3.5 text-slate-500">
+                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <button
+                                    type="button"
+                                    onClick={handleSaveLocationHead}
+                                    className="px-6 py-2 bg-brand-primary hover:bg-[#1D4ED8] text-white font-semibold text-[13px] rounded-lg shadow-sm transition-colors cursor-pointer border-none"
+                                >
+                                    Save
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* Table matching Designation Master */}
+                        <div className="bg-white rounded-[12px] border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden flex flex-col w-full">
+                            {/* Table Toolbar */}
+                            <div className="p-4 bg-slate-50 border-b border-brand-border flex flex-col sm:flex-row items-center justify-between gap-4">
+                                <div className="relative w-full sm:w-[400px]">
+                                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
+                                    <input
+                                        type="text"
+                                        placeholder="Search sales executive name or mobile..."
+                                        value={salesExSearch}
+                                        onChange={(e) => { setSalesExSearch(e.target.value); setSalesExPage(1); }}
+                                        className="w-full pl-9 pr-4 py-2 bg-white border border-slate-300 rounded-lg text-sm text-brand-navy placeholder-[#94a3b8] focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all h-[40px]"
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="overflow-x-auto w-full custom-scrollbar min-h-[400px]">
+                                <table className="w-full text-left border-collapse min-w-[1000px]">
+                                    <thead>
+                                        <tr className="bg-brand-lightbg text-brand-navy text-[13px] font-semibold uppercase border-b border-brand-border whitespace-nowrap">
+                                            <th className="py-3 px-4 w-[90px]">SR.NO.</th>
+                                            <th className="py-3 px-4">SALES EXECUTIVE NAME</th>
+                                            <th className="py-3 px-4">MOBILENO</th>
+                                            <th className="py-3 px-4 w-[80px] text-center">
+                                                <input
+                                                    type="checkbox"
+                                                    checked={isAllSelected}
+                                                    onChange={toggleSelectAll}
+                                                    className="w-4 h-4 rounded border-gray-300 text-brand-primary focus:ring-brand-primary cursor-pointer accent-brand-primary"
+                                                    title="Select All"
+                                                />
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="divide-y divide-brand-border text-[13px]">
+                                        {paginatedExecutives.map((exec, idx) => {
+                                            const isChecked = selectedSalesExIds.includes(exec.id);
+                                            return (
+                                                <tr
+                                                    key={exec.id}
+                                                    className={`h-[48px] transition-colors ${isChecked ? 'bg-blue-50/60 hover:bg-blue-50/90' : 'bg-white hover:bg-brand-mainbg'}`}
+                                                >
+                                                    <td className="py-2 px-4 text-brand-muted">
+                                                        {(salesExPage - 1) * salesExPerPage + idx + 1}
+                                                    </td>
+                                                    <td className="py-2 px-4 font-semibold text-[#12284A] uppercase">
+                                                        {exec.name}
+                                                    </td>
+                                                    <td className="py-2 px-4 text-brand-navy font-mono text-xs">
+                                                        {exec.mobile}
+                                                    </td>
+                                                    <td className="py-2 px-4 text-center">
+                                                        <input
+                                                            type="checkbox"
+                                                            checked={isChecked}
+                                                            onChange={() => toggleSelectRow(exec.id)}
+                                                            className="w-4 h-4 rounded border-gray-300 text-brand-primary focus:ring-brand-primary cursor-pointer accent-brand-primary"
+                                                        />
+                                                    </td>
+                                                </tr>
+                                            );
+                                        })}
+                                        {paginatedExecutives.length === 0 && (
+                                            <tr>
+                                                <td colSpan={4} className="py-12 text-center text-slate-500">
+                                                    No sales executives found{salesExSearch ? ` matching "${salesExSearch}"` : ''}.
+                                                </td>
+                                            </tr>
+                                        )}
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            {/* Pagination matching Designation Master */}
+                            <div className="p-4 bg-white border-t border-brand-border flex flex-col sm:flex-row items-center justify-between gap-4">
+                                <div className="flex items-center gap-2 text-sm text-brand-muted font-medium">
+                                    <span>Records per page:</span>
+                                    <select
+                                        value={salesExPerPage}
+                                        onChange={(e) => {
+                                            setSalesExPerPage(Number(e.target.value));
+                                            setSalesExPage(1);
+                                        }}
+                                        className="px-2 py-1 bg-white border border-brand-border rounded-md text-sm font-semibold text-brand-navy focus:outline-none focus:ring-1 focus:ring-brand-primary focus:border-brand-primary cursor-pointer"
+                                    >
+                                        <option value={10}>10</option>
+                                        <option value={20}>20</option>
+                                        <option value={50}>50</option>
+                                        <option value={100}>100</option>
+                                    </select>
+                                </div>
+
+                                <span className="text-sm text-brand-muted font-medium">
+                                    Showing {filteredExecutives.length === 0 ? 0 : (salesExPage - 1) * salesExPerPage + 1} - {Math.min(salesExPage * salesExPerPage, filteredExecutives.length)} of {filteredExecutives.length} records
+                                </span>
+
+                                <div className="flex items-center gap-1">
+                                    <button
+                                        onClick={() => setSalesExPage(prev => Math.max(prev - 1, 1))}
+                                        disabled={salesExPage === 1}
+                                        className="w-8 h-8 flex items-center justify-center text-xs font-semibold text-brand-navy bg-white border border-brand-border rounded-md hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+                                    >
+                                        &lt;
+                                    </button>
+                                    {Array.from({ length: totalSalesExPages || 1 }, (_, i) => i + 1).map((page) => (
+                                        <button
+                                            key={page}
+                                            onClick={() => setSalesExPage(page)}
+                                            className={`w-8 h-8 flex items-center justify-center text-xs font-bold rounded-md transition-all ${salesExPage === page
+                                                ? 'bg-brand-primary text-white shadow-sm'
+                                                : 'bg-white text-brand-navy border border-brand-border hover:bg-slate-100'
+                                                }`}
+                                        >
+                                            {page}
+                                        </button>
+                                    ))}
+                                    <button
+                                        onClick={() => setSalesExPage(prev => Math.min(prev + 1, totalSalesExPages))}
+                                        disabled={salesExPage === totalSalesExPages || totalSalesExPages === 0}
+                                        className="w-8 h-8 flex items-center justify-center text-xs font-semibold text-brand-navy bg-white border border-brand-border rounded-md hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+                                    >
+                                        &gt;
+                                    </button>
+                                </div>
+                            </div>
+
+                            {/* Table Footer with Save Button matching Assign Privileges */}
+                            <div className="p-4 bg-white border-t border-brand-border flex justify-end">
+                                <button
+                                    type="button"
+                                    onClick={handleSaveLocationHead}
+                                    className="px-6 py-2 bg-brand-primary hover:bg-[#1D4ED8] text-white font-semibold text-[13px] rounded-lg shadow-sm transition-colors cursor-pointer border-none"
+                                >
+                                    Save
+                                </button>
                             </div>
                         </div>
                     </div>
-
-                    {/* Search Field matching Photo 2 */}
-                    <div className="flex items-center justify-between gap-4">
-                        <div className="w-full sm:w-80">
-                            <input
-                                type="text"
-                                placeholder="Search SalesEx Name Here"
-                                value={salesExSearch}
-                                onChange={(e) => setSalesExSearch(e.target.value)}
-                                className="w-full px-3.5 py-1.5 bg-white border border-slate-300 rounded-[4px] text-[13px] text-slate-800 placeholder-slate-400 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-sm"
-                            />
-                        </div>
-                    </div>
-
-                    {/* Table matching Photo 1 & 2 */}
-                    {(() => {
-                        const filteredExecutives = salesExecutives.filter(e =>
-                            !salesExSearch ||
-                            e.name.toLowerCase().includes(salesExSearch.toLowerCase()) ||
-                            e.mobile.includes(salesExSearch)
-                        );
-                        const isAllSelected = filteredExecutives.length > 0 && filteredExecutives.every(e => selectedSalesExIds.includes(e.id));
-
-                        const toggleSelectAll = () => {
-                            if (isAllSelected) {
-                                const filteredIds = new Set(filteredExecutives.map(e => e.id));
-                                setSelectedSalesExIds(prev => prev.filter(id => !filteredIds.has(id)));
-                            } else {
-                                const filteredIds = filteredExecutives.map(e => e.id);
-                                setSelectedSalesExIds(prev => Array.from(new Set([...prev, ...filteredIds])));
-                            }
-                        };
-
-                        const toggleSelectRow = (id: number) => {
-                            setSelectedSalesExIds(prev =>
-                                prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]
-                            );
-                        };
-
-                        const handleAssign = () => {
-                            if (!selectedLocationHead) {
-                                showToast('Please select a Location Head from the dropdown first');
-                                return;
-                            }
-                            if (selectedSalesExIds.length === 0) {
-                                showToast('Please select at least one Sales Executive to assign');
-                                return;
-                            }
-                            showToast(`Assigned ${selectedSalesExIds.length} sales executive(s) to ${selectedLocationHead} successfully!`);
-                            setSelectedSalesExIds([]);
-                        };
-
-                        return (
-                            <>
-                                <div className="bg-white rounded-[12px] border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden flex flex-col w-full">
-                                    <div className="overflow-x-auto w-full custom-scrollbar min-h-[400px]">
-                                        <table className="w-full text-left border-collapse min-w-[1000px]">
-                                            <thead>
-                                                <tr className="bg-brand-lightbg text-brand-navy text-[13px] font-semibold uppercase border-b border-brand-border whitespace-nowrap">
-                                                    <th className="py-3 px-4 w-[90px]">SR.NO.</th>
-                                                    <th className="py-3 px-4">SALES EXECUTIVE NAME</th>
-                                                    <th className="py-3 px-4">MOBILENO</th>
-                                                    <th className="py-3 px-4 w-[80px] text-center">
-                                                        <input
-                                                            type="checkbox"
-                                                            checked={isAllSelected}
-                                                            onChange={toggleSelectAll}
-                                                            className="w-4 h-4 rounded border-gray-300 text-brand-primary focus:ring-brand-primary cursor-pointer accent-brand-primary"
-                                                            title="Select All"
-                                                        />
-                                                    </th>
-                                                </tr>
-                                            </thead>
-                                            <tbody className="divide-y divide-brand-border text-[13px]">
-                                                {filteredExecutives.map((exec, idx) => {
-                                                    const isChecked = selectedSalesExIds.includes(exec.id);
-                                                    return (
-                                                        <tr
-                                                            key={exec.id}
-                                                            className={`h-[48px] transition-colors ${isChecked ? 'bg-blue-50/60 hover:bg-blue-50/90' : 'bg-white hover:bg-brand-mainbg'}`}
-                                                        >
-                                                            <td className="py-2 px-4 text-brand-muted">
-                                                                {idx + 1}
-                                                            </td>
-                                                            <td className="py-2 px-4 font-semibold text-[#12284A] uppercase">
-                                                                {exec.name}
-                                                            </td>
-                                                            <td className="py-2 px-4 text-brand-navy font-mono text-xs">
-                                                                {exec.mobile}
-                                                            </td>
-                                                            <td className="py-2 px-4 text-center">
-                                                                <input
-                                                                    type="checkbox"
-                                                                    checked={isChecked}
-                                                                    onChange={() => toggleSelectRow(exec.id)}
-                                                                    className="w-4 h-4 rounded border-gray-300 text-brand-primary focus:ring-brand-primary cursor-pointer accent-brand-primary"
-                                                                />
-                                                            </td>
-                                                        </tr>
-                                                    );
-                                                })}
-                                                {filteredExecutives.length === 0 && (
-                                                    <tr>
-                                                        <td colSpan={4} className="py-12 text-center text-slate-500">
-                                                            No sales executives found matching "{salesExSearch}"
-                                                        </td>
-                                                    </tr>
-                                                )}
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-
-                                {/* Bottom Action Bar */}
-                                <div className="flex flex-wrap items-center justify-between gap-4 bg-white p-4 rounded-[8px] border border-slate-200/80 shadow-sm">
-                                    <div className="text-[13px] text-slate-600 font-medium">
-                                        {selectedSalesExIds.length > 0 ? (
-                                            <span>
-                                                <span className="font-bold text-brand-primary">{selectedSalesExIds.length}</span> executive{selectedSalesExIds.length > 1 ? 's' : ''} selected
-                                                {selectedLocationHead ? (
-                                                    <> to assign to <span className="font-bold text-slate-800">{selectedLocationHead}</span></>
-                                                ) : (
-                                                    <span className="text-amber-600"> (Please select a Location Head above)</span>
-                                                )}
-                                            </span>
-                                        ) : (
-                                            <span>Select executives using the checkboxes to assign to a Location Head.</span>
-                                        )}
-                                    </div>
-
-                                    <div className="flex items-center gap-3">
-                                        <button
-                                            type="button"
-                                            onClick={handleAssign}
-                                            className="px-6 py-2.5 bg-brand-primary hover:bg-[#1D4ED8] text-white font-semibold text-[14px] rounded-[6px] shadow-sm transition-colors cursor-pointer border-none"
-                                        >
-                                            Assign
-                                        </button>
-                                        {selectedSalesExIds.length > 0 && (
-                                            <button
-                                                type="button"
-                                                onClick={() => setSelectedSalesExIds([])}
-                                                className="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium text-[14px] rounded-[6px] transition-colors cursor-pointer border border-slate-300"
-                                            >
-                                                Clear Selection
-                                            </button>
-                                        )}
-                                    </div>
-                                </div>
-                            </>
-                        );
-                    })()}
-                </div>
-            )}
+                );
+            })()}
 
             {/* TAB CONTENT 6: TEMPORARY OPERATOR */}
             {activeTab === 'temporary-operator' && (
@@ -1388,124 +1519,149 @@ const UserMaster: React.FC = () => {
             )}
 
             {/* TAB CONTENT 7: LOGIN HISTORY */}
-            {activeTab === 'login-history' && (
-                <div key={activeTab} className="tab-transition-wrapper space-y-4">
-                    {/* Top Card: Filter Form matching Photo 1, 2, 3 */}
-                    <div className="bg-white rounded-[10px] p-6 shadow-sm border border-slate-200/80">
-                        <div className="flex flex-wrap items-center gap-5 sm:gap-6">
-                            {/* From Date */}
-                            <div className="w-full sm:w-[170px]">
-                                <label className="block text-[13px] text-slate-700 font-normal mb-2">From Date</label>
-                                <input
-                                    type="text"
-                                    value={loginFromDate}
-                                    onChange={(e) => setLoginFromDate(e.target.value)}
-                                    className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 text-center focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
-                                />
-                            </div>
+            {activeTab === 'login-history' && (() => {
+                const filtered = loginLogs.filter(l =>
+                    (loginSelectedRole === '--ALL--' || l.role === loginSelectedRole) &&
+                    (!loginUserSearch || l.userName.toLowerCase().includes(loginUserSearch.toLowerCase()) || l.name.toLowerCase().includes(loginUserSearch.toLowerCase()))
+                );
+                const totalLoginPages = Math.max(1, Math.ceil(filtered.length / loginsPerPage));
+                const paginatedLogs = filtered.slice((loginPage - 1) * loginsPerPage, loginPage * loginsPerPage);
 
-                            {/* To Date */}
-                            <div className="w-full sm:w-[170px]">
-                                <label className="block text-[13px] text-slate-700 font-normal mb-2">To Date</label>
-                                <input
-                                    type="text"
-                                    value={loginToDate}
-                                    onChange={(e) => setLoginToDate(e.target.value)}
-                                    className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 text-center focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
-                                />
-                            </div>
+                const handleExportCsv = () => {
+                    const headers = ['SR.NO.', 'LOGIN DATE', 'LOGIN TIME', 'USER ROLE', 'USER NAME', 'NAME', 'REMARK', 'IP ADDRESS'];
+                    const csvRows = [
+                        headers.join(','),
+                        ...filtered.map((item, idx) => [
+                            idx + 1,
+                            `"${item.loginDate}"`,
+                            `"${item.loginTime}"`,
+                            `"${item.role}"`,
+                            `"${item.userName}"`,
+                            `"${item.name}"`,
+                            `"${item.remark}"`,
+                            `"${item.ipAddress}"`
+                        ].join(','))
+                    ];
+                    const blob = new Blob([csvRows.join('\n')], { type: 'text/csv;charset=utf-8;' });
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.setAttribute('download', `Login_History_${loginFromDate.replace(/\//g, '-')}_to_${loginToDate.replace(/\//g, '-')}.csv`);
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    showToast('Login history exported to CSV successfully!');
+                };
 
-                            {/* Role */}
-                            <div className="w-full sm:w-[200px]">
-                                <label className="block text-[13px] text-slate-700 font-normal mb-2">Role</label>
-                                <div className="relative">
-                                    <select
-                                        value={loginSelectedRole}
-                                        onChange={(e) => setLoginSelectedRole(e.target.value)}
-                                        className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-8"
-                                    >
-                                        {loginRoleOptions.map((r) => (
-                                            <option key={r} value={r}>{r}</option>
-                                        ))}
-                                    </select>
-                                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-slate-500">
-                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-                                        </svg>
+                return (
+                    <div key={activeTab} className="tab-transition-wrapper space-y-4">
+                        <div className="bg-white rounded-[10px] border border-brand-border shadow-sm overflow-hidden flex flex-col w-full min-w-0">
+                            {/* Table Header Toolbar: Search + Role Filter Dropdown + Date Range + Show + Export (matching View Agent in Registration) */}
+                            <div className="p-3.5 sm:p-4 bg-white border-b border-brand-border flex flex-wrap items-center justify-between gap-4">
+                                {/* Left: Search Input & Role Filter Dropdown */}
+                                <div className="flex items-center gap-3 flex-wrap">
+                                    {/* Search Input */}
+                                    <div className="relative w-72 sm:w-80 md:w-[320px] h-[38px]">
+                                        <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" size={15} />
+                                        <input
+                                            type="text"
+                                            value={loginUserSearch}
+                                            onChange={(e) => {
+                                                setLoginUserSearch(e.target.value);
+                                                setLoginPage(1);
+                                            }}
+                                            placeholder="Search by User Name or Name..."
+                                            className="w-full h-[38px] pl-10 pr-9 bg-white border border-[#CBD5E1] rounded-[6px] text-[13px] text-slate-800 placeholder-[#94A3B8] shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all"
+                                        />
+                                        {loginUserSearch && (
+                                            <button
+                                                type="button"
+                                                onClick={() => {
+                                                    setLoginUserSearch('');
+                                                    setLoginPage(1);
+                                                }}
+                                                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1 cursor-pointer"
+                                            >
+                                                <X size={14} />
+                                            </button>
+                                        )}
                                     </div>
+
+                                    {/* Role Filter Dropdown matching View Agent */}
+                                    <div className="relative inline-flex items-center h-[38px]">
+                                        <Filter size={14} className="absolute left-3 text-slate-400 pointer-events-none" />
+                                        <select
+                                            value={loginSelectedRole}
+                                            onChange={(e) => {
+                                                setLoginSelectedRole(e.target.value);
+                                                setLoginPage(1);
+                                            }}
+                                            className="h-[38px] pl-9 pr-8 bg-white border border-[#CBD5E1] rounded-[6px] text-[13px] font-semibold text-slate-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent cursor-pointer transition-all appearance-none"
+                                        >
+                                            {loginRoleOptions.map((r) => (
+                                                <option key={r} value={r}>
+                                                    {r === '--ALL--' ? 'All Roles' : r}
+                                                </option>
+                                            ))}
+                                        </select>
+                                        <ChevronDown size={14} className="absolute right-2.5 text-slate-400 pointer-events-none" />
+                                    </div>
+                                </div>
+
+                                {/* Right: Date Filters & Action Buttons matching View Agent */}
+                                <div className="flex items-center gap-2.5 flex-wrap">
+                                    {/* From Date */}
+                                    <div className="relative inline-flex items-center h-[38px]">
+                                        <Calendar size={14} className="absolute left-3 text-slate-400 pointer-events-none" />
+                                        <input
+                                            type="text"
+                                            value={loginFromDate}
+                                            onChange={(e) => setLoginFromDate(e.target.value)}
+                                            placeholder="From Date"
+                                            title="From Date"
+                                            className="h-[38px] w-[125px] sm:w-[135px] pl-8 pr-2.5 bg-white border border-[#CBD5E1] rounded-[6px] text-[13px] text-slate-800 text-center shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all"
+                                        />
+                                    </div>
+
+                                    <span className="text-slate-400 text-xs font-medium">to</span>
+
+                                    {/* To Date */}
+                                    <div className="relative inline-flex items-center h-[38px]">
+                                        <Calendar size={14} className="absolute left-3 text-slate-400 pointer-events-none" />
+                                        <input
+                                            type="text"
+                                            value={loginToDate}
+                                            onChange={(e) => setLoginToDate(e.target.value)}
+                                            placeholder="To Date"
+                                            title="To Date"
+                                            className="h-[38px] w-[125px] sm:w-[135px] pl-8 pr-2.5 bg-white border border-[#CBD5E1] rounded-[6px] text-[13px] text-slate-800 text-center shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all"
+                                        />
+                                    </div>
+
+                                    {/* Show Button */}
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            setLoginPage(1);
+                                            showToast('Login history records updated');
+                                        }}
+                                        className="h-[38px] flex items-center justify-center px-4 bg-brand-primary hover:bg-[#1D4ED8] text-white font-semibold text-[13px] rounded-[6px] shadow-sm transition-colors cursor-pointer border-none"
+                                    >
+                                        <span>Show</span>
+                                    </button>
+
+                                    {/* Export Button matching View Agent */}
+                                    <button
+                                        type="button"
+                                        onClick={handleExportCsv}
+                                        className="h-[38px] flex items-center gap-1.5 px-4 bg-brand-primary hover:bg-[#1D4ED8] text-white font-semibold text-[13px] rounded-[6px] shadow-sm transition-colors cursor-pointer border-none"
+                                    >
+                                        <Download size={15} />
+                                        <span>Export</span>
+                                    </button>
                                 </div>
                             </div>
 
-                            {/* Buttons stacked in column matching Photo 1, 2, 3 */}
-                            <div className="flex flex-col gap-2 pt-5">
-                                <button
-                                    type="button"
-                                    onClick={() => showToast('Login history records updated')}
-                                    className="px-6 py-1.5 bg-brand-primary hover:bg-[#1D4ED8] text-white font-medium text-[13px] rounded-[6px] shadow-sm transition-colors cursor-pointer border-none min-w-[90px] h-[34px] flex items-center justify-center"
-                                >
-                                    Show
-                                </button>
-                                <button
-                                    type="button"
-                                    onClick={() => {
-                                        const headers = ['SR.NO.', 'LOGIN DATE', 'LOGIN TIME', 'USER ROLE', 'USER NAME', 'NAME', 'REMARK', 'IP ADDRESS'];
-                                        const filtered = loginLogs.filter(l =>
-                                            (loginSelectedRole === '--ALL--' || l.role === loginSelectedRole) &&
-                                            (!loginUserSearch || l.userName.toLowerCase().includes(loginUserSearch.toLowerCase()) || l.name.toLowerCase().includes(loginUserSearch.toLowerCase()))
-                                        );
-                                        const csvRows = [
-                                            headers.join(','),
-                                            ...filtered.map((item, idx) => [
-                                                idx + 1,
-                                                `"${item.loginDate}"`,
-                                                `"${item.loginTime}"`,
-                                                `"${item.role}"`,
-                                                `"${item.userName}"`,
-                                                `"${item.name}"`,
-                                                `"${item.remark}"`,
-                                                `"${item.ipAddress}"`
-                                            ].join(','))
-                                        ];
-                                        const blob = new Blob([csvRows.join('\n')], { type: 'text/csv;charset=utf-8;' });
-                                        const url = URL.createObjectURL(blob);
-                                        const link = document.createElement('a');
-                                        link.href = url;
-                                        link.setAttribute('download', `Login_History_${loginFromDate.replace(/\//g, '-')}_to_${loginToDate.replace(/\//g, '-')}.csv`);
-                                        document.body.appendChild(link);
-                                        link.click();
-                                        document.body.removeChild(link);
-                                        showToast('Login history exported to CSV successfully!');
-                                    }}
-                                    className="px-6 py-1.5 bg-[#EAA144] hover:bg-[#D99B35] text-white font-medium text-[13px] rounded-[6px] shadow-sm transition-colors cursor-pointer border-none min-w-[90px] h-[34px] flex items-center justify-center"
-                                >
-                                    Export
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Search Field matching Photo 1, 2 */}
-                    <div className="flex items-center justify-between gap-4">
-                        <div className="w-full sm:w-80">
-                            <input
-                                type="text"
-                                placeholder="Search User Name Here"
-                                value={loginUserSearch}
-                                onChange={(e) => setLoginUserSearch(e.target.value)}
-                                className="w-full px-3.5 py-1.5 bg-white border border-slate-300 rounded-[4px] text-[13px] text-slate-800 placeholder-slate-400 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-sm"
-                            />
-                        </div>
-                    </div>
-
-                    {/* Table matching BranchMaster */}
-                    {(() => {
-                        const filtered = loginLogs.filter(l =>
-                            (loginSelectedRole === '--ALL--' || l.role === loginSelectedRole) &&
-                            (!loginUserSearch || l.userName.toLowerCase().includes(loginUserSearch.toLowerCase()) || l.name.toLowerCase().includes(loginUserSearch.toLowerCase()))
-                        );
-
-                        return (
-                            <div className="bg-white rounded-[12px] border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden flex flex-col w-full">
                                 <div className="overflow-x-auto w-full custom-scrollbar min-h-[400px]">
                                     <table className="w-full text-left border-collapse min-w-[1000px]">
                                         <thead className="sticky top-0 z-10 shadow-xs">
@@ -1520,10 +1676,10 @@ const UserMaster: React.FC = () => {
                                             </tr>
                                         </thead>
                                         <tbody className="divide-y divide-brand-border text-[13px]">
-                                            {filtered.map((item, idx) => (
+                                            {paginatedLogs.map((item, idx) => (
                                                 <tr key={item.id} className="h-[48px] hover:bg-brand-mainbg transition-colors bg-white">
                                                     <td className="py-2 px-4 text-brand-muted">
-                                                        {idx + 1}
+                                                        {(loginPage - 1) * loginsPerPage + idx + 1}
                                                     </td>
                                                     <td className="py-2 px-4 text-brand-navy">
                                                         <div className="leading-snug">
@@ -1548,21 +1704,73 @@ const UserMaster: React.FC = () => {
                                                     </td>
                                                 </tr>
                                             ))}
-                                            {filtered.length === 0 && (
+                                            {paginatedLogs.length === 0 && (
                                                 <tr>
                                                     <td colSpan={7} className="py-12 text-center text-slate-500">
-                                                        No login history records found.
+                                                        No login history records found{loginUserSearch ? ` matching "${loginUserSearch}"` : ''}.
                                                     </td>
                                                 </tr>
                                             )}
                                         </tbody>
                                     </table>
                                 </div>
+
+                                {/* Pagination matching Designation Master */}
+                                <div className="p-4 bg-white border-t border-brand-border flex flex-col sm:flex-row items-center justify-between gap-4">
+                                    <div className="flex items-center gap-2 text-sm text-brand-muted font-medium">
+                                        <span>Records per page:</span>
+                                        <select
+                                            value={loginsPerPage}
+                                            onChange={(e) => {
+                                                setLoginsPerPage(Number(e.target.value));
+                                                setLoginPage(1);
+                                            }}
+                                            className="px-2 py-1 bg-white border border-brand-border rounded-md text-sm font-semibold text-brand-navy focus:outline-none focus:ring-1 focus:ring-brand-primary focus:border-brand-primary cursor-pointer"
+                                        >
+                                            <option value={10}>10</option>
+                                            <option value={20}>20</option>
+                                            <option value={50}>50</option>
+                                            <option value={100}>100</option>
+                                        </select>
+                                    </div>
+
+                                    <span className="text-sm text-brand-muted font-medium">
+                                        Showing {filtered.length === 0 ? 0 : (loginPage - 1) * loginsPerPage + 1} - {Math.min(loginPage * loginsPerPage, filtered.length)} of {filtered.length} records
+                                    </span>
+
+                                    <div className="flex items-center gap-1">
+                                        <button
+                                            onClick={() => setLoginPage(prev => Math.max(prev - 1, 1))}
+                                            disabled={loginPage === 1}
+                                            className="w-8 h-8 flex items-center justify-center text-xs font-semibold text-brand-navy bg-white border border-brand-border rounded-md hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+                                        >
+                                            &lt;
+                                        </button>
+                                        {Array.from({ length: totalLoginPages || 1 }, (_, i) => i + 1).map((page) => (
+                                            <button
+                                                key={page}
+                                                onClick={() => setLoginPage(page)}
+                                                className={`w-8 h-8 flex items-center justify-center text-xs font-bold rounded-md transition-all ${loginPage === page
+                                                    ? 'bg-brand-primary text-white shadow-sm'
+                                                    : 'bg-white text-brand-navy border border-brand-border hover:bg-slate-100'
+                                                    }`}
+                                            >
+                                                {page}
+                                            </button>
+                                        ))}
+                                        <button
+                                            onClick={() => setLoginPage(prev => Math.min(prev + 1, totalLoginPages))}
+                                            disabled={loginPage === totalLoginPages || totalLoginPages === 0}
+                                            className="w-8 h-8 flex items-center justify-center text-xs font-semibold text-brand-navy bg-white border border-brand-border rounded-md hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+                                        >
+                                            &gt;
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
-                        );
-                    })()}
-                </div>
-            )}
+                        </div>
+                    );
+                })()}
 
             {/* MODALS RENDERED IN PORTAL TO COVER FULL VIEWPORT */}
             {modalType && createPortal(
