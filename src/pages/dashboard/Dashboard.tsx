@@ -4,7 +4,7 @@ import PageHeader from '../../components/page-header/PageHeader';
 import Breadcrumbs from '../../components/breadcrumbs/Breadcrumbs';
 import {
     Clock, Lock, Zap, ArrowUpRight, ArrowRight,
-    CreditCard, CheckCircle2, Headphones, FileText, Percent, Search,
+    CreditCard, CheckCircle2, Headphones,
     LayoutGrid, Layers
 } from 'lucide-react';
 import { useAuthContext } from '../../context/AuthContext';
@@ -325,69 +325,6 @@ const Dashboard = () => {
                             </div>
                         </div>
                     </div>
-
-                    {/* Quick Inquiries & Actions Grid */}
-                    <div className="bg-white rounded-xl border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] p-6">
-                        <div className="mb-4">
-                            <h3 className="text-sm font-bold text-brand-navy">Quick Inquiries & Actions</h3>
-                            <p className="text-xs text-brand-muted">Direct navigation to active policy search, commission grids, and posp lookup</p>
-                        </div>
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <button
-                                onClick={() => navigate('/transactions/view-policy-document')}
-                                className="p-4 rounded-xl border border-brand-border hover:border-brand-primary hover:bg-brand-lightbg/30 flex items-center justify-between transition-all group text-left cursor-pointer"
-                            >
-                                <div className="flex items-center gap-3">
-                                    <div className="p-2.5 bg-brand-lightbg text-brand-primary rounded-lg group-hover:bg-brand-primary group-hover:text-white transition-colors">
-                                        <FileText size={20} />
-                                    </div>
-                                    <div>
-                                        <h4 className="text-sm font-bold text-brand-navy group-hover:text-brand-primary transition-colors">
-                                            View Policy
-                                        </h4>
-                                        <p className="text-xs text-brand-muted">Search & view policy documents</p>
-                                    </div>
-                                </div>
-                                <ArrowUpRight size={18} className="text-brand-muted group-hover:text-brand-primary transition-colors" />
-                            </button>
-
-                            <button
-                                onClick={() => navigate('/commission-grid')}
-                                className="p-4 rounded-xl border border-brand-border hover:border-brand-primary hover:bg-brand-lightbg/30 flex items-center justify-between transition-all group text-left cursor-pointer"
-                            >
-                                <div className="flex items-center gap-3">
-                                    <div className="p-2.5 bg-brand-lightbg text-brand-primary rounded-lg group-hover:bg-brand-primary group-hover:text-white transition-colors">
-                                        <Percent size={20} />
-                                    </div>
-                                    <div>
-                                        <h4 className="text-sm font-bold text-brand-navy group-hover:text-brand-primary transition-colors">
-                                            Current Grid / System Grid
-                                        </h4>
-                                        <p className="text-xs text-brand-muted">Broker & agent commission grids</p>
-                                    </div>
-                                </div>
-                                <ArrowUpRight size={18} className="text-brand-muted group-hover:text-brand-primary transition-colors" />
-                            </button>
-
-                            <button
-                                onClick={() => navigate('/registration/agent')}
-                                className="p-4 rounded-xl border border-brand-border hover:border-brand-primary hover:bg-brand-lightbg/30 flex items-center justify-between transition-all group text-left cursor-pointer"
-                            >
-                                <div className="flex items-center gap-3">
-                                    <div className="p-2.5 bg-brand-lightbg text-brand-primary rounded-lg group-hover:bg-brand-primary group-hover:text-white transition-colors">
-                                        <Search size={20} />
-                                    </div>
-                                    <div>
-                                        <h4 className="text-sm font-bold text-brand-navy group-hover:text-brand-primary transition-colors">
-                                            Search POSP by Agent
-                                        </h4>
-                                        <p className="text-xs text-brand-muted">Find POSP registration & agents</p>
-                                    </div>
-                                </div>
-                                <ArrowUpRight size={18} className="text-brand-muted group-hover:text-brand-primary transition-colors" />
-                            </button>
-                        </div>
-                    </div>
                 </div>
             )}
 
@@ -575,69 +512,6 @@ const Dashboard = () => {
 
                             <div className="hidden lg:block" />
                             <div className="hidden lg:block" />
-                        </div>
-                    </div>
-
-                    {/* Quick Inquiries & Actions Grid */}
-                    <div className="bg-white rounded-xl border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] p-6">
-                        <div className="mb-4">
-                            <h3 className="text-sm font-bold text-brand-navy">Quick Inquiries & Actions</h3>
-                            <p className="text-xs text-brand-muted">Direct navigation to active policy search, commission grids, and posp lookup</p>
-                        </div>
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <button
-                                onClick={() => navigate('/transactions/view-policy-document')}
-                                className="p-4 rounded-xl border border-brand-border hover:border-brand-primary hover:bg-brand-lightbg/30 flex items-center justify-between transition-all group text-left cursor-pointer"
-                            >
-                                <div className="flex items-center gap-3">
-                                    <div className="p-2.5 bg-brand-lightbg text-brand-primary rounded-lg group-hover:bg-brand-primary group-hover:text-white transition-colors">
-                                        <FileText size={20} />
-                                    </div>
-                                    <div>
-                                        <h4 className="text-sm font-bold text-brand-navy group-hover:text-brand-primary transition-colors">
-                                            View Policy
-                                        </h4>
-                                        <p className="text-xs text-brand-muted">Search & view policy documents</p>
-                                    </div>
-                                </div>
-                                <ArrowUpRight size={18} className="text-brand-muted group-hover:text-brand-primary transition-colors" />
-                            </button>
-
-                            <button
-                                onClick={() => navigate('/commission-grid')}
-                                className="p-4 rounded-xl border border-brand-border hover:border-brand-primary hover:bg-brand-lightbg/30 flex items-center justify-between transition-all group text-left cursor-pointer"
-                            >
-                                <div className="flex items-center gap-3">
-                                    <div className="p-2.5 bg-brand-lightbg text-brand-primary rounded-lg group-hover:bg-brand-primary group-hover:text-white transition-colors">
-                                        <Percent size={20} />
-                                    </div>
-                                    <div>
-                                        <h4 className="text-sm font-bold text-brand-navy group-hover:text-brand-primary transition-colors">
-                                            Current Grid / System Grid
-                                        </h4>
-                                        <p className="text-xs text-brand-muted">Broker & agent commission grids</p>
-                                    </div>
-                                </div>
-                                <ArrowUpRight size={18} className="text-brand-muted group-hover:text-brand-primary transition-colors" />
-                            </button>
-
-                            <button
-                                onClick={() => navigate('/registration/agent')}
-                                className="p-4 rounded-xl border border-brand-border hover:border-brand-primary hover:bg-brand-lightbg/30 flex items-center justify-between transition-all group text-left cursor-pointer"
-                            >
-                                <div className="flex items-center gap-3">
-                                    <div className="p-2.5 bg-brand-lightbg text-brand-primary rounded-lg group-hover:bg-brand-primary group-hover:text-white transition-colors">
-                                        <Search size={20} />
-                                    </div>
-                                    <div>
-                                        <h4 className="text-sm font-bold text-brand-navy group-hover:text-brand-primary transition-colors">
-                                            Search POSP by Agent
-                                        </h4>
-                                        <p className="text-xs text-brand-muted">Find POSP registration & agents</p>
-                                    </div>
-                                </div>
-                                <ArrowUpRight size={18} className="text-brand-muted group-hover:text-brand-primary transition-colors" />
-                            </button>
                         </div>
                     </div>
                 </div>
