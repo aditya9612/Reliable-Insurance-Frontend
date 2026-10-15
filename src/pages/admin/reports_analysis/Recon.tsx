@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import PageHeader from '../../../components/page-header/PageHeader';
 import UnderlineTabs from '../../../components/tabs/UnderlineTabs';
 import { Search, Upload, FileText, Download } from 'lucide-react';
 
 type ReconSubTab =
-  | 'companyCommission'
-  | 'dataMatch'
-  | 'commissionRecon';
+  | 'importCompanyCommission'
+  | 'reconciliationReport'
+  | 'idealReconciliation';
 
 interface ReconRow {
   id: number;
@@ -19,15 +20,43 @@ interface ReconRow {
   transDate: string;
 }
 
+const normalizeReconTab = (tab: string | null): ReconSubTab => {
+  if (tab === 'reconciliationReport' || tab === 'commissionRecon') return 'reconciliationReport';
+  if (tab === 'idealReconciliation' || tab === 'dataMatch') return 'idealReconciliation';
+  return 'importCompanyCommission';
+};
+
 export const Recon: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<ReconSubTab>('companyCommission');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const tabParam = searchParams.get('tab');
+  const [activeTab, setActiveTab] = useState<ReconSubTab>(normalizeReconTab(tabParam));
+
+  useEffect(() => {
+    if (tabParam) {
+      const norm = normalizeReconTab(tabParam);
+      if (norm !== activeTab) {
+        setActiveTab(norm);
+      }
+    }
+  }, [tabParam]);
+
+  const handleTabChange = (tabId: string) => {
+    const nextTab = normalizeReconTab(tabId);
+    setActiveTab(nextTab);
+    setSearchParams({ tab: nextTab });
+    setCurrentPage(1);
+    setSearchQuery('');
+    setShowDataMatchGrid(false);
+    setShowReconDataGrid(false);
+  };
+
   const [searchQuery, setSearchQuery] = useState('');
 
-  // Tab 1: Insurance Company Commission States
+  // Tab 1: Import Company Commission States
   const [brokerTab1, setBrokerTab1] = useState('RELIABLE - ASSOCIATES');
   const [companyTab1, setCompanyTab1] = useState('');
 
-  // Tab 2: Company Commission Data Match States
+  // Tab: Company Commission Data Match States (Ideal Reconciliation)
   const [dateFilterTab2, setDateFilterTab2] = useState<'trans' | 'accounting'>('trans');
   const [matchStatusTab2, setMatchStatusTab2] = useState<'all' | 'notFound' | 'match' | 'partiallyMatch' | 'notReceived'>('all');
   const [brokerTab2, setBrokerTab2] = useState('RELIABLE - ASSOCIATES');
@@ -37,7 +66,7 @@ export const Recon: React.FC = () => {
   const [accountingMonthTab2, setAccountingMonthTab2] = useState('OCT');
   const [accountingYearTab2, setAccountingYearTab2] = useState('2026-2027');
 
-  // Month & Financial Year Options Lists (Matches Previous Project Dropdowns, Image 1 & 2)
+  // Month & Financial Year Options Lists
   const reconMonthsList = [
     'JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN',
     'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'
@@ -55,11 +84,11 @@ export const Recon: React.FC = () => {
     '2018-2019'
   ];
 
-  // Tab 3: Commission Reconciliation States
+  // Tab: Reconciliation Report States
   const [reconMonthTab3, setReconMonthTab3] = useState('OCT');
   const [reconYearTab3, setReconYearTab3] = useState('2026-2027');
 
-  // View Grid States (Triggered upon clicking View button, Image 4 & 5)
+  // View Grid States
   const [showDataMatchGrid, setShowDataMatchGrid] = useState(false);
   const [showReconDataGrid, setShowReconDataGrid] = useState(false);
 
@@ -101,11 +130,12 @@ export const Recon: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
 
-  // EXACT 3 Sub-Tabs matching user images
+  // EXACT 3 Sub-Tabs matching 1st Attached Photo (Legacy ERP Recon Menu):
+  // 1. Import Company Commission, 2. Reconciliation Report, 3. Ideal Reconciliation
   const tabsList: { key: ReconSubTab; label: string }[] = [
-    { key: 'companyCommission', label: 'Insurance Company Commission' },
-    { key: 'dataMatch', label: 'Ideal Reconciliation' },
-    { key: 'commissionRecon', label: 'Commission Reconciliation' }
+    { key: 'importCompanyCommission', label: 'Import Company Commission' },
+    { key: 'reconciliationReport', label: 'Reconciliation Report' },
+    { key: 'idealReconciliation', label: 'Ideal Reconciliation' }
   ];
 
   const filteredData = reconData.filter(item => {
@@ -128,28 +158,22 @@ export const Recon: React.FC = () => {
         description="Insurance company commission import, transaction matching & reconciliation"
       />
 
-      {/* Horizontal Sub-Tabs Bar (EXACTLY 3 TABS) */}
+      {/* Horizontal Sub-Tabs Bar strictly matching 1st Attached Photo */}
       <UnderlineTabs
         tabs={tabsList.map(tab => ({ id: tab.key, label: tab.label }))}
         activeTab={activeTab}
-        onTabChange={(tabId) => {
-          setActiveTab(tabId as ReconSubTab);
-          setCurrentPage(1);
-          setSearchQuery('');
-          setShowDataMatchGrid(false);
-          setShowReconDataGrid(false);
-        }}
+        onTabChange={handleTabChange}
       />
 
       {/* Main Content Card */}
       <div key={activeTab} className="tab-transition-wrapper">
         <div className="bg-white rounded-[12px] border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden flex flex-col w-full">
 
-          {/* TAB 1: INSURANCE COMPANY COMMISSION (Exact Image 3 match) */}
-          {activeTab === 'companyCommission' && (
+          {/* TAB 1: IMPORT COMPANY COMMISSION (Photo 1) */}
+          {activeTab === 'importCompanyCommission' && (
             <div className="p-5 border-b border-slate-200 space-y-4">
-              <div className="bg-slate-50 text-slate-800 border border-slate-200 px-5 py-2.5 font-semibold text-sm rounded-lg flex items-center shadow-xs">
-                <span>» Insurance Company Commission</span>
+              <div className="bg-[#0B5ED7] text-white px-5 py-2.5 font-semibold text-[13.5px] rounded-lg flex items-center shadow-xs">
+                <span className="mr-1 text-base font-serif">&raquo;</span>Import Company Commission
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end pt-1">
@@ -203,10 +227,13 @@ export const Recon: React.FC = () => {
             </div>
           )}
 
-          {/* TAB 2: IDEAL RECONCILIATION (Exact Image 4 match) */}
-          {activeTab === 'dataMatch' && (
+          {/* TAB 3: IDEAL RECONCILIATION */}
+          {activeTab === 'idealReconciliation' && (
             <div className="p-5 border-b border-slate-200 space-y-4">
-              <div className="text-center font-semibold text-sm text-[#0869D8] pb-1">
+              <div className="bg-[#0B5ED7] text-white px-5 py-2.5 font-semibold text-[13.5px] rounded-lg flex items-center shadow-xs">
+                <span className="mr-1 text-base font-serif">&raquo;</span>Ideal Reconciliation
+              </div>
+              <div className="text-center font-bold text-sm text-[#0B5ED7] pb-1">
                 Company Commission Data Match with Transaction
               </div>
 
@@ -460,11 +487,11 @@ export const Recon: React.FC = () => {
             </div>
           )}
 
-          {/* TAB 3: COMMISSION RECONCILIATION (Exact Image 5 match) */}
-          {activeTab === 'commissionRecon' && (
+          {/* TAB 2: RECONCILIATION REPORT */}
+          {activeTab === 'reconciliationReport' && (
             <div className="p-5 border-b border-slate-200 space-y-4">
-              <div className="bg-slate-50 text-slate-800 border border-slate-200 px-5 py-2.5 font-semibold text-sm rounded-lg flex items-center shadow-xs">
-                <span>» Commission reconciliation</span>
+              <div className="bg-[#0B5ED7] text-white px-5 py-2.5 font-semibold text-[13.5px] rounded-lg flex items-center shadow-xs">
+                <span className="mr-1 text-base font-serif">&raquo;</span>Reconciliation Report
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end pt-1">

@@ -4,7 +4,7 @@ import {
     LayoutDashboard, Database, Users, Briefcase, FileText, Settings,
     ChevronDown, ChevronRight, UserPlus, FileSpreadsheet, Building2,
     Shield, Map, MessageSquare, Download, Layers, UserCheck, Percent, BarChart2,
-    Smartphone
+    Smartphone, ShieldCheck
 } from 'lucide-react';
 import { useAuthContext } from '../../context/AuthContext';
 
@@ -67,6 +67,26 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
             path: '/commission-grid'
         },
         {
+            title: 'FRANCHISE',
+            icon: Building2,
+            children: [
+                { name: 'Franchise Master', path: '/franchise/franchise-master' },
+                { name: 'View Franchise', path: '/franchise/view-franchise' },
+                { name: 'Franchise Commision', path: '/franchise/franchise-commission' },
+            ]
+        },
+        {
+            title: 'NON MOTOR',
+            icon: ShieldCheck,
+            children: [
+                { name: 'Non Motor Commission', path: '/non-motor/commission' },
+                { name: 'Insurance Type', path: '/non-motor/insurance-type' },
+                { name: 'Insurance Sub Type', path: '/non-motor/insurance-sub-type' },
+                { name: 'Insurance Type of Sub Type', path: '/non-motor/insurance-type-of-sub-type' },
+                { name: 'Non Motor Recalculation', path: '/non-motor/recalculation' },
+            ]
+        },
+        {
             title: 'TRANSACTION',
             icon: FileText,
             children: [
@@ -105,7 +125,6 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
                 { name: 'Renewal', path: '/operations/renewal' },
                 { name: 'Caliber Policy', path: '/operations/caliber-policy' },
                 { name: 'Sales', path: '/operations/sales' },
-                { name: 'Franchise', path: '/operations/franchise' },
                 { name: 'POSP', path: '/operations/posp' },
                 { name: 'Business Master', path: '/operations/business-master' },
                 { name: 'Support', path: '/operations/support' },
@@ -124,7 +143,11 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
         {
             title: 'RECON',
             icon: Shield,
-            path: '/reports/recon'
+            children: [
+                { name: 'Import Company Commission', path: '/reports/recon?tab=importCompanyCommission' },
+                { name: 'Reconciliation Report', path: '/reports/recon?tab=reconciliationReport' },
+                { name: 'Ideal Reconciliation', path: '/reports/recon?tab=idealReconciliation' }
+            ]
         },
         {
             title: 'TARGET',
@@ -140,7 +163,6 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
             title: 'OTHER MODULES',
             icon: Layers,
             children: [
-                { name: 'Non Motor', path: '/other/non-motor' },
                 { name: 'My Page', path: '/other/my-page' },
                 { name: 'Download App', path: '/other/download' },
                 { name: 'Chat Board', path: '/other/chat' },

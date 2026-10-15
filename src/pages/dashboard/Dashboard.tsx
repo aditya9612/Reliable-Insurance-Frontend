@@ -1,11 +1,23 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import PageHeader from '../../components/page-header/PageHeader';
 import {
     ArrowUpRight, FileText, Percent, Search, BarChart2,
     Users, DollarSign, TrendingUp, Building2, Clock
 } from 'lucide-react';
 import { useAuthContext } from '../../context/AuthContext';
+import CommissionSummaryTab from './CommissionSummaryTab';
+import ViewDashboardTab from './tabs/ViewDashboardTab';
+import AgentPaymentTab from './AgentPaymentTab';
+import AnalyticDashboardAgentTab from './tabs/AnalyticDashboardAgentTab';
+import AnalyticDashboardExecutiveTab from './tabs/AnalyticDashboardExecutiveTab';
+import AnalyticDashboardLocationTab from './tabs/AnalyticDashboardLocationTab';
+import AgentBusinessTab from './tabs/AgentBusinessTab';
+import ExecutiveBusinessTab from './tabs/ExecutiveBusinessTab';
+import InsuranceOutstandingTab from './tabs/InsuranceOutstandingTab';
+import BrokerReportTab from './tabs/BrokerReportTab';
+import DirectBusinessTab from './tabs/DirectBusinessTab';
+import AgentPendingCommissionTab from './tabs/AgentPendingCommissionTab';
 
 const dashboardTabs = [
     { id: 'view-dashboard',        label: 'View Dashboard' },
@@ -27,8 +39,8 @@ const quickActions = [
     { id: 'commission-grid',   label: 'Current Grid / System Grid',   desc: 'Broker & agent commission grids',          icon: Percent,     to: '/commission-grid' },
     { id: 'search-posp',       label: 'Search POSP by Agent',         desc: 'Find POSP registration & agents',          icon: Search,      to: '/registration/agent' },
     { id: 'reports',           label: 'Reports',                      desc: 'Cut N Pay, TDS, Endorsement & more',       icon: BarChart2,   to: '/reports' },
-    { id: 'agent-commission',  label: 'View All Agent Commission',     desc: 'Commission summary by agent',              icon: Users,       to: '/reports?tab=viewAllAgentCommission' },
-    { id: 'agent-payment-qa',  label: 'Agent Payment',                desc: 'View & process agent payments',            icon: DollarSign,  to: '/commission-grid/agent-commission' },
+    { id: 'agent-commission',  label: 'View All Agent Commissioners',  desc: 'Commission summary by agent',              icon: Users,       to: '/reports?tab=viewAllAgentCommission' },
+    { id: 'agent-payment-qa',  label: 'Agent Payment',                desc: 'View & process agent payments',            icon: DollarSign,  to: '/dashboard?tab=agent-payment' },
     { id: 'mis-reports',       label: 'MIS Reports',                  desc: 'Management information system reports',    icon: TrendingUp,  to: '/reports/mis' },
     { id: 'hr-module',         label: 'HR Module',                    desc: 'Attendance, salary & employee data',       icon: Building2,   to: '/hr' },
 ];
@@ -46,9 +58,23 @@ const ComingSoonPanel: React.FC<{ label: string }> = ({ label }) => (
 
 const Dashboard = () => {
     const navigate = useNavigate();
+    const [searchParams, setSearchParams] = useSearchParams();
     const { user } = useAuthContext();
     const isAdmin = user?.role === 'admin';
-    const [activeTab, setActiveTab] = useState('view-dashboard');
+
+    const tabParam = searchParams.get('tab');
+    const [activeTab, setActiveTab] = useState(tabParam || 'view-dashboard');
+
+    useEffect(() => {
+        if (tabParam && tabParam !== activeTab) {
+            setActiveTab(tabParam);
+        }
+    }, [tabParam]);
+
+    const handleTabChange = (tabId: string) => {
+        setActiveTab(tabId);
+        setSearchParams(tabId === 'view-dashboard' ? {} : { tab: tabId });
+    };
 
     if (!isAdmin) {
         return (
@@ -88,7 +114,7 @@ const Dashboard = () => {
                         return (
                             <button
                                 key={tab.id}
-                                onClick={() => setActiveTab(tab.id)}
+                                onClick={() => handleTabChange(tab.id)}
                                 className={`w-full py-2.5 px-2 rounded-xl text-[11px] xl:text-[12px] transition-all cursor-pointer border-none text-center font-bold flex items-center justify-center ${isActive
                                     ? 'bg-brand-primary text-white shadow-sm'
                                     : 'bg-[#F1F5F9] hover:bg-slate-200 text-[#0F172A]'
@@ -108,7 +134,7 @@ const Dashboard = () => {
                         return (
                             <button
                                 key={tab.id}
-                                onClick={() => setActiveTab(tab.id)}
+                                onClick={() => handleTabChange(tab.id)}
                                 className={`w-full py-2.5 px-2 rounded-xl text-[11px] xl:text-[12px] transition-all cursor-pointer border-none text-center font-bold flex items-center justify-center ${isActive
                                     ? 'bg-brand-primary text-white shadow-sm'
                                     : 'bg-[#F1F5F9] hover:bg-slate-200 text-[#0F172A]'
@@ -124,47 +150,20 @@ const Dashboard = () => {
 
             {/* Tab Content */}
             {activeTab === 'view-dashboard' && (
-                <div className="space-y-5">
-                    {/* Quick Actions Grid */}
-                    <div>
-                        <h2 className="text-sm font-bold text-brand-navy mb-3">Quick Actions</h2>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                            {quickActions.map((action) => (
-                                <button
-                                    key={action.id}
-                                    onClick={() => navigate(action.to)}
-                                    className="p-4 rounded-xl border border-brand-border bg-white hover:border-brand-primary hover:bg-brand-lightbg/30 flex items-center justify-between transition-all group text-left cursor-pointer shadow-[0_1px_2px_rgba(0,0,0,0.02)]"
-                                >
-                                    <div className="flex items-center gap-3">
-                                        <div className="p-2.5 bg-brand-lightbg text-brand-primary rounded-lg group-hover:bg-brand-primary group-hover:text-white transition-colors shrink-0">
-                                            <action.icon size={18} />
-                                        </div>
-                                        <div className="min-w-0">
-                                            <h4 className="text-sm font-bold text-brand-navy group-hover:text-brand-primary transition-colors leading-tight">
-                                                {action.label}
-                                            </h4>
-                                            <p className="text-xs text-brand-muted mt-0.5 leading-tight">{action.desc}</p>
-                                        </div>
-                                    </div>
-                                    <ArrowUpRight size={16} className="text-brand-muted group-hover:text-brand-primary transition-colors shrink-0 ml-2" />
-                                </button>
-                            ))}
-                        </div>
-                    </div>
-                </div>
+                <ViewDashboardTab onNavigateTab={handleTabChange} />
             )}
 
-            {activeTab === 'commission-summary' && <ComingSoonPanel label="Commission Summary" />}
-            {activeTab === 'agent-payment' && <ComingSoonPanel label="Agent Payment" />}
-            {activeTab === 'analytic-agent' && <ComingSoonPanel label="Analytic Dashboard Agent" />}
-            {activeTab === 'analytic-executive' && <ComingSoonPanel label="Analytic Dashboard Executive" />}
-            {activeTab === 'analytic-location' && <ComingSoonPanel label="Analytic Dashboard Location" />}
-            {activeTab === 'agent-business' && <ComingSoonPanel label="Agent Business" />}
-            {activeTab === 'executive-business' && <ComingSoonPanel label="Executive Business" />}
-            {activeTab === 'insurance-outstanding' && <ComingSoonPanel label="Insurance Co. Outstanding" />}
-            {activeTab === 'broker-report' && <ComingSoonPanel label="Broker Report" />}
-            {activeTab === 'direct-business' && <ComingSoonPanel label="Direct Business" />}
-            {activeTab === 'agent-pending-comm' && <ComingSoonPanel label="Agent Pending Comm Rep" />}
+            {activeTab === 'commission-summary' && <CommissionSummaryTab />}
+            {activeTab === 'agent-payment' && <AgentPaymentTab onBack={() => handleTabChange('view-dashboard')} />}
+            {activeTab === 'analytic-agent' && <AnalyticDashboardAgentTab />}
+            {activeTab === 'analytic-executive' && <AnalyticDashboardExecutiveTab />}
+            {activeTab === 'analytic-location' && <AnalyticDashboardLocationTab />}
+            {activeTab === 'agent-business' && <AgentBusinessTab />}
+            {activeTab === 'executive-business' && <ExecutiveBusinessTab />}
+            {activeTab === 'insurance-outstanding' && <InsuranceOutstandingTab />}
+            {activeTab === 'broker-report' && <BrokerReportTab />}
+            {activeTab === 'direct-business' && <DirectBusinessTab />}
+            {activeTab === 'agent-pending-comm' && <AgentPendingCommissionTab />}
 
         </div>
     );

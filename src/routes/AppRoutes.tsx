@@ -25,6 +25,12 @@ import Registration from '../pages/admin/registration/Registration'
 import HrModule from '../pages/admin/hr/HrModule'
 import CommissionGrid from '../pages/admin/commission/CommissionGrid'
 
+// Franchise
+import FranchisePage from '../pages/admin/franchise/FranchisePage'
+
+// Non Motor
+import NonMotorPage from '../pages/admin/non_motor/NonMotorPage'
+
 // Operations
 import ClaimPage from '../pages/admin/operations/ClaimPage'
 import RenewalPage from '../pages/admin/operations/RenewalPage'
@@ -111,6 +117,19 @@ const AppRoutes = () => {
             {/* Commission Grid */}
             <Route path="/commission-grid" element={<Navigate to="/commission-grid/agent-commission" replace />} />
             <Route path="/commission-grid/:tab" element={<CommissionGrid />} />
+
+            {/* Franchise */}
+            <Route path="/franchise" element={<Navigate to="/franchise/franchise-master" replace />} />
+            <Route path="/franchise/:tab" element={<FranchisePage />} />
+            <Route path="/franchise-master" element={<Navigate to="/franchise/franchise-master" replace />} />
+            <Route path="/view-franchise" element={<Navigate to="/franchise/view-franchise" replace />} />
+            <Route path="/franchise-commission" element={<Navigate to="/franchise/franchise-commission" replace />} />
+            <Route path="/operations/franchise" element={<Navigate to="/franchise/franchise-master" replace />} />
+
+            {/* Non Motor */}
+            <Route path="/non-motor" element={<Navigate to="/non-motor/commission" replace />} />
+            <Route path="/non-motor/:tab" element={<NonMotorPage />} />
+            <Route path="/other/non-motor" element={<Navigate to="/non-motor/commission" replace />} />
 
             {/* Operations */}
             <Route path="/operations/claims" element={<ClaimPage />} />

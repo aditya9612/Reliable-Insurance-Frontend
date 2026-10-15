@@ -7,9 +7,27 @@ import {
   TrendingUp, Building2, UserCheck, ShieldCheck, ArrowUpRight, DollarSign,
   FileText, Percent, Printer
 } from 'lucide-react';
+import ViewAllAgentCommissionTab from './ViewAllAgentCommissionTab';
+import ViewPolicyTab from './ViewPolicyTab';
+import EndorsementReportTab from './EndorsementReportTab';
+import ChequeBounceReportTab from './ChequeBounceReportTab';
+import ProfitReportTab from './ProfitReportTab';
+import CashbackReportTab from './CashbackReportTab';
+import CompanyWiseAgentGridTab from './CompanyWiseAgentGridTab';
+import PremiumCashApprovalReportTab from './PremiumCashApprovalReportTab';
+import TdsReportTab from './TdsReportTab';
+import VehicleHistoryTab from './VehicleHistoryTab';
+import DayBookTab from './DayBookTab';
+import AgentTdsReportTab from './AgentTdsReportTab';
+import ActiveInactiveAgentTab from './ActiveInactiveAgentTab';
+import OnlineToRaApprovalTab from './OnlineToRaApprovalTab';
+import PolicyCancelReportTab from './PolicyCancelReportTab';
+import PaymentReportTab from './PaymentReportTab';
 
-// 18 Report Sub-Tabs (Photo 4 reports + View All Agent Commission + View Policy)
+// 18 Report Sub-Tabs arranged strictly according to ERP Report Menu (Image 1 & Image 2)
 export type GeneralReportTab =
+  | 'viewAllAgentCommission'
+  | 'viewPolicy'
   | 'cutNPay'
   | 'endorsement'
   | 'chequeBounce'
@@ -18,7 +36,6 @@ export type GeneralReportTab =
   | 'cashback'
   | 'companyWiseAgentGrid'
   | 'premiumCashApproval'
-  | 'viewAllAgentCommission'
   | 'tdsReport'
   | 'vehicleHistory'
   | 'dayBook'
@@ -26,8 +43,7 @@ export type GeneralReportTab =
   | 'activeInactiveAgent'
   | 'onlineToRaApproval'
   | 'policyCancelReport'
-  | 'paymentReport'
-  | 'viewPolicy';
+  | 'paymentReport';
 
 export interface ReportTabMeta {
   key: GeneralReportTab;
@@ -36,7 +52,7 @@ export interface ReportTabMeta {
 
 export const GeneralReports: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const initialTab = (searchParams.get('tab') as GeneralReportTab) || 'cutNPay';
+  const initialTab = (searchParams.get('tab') as GeneralReportTab) || 'viewAllAgentCommission';
 
   const [activeTab, setActiveTab] = useState<GeneralReportTab>(initialTab);
   const [searchQuery, setSearchQuery] = useState('');
@@ -59,8 +75,16 @@ export const GeneralReports: React.FC = () => {
   }, [searchParams]);
 
   // Tab definitions (Row 1: 9 buttons, Row 2: 9 buttons = 18 total)
+  // Ordered strictly according to legacy ERP Report menu (Image 1 & Image 2):
+  // 1. View All Agent Commissioners, 2. View Policy, 3. Cut N Pay Report, 4. Endorsement Report,
+  // 5. Cheque Bounce Report, 6. Profit Report, 7. Franchise Profit Report, 8. Cashback Report,
+  // 9. Company Wise Agent Grid, 10. Premium Cash Approval Report, 11. TDS Report, 12. Vehicle History,
+  // 13. Day Book, 14. Agent TDS Report, 15. Active or InActive Agent, 16. Online To RA Approval,
+  // 17. Policy Cancel Report, 18. Payment Report.
   const tabsList: ReportTabMeta[] = [
     // Row 1 (9 Tabs)
+    { key: 'viewAllAgentCommission', label: 'View All Agent Commissioners' },
+    { key: 'viewPolicy', label: 'View Policy' },
     { key: 'cutNPay', label: 'Cut N Pay Report' },
     { key: 'endorsement', label: 'Endorsement Report' },
     { key: 'chequeBounce', label: 'Cheque Bounce Report' },
@@ -68,9 +92,8 @@ export const GeneralReports: React.FC = () => {
     { key: 'franchiseProfit', label: 'Franchise Profit Report' },
     { key: 'cashback', label: 'Cashback Report' },
     { key: 'companyWiseAgentGrid', label: 'Company Wise Agent Grid' },
-    { key: 'premiumCashApproval', label: 'Premium Cash Approval Report' },
-    { key: 'viewAllAgentCommission', label: 'View All Agent Commission' },
     // Row 2 (9 Tabs)
+    { key: 'premiumCashApproval', label: 'Premium Cash Approval Report' },
     { key: 'tdsReport', label: 'TDS Report' },
     { key: 'vehicleHistory', label: 'Vehicle History' },
     { key: 'dayBook', label: 'Day Book' },
@@ -79,7 +102,6 @@ export const GeneralReports: React.FC = () => {
     { key: 'onlineToRaApproval', label: 'Online To RA Approval' },
     { key: 'policyCancelReport', label: 'Policy Cancel Report' },
     { key: 'paymentReport', label: 'Payment Report' },
-    { key: 'viewPolicy', label: 'View Policy' },
   ];
 
   const branches = [
@@ -474,8 +496,43 @@ export const GeneralReports: React.FC = () => {
         </div>
       </div>
 
-      {/* KPI Overview Summary Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full">
+      {/* Dedicated ERP views for all reports matching legacy screenshots */}
+      {activeTab === 'viewAllAgentCommission' ? (
+        <ViewAllAgentCommissionTab />
+      ) : activeTab === 'viewPolicy' ? (
+        <ViewPolicyTab />
+      ) : activeTab === 'endorsement' ? (
+        <EndorsementReportTab />
+      ) : activeTab === 'chequeBounce' ? (
+        <ChequeBounceReportTab />
+      ) : activeTab === 'profit' ? (
+        <ProfitReportTab />
+      ) : activeTab === 'cashback' ? (
+        <CashbackReportTab />
+      ) : activeTab === 'companyWiseAgentGrid' ? (
+        <CompanyWiseAgentGridTab />
+      ) : activeTab === 'premiumCashApproval' ? (
+        <PremiumCashApprovalReportTab />
+      ) : activeTab === 'tdsReport' ? (
+        <TdsReportTab />
+      ) : activeTab === 'vehicleHistory' ? (
+        <VehicleHistoryTab />
+      ) : activeTab === 'dayBook' ? (
+        <DayBookTab />
+      ) : activeTab === 'agentTdsReport' ? (
+        <AgentTdsReportTab />
+      ) : activeTab === 'activeInactiveAgent' ? (
+        <ActiveInactiveAgentTab />
+      ) : activeTab === 'onlineToRaApproval' ? (
+        <OnlineToRaApprovalTab />
+      ) : activeTab === 'policyCancelReport' ? (
+        <PolicyCancelReportTab />
+      ) : activeTab === 'paymentReport' ? (
+        <PaymentReportTab />
+      ) : (
+        <>
+          {/* KPI Overview Summary Cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full">
         {kpiMetrics.map((kpi, idx) => {
           const Icon = kpi.icon;
           return (
@@ -1429,6 +1486,8 @@ export const GeneralReports: React.FC = () => {
 
         </div>
       </div>
+        </>
+      )}
 
       {/* Record Details Modal */}
       {selectedRecord && (
