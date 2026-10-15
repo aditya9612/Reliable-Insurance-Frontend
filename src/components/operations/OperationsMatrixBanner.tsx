@@ -123,7 +123,7 @@ export const OperationsMatrixBanner: React.FC = () => {
                         <div className="hidden lg:block" />
 
                         <div
-                            onClick={() => navigate('/transactions/online-app-request')}
+                            onClick={() => navigate('/accounts/cash-approval')}
                             className="flex items-center gap-2 cursor-pointer group"
                         >
                             <span className="text-xs font-medium text-brand-navy group-hover:text-brand-primary transition-colors">

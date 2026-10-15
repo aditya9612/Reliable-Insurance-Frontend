@@ -31,6 +31,9 @@ import FranchisePage from '../pages/admin/franchise/FranchisePage'
 // Non Motor
 import NonMotorPage from '../pages/admin/non_motor/NonMotorPage'
 
+// Account Module
+import AccountModule from '../pages/admin/accounts/AccountModule'
+
 // Operations
 import ClaimPage from '../pages/admin/operations/ClaimPage'
 import RenewalPage from '../pages/admin/operations/RenewalPage'
@@ -130,6 +133,10 @@ const AppRoutes = () => {
             <Route path="/non-motor" element={<Navigate to="/non-motor/commission" replace />} />
             <Route path="/non-motor/:tab" element={<NonMotorPage />} />
             <Route path="/other/non-motor" element={<Navigate to="/non-motor/commission" replace />} />
+
+            {/* Account Module */}
+            <Route path="/accounts" element={<Navigate to="/accounts/cash-approval" replace />} />
+            <Route path="/accounts/:tab" element={<AccountModule />} />
 
             {/* Operations */}
             <Route path="/operations/claims" element={<ClaimPage />} />
