@@ -147,7 +147,7 @@ const HeaderNavbar: React.FC = () => {
           <li><a href="#commission">Commission Grid</a></li>
           <li><a href="#new-grid">New Grid Style</a></li>
           <li><a href="#sales">Sales</a></li>
-          <li><a href="#others">Others</a></li>
+          <li><a href="/other/outstanding">Others</a></li>
           <li><a href="#business-master">Business Master</a></li>
           <li><a href="#support">Support</a></li>
           <li><a href="#posp">POSP</a></li>

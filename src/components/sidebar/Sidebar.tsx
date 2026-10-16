@@ -192,6 +192,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
             title: 'OTHER MODULES',
             icon: Layers,
             children: [
+                { name: 'Others Outstanding', path: '/other/outstanding', matchPaths: ['/other/outstanding', '/others/outstanding', '/others'] },
                 { name: 'Download App', path: '/other/download' },
                 { name: 'Chat Board', path: '/other/chat' },
                 { name: 'Old Data', path: '/other/old-data' },
