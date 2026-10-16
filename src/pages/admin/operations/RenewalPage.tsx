@@ -120,7 +120,7 @@ export const RenewalPage: React.FC = () => {
       remark: 'FOLLOW UP',
       financialYear: '2023-2024',
       createdDate: '15/04/2024 13:35:10',
-      registrationNo: 'MH50S930',
+      registrationNo: 'MH505930',
       insuranceCompany: 'RELIANCE GENERAL INSURANCE CO. LTD',
       customerName: 'SHEKHAR DAGADU KADAM',
       totalPremium: 19568,
@@ -212,38 +212,8 @@ export const RenewalPage: React.FC = () => {
       createdDate: '12/07/2025 16:55:51',
       registrationNo: 'MH42AQ7075',
       insuranceCompany: 'TATA AIG',
-      customerName: 'ARVIND DNYANESHWAR GAWADE',
+      customerName: 'ARVIND DNYANESHWAR',
       totalPremium: 19313,
-      expiryDate: '11/07/2025',
-      followupDate: '14/07/2025',
-      executive: 'ARVIND DNYANESHWAR GAWADE',
-      productType: 'COMPREHENSIVE',
-      branch: 'BARAMATI'
-    },
-    {
-      id: 10,
-      remark: 'FOLLOW UP',
-      financialYear: '2024-2025',
-      createdDate: '12/07/2025 16:57:08',
-      registrationNo: 'MH42AY0151',
-      insuranceCompany: 'ROYAL',
-      customerName: 'ARVIND DNYANESHWAR GAWADE',
-      totalPremium: 36837,
-      expiryDate: '09/07/2025',
-      followupDate: '14/07/2025',
-      executive: 'ARVIND DNYANESHWAR GAWADE',
-      productType: 'PRIVATE CAR',
-      branch: 'BARAMATI'
-    },
-    {
-      id: 11,
-      remark: 'FOLLOW UP',
-      financialYear: '2024-2025',
-      createdDate: '12/07/2025 16:58:04',
-      registrationNo: 'MH12TV4563',
-      insuranceCompany: 'RELIANCE',
-      customerName: 'ARVIND DNYANESHWAR GAWADE',
-      totalPremium: 41848,
       expiryDate: '11/07/2025',
       followupDate: '14/07/2025',
       executive: 'ARVIND DNYANESHWAR GAWADE',
@@ -285,7 +255,7 @@ export const RenewalPage: React.FC = () => {
     { id: 'renewalReport', label: 'Renewal Report' },
     { id: 'dashboard', label: 'Dashboard' },
     { id: 'renewalPolicyReassign', label: 'Renewal Policy Reassign' },
-    { id: 'renewalStatus', label: 'Renewal Status' }
+    { id: 'renewalStatus', label: 'Renew Follow up Policy' }
   ];
 
   // Handlers for modal
@@ -596,49 +566,49 @@ export const RenewalPage: React.FC = () => {
               {/* 3 Summary Color Cards */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {/* Follow up card */}
-                <div className="bg-[#D9534F] text-white rounded-lg p-4 shadow-sm flex flex-col justify-between h-32">
+                <div className="bg-[#FEF2F2] border border-[#FECACA] rounded-xl p-4 shadow-xs hover:shadow-sm transition-all flex flex-col justify-between h-32">
                   <div className="flex items-center justify-between">
                     <div>
-                      <div className="text-sm font-semibold uppercase tracking-wide">Follow up</div>
-                      <div className="text-3xl font-extrabold mt-1">1</div>
+                      <div className="text-xs font-bold uppercase tracking-wider text-rose-700">Follow up</div>
+                      <div className="text-3xl font-black text-rose-900 mt-1">1</div>
                     </div>
-                    <div className="opacity-80">
+                    <div className="text-rose-400">
                       <ListFilter size={44} />
                     </div>
                   </div>
-                  <div className="border-t border-white/20 pt-2 flex items-center justify-end text-xs font-semibold cursor-pointer hover:underline">
+                  <div className="border-t border-rose-200/80 pt-2 flex items-center justify-end text-xs font-semibold text-rose-600 hover:text-rose-800 cursor-pointer hover:underline">
                     <span>View Details &gt;</span>
                   </div>
                 </div>
 
                 {/* Done card */}
-                <div className="bg-[#337AB7] text-white rounded-lg p-4 shadow-sm flex flex-col justify-between h-32">
+                <div className="bg-[#EFF6FF] border border-[#BFDBFE] rounded-xl p-4 shadow-xs hover:shadow-sm transition-all flex flex-col justify-between h-32">
                   <div className="flex items-center justify-between">
                     <div>
-                      <div className="text-sm font-semibold uppercase tracking-wide">Done</div>
-                      <div className="text-3xl font-extrabold mt-1">0</div>
+                      <div className="text-xs font-bold uppercase tracking-wider text-blue-700">Done</div>
+                      <div className="text-3xl font-black text-blue-900 mt-1">0</div>
                     </div>
-                    <div className="opacity-80">
+                    <div className="text-blue-400">
                       <CheckCircle size={44} />
                     </div>
                   </div>
-                  <div className="border-t border-white/20 pt-2 flex items-center justify-end text-xs font-semibold cursor-pointer hover:underline">
+                  <div className="border-t border-blue-200/80 pt-2 flex items-center justify-end text-xs font-semibold text-blue-600 hover:text-blue-800 cursor-pointer hover:underline">
                     <span>View Details &gt;</span>
                   </div>
                 </div>
 
                 {/* Lost card */}
-                <div className="bg-[#FF9800] text-white rounded-lg p-4 shadow-sm flex flex-col justify-between h-32">
+                <div className="bg-[#FFFBEB] border border-[#FDE68A] rounded-xl p-4 shadow-xs hover:shadow-sm transition-all flex flex-col justify-between h-32">
                   <div className="flex items-center justify-between">
                     <div>
-                      <div className="text-sm font-semibold uppercase tracking-wide">Lost</div>
-                      <div className="text-3xl font-extrabold mt-1">0</div>
+                      <div className="text-xs font-bold uppercase tracking-wider text-amber-700">Lost</div>
+                      <div className="text-3xl font-black text-amber-900 mt-1">0</div>
                     </div>
-                    <div className="opacity-80">
+                    <div className="text-amber-400">
                       <XCircle size={44} />
                     </div>
                   </div>
-                  <div className="border-t border-white/20 pt-2 flex items-center justify-end text-xs font-semibold cursor-pointer hover:underline">
+                  <div className="border-t border-amber-200/80 pt-2 flex items-center justify-end text-xs font-semibold text-amber-600 hover:text-amber-800 cursor-pointer hover:underline">
                     <span>View Details &gt;</span>
                   </div>
                 </div>
@@ -934,62 +904,80 @@ export const RenewalPage: React.FC = () => {
           )}
 
           {/* ========================================================================= */}
-          {/* SUB-TAB 4: RENEWAL STATUS (Image 3) */}
+          {/* SUB-TAB 4: RENEW FOLLOW UP POLICY */}
           {/* ========================================================================= */}
           {activeTab === 'renewalStatus' && (
-            <div className="p-6 space-y-6">
-              <div className="border border-brand-border rounded-[12px] overflow-hidden bg-white shadow-sm">
-                <div className="bg-brand-lightbg text-brand-navy px-5 py-3 font-semibold text-[14px] border-b border-brand-border">
-                  <span>Renewal Status</span>
-                </div>
-                <div className="p-6 space-y-4">
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <div className="p-4 bg-brand-mainbg rounded-lg border border-brand-border">
-                      <div className="text-xs font-semibold text-brand-muted uppercase">Total Tracked Renewals</div>
-                      <div className="text-2xl font-bold text-brand-navy mt-1">{renewalList.length}</div>
-                    </div>
-                    <div className="p-4 bg-brand-mainbg rounded-lg border border-brand-border">
-                      <div className="text-xs font-semibold text-brand-muted uppercase">Active Follow Ups</div>
-                      <div className="text-2xl font-bold text-brand-primary mt-1">{renewalList.filter(r => r.remark === 'FOLLOW UP').length}</div>
-                    </div>
-                    <div className="p-4 bg-brand-mainbg rounded-lg border border-brand-border">
-                      <div className="text-xs font-semibold text-brand-muted uppercase">Closed / Completed</div>
-                      <div className="text-2xl font-bold text-emerald-600 mt-1">{renewalList.filter(r => r.remark !== 'FOLLOW UP').length}</div>
-                    </div>
-                  </div>
-
-                  <div className="overflow-x-auto border border-brand-border rounded-[12px]">
-                    <table className="w-full text-left border-collapse text-[14px]">
-                      <thead>
-                        <tr className="bg-brand-lightbg text-brand-navy font-semibold uppercase border-b border-brand-border">
-                          <th className="py-3 px-6">REGISTRATION NO</th>
-                          <th className="py-3 px-6">CUSTOMER NAME</th>
-                          <th className="py-3 px-6">EXECUTIVE</th>
-                          <th className="py-3 px-6">STATUS</th>
-                          <th className="py-3 px-6">EXPIRY DATE</th>
-                          <th className="py-3 px-6">FOLLOWUP DATE</th>
+            <div className="p-4 sm:p-6 w-full max-w-full">
+              <div className="bg-white rounded-xl border border-brand-border shadow-sm overflow-hidden w-full">
+                <div className="w-full overflow-x-auto">
+                  <table className="w-full text-left border-collapse">
+                    <thead>
+                      <tr className="bg-brand-lightbg text-brand-navy text-[13px] font-bold uppercase tracking-wider border-b border-brand-border whitespace-nowrap">
+                        <th className="py-3 px-3 text-center border-r border-brand-border w-24"></th>
+                        <th className="py-3 px-3 text-center border-r border-brand-border w-20"></th>
+                        <th className="py-3 px-3.5 border-r border-brand-border">REMARK</th>
+                        <th className="py-3 px-3.5 border-r border-brand-border">FINANCIAL YEAR</th>
+                        <th className="py-3 px-3.5 border-r border-brand-border">CREATED DATE</th>
+                        <th className="py-3 px-3.5 border-r border-brand-border">REGISTRATION NO</th>
+                        <th className="py-3 px-3.5 border-r border-brand-border">INSURANCE COMPANY</th>
+                        <th className="py-3 px-3.5 border-r border-brand-border">NAME</th>
+                        <th className="py-3 px-3.5 border-r border-brand-border">TOTAL PREMIUM</th>
+                        <th className="py-3 px-3.5 border-r border-brand-border">EXPIRY DATE</th>
+                        <th className="py-3 px-3.5">FOLLOWUP DATE</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-brand-border text-[13px] bg-white">
+                      {renewalList.map((row) => (
+                        <tr key={row.id} className="hover:bg-brand-mainbg/70 transition-colors h-[46px]">
+                          <td className="py-2.5 px-3 text-center border-r border-brand-border whitespace-nowrap">
+                            <button
+                              type="button"
+                              onClick={() => handleOpenFollowUp(row, 'FOLLOW UP')}
+                              className="text-blue-600 hover:text-blue-800 font-semibold text-[13px] hover:underline cursor-pointer bg-transparent border-none p-0 inline-block text-center uppercase"
+                            >
+                              FOLLOW UP
+                            </button>
+                          </td>
+                          <td className="py-2.5 px-3 text-center border-r border-brand-border whitespace-nowrap">
+                            <button
+                              type="button"
+                              onClick={() => handleOpenFollowUp(row, 'CLOSE')}
+                              className="text-blue-600 hover:text-blue-800 font-semibold text-[13px] hover:underline cursor-pointer bg-transparent border-none p-0 inline-block text-center uppercase"
+                            >
+                              CLOSE
+                            </button>
+                          </td>
+                          <td className="py-2.5 px-3.5 border-r border-brand-border text-slate-700 font-medium whitespace-nowrap uppercase">
+                            {row.remark}
+                          </td>
+                          <td className="py-2.5 px-3.5 border-r border-brand-border font-mono text-slate-700 whitespace-nowrap">
+                            {row.financialYear}
+                          </td>
+                          <td className="py-2.5 px-3.5 border-r border-brand-border font-mono text-slate-700 whitespace-nowrap">
+                            {row.createdDate}
+                          </td>
+                          <td className="py-2.5 px-3.5 border-r border-brand-border font-mono font-bold text-brand-navy whitespace-nowrap">
+                            {row.registrationNo}
+                          </td>
+                          <td className="py-2.5 px-3.5 border-r border-brand-border text-slate-700 font-medium whitespace-nowrap uppercase">
+                            {row.insuranceCompany}
+                          </td>
+                          <td className="py-2.5 px-3.5 border-r border-brand-border text-slate-800 font-semibold whitespace-nowrap uppercase">
+                            {row.customerName}
+                          </td>
+                          <td className="py-2.5 px-3.5 border-r border-brand-border font-mono text-slate-700 whitespace-nowrap">
+                            {row.totalPremium}
+                          </td>
+                          <td className="py-2.5 px-3.5 border-r border-brand-border font-mono text-slate-700 whitespace-nowrap">
+                            {row.expiryDate}
+                          </td>
+                          <td className="py-2.5 px-3.5 font-mono text-slate-700 whitespace-nowrap">
+                            {row.followupDate}
+                          </td>
                         </tr>
-                      </thead>
-                      <tbody className="divide-y divide-brand-border text-brand-navy bg-white">
-                        {renewalList.map((row) => (
-                          <tr key={row.id} className="hover:bg-brand-mainbg h-[52px]">
-                            <td className="py-2 px-6 font-mono font-bold text-brand-navy">{row.registrationNo}</td>
-                            <td className="py-2 px-6 font-semibold text-brand-navy">{row.customerName}</td>
-                            <td className="py-2 px-6 text-brand-muted">{row.executive}</td>
-                            <td className="py-2 px-6">
-                              <span className={`px-2.5 py-1 text-xs font-semibold rounded-full ${
-                                row.remark === 'FOLLOW UP' ? 'bg-brand-lightbg text-brand-primary border border-brand-border' : 'bg-slate-100 text-slate-700'
-                              }`}>
-                                {row.remark}
-                              </span>
-                            </td>
-                            <td className="py-2 px-6 font-mono text-brand-muted">{row.expiryDate}</td>
-                            <td className="py-2 px-6 font-mono text-brand-muted">{row.followupDate}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
+                      ))}
+                    </tbody>
+                  </table>
                 </div>
               </div>
             </div>

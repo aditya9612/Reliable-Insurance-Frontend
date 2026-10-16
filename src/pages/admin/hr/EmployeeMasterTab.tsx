@@ -338,11 +338,11 @@ const EmployeeMasterTab: React.FC = () => {
             {/* ============================================================== */}
             {/* SECTION 1: » EMPLOYEE DETAILS                                  */}
             {/* ============================================================== */}
-            <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden w-full min-w-0">
-                {/* Header Banner in Blue Theme */}
-                <div className="bg-brand-primary text-white px-6 py-3.5 flex items-center shadow-xs">
+            <div className="bg-white rounded-xl border border-brand-border shadow-sm overflow-hidden w-full min-w-0">
+                {/* Header Banner in Light Blue Theme */}
+                <div className="bg-brand-lightbg text-brand-navy border-b border-brand-border px-6 py-3.5 flex items-center shadow-xs">
                     <div className="flex items-center gap-1.5 font-bold text-[15px] tracking-wide">
-                        <span className="text-white/90 text-lg font-serif">»</span>
+                        <span className="text-brand-primary text-lg font-bold">»</span>
                         <span>Employee Details</span>
                     </div>
                 </div>
@@ -854,10 +854,10 @@ const EmployeeMasterTab: React.FC = () => {
             {/* ============================================================== */}
             {/* SECTION 2: » USER DETAILS                                      */}
             {/* ============================================================== */}
-            <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden w-full min-w-0">
-                <div className="bg-brand-primary text-white px-6 py-3.5 flex items-center shadow-xs">
+            <div className="bg-white rounded-xl border border-brand-border shadow-sm overflow-hidden w-full min-w-0">
+                <div className="bg-brand-lightbg text-brand-navy border-b border-brand-border px-6 py-3.5 flex items-center shadow-xs">
                     <div className="flex items-center gap-1.5 font-bold text-[15px] tracking-wide">
-                        <span className="text-white/90 text-lg font-serif">»</span>
+                        <span className="text-brand-primary text-lg font-bold">»</span>
                         <span>User Details</span>
                     </div>
                 </div>
@@ -923,10 +923,10 @@ const EmployeeMasterTab: React.FC = () => {
             {/* ============================================================== */}
             {/* SECTION 3: » BANK DETAILS                                      */}
             {/* ============================================================== */}
-            <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden w-full min-w-0">
-                <div className="bg-brand-primary text-white px-6 py-3.5 flex items-center shadow-xs">
+            <div className="bg-white rounded-xl border border-brand-border shadow-sm overflow-hidden w-full min-w-0">
+                <div className="bg-brand-lightbg text-brand-navy border-b border-brand-border px-6 py-3.5 flex items-center shadow-xs">
                     <div className="flex items-center gap-1.5 font-bold text-[15px] tracking-wide">
-                        <span className="text-white/90 text-lg font-serif">»</span>
+                        <span className="text-brand-primary text-lg font-bold">»</span>
                         <span>Bank Details</span>
                     </div>
                 </div>
@@ -981,10 +981,10 @@ const EmployeeMasterTab: React.FC = () => {
             {/* ============================================================== */}
             {/* SECTION 4: » FAMILY MEMBER DETAILS                             */}
             {/* ============================================================== */}
-            <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden w-full min-w-0">
-                <div className="bg-brand-primary text-white px-6 py-3.5 flex items-center shadow-xs">
+            <div className="bg-white rounded-xl border border-brand-border shadow-sm overflow-hidden w-full min-w-0">
+                <div className="bg-brand-lightbg text-brand-navy border-b border-brand-border px-6 py-3.5 flex items-center shadow-xs">
                     <div className="flex items-center gap-1.5 font-bold text-[15px] tracking-wide">
-                        <span className="text-white/90 text-lg font-serif">»</span>
+                        <span className="text-brand-primary text-lg font-bold">»</span>
                         <span>Family Member Details</span>
                     </div>
                 </div>
@@ -1056,19 +1056,19 @@ const EmployeeMasterTab: React.FC = () => {
                             NO ITEMS ADDED
                         </div>
                     ) : (
-                        <div className="overflow-x-auto rounded-lg border border-slate-200">
+                        <div className="overflow-x-auto rounded-lg border border-brand-border">
                             <table className="w-full text-left border-collapse text-xs">
                                 <thead>
-                                    <tr className="bg-brand-primary text-white font-bold uppercase">
-                                        <th className="py-2.5 px-4">Name</th>
-                                        <th className="py-2.5 px-4">Relation</th>
-                                        <th className="py-2.5 px-4">Occupation</th>
-                                        <th className="py-2.5 px-4">Contact</th>
-                                        <th className="py-2.5 px-4">Designation</th>
+                                    <tr className="bg-brand-lightbg text-brand-navy border-b border-brand-border font-semibold uppercase">
+                                        <th className="py-2.5 px-4 border-r border-brand-border">Name</th>
+                                        <th className="py-2.5 px-4 border-r border-brand-border">Relation</th>
+                                        <th className="py-2.5 px-4 border-r border-brand-border">Occupation</th>
+                                        <th className="py-2.5 px-4 border-r border-brand-border">Contact</th>
+                                        <th className="py-2.5 px-4 border-r border-brand-border">Designation</th>
                                         <th className="py-2.5 px-4 text-center w-16">Action</th>
                                     </tr>
                                 </thead>
-                                <tbody className="divide-y divide-slate-200">
+                                <tbody className="divide-y divide-brand-border">
                                     {familyList.map(item => (
                                         <tr key={item.id} className="hover:bg-slate-50">
                                             <td className="py-2 px-4 font-medium text-slate-800">{item.name}</td>
@@ -1097,10 +1097,10 @@ const EmployeeMasterTab: React.FC = () => {
             {/* ============================================================== */}
             {/* SECTION 5: » REFERENCE DETAILS                                 */}
             {/* ============================================================== */}
-            <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden w-full min-w-0">
-                <div className="bg-brand-primary text-white px-6 py-3.5 flex items-center shadow-xs">
+            <div className="bg-white rounded-xl border border-brand-border shadow-sm overflow-hidden w-full min-w-0">
+                <div className="bg-brand-lightbg text-brand-navy border-b border-brand-border px-6 py-3.5 flex items-center shadow-xs">
                     <div className="flex items-center gap-1.5 font-bold text-[15px] tracking-wide">
-                        <span className="text-white/90 text-lg font-serif">»</span>
+                        <span className="text-brand-primary text-lg font-bold">»</span>
                         <span>Reference Details</span>
                     </div>
                 </div>
@@ -1172,19 +1172,19 @@ const EmployeeMasterTab: React.FC = () => {
                             NO ITEMS ADDED
                         </div>
                     ) : (
-                        <div className="overflow-x-auto rounded-lg border border-slate-200">
+                        <div className="overflow-x-auto rounded-lg border border-brand-border">
                             <table className="w-full text-left border-collapse text-xs">
                                 <thead>
-                                    <tr className="bg-brand-primary text-white font-bold uppercase">
-                                        <th className="py-2.5 px-4">Name</th>
-                                        <th className="py-2.5 px-4">Address</th>
-                                        <th className="py-2.5 px-4">Designation</th>
-                                        <th className="py-2.5 px-4">Contact</th>
-                                        <th className="py-2.5 px-4">Email</th>
+                                    <tr className="bg-brand-lightbg text-brand-navy border-b border-brand-border font-semibold uppercase">
+                                        <th className="py-2.5 px-4 border-r border-brand-border">Name</th>
+                                        <th className="py-2.5 px-4 border-r border-brand-border">Address</th>
+                                        <th className="py-2.5 px-4 border-r border-brand-border">Designation</th>
+                                        <th className="py-2.5 px-4 border-r border-brand-border">Contact</th>
+                                        <th className="py-2.5 px-4 border-r border-brand-border">Email</th>
                                         <th className="py-2.5 px-4 text-center w-16">Action</th>
                                     </tr>
                                 </thead>
-                                <tbody className="divide-y divide-slate-200">
+                                <tbody className="divide-y divide-brand-border">
                                     {referenceList.map(item => (
                                         <tr key={item.id} className="hover:bg-slate-50">
                                             <td className="py-2 px-4 font-medium text-slate-800">{item.name}</td>
@@ -1213,10 +1213,10 @@ const EmployeeMasterTab: React.FC = () => {
             {/* ============================================================== */}
             {/* SECTION 6: » PREVIOUS COMPANY DETAILS                          */}
             {/* ============================================================== */}
-            <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden w-full min-w-0">
-                <div className="bg-brand-primary text-white px-6 py-3.5 flex items-center shadow-xs">
+            <div className="bg-white rounded-xl border border-brand-border shadow-sm overflow-hidden w-full min-w-0">
+                <div className="bg-brand-lightbg text-brand-navy border-b border-brand-border px-6 py-3.5 flex items-center shadow-xs">
                     <div className="flex items-center gap-1.5 font-bold text-[15px] tracking-wide">
-                        <span className="text-white/90 text-lg font-serif">»</span>
+                        <span className="text-brand-primary text-lg font-bold">»</span>
                         <span>Previous Company Details</span>
                     </div>
                 </div>
@@ -1341,19 +1341,19 @@ const EmployeeMasterTab: React.FC = () => {
                             NO ITEMS ADDED
                         </div>
                     ) : (
-                        <div className="overflow-x-auto rounded-lg border border-slate-200">
+                        <div className="overflow-x-auto rounded-lg border border-brand-border">
                             <table className="w-full text-left border-collapse text-xs">
                                 <thead>
-                                    <tr className="bg-brand-primary text-white font-bold uppercase">
-                                        <th className="py-2.5 px-4">Company Name</th>
-                                        <th className="py-2.5 px-4">Address</th>
-                                        <th className="py-2.5 px-4">DOJ - DOE</th>
-                                        <th className="py-2.5 px-4">Experience</th>
-                                        <th className="py-2.5 px-4">HR Contact</th>
+                                    <tr className="bg-brand-lightbg text-brand-navy border-b border-brand-border font-semibold uppercase">
+                                        <th className="py-2.5 px-4 border-r border-brand-border">Company Name</th>
+                                        <th className="py-2.5 px-4 border-r border-brand-border">Address</th>
+                                        <th className="py-2.5 px-4 border-r border-brand-border">DOJ - DOE</th>
+                                        <th className="py-2.5 px-4 border-r border-brand-border">Experience</th>
+                                        <th className="py-2.5 px-4 border-r border-brand-border">HR Contact</th>
                                         <th className="py-2.5 px-4 text-center w-16">Action</th>
                                     </tr>
                                 </thead>
-                                <tbody className="divide-y divide-slate-200">
+                                <tbody className="divide-y divide-brand-border">
                                     {previousList.map(item => (
                                         <tr key={item.id} className="hover:bg-slate-50">
                                             <td className="py-2 px-4 font-medium text-slate-800">{item.companyName}</td>
@@ -1382,10 +1382,10 @@ const EmployeeMasterTab: React.FC = () => {
             {/* ============================================================== */}
             {/* SECTION 7: » EMPLOYEE PHOTO UPLOAD                             */}
             {/* ============================================================== */}
-            <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden w-full min-w-0">
-                <div className="bg-brand-primary text-white px-6 py-3.5 flex items-center shadow-xs">
+            <div className="bg-white rounded-xl border border-brand-border shadow-sm overflow-hidden w-full min-w-0">
+                <div className="bg-brand-lightbg text-brand-navy border-b border-brand-border px-6 py-3.5 flex items-center shadow-xs">
                     <div className="flex items-center gap-1.5 font-bold text-[15px] tracking-wide">
-                        <span className="text-white/90 text-lg font-serif">»</span>
+                        <span className="text-brand-primary text-lg font-bold">»</span>
                         <span>Employee Photo Upload</span>
                     </div>
                 </div>

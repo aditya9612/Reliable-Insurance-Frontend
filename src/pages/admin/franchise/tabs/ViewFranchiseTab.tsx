@@ -140,7 +140,7 @@ export const ViewFranchiseTab: React.FC<ViewFranchiseTabProps> = ({
       {/* ========================================================= */}
       {/* TOP BAR: Search & Active/Inactive Franchise Toggle Tabs    */}
       {/* ========================================================= */}
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-4 flex flex-col md:flex-row items-center justify-between gap-4">
+      <div className="bg-white rounded-[12px] border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] p-4 flex flex-col md:flex-row items-center justify-between gap-4">
         {/* Search input on the left */}
         <div className="relative w-full md:w-96">
           <input
@@ -148,7 +148,7 @@ export const ViewFranchiseTab: React.FC<ViewFranchiseTabProps> = ({
             value={searchName}
             onChange={e => setSearchName(e.target.value)}
             placeholder="Search Franchise Name Here"
-            className="w-full px-4 py-2 text-xs bg-slate-50 border border-slate-300 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-brand-primary"
+            className="w-full px-4 py-2 text-xs bg-slate-50 border border-brand-border rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-brand-primary focus:border-brand-primary"
           />
           {searchName && (
             <button
@@ -161,7 +161,7 @@ export const ViewFranchiseTab: React.FC<ViewFranchiseTabProps> = ({
         </div>
 
         {/* Right Toggle Tabs: Active franchise | Inactive franchise */}
-        <div className="flex items-center rounded-lg border border-slate-300 bg-slate-50 p-1 w-full md:w-auto shadow-2xs">
+        <div className="flex items-center rounded-lg border border-brand-border bg-slate-50 p-1 w-full md:w-auto shadow-2xs">
           <button
             onClick={() => setActiveTab('ACTIVE')}
             className={`flex-1 md:flex-none px-6 py-1.5 text-xs font-bold rounded-md transition-all cursor-pointer flex items-center justify-center gap-2 ${
@@ -215,60 +215,60 @@ export const ViewFranchiseTab: React.FC<ViewFranchiseTabProps> = ({
       {/* ========================================================= */}
       {/* COMPREHENSIVE HORIZONTAL SCROLL TABLE IN BLUE THEME       */}
       {/* ========================================================= */}
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+      <div className="bg-white rounded-[12px] border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden">
         <div className="overflow-x-auto max-h-[70vh]">
           <table className="w-full text-left border-collapse text-xs whitespace-nowrap">
-            {/* Table Header: Blue Theme */}
-            <thead className="sticky top-0 z-20 bg-brand-primary text-white shadow-xs select-none">
-              <tr className="font-bold uppercase tracking-wider text-[11px] divide-x divide-blue-400/40">
+            {/* Table Header: Brand Light Theme */}
+            <thead className="sticky top-0 z-20 bg-brand-lightbg text-brand-navy shadow-xs select-none border-b border-brand-border">
+              <tr className="font-semibold uppercase tracking-wider text-[12px] divide-x divide-brand-border">
                 {/* Action Columns Sticky Left */}
-                <th className="py-2.5 px-3 sticky left-0 z-30 bg-brand-primary text-center w-14">
+                <th className="py-3 px-3 sticky left-0 z-30 bg-brand-lightbg text-brand-navy text-center w-14 font-semibold">
                   VIEW
                 </th>
-                <th className="py-2.5 px-3 sticky left-14 z-30 bg-brand-primary text-center w-14">
+                <th className="py-3 px-3 sticky left-14 z-30 bg-brand-lightbg text-brand-navy text-center w-14 font-semibold">
                   EXIT
                 </th>
-                <th className="py-2.5 px-2.5 sticky left-28 z-30 bg-brand-primary text-center w-10">
+                <th className="py-3 px-2.5 sticky left-28 z-30 bg-brand-lightbg text-brand-navy text-center w-10 font-semibold">
                   <Edit2 size={13} className="mx-auto" />
                 </th>
 
                 {/* Data Columns */}
-                <th className="py-2.5 px-3 text-center">SR.NO.</th>
-                <th className="py-2.5 px-3">CODE</th>
-                <th className="py-2.5 px-4 min-w-[200px]">NAME</th>
-                <th className="py-2.5 px-4 min-w-[280px]">ADDRESS</th>
-                <th className="py-2.5 px-3">MOBILE NO</th>
-                <th className="py-2.5 px-3">GENDER</th>
-                <th className="py-2.5 px-3">MARITAL STATUS</th>
-                <th className="py-2.5 px-3">PAN NO</th>
-                <th className="py-2.5 px-3">AADHAR NO</th>
-                <th className="py-2.5 px-3">DATE OF BIRTH</th>
-                <th className="py-2.5 px-3">EMAIL-ID</th>
-                <th className="py-2.5 px-3">BANK NAME</th>
-                <th className="py-2.5 px-3">BANK BRANCH</th>
-                <th className="py-2.5 px-3">IFSC_CODE</th>
-                <th className="py-2.5 px-3">ACCOUNT NO</th>
-                <th className="py-2.5 px-3">BRANCH</th>
-                <th className="py-2.5 px-3">USER NAME</th>
-                <th className="py-2.5 px-3">USER PASSWORD</th>
-                <th className="py-2.5 px-3">USER ROLE</th>
-                <th className="py-2.5 px-3">QUOTATION CO-ORDINATOR NAME</th>
-                <th className="py-2.5 px-3">INSPECTION CO-ORDINATOR NAME</th>
-                <th className="py-2.5 px-3">ENDROSMENT CO-ORDINATOR NAME</th>
-                <th className="py-2.5 px-3">CO-ORDINATOR NAME</th>
-                <th className="py-2.5 px-3">SALES EXECUTIVE</th>
-                <th className="py-2.5 px-3 text-center">FRANCHISETDS</th>
-                <th className="py-2.5 px-3">BUSINESS PROCESS</th>
-                <th className="py-2.5 px-3">LINE OF BUSINESS</th>
-                <th className="py-2.5 px-3">FUNCTION TYPE</th>
-                <th className="py-2.5 px-3">DESIGNATION</th>
-                <th className="py-2.5 px-3">CLASS</th>
-                <th className="py-2.5 px-4">REPORTING</th>
+                <th className="py-3 px-3 text-center font-semibold text-brand-navy">SR.NO.</th>
+                <th className="py-3 px-3 font-semibold text-brand-navy">CODE</th>
+                <th className="py-3 px-4 min-w-[200px] font-semibold text-brand-navy">NAME</th>
+                <th className="py-3 px-4 min-w-[280px] font-semibold text-brand-navy">ADDRESS</th>
+                <th className="py-3 px-3 font-semibold text-brand-navy">MOBILE NO</th>
+                <th className="py-3 px-3 font-semibold text-brand-navy">GENDER</th>
+                <th className="py-3 px-3 font-semibold text-brand-navy">MARITAL STATUS</th>
+                <th className="py-3 px-3 font-semibold text-brand-navy">PAN NO</th>
+                <th className="py-3 px-3 font-semibold text-brand-navy">AADHAR NO</th>
+                <th className="py-3 px-3 font-semibold text-brand-navy">DATE OF BIRTH</th>
+                <th className="py-3 px-3 font-semibold text-brand-navy">EMAIL-ID</th>
+                <th className="py-3 px-3 font-semibold text-brand-navy">BANK NAME</th>
+                <th className="py-3 px-3 font-semibold text-brand-navy">BANK BRANCH</th>
+                <th className="py-3 px-3 font-semibold text-brand-navy">IFSC_CODE</th>
+                <th className="py-3 px-3 font-semibold text-brand-navy">ACCOUNT NO</th>
+                <th className="py-3 px-3 font-semibold text-brand-navy">BRANCH</th>
+                <th className="py-3 px-3 font-semibold text-brand-navy">USER NAME</th>
+                <th className="py-3 px-3 font-semibold text-brand-navy">USER PASSWORD</th>
+                <th className="py-3 px-3 font-semibold text-brand-navy">USER ROLE</th>
+                <th className="py-3 px-3 font-semibold text-brand-navy">QUOTATION CO-ORDINATOR NAME</th>
+                <th className="py-3 px-3 font-semibold text-brand-navy">INSPECTION CO-ORDINATOR NAME</th>
+                <th className="py-3 px-3 font-semibold text-brand-navy">ENDROSMENT CO-ORDINATOR NAME</th>
+                <th className="py-3 px-3 font-semibold text-brand-navy">CO-ORDINATOR NAME</th>
+                <th className="py-3 px-3 font-semibold text-brand-navy">SALES EXECUTIVE</th>
+                <th className="py-3 px-3 text-center font-semibold text-brand-navy">FRANCHISETDS</th>
+                <th className="py-3 px-3 font-semibold text-brand-navy">BUSINESS PROCESS</th>
+                <th className="py-3 px-3 font-semibold text-brand-navy">LINE OF BUSINESS</th>
+                <th className="py-3 px-3 font-semibold text-brand-navy">FUNCTION TYPE</th>
+                <th className="py-3 px-3 font-semibold text-brand-navy">DESIGNATION</th>
+                <th className="py-3 px-3 font-semibold text-brand-navy">CLASS</th>
+                <th className="py-3 px-4 font-semibold text-brand-navy">REPORTING</th>
               </tr>
             </thead>
 
             {/* Table Body */}
-            <tbody className="divide-y divide-slate-200 text-slate-700 bg-white">
+            <tbody className="divide-y divide-brand-border text-slate-800 bg-white">
               {filteredFranchises.length === 0 ? (
                 <tr>
                   <td colSpan={34} className="py-12 text-center text-slate-400">
@@ -284,10 +284,10 @@ export const ViewFranchiseTab: React.FC<ViewFranchiseTabProps> = ({
                   return (
                     <tr
                       key={item.id}
-                      className="hover:bg-blue-50/60 transition-colors divide-x divide-slate-100 group"
+                      className="hover:bg-brand-mainbg transition-colors divide-x divide-brand-border group"
                     >
                       {/* 1. VIEW Action */}
-                      <td className="py-2.5 px-3 text-center font-bold sticky left-0 z-10 bg-white group-hover:bg-blue-50/90 shadow-2xs">
+                      <td className="py-2.5 px-3 text-center font-bold sticky left-0 z-10 bg-white group-hover:bg-brand-mainbg shadow-2xs">
                         <button
                           onClick={() => setViewingFranchise(item)}
                           className="text-brand-primary hover:text-blue-800 uppercase font-bold text-xs tracking-wider cursor-pointer hover:underline"
@@ -297,7 +297,7 @@ export const ViewFranchiseTab: React.FC<ViewFranchiseTabProps> = ({
                       </td>
 
                       {/* 2. EXIT Action */}
-                      <td className="py-2.5 px-3 text-center font-bold sticky left-14 z-10 bg-white group-hover:bg-blue-50/90 shadow-2xs">
+                      <td className="py-2.5 px-3 text-center font-bold sticky left-14 z-10 bg-white group-hover:bg-brand-mainbg shadow-2xs">
                         <button
                           onClick={() => handleToggleExit(item)}
                           className="text-brand-primary hover:text-rose-700 uppercase font-bold text-xs tracking-wider cursor-pointer hover:underline"
@@ -308,7 +308,7 @@ export const ViewFranchiseTab: React.FC<ViewFranchiseTabProps> = ({
                       </td>
 
                       {/* 3. Edit Action */}
-                      <td className="py-2.5 px-2.5 text-center sticky left-28 z-10 bg-white group-hover:bg-blue-50/90 shadow-2xs">
+                      <td className="py-2.5 px-2.5 text-center sticky left-28 z-10 bg-white group-hover:bg-brand-mainbg shadow-2xs">
                         <button
                           onClick={() => setEditingFranchise(item)}
                           className="text-brand-primary hover:text-blue-800 transition-colors cursor-pointer p-0.5"

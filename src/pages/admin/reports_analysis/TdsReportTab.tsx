@@ -345,7 +345,7 @@ export const TdsReportTab: React.FC = () => {
                 <select
                   value={selectedBranch}
                   onChange={(e) => setSelectedBranch(e.target.value)}
-                  className="w-full px-3.5 py-1.5 bg-white border border-slate-300 rounded-full text-[12.5px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner appearance-none pr-8 cursor-pointer"
+                  className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-xs text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all appearance-none pr-8 cursor-pointer"
                 >
                   {branches.map((b) => (
                     <option key={b} value={b}>
@@ -368,7 +368,7 @@ export const TdsReportTab: React.FC = () => {
                 <select
                   value={selectedAgent}
                   onChange={(e) => setSelectedAgent(e.target.value)}
-                  className="w-full px-3.5 py-1.5 bg-white border border-slate-300 rounded-full text-[12.5px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner appearance-none pr-8 cursor-pointer"
+                  className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-xs text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all appearance-none pr-8 cursor-pointer"
                 >
                   {(deducteeType === 'Agent' ? agentList : franchiseList).map((item) => (
                     <option key={item} value={item}>
@@ -391,7 +391,7 @@ export const TdsReportTab: React.FC = () => {
                 type="date"
                 value={fromDate}
                 onChange={(e) => setFromDate(e.target.value)}
-                className="w-full px-3.5 py-1.5 bg-white border border-slate-300 rounded-full text-[12.5px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-xs text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all"
               />
             </div>
 
@@ -404,16 +404,16 @@ export const TdsReportTab: React.FC = () => {
                 type="date"
                 value={toDate}
                 onChange={(e) => setToDate(e.target.value)}
-                className="w-full px-3.5 py-1.5 bg-white border border-slate-300 rounded-full text-[12.5px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-xs text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all"
               />
             </div>
           </div>
 
-          {/* Row 2: Show (Blue) & Export (Amber) Buttons matching screenshot */}
+          {/* Row 2: Show & Export Buttons */}
           <div className="flex items-center gap-3 pt-1">
             <button
               type="submit"
-              className="px-8 py-2 bg-[#0B5ED7] hover:bg-blue-700 text-white rounded-md text-[13px] font-bold shadow-sm transition-all cursor-pointer border-none active:scale-[0.98] min-w-[76px]"
+              className="px-6 py-2 bg-brand-primary hover:bg-brand-primaryHover text-white rounded-lg text-xs font-semibold shadow-sm transition-all cursor-pointer border-none active:scale-[0.98]"
             >
               Show
             </button>
@@ -421,7 +421,7 @@ export const TdsReportTab: React.FC = () => {
             <button
               type="button"
               onClick={handleExport}
-              className="px-8 py-2 bg-[#E89C35] hover:bg-[#d48824] text-white rounded-md text-[13px] font-bold shadow-sm transition-all cursor-pointer border-none active:scale-[0.98] min-w-[76px]"
+              className="px-5 py-2 bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 rounded-lg text-xs font-semibold shadow-sm transition-all cursor-pointer active:scale-[0.98]"
             >
               Export
             </button>
@@ -473,7 +473,7 @@ export const TdsReportTab: React.FC = () => {
             placeholder="Search Deductee Name, Code, PAN..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-full text-[13px] text-slate-800 placeholder-slate-400 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+            className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-lg text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all"
           />
           {searchQuery && (
             <button
@@ -489,59 +489,29 @@ export const TdsReportTab: React.FC = () => {
       {/* =========================================================================
           DATA GRID (Styled with our Blue Theme)
          ========================================================================= */}
-      {filteredRecords.length === 0 ? (
-        <div className="w-full bg-white rounded-lg border border-brand-border shadow-xs overflow-hidden">
-          <div className="bg-[#EAEAEA] text-[#1E293B] px-4 py-3 font-semibold text-[13px] tracking-wide border-b border-slate-300 flex items-center justify-between">
-            <span>NO DATA FOUND</span>
-          </div>
-          <div className="p-8 text-center text-slate-500 text-xs">
-            <p className="font-medium text-slate-600">
-              No TDS records found for the selected criteria ({appliedFilters.from} to {appliedFilters.to}).
-            </p>
-            <p className="text-[11px] text-slate-400 mt-1">
-              Click "(View All Dates)" above to display historic TDS deductions and challans.
-            </p>
-          </div>
-        </div>
-      ) : (
-        <div className="w-full bg-white rounded-lg border border-brand-border shadow-sm overflow-hidden flex flex-col">
-          {/* Table Header Bar */}
-          <div className="bg-brand-lightbg text-brand-navy px-4 py-2.5 font-semibold text-[13px] border-b border-brand-border flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <span className="text-brand-primary font-bold">»</span>
-              <span>
-                TDS Report: <strong className="text-slate-900">{appliedFilters.type} Records</strong>
-              </span>
-              <span className="bg-brand-primary/10 text-brand-primary text-xs px-2.5 py-0.5 rounded-full font-bold ml-1">
-                {filteredRecords.length} Records
-              </span>
-            </div>
-            <div className="text-xs text-slate-500">
-              Branch: <strong className="text-slate-700">{appliedFilters.branch}</strong>
-            </div>
-          </div>
-
-          {/* Table Area */}
-          <div className="overflow-x-auto w-full">
+      {/* Table Card */}
+      <div className="w-full bg-white rounded-lg border border-brand-border shadow-sm overflow-hidden flex flex-col">
+        {/* Table Area */}
+        <div className="overflow-x-auto w-full custom-scrollbar min-h-[400px]">
             <table className="w-full text-left border-collapse min-w-[950px]">
               <thead>
-                <tr className="bg-brand-primary text-white text-[11.5px] uppercase tracking-wider font-bold select-none border-b border-blue-700">
-                  <th className="py-2.5 px-3.5 whitespace-nowrap">Deductee Name</th>
-                  <th className="py-2.5 px-3.5 whitespace-nowrap">Code</th>
-                  <th className="py-2.5 px-3.5 whitespace-nowrap font-mono">PAN No</th>
-                  <th className="py-2.5 px-3.5 whitespace-nowrap">Branch</th>
-                  <th className="py-2.5 px-3 text-center whitespace-nowrap">Section</th>
-                  <th className="py-2.5 px-3.5 whitespace-nowrap">Quarter</th>
-                  <th className="py-2.5 px-3.5 whitespace-nowrap text-right">Gross Comm (₹)</th>
-                  <th className="py-2.5 px-3 text-center whitespace-nowrap">TDS Rate</th>
-                  <th className="py-2.5 px-3.5 whitespace-nowrap text-right">TDS Amt (₹)</th>
-                  <th className="py-2.5 px-3.5 whitespace-nowrap font-mono">Challan Ref</th>
-                  <th className="py-2.5 px-3.5 text-center whitespace-nowrap">Status</th>
+                <tr className="bg-brand-lightbg text-brand-navy text-[13px] uppercase tracking-wider font-semibold select-none border-b border-brand-border">
+                  <th className="py-3 px-3.5 whitespace-nowrap">Deductee Name</th>
+                  <th className="py-3 px-3.5 whitespace-nowrap">Code</th>
+                  <th className="py-3 px-3.5 whitespace-nowrap font-mono">PAN No</th>
+                  <th className="py-3 px-3.5 whitespace-nowrap">Branch</th>
+                  <th className="py-3 px-3 text-center whitespace-nowrap">Section</th>
+                  <th className="py-3 px-3.5 whitespace-nowrap">Quarter</th>
+                  <th className="py-3 px-3.5 whitespace-nowrap text-right">Gross Comm (₹)</th>
+                  <th className="py-3 px-3 text-center whitespace-nowrap">TDS Rate</th>
+                  <th className="py-3 px-3.5 whitespace-nowrap text-right">TDS Amt (₹)</th>
+                  <th className="py-3 px-3.5 whitespace-nowrap font-mono">Challan Ref</th>
+                  <th className="py-3 px-3.5 text-center whitespace-nowrap">Status</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100 text-[12.5px] text-slate-800">
+              <tbody className="divide-y divide-brand-border text-[13px] text-slate-800">
                 {filteredRecords.map((row) => (
-                  <tr key={row.id} className="hover:bg-blue-50/50 transition-colors">
+                  <tr key={row.id} className="hover:bg-brand-mainbg h-[48px] transition-colors bg-white">
                     <td className="py-3 px-3.5 font-semibold text-slate-900">
                       {row.deducteeName}
                     </td>
@@ -585,6 +555,18 @@ export const TdsReportTab: React.FC = () => {
                     </td>
                   </tr>
                 ))}
+                {filteredRecords.length === 0 && (
+                  <tr>
+                    <td colSpan={11} className="py-16 text-center text-slate-500">
+                      <p className="font-semibold text-slate-600 text-sm">
+                        No TDS records found for the selected criteria ({appliedFilters.from} to {appliedFilters.to}).
+                      </p>
+                      <p className="text-xs text-slate-400 mt-1">
+                        Click "(View All Dates)" above to display historic TDS deductions and challans.
+                      </p>
+                    </td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>
@@ -610,8 +592,7 @@ export const TdsReportTab: React.FC = () => {
             </div>
           </div>
         </div>
-      )}
-    </div>
+      </div>
   );
 };
 

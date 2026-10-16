@@ -121,9 +121,9 @@ export const InsuranceTypeOfSubTypeTab: React.FC<InsuranceTypeOfSubTypeTabProps>
   return (
     <div className="space-y-4">
       {/* Top Banner Stats */}
-      <div className="flex flex-wrap items-center justify-between gap-3 bg-blue-50/70 border border-blue-100 rounded-lg p-2.5 px-4 text-xs font-semibold text-slate-700">
-        <span className="flex items-center gap-1.5 text-blue-700">
-          <Layers size={14} /> Granular Sub-Risk Classifications: <strong className="text-blue-900">{items.length}</strong>
+      <div className="flex flex-wrap items-center justify-between gap-3 bg-slate-50 border border-brand-border rounded-[12px] p-3 px-4 text-xs font-semibold text-slate-700">
+        <span className="flex items-center gap-1.5 text-brand-primary">
+          <Layers size={14} /> Granular Sub-Risk Classifications: <strong className="text-brand-navy">{items.length}</strong>
         </span>
         <span className="text-slate-500 font-normal">
           Tier-3 risk classifications for high-value commercial underwriting
@@ -133,17 +133,17 @@ export const InsuranceTypeOfSubTypeTab: React.FC<InsuranceTypeOfSubTypeTabProps>
       {/* Grid: Left Form (approx 1/3) + Right Table (approx 2/3) matching Screenshot 4 */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
         {/* LEFT COLUMN: » Type of Sub Type Master Form */}
-        <div className="lg:col-span-4 bg-white rounded-xl shadow-sm border border-slate-200/80 overflow-hidden">
+        <div className="lg:col-span-4 bg-white rounded-[12px] shadow-[0_1px_2px_rgba(0,0,0,0.02)] border border-brand-border overflow-hidden">
           {/* Header Banner */}
-          <div className="bg-gradient-to-r from-blue-700 via-blue-600 to-indigo-700 px-4 py-2.5 flex items-center justify-between text-white shadow-sm">
+          <div className="p-3.5 bg-slate-50 border-b border-brand-border flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <span className="text-blue-200 font-bold text-sm">»</span>
-              <h2 className="text-xs font-bold tracking-wide uppercase">
-                {editingId ? '» Edit Type of Sub Type' : '» Type of Sub Type Master'}
+              <span className="text-brand-primary font-bold text-sm">»</span>
+              <h2 className="text-xs font-bold text-brand-navy tracking-wide uppercase">
+                {editingId ? 'Edit Type of Sub Type' : 'Type of Sub Type Master'}
               </h2>
             </div>
             {editingId && (
-              <span className="text-[10px] bg-white/20 px-2 py-0.5 rounded-full text-blue-100 font-medium">
+              <span className="text-[10px] bg-blue-50 border border-blue-200 px-2 py-0.5 rounded-full text-brand-primary font-semibold">
                 Edit Mode
               </span>
             )}
@@ -158,7 +158,7 @@ export const InsuranceTypeOfSubTypeTab: React.FC<InsuranceTypeOfSubTypeTabProps>
               <select
                 value={companyName}
                 onChange={(e) => setCompanyName(e.target.value)}
-                className="w-full h-9 rounded-full border border-slate-300 bg-white px-3.5 text-xs text-slate-800 focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-600 shadow-inner"
+                className="w-full h-9 rounded-full border border-slate-300 bg-white px-3.5 text-xs text-slate-800 focus:border-brand-primary focus:outline-none focus:ring-1 focus:ring-brand-primary shadow-inner"
               >
                 <option value="">--Select Company--</option>
                 {mockInsuranceCompanies.map((c) => (
@@ -179,7 +179,7 @@ export const InsuranceTypeOfSubTypeTab: React.FC<InsuranceTypeOfSubTypeTabProps>
                   setSelectedType(e.target.value);
                   setSelectedSubType('');
                 }}
-                className="w-full h-9 rounded-full border border-slate-300 bg-white px-3.5 text-xs text-slate-800 focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-600 shadow-inner"
+                className="w-full h-9 rounded-full border border-slate-300 bg-white px-3.5 text-xs text-slate-800 focus:border-brand-primary focus:outline-none focus:ring-1 focus:ring-brand-primary shadow-inner"
               >
                 <option value="">--Select Insurance Type--</option>
                 {uniqueTypes.map((t) => (
@@ -197,7 +197,7 @@ export const InsuranceTypeOfSubTypeTab: React.FC<InsuranceTypeOfSubTypeTabProps>
               <select
                 value={selectedSubType}
                 onChange={(e) => setSelectedSubType(e.target.value)}
-                className="w-full h-9 rounded-full border border-slate-300 bg-white px-3.5 text-xs text-slate-800 focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-600 shadow-inner"
+                className="w-full h-9 rounded-full border border-slate-300 bg-white px-3.5 text-xs text-slate-800 focus:border-brand-primary focus:outline-none focus:ring-1 focus:ring-brand-primary shadow-inner"
               >
                 <option value="">--Select Insurance Sub Type--</option>
                 {Array.from(new Set(availableSubTypes.map((st) => st.insuranceSubType))).map((st) => (
@@ -217,14 +217,14 @@ export const InsuranceTypeOfSubTypeTab: React.FC<InsuranceTypeOfSubTypeTabProps>
                 placeholder="e.g. COLD STORAGE & GRAIN WAREHOUSES"
                 value={typeOfSubType}
                 onChange={(e) => setTypeOfSubType(e.target.value)}
-                className="w-full h-9 rounded-full border border-slate-300 bg-white px-3.5 text-xs text-slate-800 focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-600 shadow-inner"
+                className="w-full h-9 rounded-full border border-slate-300 bg-white px-3.5 text-xs text-slate-800 focus:border-brand-primary focus:outline-none focus:ring-1 focus:ring-brand-primary shadow-inner"
               />
             </div>
 
             <div className="pt-2 flex items-center gap-2">
               <button
                 type="submit"
-                className="h-9 px-6 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white text-xs font-semibold rounded-lg shadow-sm hover:shadow transition-all flex items-center gap-1.5"
+                className="h-9 px-6 bg-brand-primary hover:bg-[#1D4ED8] active:bg-blue-800 text-white text-xs font-semibold rounded-lg shadow-sm hover:shadow transition-all flex items-center gap-1.5"
               >
                 <Save size={13} />
                 {editingId ? 'Update' : 'Save'}
@@ -250,15 +250,15 @@ export const InsuranceTypeOfSubTypeTab: React.FC<InsuranceTypeOfSubTypeTabProps>
         </div>
 
         {/* RIGHT COLUMN: Table or NO DATA FOUND (as in Screenshot 4) */}
-        <div className="lg:col-span-8 bg-white rounded-xl shadow-sm border border-slate-200/80 overflow-hidden">
+        <div className="lg:col-span-8 bg-white rounded-[12px] shadow-[0_1px_2px_rgba(0,0,0,0.02)] border border-brand-border overflow-hidden">
           {/* Header Filter Bar */}
-          <div className="p-3 border-b border-slate-200/80 bg-slate-50/70 flex flex-col sm:flex-row items-center justify-between gap-3">
+          <div className="p-3.5 border-b border-brand-border bg-slate-50 flex flex-col sm:flex-row items-center justify-between gap-3">
             <div className="flex items-center gap-2">
-              <Filter size={13} className="text-blue-600" />
+              <Filter size={13} className="text-brand-primary" />
               <select
                 value={filterType}
                 onChange={(e) => setFilterType(e.target.value)}
-                className="h-8 rounded-lg border border-slate-300 bg-white px-2.5 text-xs font-semibold text-slate-700 focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600"
+                className="h-8 rounded-lg border border-brand-border bg-white px-2.5 text-xs font-semibold text-slate-700 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary"
               >
                 <option value="ALL">All Types</option>
                 {uniqueTypes.map((t) => (
@@ -277,7 +277,7 @@ export const InsuranceTypeOfSubTypeTab: React.FC<InsuranceTypeOfSubTypeTabProps>
                 placeholder="Search risk types..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full h-8 pl-8 pr-3 rounded-lg border border-slate-300 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600"
+                className="w-full h-8 pl-8 pr-3 rounded-lg border border-brand-border text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary"
               />
             </div>
           </div>
@@ -285,7 +285,7 @@ export const InsuranceTypeOfSubTypeTab: React.FC<InsuranceTypeOfSubTypeTabProps>
           {/* Table / NO DATA FOUND View */}
           {filteredItems.length === 0 ? (
             <div className="p-6">
-              <div className="w-full bg-slate-50 border border-slate-200 rounded-lg py-5 px-6 text-center text-slate-600 text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2">
+              <div className="w-full bg-slate-50 border border-brand-border rounded-lg py-5 px-6 text-center text-slate-600 text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2">
                 <AlertCircle size={15} className="text-slate-400" />
                 NO DATA FOUND
               </div>
@@ -293,26 +293,26 @@ export const InsuranceTypeOfSubTypeTab: React.FC<InsuranceTypeOfSubTypeTabProps>
           ) : (
             <div className="overflow-x-auto max-h-[560px]">
               <table className="w-full text-left text-xs border-collapse">
-                <thead className="sticky top-0 z-10">
-                  <tr className="bg-[#102A4C] text-white uppercase text-[11px] font-semibold tracking-wider">
-                    <th className="py-2.5 px-3">TYPE OF SUB TYPE</th>
-                    <th className="py-2.5 px-3">INSURANCE SUB TYPE</th>
-                    <th className="py-2.5 px-3">INSURANCE TYPE</th>
-                    <th className="py-2.5 px-3">COMPANY</th>
-                    <th className="py-2.5 px-3 w-16 text-center">ACTIONS</th>
+                <thead className="sticky top-0 z-10 bg-brand-lightbg text-brand-navy text-[12px] uppercase tracking-wider font-semibold select-none border-b border-brand-border">
+                  <tr>
+                    <th className="py-3 px-3 font-semibold text-brand-navy">TYPE OF SUB TYPE</th>
+                    <th className="py-3 px-3 font-semibold text-brand-navy">INSURANCE SUB TYPE</th>
+                    <th className="py-3 px-3 font-semibold text-brand-navy">INSURANCE TYPE</th>
+                    <th className="py-3 px-3 font-semibold text-brand-navy">COMPANY</th>
+                    <th className="py-3 px-3 w-16 text-center font-semibold text-brand-navy">ACTIONS</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-200/80">
+                <tbody className="divide-y divide-brand-border bg-white text-slate-800">
                   {filteredItems.map((item) => (
-                    <tr key={item.id} className="hover:bg-blue-50/40 transition-colors">
-                      <td className="py-2.5 px-3 font-semibold text-blue-800">
+                    <tr key={item.id} className="hover:bg-brand-mainbg transition-colors bg-white">
+                      <td className="py-2.5 px-3 font-semibold text-brand-primary">
                         {item.insuranceTypeOfSubType}
                       </td>
                       <td className="py-2.5 px-3 text-slate-700 font-medium">
                         {item.insuranceSubType}
                       </td>
                       <td className="py-2.5 px-3 text-slate-600">
-                        <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-200">
+                        <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-50 text-brand-primary border border-blue-200">
                           {item.insuranceType}
                         </span>
                       </td>
@@ -324,7 +324,7 @@ export const InsuranceTypeOfSubTypeTab: React.FC<InsuranceTypeOfSubTypeTabProps>
                           <button
                             type="button"
                             onClick={() => handleEdit(item)}
-                            className="p-1 rounded text-blue-600 hover:bg-blue-100 transition-colors"
+                            className="p-1 rounded text-brand-primary hover:bg-blue-100 transition-colors"
                             title="Edit"
                           >
                             <Edit2 size={13} />

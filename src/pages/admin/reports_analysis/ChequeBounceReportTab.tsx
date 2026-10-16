@@ -182,122 +182,116 @@ export const ChequeBounceReportTab: React.FC = () => {
   }, [filteredRecords]);
 
   return (
-    <div className="space-y-4 w-full font-sans">
-      {/* =========================================================================
-          TOP SEARCH & ACTION BAR (Replicating reliable-erp.com/Clerk/RptChequeBounce.aspx)
-         ========================================================================= */}
-      <div className="flex items-center gap-3 w-full">
-        {/* Search Agent Name input */}
-        <div className="relative w-full max-w-sm">
-          <input
-            type="text"
-            placeholder="Search Agent Name"
-            value={searchAgentName}
-            onChange={(e) => setSearchAgentName(e.target.value)}
-            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 placeholder-slate-400 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
-          />
-          {searchAgentName && (
-            <button
-              onClick={() => setSearchAgentName('')}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 bg-transparent border-none cursor-pointer"
-            >
-              <X size={15} />
-            </button>
-          )}
+    <div className="w-full font-sans">
+      {/* Unified Table Card matching VehicleMaster (Image 2) */}
+      <div className="bg-white rounded-[12px] border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden flex flex-col w-full">
+        {/* Table Toolbar */}
+        <div className="p-4 bg-slate-50 border-b border-brand-border flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="relative w-full sm:w-[350px]">
+            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+            <input
+              type="text"
+              placeholder="Search Agent Name..."
+              value={searchAgentName}
+              onChange={(e) => setSearchAgentName(e.target.value)}
+              className="w-full pl-9 pr-8 py-2 bg-white border border-slate-300 rounded-lg text-sm text-brand-navy placeholder-[#94a3b8] focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all h-[40px]"
+            />
+            {searchAgentName && (
+              <button
+                onClick={() => setSearchAgentName('')}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 bg-transparent border-none cursor-pointer"
+              >
+                <X size={15} />
+              </button>
+            )}
+          </div>
+
+          <button
+            type="button"
+            onClick={handleExport}
+            className="w-full sm:w-auto px-5 py-2 bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 rounded-lg text-sm font-semibold transition-all cursor-pointer h-[40px] flex items-center justify-center gap-2 shadow-xs"
+          >
+            <Download size={15} />
+            <span>Export CSV</span>
+          </button>
         </div>
 
-        {/* Export Button (Amber/Orange Theme from ERP) */}
-        <button
-          type="button"
-          onClick={handleExport}
-          className="px-7 py-2 bg-[#E89C35] hover:bg-[#d48824] text-white rounded-md text-[13px] font-bold shadow-sm transition-all cursor-pointer border-none active:scale-[0.98] flex items-center justify-center min-w-[80px]"
-        >
-          Export
-        </button>
-      </div>
-
-      {/* =========================================================================
-          DATA GRID (Replicating legacy columns styled with our Blue Theme)
-         ========================================================================= */}
-      {filteredRecords.length === 0 ? (
-        <div className="w-full bg-white rounded-lg border border-brand-border shadow-xs overflow-hidden">
-          <div className="bg-[#EAEAEA] text-[#1E293B] px-4 py-3 font-semibold text-[13px] tracking-wide border-b border-slate-300">
-            NO DATA FOUND
-          </div>
-          <div className="p-8 text-center text-slate-500 text-xs">
-            No cheque bounce records found matching "{searchAgentName}".
-          </div>
-        </div>
-      ) : (
-        <div className="w-full bg-white rounded-lg border border-brand-border shadow-sm overflow-hidden flex flex-col">
-          {/* Scrollable Table Area */}
-          <div className="overflow-x-auto w-full">
-            <table className="w-full text-left border-collapse min-w-[980px]">
+        {/* Scrollable Table Area starting immediately beneath toolbar */}
+        <div className="overflow-x-auto w-full custom-scrollbar min-h-[400px]">
+          <table className="w-full text-left border-collapse min-w-[980px]">
               <thead>
-                <tr className="bg-brand-primary text-white text-[11.5px] uppercase tracking-wider font-bold select-none border-b border-blue-700">
-                  <th className="py-2.5 px-3.5 whitespace-nowrap">PAYMENT DATE</th>
-                  <th className="py-2.5 px-3.5 whitespace-nowrap">CUSTOMER NAME</th>
-                  <th className="py-2.5 px-3.5 whitespace-nowrap">AGENT NAME</th>
-                  <th className="py-2.5 px-3.5 whitespace-nowrap">SELES EX./FRANCHISE</th>
-                  <th className="py-2.5 px-3.5 whitespace-nowrap">POLICY NO</th>
-                  <th className="py-2.5 px-3.5 whitespace-nowrap">PAYMENT TYPE</th>
-                  <th className="py-2.5 px-3.5 whitespace-nowrap">PAYMENT DETAILS</th>
-                  <th className="py-2.5 px-3.5 whitespace-nowrap text-right">AMOUNT</th>
+                <tr className="bg-brand-lightbg text-brand-navy text-[13px] font-semibold uppercase border-b border-brand-border whitespace-nowrap">
+                  <th className="py-3 px-4 whitespace-nowrap">PAYMENT DATE</th>
+                  <th className="py-3 px-4 whitespace-nowrap">CUSTOMER NAME</th>
+                  <th className="py-3 px-4 whitespace-nowrap">AGENT NAME</th>
+                  <th className="py-3 px-4 whitespace-nowrap">SALES EX./FRANCHISE</th>
+                  <th className="py-3 px-4 whitespace-nowrap">POLICY NO</th>
+                  <th className="py-3 px-4 whitespace-nowrap">PAYMENT TYPE</th>
+                  <th className="py-3 px-4 whitespace-nowrap">PAYMENT DETAILS</th>
+                  <th className="py-3 px-4 whitespace-nowrap text-right">AMOUNT (₹)</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100 text-[12.5px] text-slate-800">
+              <tbody className="divide-y divide-brand-border text-[13px]">
                 {filteredRecords.map((row) => (
                   <tr
                     key={row.id}
-                    className="hover:bg-blue-50/50 transition-colors"
+                    className="hover:bg-brand-mainbg h-[48px] transition-colors bg-white"
                   >
-                    <td className="py-3 px-3.5 whitespace-nowrap text-slate-700 font-medium">
+                    <td className="py-2.5 px-4 whitespace-nowrap text-slate-700 font-medium">
                       {row.paymentDate}
                     </td>
-                    <td className="py-3 px-3.5 font-semibold text-slate-900">
+                    <td className="py-2.5 px-4 font-semibold text-brand-navy">
                       {row.customerName}
                     </td>
-                    <td className="py-3 px-3.5 text-slate-800 font-medium">
+                    <td className="py-2.5 px-4 text-slate-800 font-medium">
                       {row.agentName}
                     </td>
-                    <td className="py-3 px-3.5 text-slate-700">
+                    <td className="py-2.5 px-4 text-slate-700">
                       {row.salesExecutive}
                     </td>
-                    <td className="py-3 px-3.5 font-mono font-medium text-brand-primary whitespace-nowrap">
+                    <td className="py-2.5 px-4 font-mono font-medium text-brand-primary whitespace-nowrap">
                       {row.policyNo}
                     </td>
-                    <td className="py-3 px-3.5 text-slate-700 font-semibold whitespace-nowrap">
+                    <td className="py-2.5 px-4 text-slate-700 font-semibold whitespace-nowrap">
                       {row.paymentType}
                     </td>
-                    <td className="py-3 px-3.5 text-slate-700 whitespace-nowrap">
+                    <td className="py-2.5 px-4 text-slate-700 whitespace-nowrap">
                       {row.paymentDetails}
                     </td>
-                    <td className="py-3 px-3.5 text-right font-bold text-slate-900 whitespace-nowrap">
+                    <td className="py-2.5 px-4 text-right font-medium text-rose-600 font-mono whitespace-nowrap">
                       {formatAmount(row.amount)}
                     </td>
                   </tr>
                 ))}
+                {filteredRecords.length === 0 && (
+                  <tr>
+                    <td colSpan={8} className="py-16 text-center text-slate-500">
+                      <p className="font-semibold text-slate-600 text-sm">
+                        No cheque bounce records found matching "{searchAgentName}".
+                      </p>
+                    </td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>
 
           {/* Table Footer with Summary & Total Amount */}
-          <div className="bg-slate-50 border-t border-brand-border px-4 py-2.5 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-600">
+          <div className="bg-white border-t border-brand-border p-4 flex flex-wrap items-center justify-between gap-3 text-sm text-brand-muted font-medium">
             <div>
-              Showing <span className="font-bold text-slate-800">{filteredRecords.length}</span> cheque bounce records
+              Showing <span className="font-bold text-brand-navy">{filteredRecords.length}</span> cheque bounce records
             </div>
             <div className="flex items-center gap-3">
               <span>
                 Total Amount:{' '}
-                <strong className="text-brand-primary font-bold text-sm">
+                <strong className="text-brand-primary font-bold text-base font-mono">
                   ₹{formatAmount(totalAmount)}
                 </strong>
               </span>
             </div>
           </div>
         </div>
-      )}
-    </div>
+      </div>
   );
 };
 

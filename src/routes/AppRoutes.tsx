@@ -65,7 +65,7 @@ import NcbRecoveryReport from '../pages/admin/operations/transactions/NcbRecover
 import OnlineAppRequest from '../pages/admin/operations/transactions/OnlineAppRequest'
 
 // Reports & Other Modules
-import MyPage from '../pages/admin/other_modules/MyPage'
+import MyPage from '../pages/admin/my_page/MyPage'
 import MisReports from '../pages/admin/reports_analysis/MisReports'
 import GeneralReports from '../pages/admin/reports_analysis/GeneralReports'
 import Recon from '../pages/admin/reports_analysis/Recon'
@@ -95,6 +95,7 @@ const AppRoutes = () => {
             <Route path="/vehicle-master" element={<VehicleMaster />} />
             <Route path="/account-master" element={<AccountMaster />} />
             <Route path="/operations/business-master" element={<BusinessMaster />} />
+            <Route path="/business-master" element={<BusinessMaster />} />
 
             {/* User */}
             <Route path="/users" element={<Navigate to="/users/role-master" replace />} />
@@ -138,6 +139,10 @@ const AppRoutes = () => {
             <Route path="/accounts" element={<Navigate to="/accounts/cash-approval" replace />} />
             <Route path="/accounts/:tab" element={<AccountModule />} />
 
+            {/* Claims & Renewal Main Routes */}
+            <Route path="/claims" element={<ClaimPage />} />
+            <Route path="/renewal" element={<RenewalPage />} />
+
             {/* Operations */}
             <Route path="/operations/claims" element={<ClaimPage />} />
             <Route path="/operations/renewal" element={<RenewalPage />} />
@@ -180,8 +185,9 @@ const AppRoutes = () => {
             <Route path="/app" element={<AppModulePage />} />
             <Route path="/other/app" element={<Navigate to="/app" replace />} />
 
-            {/* Other Modules */}
-            <Route path="/other/my-page" element={<MyPage />} />
+            {/* My Page Module */}
+            <Route path="/my-page" element={<MyPage />} />
+            <Route path="/other/my-page" element={<Navigate to="/my-page" replace />} />
           </Route>
         </Route>
       </Routes>

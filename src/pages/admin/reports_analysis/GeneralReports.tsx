@@ -457,7 +457,7 @@ export const GeneralReports: React.FC = () => {
                   setStatusFilter('ALL');
                   setSearchParams({ tab: tab.key });
                 }}
-                className={`w-full py-2.5 px-1.5 rounded-xl text-[10.5px] xl:text-[11.5px] transition-all cursor-pointer border-none text-center font-bold flex items-center justify-center ${isActive
+                className={`w-full py-2.5 px-2 rounded-full text-[11px] xl:text-[12px] transition-all cursor-pointer border-none text-center font-bold flex items-center justify-center ${isActive
                   ? 'bg-brand-primary text-white shadow-sm'
                   : 'bg-[#F1F5F9] hover:bg-slate-200 text-[#0F172A]'
                   }`}
@@ -483,7 +483,7 @@ export const GeneralReports: React.FC = () => {
                   setStatusFilter('ALL');
                   setSearchParams({ tab: tab.key });
                 }}
-                className={`w-full py-2.5 px-1.5 rounded-xl text-[10.5px] xl:text-[11.5px] transition-all cursor-pointer border-none text-center font-bold flex items-center justify-center ${isActive
+                className={`w-full py-2.5 px-2 rounded-full text-[11px] xl:text-[12px] transition-all cursor-pointer border-none text-center font-bold flex items-center justify-center ${isActive
                   ? 'bg-brand-primary text-white shadow-sm'
                   : 'bg-[#F1F5F9] hover:bg-slate-200 text-[#0F172A]'
                   }`}
@@ -556,7 +556,6 @@ export const GeneralReports: React.FC = () => {
           {/* Card Header Banner */}
           <div className="bg-brand-lightbg text-brand-navy px-4 py-3 font-semibold text-[14px] border-b border-brand-border flex flex-wrap items-center justify-between gap-3">
             <div className="flex items-center gap-2">
-              <span className="text-brand-primary font-bold">»</span>
               <span className="font-bold tracking-tight text-slate-900">{activeTabMeta.label}</span>
               <span className="text-xs bg-brand-primary/10 text-brand-primary px-2.5 py-0.5 rounded-full font-semibold ml-2">
                 {filteredData.length} Records Found
@@ -682,8 +681,8 @@ export const GeneralReports: React.FC = () => {
             <table className="w-full text-left border-collapse text-[12px]">
               {/* Dynamic Header Based on Active Tab */}
               <thead>
-                <tr className="bg-slate-100 text-slate-700 uppercase tracking-wider text-[11px] border-b border-slate-200 font-bold select-none whitespace-nowrap">
-                  <th className="py-3 px-3.5 text-center w-12">SR</th>
+                <tr className="bg-brand-lightbg text-brand-navy text-[13px] font-semibold uppercase border-b border-brand-border whitespace-nowrap">
+                  <th className="py-3 px-4 text-center w-14">SR. NO.</th>
 
                   {activeTab === 'cutNPay' && (
                     <>
@@ -988,7 +987,7 @@ export const GeneralReports: React.FC = () => {
               </thead>
 
               {/* Table Body */}
-              <tbody className="divide-y divide-slate-200">
+              <tbody className="divide-y divide-brand-border text-[13px]">
                 {paginatedData.length === 0 ? (
                   <tr>
                     <td colSpan={14} className="py-12 text-center text-slate-500">
@@ -1006,7 +1005,7 @@ export const GeneralReports: React.FC = () => {
                       <tr
                         key={row.id || idx}
                         onClick={() => setSelectedRecord(row)}
-                        className="hover:bg-blue-50/50 transition-colors cursor-pointer group"
+                        className="hover:bg-brand-mainbg h-[48px] transition-colors cursor-pointer group bg-white"
                       >
                         <td className="py-3 px-3.5 text-center font-semibold text-slate-500">{srNo}</td>
 
@@ -1414,72 +1413,63 @@ export const GeneralReports: React.FC = () => {
             </table>
           </div>
 
-          {/* Pagination Footer */}
-          <div className="p-3.5 bg-slate-50 border-t border-slate-200 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-600">
-            <div className="flex items-center gap-2">
-              <span>Showing</span>
-              <span className="font-bold text-slate-900">
-                {filteredData.length === 0 ? 0 : (currentPage - 1) * itemsPerPage + 1}
-              </span>
-              <span>to</span>
-              <span className="font-bold text-slate-900">
-                {Math.min(currentPage * itemsPerPage, filteredData.length)}
-              </span>
-              <span>of</span>
-              <span className="font-bold text-slate-900">{filteredData.length}</span>
-              <span>records</span>
-
-              <div className="ml-4 flex items-center gap-1.5">
-                <span>Per page:</span>
-                <select
-                  value={itemsPerPage}
-                  onChange={(e) => {
-                    setItemsPerPage(Number(e.target.value));
-                    setCurrentPage(1);
-                  }}
-                  className="px-2 py-1 border border-slate-300 rounded bg-white text-slate-800 text-xs focus:ring-1 focus:ring-brand-primary"
-                >
-                  <option value={10}>10</option>
-                  <option value={25}>25</option>
-                  <option value={50}>50</option>
-                </select>
-              </div>
+          {/* Standard Footer Pagination Bar matching VehicleMaster */}
+          <div className="p-4 bg-white border-t border-brand-border flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-2 text-sm text-brand-muted font-medium">
+              <span>Records per page:</span>
+              <select
+                value={itemsPerPage}
+                onChange={(e) => {
+                  setItemsPerPage(Number(e.target.value));
+                  setCurrentPage(1);
+                }}
+                className="border border-brand-border rounded px-2 py-1 text-sm bg-white text-brand-navy focus:outline-none focus:border-brand-primary"
+              >
+                <option value={10}>10</option>
+                <option value={25}>25</option>
+                <option value={50}>50</option>
+              </select>
             </div>
 
-            {/* Pagination Controls */}
+            <div className="text-sm text-brand-muted font-medium">
+              Showing {filteredData.length === 0 ? 0 : (currentPage - 1) * itemsPerPage + 1} - {Math.min(currentPage * itemsPerPage, filteredData.length)} of {filteredData.length} records
+            </div>
+
             <div className="flex items-center gap-1">
               <button
-                onClick={() => setCurrentPage(1)}
+                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                 disabled={currentPage === 1}
-                className="px-2.5 py-1.5 rounded border border-slate-300 bg-white hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed font-medium text-slate-700"
+                className={`px-3 py-1 rounded text-sm font-medium border border-brand-border ${
+                  currentPage === 1
+                    ? 'text-slate-300 cursor-not-allowed bg-slate-50'
+                    : 'text-brand-navy hover:bg-brand-mainbg cursor-pointer'
+                }`}
               >
-                First
+                &lt;
               </button>
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                <button
+                  key={page}
+                  onClick={() => setCurrentPage(page)}
+                  className={`px-3 py-1 rounded text-sm font-medium ${
+                    currentPage === page
+                      ? 'bg-brand-primary text-white'
+                      : 'text-brand-navy hover:bg-brand-mainbg border border-brand-border'
+                  }`}
+                >
+                  {page}
+                </button>
+              ))}
               <button
-                onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-                disabled={currentPage === 1}
-                className="p-1.5 rounded border border-slate-300 bg-white hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed text-slate-700"
+                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                disabled={currentPage === totalPages || totalPages === 0}
+                className={`px-3 py-1 rounded text-sm font-medium border border-brand-border ${
+                  currentPage === totalPages || totalPages === 0
+                    ? 'text-slate-300 cursor-not-allowed bg-slate-50'
+                    : 'text-brand-navy hover:bg-brand-mainbg cursor-pointer'
+                }`}
               >
-                <ChevronLeft size={14} />
-              </button>
-
-              <span className="px-3 py-1 bg-brand-primary text-white font-bold rounded">
-                {currentPage} / {totalPages}
-              </span>
-
-              <button
-                onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
-                disabled={currentPage === totalPages}
-                className="p-1.5 rounded border border-slate-300 bg-white hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed text-slate-700"
-              >
-                <ChevronRight size={14} />
-              </button>
-              <button
-                onClick={() => setCurrentPage(totalPages)}
-                disabled={currentPage === totalPages}
-                className="px-2.5 py-1.5 rounded border border-slate-300 bg-white hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed font-medium text-slate-700"
-              >
-                Last
+                &gt;
               </button>
             </div>
           </div>

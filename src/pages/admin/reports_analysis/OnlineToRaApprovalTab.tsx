@@ -139,150 +139,118 @@ export const OnlineToRaApprovalTab: React.FC = () => {
   };
 
   return (
-    <div className="space-y-4 w-full font-sans">
-      {/* Top Filter Card matching Photo 5 */}
-      <div className="bg-white rounded-xl shadow-sm border border-brand-border overflow-hidden">
-        <div className="bg-[#0B5ED7] text-white px-5 py-2.5 text-[13.5px] font-semibold flex items-center shadow-xs">
-          <span className="mr-1 text-base font-serif">&raquo;</span>Online To RA Approval Report
-        </div>
+    <div className="w-full font-sans">
+      {/* Unified Table Card matching VehicleMaster (Image 2) */}
+      <div className="bg-white rounded-[12px] border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden flex flex-col w-full">
+        {/* Table Toolbar */}
+        <div className="p-4 bg-slate-50 border-b border-brand-border flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
+            Records: <span className="text-brand-primary font-bold">{filteredRecords.length}</span>
+          </div>
 
-        <div className="p-6">
-          <form onSubmit={handleShow} className="flex flex-wrap items-center gap-6">
-            <div className="flex items-center gap-3">
-              <label className="text-[13px] text-slate-800 font-bold whitespace-nowrap">
-                From Date
-              </label>
+          <form onSubmit={handleShow} className="flex flex-wrap items-center gap-3 w-full sm:w-auto justify-end">
+            <div className="flex items-center gap-1.5">
+              <span className="text-xs font-semibold text-slate-600 whitespace-nowrap">From:</span>
               <input
                 type="date"
                 value={fromDate}
                 onChange={(e) => setFromDate(e.target.value)}
-                className="w-44 px-3.5 py-1.5 bg-white border border-slate-300 rounded-full text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                className="px-2.5 py-1.5 bg-white border border-slate-300 rounded-lg text-xs text-slate-800 focus:outline-none focus:border-brand-primary h-[38px] cursor-pointer"
               />
             </div>
 
-            <div className="flex items-center gap-3">
-              <label className="text-[13px] text-slate-800 font-bold whitespace-nowrap">
-                To Date
-              </label>
+            <div className="flex items-center gap-1.5">
+              <span className="text-xs font-semibold text-slate-600 whitespace-nowrap">To:</span>
               <input
                 type="date"
                 value={toDate}
                 onChange={(e) => setToDate(e.target.value)}
-                className="w-44 px-3.5 py-1.5 bg-white border border-slate-300 rounded-full text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                className="px-2.5 py-1.5 bg-white border border-slate-300 rounded-lg text-xs text-slate-800 focus:outline-none focus:border-brand-primary h-[38px] cursor-pointer"
               />
             </div>
 
             <button
               type="submit"
-              className="px-8 py-2 bg-[#0B5ED7] hover:bg-blue-700 text-white rounded-md text-[13px] font-bold shadow-sm transition-all cursor-pointer border-none active:scale-[0.98] min-w-[76px]"
+              className="px-4 py-2 bg-brand-primary hover:bg-[#1D4ED8] text-white rounded-lg font-semibold text-xs shadow-xs transition-all cursor-pointer border-none h-[38px] flex items-center gap-1.5"
             >
-              Show
+              <Eye size={14} />
+              <span>Show</span>
             </button>
 
-            {appliedDates.from === '2026-10-14' && appliedDates.to === '2026-10-14' && (
-              <button
-                type="button"
-                onClick={() => {
-                  setFromDate('2026-10-01');
-                  setToDate('2026-10-14');
-                  setAppliedDates({ from: '2026-10-01', to: '2026-10-14' });
-                }}
-                className="text-xs text-brand-primary hover:text-blue-800 hover:underline cursor-pointer bg-transparent border-none font-medium ml-2"
-              >
-                (View All Dates)
-              </button>
-            )}
+            <button
+              type="button"
+              onClick={handleExport}
+              className="px-4 py-2 bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 rounded-lg font-semibold text-xs shadow-xs transition-all cursor-pointer h-[38px] flex items-center gap-1.5"
+            >
+              <Download size={14} />
+              <span>Export CSV</span>
+            </button>
           </form>
         </div>
-      </div>
 
-      {/* Export Button below card matching Photo 5 */}
-      <div className="flex items-center gap-3">
-        <button
-          type="button"
-          onClick={handleExport}
-          className="px-7 py-2 bg-[#E89C35] hover:bg-[#d48824] text-white rounded-md text-[13px] font-bold shadow-sm transition-all cursor-pointer border-none active:scale-[0.98] min-w-[80px]"
-        >
-          Export
-        </button>
-      </div>
-
-      {/* Results Banner / Grid */}
-      {filteredRecords.length === 0 ? (
-        <div className="w-full bg-white rounded-lg border border-brand-border shadow-xs overflow-hidden">
-          <div className="bg-[#EAEAEA] text-[#1E293B] px-4 py-3 font-semibold text-[13px] tracking-wide border-b border-slate-300">
-            NO DATA FOUND
-          </div>
-          <div className="p-8 text-center text-slate-500 text-xs">
-            No approval requests found for the selected date range ({appliedDates.from} to {appliedDates.to}).
-          </div>
-        </div>
-      ) : (
-        <div className="w-full bg-white rounded-lg border border-brand-border shadow-sm overflow-hidden flex flex-col">
-          <div className="bg-brand-lightbg text-brand-navy px-4 py-2.5 font-semibold text-[13px] border-b border-brand-border flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <span className="text-brand-primary font-bold">»</span>
-              <span>Online To RA Approval Entries</span>
-              <span className="bg-brand-primary/10 text-brand-primary text-xs px-2.5 py-0.5 rounded-full font-bold ml-1">
-                {filteredRecords.length} Records
-              </span>
-            </div>
-          </div>
-
-          <div className="overflow-x-auto w-full">
-            <table className="w-full text-left border-collapse min-w-[950px]">
-              <thead>
-                <tr className="bg-brand-primary text-white text-[11.5px] uppercase tracking-wider font-bold select-none border-b border-blue-700">
-                  <th className="py-2.5 px-3.5 whitespace-nowrap font-mono">Request ID</th>
-                  <th className="py-2.5 px-3.5 whitespace-nowrap">Date</th>
-                  <th className="py-2.5 px-3.5 whitespace-nowrap">Customer Name</th>
-                  <th className="py-2.5 px-3.5 whitespace-nowrap font-mono">Mobile</th>
-                  <th className="py-2.5 px-3.5 whitespace-nowrap">Product</th>
-                  <th className="py-2.5 px-3.5 whitespace-nowrap">Proposed Insurer</th>
-                  <th className="py-2.5 px-3.5 text-right whitespace-nowrap">Premium (₹)</th>
-                  <th className="py-2.5 px-3 text-center whitespace-nowrap">KYC</th>
-                  <th className="py-2.5 px-3.5 whitespace-nowrap">RA Reviewer</th>
-                  <th className="py-2.5 px-3.5 text-center whitespace-nowrap">Status</th>
+        {/* Scrollable Table Area starting immediately beneath toolbar */}
+        <div className="overflow-x-auto w-full custom-scrollbar min-h-[400px]">
+          <table className="w-full text-left border-collapse min-w-[950px]">
+            <thead>
+              <tr className="bg-brand-lightbg text-brand-navy text-[13px] uppercase tracking-wider font-semibold select-none border-b border-brand-border whitespace-nowrap">
+                <th className="py-3 px-3.5 whitespace-nowrap font-mono">Request ID</th>
+                <th className="py-3 px-3.5 whitespace-nowrap">Date</th>
+                <th className="py-3 px-3.5 whitespace-nowrap">Customer Name</th>
+                <th className="py-3 px-3.5 whitespace-nowrap font-mono">Mobile</th>
+                <th className="py-3 px-3.5 whitespace-nowrap">Product</th>
+                <th className="py-3 px-3.5 whitespace-nowrap">Proposed Insurer</th>
+                <th className="py-3 px-3.5 text-right whitespace-nowrap">Premium (₹)</th>
+                <th className="py-3 px-3 text-center whitespace-nowrap">KYC</th>
+                <th className="py-3 px-3.5 whitespace-nowrap">RA Reviewer</th>
+                <th className="py-3 px-3.5 text-center whitespace-nowrap">Status</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-brand-border text-[13px] text-slate-800">
+              {filteredRecords.map((row) => (
+                <tr key={row.id} className="hover:bg-brand-mainbg h-[48px] transition-colors bg-white">
+                  <td className="py-3 px-3.5 font-mono font-bold text-brand-primary whitespace-nowrap">
+                    {row.requestId}
+                  </td>
+                  <td className="py-3 px-3.5 text-slate-600 whitespace-nowrap">{row.date}</td>
+                  <td className="py-3 px-3.5 font-semibold text-slate-900">{row.customerName}</td>
+                  <td className="py-3 px-3.5 font-mono text-slate-700 whitespace-nowrap">{row.mobile}</td>
+                  <td className="py-3 px-3.5 text-slate-700">{row.product}</td>
+                  <td className="py-3 px-3.5 text-slate-700">{row.proposedInsurer}</td>
+                  <td className="py-3 px-3.5 text-right font-bold text-slate-900 whitespace-nowrap">
+                    {formatCurrency(row.premium)}
+                  </td>
+                  <td className="py-3 px-3 text-center whitespace-nowrap">
+                    <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-blue-50 text-brand-primary border border-blue-200">
+                      {row.kycStatus}
+                    </span>
+                  </td>
+                  <td className="py-3 px-3.5 text-slate-600 whitespace-nowrap">{row.raReviewer}</td>
+                  <td className="py-3 px-3.5 text-center whitespace-nowrap">
+                    <span
+                      className={`inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold ${
+                        row.status === 'Approved'
+                          ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                          : 'bg-amber-50 text-amber-700 border border-amber-200'
+                      }`}
+                    >
+                      {row.status}
+                    </span>
+                  </td>
                 </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100 text-[12.5px] text-slate-800">
-                {filteredRecords.map((row) => (
-                  <tr key={row.id} className="hover:bg-blue-50/50 transition-colors">
-                    <td className="py-3 px-3.5 font-mono font-bold text-brand-primary whitespace-nowrap">
-                      {row.requestId}
-                    </td>
-                    <td className="py-3 px-3.5 text-slate-600 whitespace-nowrap">{row.date}</td>
-                    <td className="py-3 px-3.5 font-semibold text-slate-900">{row.customerName}</td>
-                    <td className="py-3 px-3.5 font-mono text-slate-700 whitespace-nowrap">{row.mobile}</td>
-                    <td className="py-3 px-3.5 text-slate-700">{row.product}</td>
-                    <td className="py-3 px-3.5 text-slate-700">{row.proposedInsurer}</td>
-                    <td className="py-3 px-3.5 text-right font-bold text-slate-900 whitespace-nowrap">
-                      {formatCurrency(row.premium)}
-                    </td>
-                    <td className="py-3 px-3 text-center whitespace-nowrap">
-                      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-blue-50 text-brand-primary border border-blue-200">
-                        {row.kycStatus}
-                      </span>
-                    </td>
-                    <td className="py-3 px-3.5 text-slate-600 whitespace-nowrap">{row.raReviewer}</td>
-                    <td className="py-3 px-3.5 text-center whitespace-nowrap">
-                      <span
-                        className={`inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold ${
-                          row.status === 'Approved'
-                            ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                            : 'bg-amber-50 text-amber-700 border border-amber-200'
-                        }`}
-                      >
-                        {row.status}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+              ))}
+              {filteredRecords.length === 0 && (
+                <tr>
+                  <td colSpan={10} className="py-16 text-center text-slate-500">
+                    <p className="font-semibold text-slate-600 text-sm">
+                      No approval requests found for the selected date range ({appliedDates.from} to {appliedDates.to}).
+                    </p>
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
         </div>
-      )}
+      </div>
     </div>
   );
 };

@@ -175,12 +175,12 @@ export const NonMotorCommissionTab: React.FC<NonMotorCommissionTabProps> = ({ sh
   return (
     <div className="space-y-5">
       {/* CARD 1: Commission Grid For Selector (Screenshot 1 Top) */}
-      <div className="bg-white rounded-xl shadow-sm border border-slate-200/80 p-5 transition-all">
+      <div className="bg-white rounded-[12px] shadow-[0_1px_2px_rgba(0,0,0,0.02)] border border-brand-border p-5 transition-all">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
           {/* Left: Radio Options */}
           <div className="space-y-2">
-            <label className="text-xs font-semibold text-slate-700 tracking-wide uppercase flex items-center gap-1.5">
-              <ShieldCheck size={14} className="text-blue-600" />
+            <label className="text-xs font-semibold text-brand-navy tracking-wide uppercase flex items-center gap-1.5">
+              <ShieldCheck size={14} className="text-brand-primary" />
               Commission Grid For
             </label>
             <div className="flex flex-wrap items-center gap-4 text-xs font-medium text-slate-700">
@@ -195,13 +195,13 @@ export const NonMotorCommissionTab: React.FC<NonMotorCommissionTabProps> = ({ sh
                     value={opt}
                     checked={selectedGridFor === opt}
                     onChange={() => handleGridForChange(opt)}
-                    className="w-4 h-4 text-blue-600 border-slate-300 focus:ring-blue-500 focus:ring-offset-0 cursor-pointer"
+                    className="w-4 h-4 text-brand-primary border-slate-300 focus:ring-brand-primary focus:ring-offset-0 cursor-pointer"
                   />
                   <span
                     className={`transition-colors ${
                       selectedGridFor === opt
-                        ? 'text-blue-700 font-semibold'
-                        : 'text-slate-600 group-hover:text-blue-600'
+                        ? 'text-brand-primary font-semibold'
+                        : 'text-slate-600 group-hover:text-brand-primary'
                     }`}
                   >
                     {opt}
@@ -220,7 +220,7 @@ export const NonMotorCommissionTab: React.FC<NonMotorCommissionTabProps> = ({ sh
               <select
                 value={selectedEntity}
                 onChange={(e) => setSelectedEntity(e.target.value)}
-                className="w-full h-9 rounded-lg border border-slate-300 bg-white px-3 text-xs font-medium text-slate-800 focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-600 shadow-sm"
+                className="w-full h-9 rounded-lg border border-brand-border bg-white px-3 text-xs font-medium text-slate-800 focus:border-brand-primary focus:outline-none focus:ring-1 focus:ring-brand-primary shadow-xs"
               >
                 {(mockCommissionEntities[selectedGridFor] || []).map((ent) => (
                   <option key={ent} value={ent}>
@@ -234,14 +234,14 @@ export const NonMotorCommissionTab: React.FC<NonMotorCommissionTabProps> = ({ sh
               <button
                 type="button"
                 onClick={() => showToast(`Viewing Commission Grid for ${selectedEntity}`)}
-                className="h-9 px-5 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white text-xs font-semibold rounded-lg shadow-sm hover:shadow transition-all flex items-center gap-1.5"
+                className="h-9 px-5 bg-brand-primary hover:bg-[#1D4ED8] active:bg-blue-800 text-white text-xs font-semibold rounded-lg shadow-sm hover:shadow transition-all flex items-center gap-1.5 cursor-pointer"
               >
                 View
               </button>
               <button
                 type="button"
                 onClick={handleReset}
-                className="h-9 px-4 bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-700 border border-slate-300 text-xs font-semibold rounded-lg transition-all flex items-center gap-1.5"
+                className="h-9 px-4 bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-700 border border-brand-border text-xs font-semibold rounded-lg transition-all flex items-center gap-1.5 cursor-pointer"
               >
                 <RotateCcw size={13} />
                 Reset
@@ -252,17 +252,17 @@ export const NonMotorCommissionTab: React.FC<NonMotorCommissionTabProps> = ({ sh
       </div>
 
       {/* CARD 2: Commission Details Form (Screenshot 1 Bottom) */}
-      <div className="bg-white rounded-xl shadow-sm border border-slate-200/80 overflow-hidden">
+      <div className="bg-white rounded-[12px] shadow-[0_1px_2px_rgba(0,0,0,0.02)] border border-brand-border overflow-hidden">
         {/* Banner Strip: » Commission Details */}
-        <div className="bg-gradient-to-r from-blue-700 via-blue-600 to-indigo-700 px-4 py-2.5 flex items-center justify-between text-white shadow-sm">
+        <div className="p-3.5 bg-slate-50 border-b border-brand-border flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="text-blue-200 font-bold text-sm">»</span>
-            <h2 className="text-xs font-bold tracking-wide uppercase">
-              {editingId ? '» Edit Commission Details' : '» Commission Details'}
+            <span className="text-brand-primary font-bold text-sm">»</span>
+            <h2 className="text-xs font-bold text-brand-navy tracking-wide uppercase">
+              {editingId ? 'Edit Commission Details' : 'Commission Details'}
             </h2>
           </div>
           {editingId && (
-            <span className="text-[11px] bg-white/20 backdrop-blur-sm px-2.5 py-0.5 rounded-full text-blue-100 font-medium">
+            <span className="text-[11px] bg-blue-50 border border-blue-200 px-2.5 py-0.5 rounded-full text-brand-primary font-semibold">
               Editing Record #{editingId}
             </span>
           )}
@@ -370,7 +370,7 @@ export const NonMotorCommissionTab: React.FC<NonMotorCommissionTabProps> = ({ sh
           <div className="mt-5 flex items-center gap-3">
             <button
               type="submit"
-              className="h-9 px-6 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white text-xs font-semibold rounded-lg shadow-sm hover:shadow transition-all flex items-center gap-1.5"
+              className="h-9 px-6 bg-brand-primary hover:bg-[#1D4ED8] active:bg-blue-800 text-white text-xs font-semibold rounded-lg shadow-sm hover:shadow transition-all flex items-center gap-1.5 cursor-pointer"
             >
               {editingId ? <CheckCircle2 size={14} /> : <Plus size={14} />}
               {editingId ? 'Update Commission' : 'Submit'}
@@ -393,12 +393,12 @@ export const NonMotorCommissionTab: React.FC<NonMotorCommissionTabProps> = ({ sh
       </div>
 
       {/* CARD 3: Configured Commission Rules Table */}
-      <div className="bg-white rounded-xl shadow-sm border border-slate-200/80 overflow-hidden">
+      <div className="bg-white rounded-[12px] shadow-[0_1px_2px_rgba(0,0,0,0.02)] border border-brand-border overflow-hidden">
         {/* Table Top Bar */}
-        <div className="p-4 border-b border-slate-200/80 bg-slate-50/70 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <div className="p-3.5 border-b border-brand-border bg-slate-50 flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="flex items-center gap-2">
-            <div className="w-2 h-2 rounded-full bg-blue-600" />
-            <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider">
+            <div className="w-2 h-2 rounded-full bg-brand-primary" />
+            <h3 className="text-xs font-bold text-brand-navy uppercase tracking-wider">
               Active Non Motor Commission Grid ({filteredItems.length})
             </h3>
           </div>
@@ -411,7 +411,7 @@ export const NonMotorCommissionTab: React.FC<NonMotorCommissionTabProps> = ({ sh
                 placeholder="Search grid rules..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full h-8 pl-8 pr-3 rounded-lg border border-slate-300 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600"
+                className="w-full h-8 pl-8 pr-3 rounded-lg border border-brand-border text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary"
               />
             </div>
           </div>
@@ -420,21 +420,21 @@ export const NonMotorCommissionTab: React.FC<NonMotorCommissionTabProps> = ({ sh
         {/* Table */}
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs border-collapse">
-            <thead>
-              <tr className="bg-[#102A4C] text-white uppercase text-[11px] font-semibold tracking-wider">
-                <th className="py-2.5 px-3">#</th>
-                <th className="py-2.5 px-3">Grid For</th>
-                <th className="py-2.5 px-3">Entity Name</th>
-                <th className="py-2.5 px-3">Company Name</th>
-                <th className="py-2.5 px-3">Policy Type</th>
-                <th className="py-2.5 px-3">Policy Sub Type</th>
-                <th className="py-2.5 px-3">Valid From</th>
-                <th className="py-2.5 px-3 text-right">Commission (%)</th>
-                <th className="py-2.5 px-3 text-center">Status</th>
-                <th className="py-2.5 px-3 text-center">Actions</th>
+            <thead className="sticky top-0 z-10 bg-brand-lightbg text-brand-navy text-[12px] uppercase tracking-wider font-semibold select-none border-b border-brand-border">
+              <tr>
+                <th className="py-3 px-3 font-semibold text-brand-navy">#</th>
+                <th className="py-3 px-3 font-semibold text-brand-navy">Grid For</th>
+                <th className="py-3 px-3 font-semibold text-brand-navy">Entity Name</th>
+                <th className="py-3 px-3 font-semibold text-brand-navy">Company Name</th>
+                <th className="py-3 px-3 font-semibold text-brand-navy">Policy Type</th>
+                <th className="py-3 px-3 font-semibold text-brand-navy">Policy Sub Type</th>
+                <th className="py-3 px-3 font-semibold text-brand-navy">Valid From</th>
+                <th className="py-3 px-3 text-right font-semibold text-brand-navy">Commission (%)</th>
+                <th className="py-3 px-3 text-center font-semibold text-brand-navy">Status</th>
+                <th className="py-3 px-3 text-center font-semibold text-brand-navy">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-200/80">
+            <tbody className="divide-y divide-brand-border bg-white text-slate-800">
               {filteredItems.length === 0 ? (
                 <tr>
                   <td colSpan={10} className="py-8 text-center text-slate-400 font-medium">
@@ -443,16 +443,16 @@ export const NonMotorCommissionTab: React.FC<NonMotorCommissionTabProps> = ({ sh
                 </tr>
               ) : (
                 filteredItems.map((item, idx) => (
-                  <tr key={item.id} className="hover:bg-blue-50/40 transition-colors">
+                  <tr key={item.id} className="hover:bg-brand-mainbg transition-colors bg-white">
                     <td className="py-2.5 px-3 text-slate-500 font-medium">{idx + 1}</td>
                     <td className="py-2.5 px-3">
-                      <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-200">
+                      <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-brand-primary border border-blue-200">
                         {item.gridFor}
                       </span>
                     </td>
                     <td className="py-2.5 px-3 font-semibold text-slate-800">{item.entityName}</td>
                     <td className="py-2.5 px-3 text-slate-700 font-medium">{item.companyName}</td>
-                    <td className="py-2.5 px-3 font-semibold text-blue-700">{item.policyType}</td>
+                    <td className="py-2.5 px-3 font-semibold text-brand-primary">{item.policyType}</td>
                     <td className="py-2.5 px-3 text-slate-600">{item.policySubType}</td>
                     <td className="py-2.5 px-3 text-slate-500 font-mono text-[11px]">{item.validFrom}</td>
                     <td className="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono text-xs">
@@ -468,7 +468,7 @@ export const NonMotorCommissionTab: React.FC<NonMotorCommissionTabProps> = ({ sh
                         <button
                           type="button"
                           onClick={() => handleEdit(item)}
-                          className="p-1 rounded text-blue-600 hover:bg-blue-100 transition-colors"
+                          className="p-1 rounded text-brand-primary hover:bg-blue-100 transition-colors"
                           title="Edit Rule"
                         >
                           <Edit2 size={13} />

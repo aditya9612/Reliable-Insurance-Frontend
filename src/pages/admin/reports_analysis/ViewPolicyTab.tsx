@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Search, Download, X, RefreshCw } from 'lucide-react';
+import { Search, Download, X, RefreshCw, Eye, FileText } from 'lucide-react';
 
 export interface PolicyTransactionRecord {
   id: number;
@@ -42,6 +42,11 @@ export const ViewPolicyTab: React.FC = () => {
 
   // Secondary Instant Search Field below card ("Search Customer Name Here")
   const [instantSearchName, setInstantSearchName] = useState('');
+
+  // Pagination states
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [selectedRecord, setSelectedRecord] = useState<PolicyTransactionRecord | null>(null);
 
   // Mock comprehensive dataset
   const initialPolicies: PolicyTransactionRecord[] = [
@@ -344,82 +349,84 @@ export const ViewPolicyTab: React.FC = () => {
     document.body.removeChild(link);
   };
 
+  // Paginated records
+  const totalPages = Math.ceil(filteredRecords.length / itemsPerPage);
+  const paginatedRecords = useMemo(() => {
+    const start = (currentPage - 1) * itemsPerPage;
+    return filteredRecords.slice(start, start + itemsPerPage);
+  }, [filteredRecords, currentPage, itemsPerPage]);
+
   return (
     <div className="space-y-6 w-full font-sans">
       {/* =========================================================================
-          TOP FILTER CARD (Replicating reliable-erp.com/Clerk/adm_AllTransactionExportNew.aspx)
+          TOP FILTER CARD (VehicleMaster Theme)
          ========================================================================= */}
-      <div className="bg-white rounded-[10px] p-6 sm:p-7 shadow-sm border border-slate-200/80">
-        {/* Blue Banner Header */}
-        <div className="bg-brand-primary text-white px-4 py-2.5 rounded-[6px] font-normal text-[15px] flex items-center shadow-xs mb-6">
-          <span className="mr-0.5 text-base font-serif">&raquo;</span>View Policy Documents
-        </div>
-
+      <div className="bg-white rounded-[12px] p-6 shadow-[0_1px_2px_rgba(0,0,0,0.02)] border border-brand-border">
         <form onSubmit={handleShow} className="space-y-6">
-          {/* Row of 4 Pill Inputs matching legacy screenshot */}
+          {/* Row of 4 Clean Inputs */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {/* 1. Customer Name */}
             <div>
-              <label className="block text-[13px] text-slate-700 font-semibold mb-1.5">
+              <label className="block text-xs font-semibold text-slate-700 mb-1.5">
                 Customer Name
               </label>
               <input
                 type="text"
                 value={filterCustomerName}
                 onChange={(e) => setFilterCustomerName(e.target.value)}
-                placeholder=""
-                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                placeholder="Enter Customer Name"
+                className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all"
               />
             </div>
 
             {/* 2. Vehicle No. */}
             <div>
-              <label className="block text-[13px] text-slate-700 font-semibold mb-1.5">
+              <label className="block text-xs font-semibold text-slate-700 mb-1.5">
                 Vehicle No.
               </label>
               <input
                 type="text"
                 value={filterVehicleNo}
                 onChange={(e) => setFilterVehicleNo(e.target.value)}
-                placeholder=""
-                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner uppercase"
+                placeholder="e.g. MH-12-PQ-4567"
+                className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all uppercase"
               />
             </div>
 
             {/* 3. Policy No. */}
             <div>
-              <label className="block text-[13px] text-slate-700 font-semibold mb-1.5">
+              <label className="block text-xs font-semibold text-slate-700 mb-1.5">
                 Policy No.
               </label>
               <input
                 type="text"
                 value={filterPolicyNo}
                 onChange={(e) => setFilterPolicyNo(e.target.value)}
-                placeholder=""
-                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner uppercase"
+                placeholder="e.g. POL-MOT-2026-8812"
+                className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all uppercase"
               />
             </div>
 
             {/* 4. Customer Cheque No. */}
             <div>
-              <label className="block text-[13px] text-slate-700 font-semibold mb-1.5">
+              <label className="block text-xs font-semibold text-slate-700 mb-1.5">
                 Customer Cheque No.
               </label>
               <input
                 type="text"
                 value={filterChequeNo}
                 onChange={(e) => setFilterChequeNo(e.target.value)}
-                placeholder=""
-                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner uppercase"
+                placeholder="e.g. CHQ-882190"
+                className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all uppercase"
               />
             </div>
           </div>
 
-          {/* Action Buttons Row: Show (Blue) & Export (Amber/Orange) */}
+          {/* Action Buttons Row */}
           <div className="flex items-center gap-3 pt-1">
             <button
               type="submit"
-              className="px-8 py-2 bg-brand-primary hover:bg-blue-700 text-white rounded-md text-[13px] font-semibold shadow-sm transition-all cursor-pointer border-none active:scale-[0.98] flex items-center gap-1.5"
+              className="px-6 py-2 bg-brand-primary hover:bg-[#1D4ED8] text-white rounded-lg text-sm font-semibold shadow-xs transition-all cursor-pointer border-none active:scale-[0.98] flex items-center gap-1.5"
             >
               <Search size={15} />
               <span>Show</span>
@@ -428,16 +435,16 @@ export const ViewPolicyTab: React.FC = () => {
             <button
               type="button"
               onClick={handleExport}
-              className="px-8 py-2 bg-[#E89C35] hover:bg-[#d48824] text-white rounded-md text-[13px] font-semibold shadow-sm transition-all cursor-pointer border-none active:scale-[0.98] flex items-center gap-1.5"
+              className="px-6 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-sm font-semibold shadow-xs transition-all cursor-pointer border-none active:scale-[0.98] flex items-center gap-1.5"
             >
               <Download size={15} />
-              <span>Export</span>
+              <span>Export CSV</span>
             </button>
 
             <button
               type="button"
               onClick={handleReset}
-              className="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-md text-[13px] font-semibold transition-all cursor-pointer border-none"
+              className="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-lg text-sm font-semibold transition-all cursor-pointer border-none"
               title="Reset Filters"
             >
               <RefreshCw size={14} />
@@ -447,29 +454,251 @@ export const ViewPolicyTab: React.FC = () => {
       </div>
 
       {/* =========================================================================
-          SECONDARY INSTANT SEARCH FIELD (Directly below card in screenshot)
+          POLICY RESULTS TABLE CARD (VehicleMaster Theme)
          ========================================================================= */}
-      <div className="w-full max-w-md">
-        <div className="relative">
-          <input
-            type="text"
-            placeholder="Search Customer Name Here"
-            value={instantSearchName}
-            onChange={(e) => {
-              setInstantSearchName(e.target.value);
-            }}
-            className="w-full px-5 py-2.5 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 placeholder-slate-400 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-sm"
-          />
-          {instantSearchName && (
-            <button
-              onClick={() => setInstantSearchName('')}
-              className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 bg-transparent border-none cursor-pointer"
+      <div className="bg-white rounded-[12px] shadow-[0_1px_2px_rgba(0,0,0,0.02)] border border-brand-border overflow-hidden flex flex-col w-full">
+        {/* Table Search & Title Toolbar */}
+        <div className="p-4 bg-slate-50 border-b border-brand-border flex flex-col sm:flex-row items-center justify-between gap-4">
+          {/* Quick search input */}
+          <div className="relative w-full sm:w-[350px]">
+            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+            <input
+              type="text"
+              placeholder="Search Customer Name Here..."
+              value={instantSearchName}
+              onChange={(e) => {
+                setInstantSearchName(e.target.value);
+                setCurrentPage(1);
+              }}
+              className="w-full pl-9 pr-4 py-2 bg-white border border-slate-300 rounded-lg text-sm text-brand-navy placeholder-[#94a3b8] focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all h-[40px]"
+            />
+          </div>
+
+          <div className="flex items-center gap-2">
+            <span className="text-xs bg-brand-primary/10 text-brand-primary px-2.5 py-1 rounded-full font-semibold">
+              {filteredRecords.length} Records
+            </span>
+          </div>
+        </div>
+
+        {/* Scrollable Table Area */}
+        <div className="overflow-x-auto w-full min-w-0">
+          <table className="w-full text-left border-collapse min-w-[1200px]">
+            <thead>
+              <tr className="bg-brand-lightbg text-brand-navy text-[13px] font-semibold uppercase border-b border-brand-border whitespace-nowrap">
+                <th className="py-3 px-4 text-center w-14">SR. NO.</th>
+                <th className="py-3 px-4">POLICY NO</th>
+                <th className="py-3 px-4">CUSTOMER NAME</th>
+                <th className="py-3 px-4">VEHICLE NO</th>
+                <th className="py-3 px-4">MAKE & MODEL</th>
+                <th className="py-3 px-4">INSURER</th>
+                <th className="py-3 px-4">PRODUCT</th>
+                <th className="py-3 px-4">CHEQUE NO</th>
+                <th className="py-3 px-4 text-right">GROSS PREM (₹)</th>
+                <th className="py-3 px-4 text-right">NET PREM (₹)</th>
+                <th className="py-3 px-4">BRANCH</th>
+                <th className="py-3 px-4 text-center">STATUS</th>
+                <th className="py-3 px-4 text-center w-20">ACTION</th>
+              </tr>
+            </thead>
+
+            <tbody className="divide-y divide-brand-border text-[13px]">
+              {paginatedRecords.length > 0 ? (
+                paginatedRecords.map((row, index) => (
+                  <tr
+                    key={row.id}
+                    className="hover:bg-brand-mainbg h-[48px] transition-colors bg-white"
+                  >
+                    <td className="py-2.5 px-4 text-center font-medium text-brand-primary">
+                      {(currentPage - 1) * itemsPerPage + index + 1}
+                    </td>
+
+                    <td className="py-2.5 px-4 font-mono font-bold text-brand-primary whitespace-nowrap">
+                      {row.policyNo}
+                    </td>
+
+                    <td className="py-2.5 px-4">
+                      <div className="font-semibold text-brand-navy">{row.customerName}</div>
+                      <div className="text-[11px] text-slate-500">{row.mobile}</div>
+                    </td>
+
+                    <td className="py-2.5 px-4 font-mono font-semibold text-slate-800 whitespace-nowrap">
+                      {row.regNo}
+                    </td>
+
+                    <td className="py-2.5 px-4 text-slate-700 whitespace-nowrap">
+                      {row.makeModel}
+                    </td>
+
+                    <td className="py-2.5 px-4 text-slate-800 font-medium">
+                      {row.insurer}
+                    </td>
+
+                    <td className="py-2.5 px-4 text-slate-600">
+                      {row.product}
+                    </td>
+
+                    <td className="py-2.5 px-4 font-mono text-xs text-slate-700 whitespace-nowrap">
+                      {row.chequeNo}
+                    </td>
+
+                    <td className="py-2.5 px-4 text-right font-medium text-slate-700 font-mono whitespace-nowrap">
+                      ₹{row.grossPremium.toLocaleString('en-IN')}
+                    </td>
+
+                    <td className="py-2.5 px-4 text-right font-medium text-slate-700 font-mono whitespace-nowrap">
+                      ₹{row.netPremium.toLocaleString('en-IN')}
+                    </td>
+
+                    <td className="py-2.5 px-4 text-slate-700 whitespace-nowrap">
+                      {row.branch}
+                    </td>
+
+                    <td className="py-2.5 px-4 text-center whitespace-nowrap">
+                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold border ${
+                        row.status === 'Active Policy'
+                          ? 'bg-emerald-50 text-emerald-700 border-emerald-300'
+                          : row.status === 'Expired'
+                          ? 'bg-slate-100 text-slate-600 border-slate-300'
+                          : 'bg-rose-50 text-rose-700 border-rose-300'
+                      }`}>
+                        {row.status}
+                      </span>
+                    </td>
+
+                    <td className="py-2.5 px-4 text-center">
+                      <button
+                        onClick={() => setSelectedRecord(row)}
+                        className="p-1.5 bg-brand-lightbg text-brand-primary hover:bg-[#E2E8F0] rounded-[6px] transition-colors cursor-pointer inline-flex items-center justify-center border-none"
+                        title="View Policy Details"
+                      >
+                        <Eye size={16} strokeWidth={1.5} />
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={13} className="py-12 text-center text-slate-400">
+                    <p className="text-sm font-semibold">No Policy Records Found</p>
+                    <p className="text-xs text-slate-400 mt-1">Try adjusting your filters or search keywords</p>
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Standard Footer Pagination Bar matching VehicleMaster */}
+        <div className="p-4 bg-white border-t border-brand-border flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-2 text-sm text-brand-muted font-medium">
+            <span>Records per page:</span>
+            <select
+              value={itemsPerPage}
+              onChange={(e) => {
+                setItemsPerPage(Number(e.target.value));
+                setCurrentPage(1);
+              }}
+              className="border border-brand-border rounded px-2 py-1 text-sm bg-white text-brand-navy focus:outline-none focus:border-brand-primary"
             >
-              <X size={15} />
+              <option value={10}>10</option>
+              <option value={25}>25</option>
+              <option value={50}>50</option>
+            </select>
+          </div>
+
+          <div className="text-sm text-brand-muted font-medium">
+            Showing {filteredRecords.length === 0 ? 0 : (currentPage - 1) * itemsPerPage + 1} - {Math.min(currentPage * itemsPerPage, filteredRecords.length)} of {filteredRecords.length} records
+          </div>
+
+          <div className="flex items-center gap-1">
+            <button
+              onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+              className={`px-3 py-1 rounded text-sm font-medium border border-brand-border ${
+                currentPage === 1
+                  ? 'text-slate-300 cursor-not-allowed bg-slate-50'
+                  : 'text-brand-navy hover:bg-brand-mainbg cursor-pointer'
+              }`}
+            >
+              &lt;
             </button>
-          )}
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+              <button
+                key={page}
+                onClick={() => setCurrentPage(page)}
+                className={`px-3 py-1 rounded text-sm font-medium ${
+                  currentPage === page
+                    ? 'bg-brand-primary text-white'
+                    : 'text-brand-navy hover:bg-brand-mainbg border border-brand-border'
+                }`}
+              >
+                {page}
+              </button>
+            ))}
+            <button
+              onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+              disabled={currentPage === totalPages || totalPages === 0}
+              className={`px-3 py-1 rounded text-sm font-medium border border-brand-border ${
+                currentPage === totalPages || totalPages === 0
+                  ? 'text-slate-300 cursor-not-allowed bg-slate-50'
+                  : 'text-brand-navy hover:bg-brand-mainbg cursor-pointer'
+              }`}
+            >
+              &gt;
+            </button>
+          </div>
         </div>
       </div>
+
+      {/* Policy Details Modal */}
+      {selectedRecord && (
+        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white rounded-xl shadow-2xl max-w-lg w-full overflow-hidden border border-slate-200">
+            <div className="bg-brand-navy text-white px-5 py-3.5 flex items-center justify-between">
+              <span className="font-bold text-sm tracking-wide">
+                Policy Document - {selectedRecord.policyNo}
+              </span>
+              <button
+                onClick={() => setSelectedRecord(null)}
+                className="text-white hover:text-rose-200 cursor-pointer border-none bg-transparent"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            <div className="p-5 space-y-4 text-xs">
+              <div className="grid grid-cols-2 gap-3 bg-slate-50 p-3 rounded-lg border border-slate-200">
+                <div>
+                  <span className="text-slate-500 block">Customer Name</span>
+                  <span className="font-bold text-slate-900">{selectedRecord.customerName}</span>
+                </div>
+                <div>
+                  <span className="text-slate-500 block">Vehicle Reg No</span>
+                  <span className="font-mono font-bold text-brand-primary">{selectedRecord.regNo}</span>
+                </div>
+                <div>
+                  <span className="text-slate-500 block">Insurer</span>
+                  <span className="font-semibold text-slate-800">{selectedRecord.insurer}</span>
+                </div>
+                <div>
+                  <span className="text-slate-500 block">Gross Premium</span>
+                  <span className="font-bold text-emerald-700">₹{selectedRecord.grossPremium.toLocaleString('en-IN')}</span>
+                </div>
+              </div>
+
+              <div className="flex justify-end pt-2">
+                <button
+                  onClick={() => setSelectedRecord(null)}
+                  className="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-md font-semibold text-xs cursor-pointer border-none"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

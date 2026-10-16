@@ -102,11 +102,11 @@ const SalaryProcessTab: React.FC = () => {
             )}
 
             {/* MAIN SALARY PROCESS CARD: FULL WIDTH MATCHING PHOTO & BLUE THEME */}
-            <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden w-full min-w-0">
-                {/* Banner Header: »Salary Process in Blue Theme */}
-                <div className="bg-brand-primary text-white px-6 py-3.5 flex items-center shadow-xs">
+            <div className="bg-white rounded-xl border border-brand-border shadow-sm overflow-hidden w-full min-w-0">
+                {/* Banner Header: »Salary Process in Light Blue Theme */}
+                <div className="bg-brand-lightbg text-brand-navy border-b border-brand-border px-6 py-3.5 flex items-center shadow-xs">
                     <div className="flex items-center gap-1.5 font-bold text-[15px] tracking-wide">
-                        <span className="text-white/90 text-lg font-serif">»</span>
+                        <span className="text-brand-primary text-lg font-bold">»</span>
                         <span>Salary Process</span>
                     </div>
                 </div>

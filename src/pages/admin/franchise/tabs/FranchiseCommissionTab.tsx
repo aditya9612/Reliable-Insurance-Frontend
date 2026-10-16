@@ -247,7 +247,7 @@ export const FranchiseCommissionTab: React.FC<FranchiseCommissionTabProps> = ({
       {/* ========================================================= */}
       {/* CARD 1: TOP FILTER SELECTION CARD                        */}
       {/* ========================================================= */}
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-5 sm:p-6 space-y-4">
+      <div className="bg-white rounded-[12px] border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] p-5 sm:p-6 space-y-4">
         {/* Row 1: Radio Groups & Broker Dropdown */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
           {/* Radio Group 1: REGULAR vs RTO */}
@@ -328,7 +328,7 @@ export const FranchiseCommissionTab: React.FC<FranchiseCommissionTabProps> = ({
         </div>
 
         {/* Row 2: Branch, Franchise, Company Name & View/Reset Buttons */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-end pt-2 border-t border-slate-100">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-end pt-2 border-t border-brand-border">
           <div>
             <label className="block text-xs font-medium text-slate-700 mb-1">
               Branch
@@ -398,13 +398,13 @@ export const FranchiseCommissionTab: React.FC<FranchiseCommissionTabProps> = ({
       </div>
 
       {/* ========================================================= */}
-      {/* CARD 2: » Commission Details (Blue Theme)                 */}
+      {/* CARD 2: » Commission Details (Themed Header)              */}
       {/* ========================================================= */}
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden w-full">
-        {/* Blue Theme Section Header */}
-        <div className="bg-brand-primary text-white px-5 py-2.5 flex items-center shadow-xs">
-          <div className="flex items-center gap-1.5 font-bold text-sm tracking-wide">
-            <span className="text-white/90 text-base font-serif">»</span>
+      <div className="bg-white rounded-[12px] border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden w-full">
+        {/* Section Header */}
+        <div className="p-3.5 bg-slate-50 border-b border-brand-border flex items-center">
+          <div className="flex items-center gap-1.5 font-bold text-xs uppercase tracking-wide text-brand-navy">
+            <span className="text-brand-navy/70 text-sm font-serif">»</span>
             <span>Commission Details</span>
           </div>
         </div>
@@ -727,11 +727,11 @@ export const FranchiseCommissionTab: React.FC<FranchiseCommissionTabProps> = ({
       {/* CARD 3: COMMISSION GRID TABLE (Active / Configured Grid)  */}
       {/* ========================================================= */}
       {showGridTable && (
-        <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-          <div className="p-3.5 border-b border-slate-200 bg-slate-50 flex items-center justify-between">
+        <div className="bg-white rounded-[12px] border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden">
+          <div className="p-3.5 border-b border-brand-border bg-slate-50 flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Percent size={16} className="text-brand-primary" />
-              <h3 className="font-bold text-slate-800 text-xs">
+              <Percent size={16} className="text-brand-navy" />
+              <h3 className="font-bold text-brand-navy text-xs uppercase tracking-wide">
                 Configured Franchise Commission Rates ({filteredRules.length} Rules)
               </h3>
             </div>
@@ -739,7 +739,7 @@ export const FranchiseCommissionTab: React.FC<FranchiseCommissionTabProps> = ({
               onClick={() => {
                 showToast('Exporting franchise commission grid...');
               }}
-              className="text-xs text-slate-600 hover:text-brand-primary font-semibold flex items-center gap-1"
+              className="text-xs text-slate-600 hover:text-brand-navy font-semibold flex items-center gap-1"
             >
               <Download size={13} /> Export Grid
             </button>
@@ -748,23 +748,23 @@ export const FranchiseCommissionTab: React.FC<FranchiseCommissionTabProps> = ({
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse text-xs whitespace-nowrap">
               <thead>
-                <tr className="bg-brand-primary text-white font-semibold uppercase tracking-wider text-[11px]">
-                  <th className="py-2 px-3">Date</th>
-                  <th className="py-2 px-3">Target</th>
-                  <th className="py-2 px-3">Branch</th>
-                  <th className="py-2 px-3">Franchise</th>
-                  <th className="py-2 px-3">Company</th>
-                  <th className="py-2 px-3">Vehicle Type</th>
-                  <th className="py-2 px-3">Make / Model</th>
-                  <th className="py-2 px-3 text-right">RA OD %</th>
-                  <th className="py-2 px-3 text-right">Comm OD %</th>
-                  <th className="py-2 px-3 text-right">RA TP %</th>
-                  <th className="py-2 px-3 text-right">Comm TP %</th>
-                  <th className="py-2 px-3 text-right font-bold">Net Comm %</th>
-                  <th className="py-2 px-3 text-center">Status</th>
+                <tr className="bg-brand-lightbg text-brand-navy font-semibold uppercase tracking-wider text-[11px] border-b border-brand-border">
+                  <th className="py-2.5 px-3">Date</th>
+                  <th className="py-2.5 px-3">Target</th>
+                  <th className="py-2.5 px-3">Branch</th>
+                  <th className="py-2.5 px-3">Franchise</th>
+                  <th className="py-2.5 px-3">Company</th>
+                  <th className="py-2.5 px-3">Vehicle Type</th>
+                  <th className="py-2.5 px-3">Make / Model</th>
+                  <th className="py-2.5 px-3 text-right">RA OD %</th>
+                  <th className="py-2.5 px-3 text-right">Comm OD %</th>
+                  <th className="py-2.5 px-3 text-right">RA TP %</th>
+                  <th className="py-2.5 px-3 text-right">Comm TP %</th>
+                  <th className="py-2.5 px-3 text-right font-bold">Net Comm %</th>
+                  <th className="py-2.5 px-3 text-center">Status</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100 text-slate-700">
+              <tbody className="divide-y divide-brand-border text-slate-700">
                 {filteredRules.length === 0 ? (
                   <tr>
                     <td colSpan={13} className="py-8 text-center text-slate-400">
@@ -774,11 +774,11 @@ export const FranchiseCommissionTab: React.FC<FranchiseCommissionTabProps> = ({
                   </tr>
                 ) : (
                   filteredRules.map(r => (
-                    <tr key={r.id} className="hover:bg-slate-50/80 transition-colors">
+                    <tr key={r.id} className="hover:bg-brand-mainbg transition-colors bg-white">
                       <td className="py-2 px-3 font-mono text-slate-500">{r.commDate}</td>
                       <td className="py-2 px-3 font-semibold text-slate-800">{r.franchiseTarget}</td>
                       <td className="py-2 px-3">{r.branch}</td>
-                      <td className="py-2 px-3 font-medium text-brand-primary">{r.franchiseName}</td>
+                      <td className="py-2 px-3 font-medium text-brand-navy">{r.franchiseName}</td>
                       <td className="py-2 px-3">{r.companyName}</td>
                       <td className="py-2 px-3">{r.vehicleType}</td>
                       <td className="py-2 px-3">{r.make} / {r.model}</td>

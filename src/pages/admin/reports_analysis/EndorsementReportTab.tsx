@@ -302,41 +302,44 @@ export const EndorsementReportTab: React.FC = () => {
   return (
     <div className="space-y-4 w-full font-sans">
       {/* =========================================================================
-          TOP FILTER CARD (Replicating reliable-erp.com/Clerk/Adm_EndorsementRtpExport.aspx)
+          TOP FILTER CARD (VehicleMaster Theme)
          ========================================================================= */}
-      <div className="bg-white rounded-xl p-5 sm:p-6 shadow-sm border border-brand-border">
+      {/* =========================================================================
+          TOP FILTER CARD (VehicleMaster Theme)
+         ========================================================================= */}
+      <div className="bg-white rounded-[12px] p-6 shadow-[0_1px_2px_rgba(0,0,0,0.02)] border border-brand-border">
         <form onSubmit={handleShow} className="flex flex-wrap items-center gap-4 sm:gap-6">
           {/* 1. From Date */}
           <div className="flex flex-col sm:flex-row sm:items-center gap-1.5 sm:gap-3">
-            <label className="text-[13px] text-slate-800 font-bold whitespace-nowrap">
+            <label className="text-xs font-semibold text-slate-700 whitespace-nowrap">
               From Date
             </label>
             <input
               type="date"
               value={fromDate}
               onChange={(e) => setFromDate(e.target.value)}
-              className="w-44 px-3.5 py-1.5 bg-white border border-slate-300 rounded-full text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+              className="w-44 px-3.5 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all"
             />
           </div>
 
           {/* 2. To Date */}
           <div className="flex flex-col sm:flex-row sm:items-center gap-1.5 sm:gap-3">
-            <label className="text-[13px] text-slate-800 font-bold whitespace-nowrap">
+            <label className="text-xs font-semibold text-slate-700 whitespace-nowrap">
               To Date
             </label>
             <input
               type="date"
               value={toDate}
               onChange={(e) => setToDate(e.target.value)}
-              className="w-44 px-3.5 py-1.5 bg-white border border-slate-300 rounded-full text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+              className="w-44 px-3.5 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all"
             />
           </div>
 
-          {/* Action Buttons: Show (Blue Theme) & Export (Amber/Orange Theme) */}
+          {/* Action Buttons: Show & Export */}
           <div className="flex items-center gap-3 pt-2 sm:pt-0">
             <button
               type="submit"
-              className="px-6 py-1.5 bg-[#0B5ED7] hover:bg-blue-700 text-white rounded-md text-[13px] font-bold shadow-sm transition-all cursor-pointer border-none active:scale-[0.98] flex items-center justify-center min-w-[76px]"
+              className="px-6 py-2 bg-brand-primary hover:bg-[#1D4ED8] text-white rounded-lg text-sm font-semibold shadow-xs transition-all cursor-pointer border-none active:scale-[0.98] flex items-center justify-center min-w-[76px]"
             >
               Show
             </button>
@@ -344,9 +347,9 @@ export const EndorsementReportTab: React.FC = () => {
             <button
               type="button"
               onClick={handleExport}
-              className="px-6 py-1.5 bg-[#E89C35] hover:bg-[#d48824] text-white rounded-md text-[13px] font-bold shadow-sm transition-all cursor-pointer border-none active:scale-[0.98] flex items-center justify-center min-w-[76px]"
+              className="px-6 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-sm font-semibold shadow-xs transition-all cursor-pointer border-none active:scale-[0.98] flex items-center justify-center min-w-[76px]"
             >
-              Export
+              Export CSV
             </button>
 
             {/* Quick date range switcher helper */}
@@ -383,99 +386,78 @@ export const EndorsementReportTab: React.FC = () => {
       </div>
 
       {/* =========================================================================
-          SECONDARY SEARCH FIELD (Directly below card in screenshot)
+          RESULTS TABLE (VehicleMaster Theme)
          ========================================================================= */}
-      <div className="w-full max-w-sm">
-        <div className="relative">
-          <input
-            type="text"
-            placeholder="Search Transferor Name Here"
-            value={instantSearchTransferor}
-            onChange={(e) => setInstantSearchTransferor(e.target.value)}
-            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-full text-[13px] text-slate-800 placeholder-slate-400 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
-          />
-          {instantSearchTransferor && (
-            <button
-              onClick={() => setInstantSearchTransferor('')}
-              className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 bg-transparent border-none cursor-pointer"
-            >
-              <X size={15} />
-            </button>
-          )}
-        </div>
-      </div>
-
-      {/* =========================================================================
-          RESULTS TABLE / NO DATA FOUND GRID (Replicating exact layout with blue theme)
-         ========================================================================= */}
-      {filteredRecords.length === 0 ? (
-        /* NO DATA FOUND Banner (matching the screenshot with our blue theme polish) */
-        <div className="w-full bg-white rounded-lg border border-brand-border shadow-xs overflow-hidden">
-          <div className="bg-[#EAEAEA] text-[#1E293B] px-4 py-3 font-semibold text-[13px] tracking-wide border-b border-slate-300 flex items-center justify-between">
-            <span>NO DATA FOUND</span>
-          </div>
-          <div className="p-8 text-center text-slate-500 text-xs">
-            <p className="font-medium text-slate-600">No endorsement records found for the selected date range ({appliedDateRange.from || 'start'} to {appliedDateRange.to || 'end'}).</p>
-            <p className="text-[11px] text-slate-400 mt-1">Try selecting a broader date range or clearing the transferor search filter.</p>
-          </div>
-          {/* Horizontal scroll indicator bar matching ERP bottom bar */}
-          <div className="bg-slate-100 border-t border-slate-200 px-3 py-1 flex items-center justify-between text-[11px] text-slate-400 select-none">
-            <span className="cursor-default">◄</span>
-            <div className="h-2 bg-slate-300/60 rounded-full flex-1 mx-3" />
-            <span className="cursor-default">►</span>
-          </div>
-        </div>
-      ) : (
-        /* POPULATED DATA GRID WITH OUR BLUE THEME */
-        <div className="w-full bg-white rounded-lg border border-brand-border shadow-sm overflow-hidden flex flex-col">
-          {/* Blue Theme Table Header Bar */}
-          <div className="bg-brand-lightbg text-brand-navy px-4 py-2.5 font-semibold text-[13px] border-b border-brand-border flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <span className="text-brand-primary font-bold">»</span>
-              <span>Endorsement Report Records</span>
-              <span className="bg-brand-primary/10 text-brand-primary text-xs px-2.5 py-0.5 rounded-full font-bold ml-1">
-                {filteredRecords.length} Records
-              </span>
-            </div>
-            <div className="text-xs text-slate-500 font-normal">
-              Showing entries from <strong className="text-slate-700">{appliedDateRange.from}</strong> to <strong className="text-slate-700">{appliedDateRange.to}</strong>
-            </div>
+      <div className="w-full bg-white rounded-[12px] border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden flex flex-col">
+        {/* Top Toolbar matching VehicleMaster */}
+        <div className="p-4 bg-slate-50 border-b border-brand-border flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="relative w-full sm:w-[350px]">
+            <input
+              type="text"
+              placeholder="Search Transferor Name Here"
+              value={instantSearchTransferor}
+              onChange={(e) => setInstantSearchTransferor(e.target.value)}
+              className="w-full pl-9 pr-8 py-2 bg-white border border-slate-300 rounded-lg text-sm text-brand-navy placeholder-[#94a3b8] focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all h-[40px]"
+            />
+            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+            {instantSearchTransferor && (
+              <button
+                type="button"
+                onClick={() => setInstantSearchTransferor('')}
+                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 bg-transparent border-none cursor-pointer"
+              >
+                <X size={15} />
+              </button>
+            )}
           </div>
 
-          {/* Scrollable Table */}
-          <div className="overflow-x-auto w-full">
-            <table className="w-full text-left border-collapse min-w-[1100px]">
-              <thead>
-                <tr className="bg-brand-primary text-white text-[11px] uppercase tracking-wider font-semibold border-b border-blue-700 select-none">
-                  <th className="py-2.5 px-3 text-center w-12">#</th>
-                  <th className="py-2.5 px-3.5">Endorsement Date</th>
-                  <th className="py-2.5 px-3.5">Endorsement No</th>
-                  <th className="py-2.5 px-3.5">Policy No</th>
-                  <th className="py-2.5 px-3.5">Transferor Name</th>
-                  <th className="py-2.5 px-3.5">Transferee / New Owner</th>
-                  <th className="py-2.5 px-3.5">Vehicle Reg No</th>
-                  <th className="py-2.5 px-3.5">Company</th>
-                  <th className="py-2.5 px-3.5">Endorsement Type</th>
-                  <th className="py-2.5 px-3.5 text-right">Prem Diff (₹)</th>
-                  <th className="py-2.5 px-3.5">Old Value</th>
-                  <th className="py-2.5 px-3.5">New Value</th>
-                  <th className="py-2.5 px-3.5">Branch</th>
-                  <th className="py-2.5 px-3.5 text-center">Status</th>
-                  <th className="py-2.5 px-3 text-center w-16">Action</th>
+          <div className="text-xs text-slate-500 font-medium">
+            Showing entries from <strong className="text-slate-700">{appliedDateRange.from}</strong> to <strong className="text-slate-700">{appliedDateRange.to}</strong>
+          </div>
+        </div>
+
+        {/* Scrollable Table */}
+        <div className="overflow-x-auto w-full">
+          <table className="w-full text-left border-collapse min-w-[1100px]">
+            <thead>
+              <tr className="bg-brand-lightbg text-brand-navy text-[13px] font-semibold uppercase border-b border-brand-border whitespace-nowrap">
+                <th className="py-3 px-4 text-center w-14">SR. NO.</th>
+                <th className="py-3 px-4">Endorsement Date</th>
+                <th className="py-3 px-4">Endorsement No</th>
+                <th className="py-3 px-4">Policy No</th>
+                <th className="py-3 px-4">Transferor Name</th>
+                <th className="py-3 px-4">Transferee / New Owner</th>
+                <th className="py-3 px-4">Vehicle Reg No</th>
+                <th className="py-3 px-4">Company</th>
+                <th className="py-3 px-4">Endorsement Type</th>
+                <th className="py-3 px-4 text-right">Prem Diff (₹)</th>
+                <th className="py-3 px-4">Old Value</th>
+                <th className="py-3 px-4">New Value</th>
+                <th className="py-3 px-4">Branch</th>
+                <th className="py-3 px-4 text-center">Status</th>
+                <th className="py-3 px-4 text-center w-20">Action</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-brand-border text-[13px]">
+              {filteredRecords.length === 0 ? (
+                <tr>
+                  <td colSpan={15} className="py-12 text-center text-slate-500 text-xs">
+                    <p className="font-medium text-slate-600">No endorsement records found for the selected date range ({appliedDateRange.from || 'start'} to {appliedDateRange.to || 'end'}).</p>
+                    <p className="text-[11px] text-slate-400 mt-1">Try selecting a broader date range or clearing the transferor search filter.</p>
+                  </td>
                 </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100 text-xs text-slate-700">
-                {filteredRecords.map((row, index) => (
+              ) : (
+                filteredRecords.map((row, index) => (
                   <tr
                     key={row.id}
-                    className="hover:bg-blue-50/40 transition-colors"
+                    className="hover:bg-brand-mainbg h-[48px] transition-colors bg-white"
                   >
-                    <td className="py-2.5 px-3 text-center text-slate-400 font-medium">{index + 1}</td>
-                    <td className="py-2.5 px-3.5 whitespace-nowrap text-slate-700 font-medium">{row.endorsementDate}</td>
-                    <td className="py-2.5 px-3.5 font-bold text-brand-primary whitespace-nowrap">{row.endorsementNo}</td>
-                    <td className="py-2.5 px-3.5 font-semibold text-slate-800 whitespace-nowrap">{row.policyNo}</td>
-                    <td className="py-2.5 px-3.5 font-semibold text-slate-900">{row.transferorName}</td>
-                    <td className="py-2.5 px-3.5 text-slate-700">
+                    <td className="py-2.5 px-4 text-center font-medium text-brand-primary">{index + 1}</td>
+                    <td className="py-2.5 px-4 whitespace-nowrap text-slate-700 font-medium">{row.endorsementDate}</td>
+                    <td className="py-2.5 px-4 font-bold text-brand-primary whitespace-nowrap">{row.endorsementNo}</td>
+                    <td className="py-2.5 px-4 font-semibold text-slate-800 whitespace-nowrap">{row.policyNo}</td>
+                    <td className="py-2.5 px-4 font-semibold text-brand-navy">{row.transferorName}</td>
+                    <td className="py-2.5 px-4 text-slate-700">
                       {row.transfereeName && row.transfereeName !== '-' ? (
                         <span className="font-semibold text-emerald-800 flex items-center gap-1">
                           <ArrowLeftRight size={11} className="text-emerald-600" />
@@ -485,55 +467,57 @@ export const EndorsementReportTab: React.FC = () => {
                         <span className="text-slate-400">-</span>
                       )}
                     </td>
-                    <td className="py-2.5 px-3.5 font-mono text-[11px] font-bold text-slate-800 whitespace-nowrap">{row.vehicleNo}</td>
-                    <td className="py-2.5 px-3.5 text-slate-700 whitespace-nowrap">{row.company}</td>
-                    <td className="py-2.5 px-3.5">
+                    <td className="py-2.5 px-4 font-mono text-xs font-bold text-slate-800 whitespace-nowrap">{row.vehicleNo}</td>
+                    <td className="py-2.5 px-4 text-slate-700 whitespace-nowrap">{row.company}</td>
+                    <td className="py-2.5 px-4">
                       <span className="font-semibold text-brand-primary">{row.endorsementType}</span>
                     </td>
-                    <td className="py-2.5 px-3.5 text-right font-bold text-slate-800 whitespace-nowrap">
+                    <td className="py-2.5 px-4 text-right font-medium text-slate-800 font-mono whitespace-nowrap">
                       {formatCurrency(row.premiumDiff)}
                     </td>
-                    <td className="py-2.5 px-3.5 text-slate-500 text-[11px] max-w-[130px] truncate" title={row.oldValue}>
+                    <td className="py-2.5 px-4 text-slate-500 text-xs max-w-[130px] truncate" title={row.oldValue}>
                       {row.oldValue}
                     </td>
-                    <td className="py-2.5 px-3.5 text-emerald-700 font-medium text-[11px] max-w-[140px] truncate" title={row.newValue}>
+                    <td className="py-2.5 px-4 text-emerald-700 font-medium text-xs max-w-[140px] truncate" title={row.newValue}>
                       {row.newValue}
                     </td>
-                    <td className="py-2.5 px-3.5 text-slate-600 whitespace-nowrap">{row.branch}</td>
-                    <td className="py-2.5 px-3.5 text-center whitespace-nowrap">
+                    <td className="py-2.5 px-4 text-slate-600 whitespace-nowrap">{row.branch}</td>
+                    <td className="py-2.5 px-4 text-center whitespace-nowrap">
                       {renderStatusBadge(row.status)}
                     </td>
-                    <td className="py-2.5 px-3 text-center">
+                    <td className="py-2.5 px-4 text-center">
                       <button
                         onClick={() => setSelectedRecord(row)}
-                        className="p-1.5 rounded-md hover:bg-brand-lightbg text-slate-500 hover:text-brand-primary transition-all cursor-pointer border-none bg-transparent"
+                        className="p-1.5 bg-brand-lightbg text-brand-primary hover:bg-[#E2E8F0] rounded-[6px] transition-colors cursor-pointer inline-flex items-center justify-center border-none"
                         title="View Endorsement Details"
                       >
-                        <Eye size={15} />
+                        <Eye size={16} strokeWidth={1.5} />
                       </button>
                     </td>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
 
-          {/* Table Footer with Summary & Horizontal Scrollbar */}
-          <div className="bg-slate-50 border-t border-brand-border px-4 py-2.5 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-600">
+        {/* Table Footer with Summary */}
+        {filteredRecords.length > 0 && (
+          <div className="bg-white border-t border-brand-border p-4 flex flex-wrap items-center justify-between gap-3 text-sm text-brand-muted font-medium">
             <div>
-              Showing <span className="font-bold text-slate-800">{filteredRecords.length}</span> endorsement entries
+              Showing <span className="font-bold text-brand-navy">{filteredRecords.length}</span> endorsement entries
             </div>
             <div className="flex items-center gap-4">
               <span>
                 Total Premium Difference:{' '}
-                <strong className="text-brand-primary font-bold">
+                <strong className="text-brand-primary font-bold font-mono">
                   {formatCurrency(filteredRecords.reduce((acc, curr) => acc + curr.premiumDiff, 0))}
                 </strong>
               </span>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
 
       {/* =========================================================================
           RECORD DETAILS MODAL (When clicking Eye icon)

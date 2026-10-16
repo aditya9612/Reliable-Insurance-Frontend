@@ -373,7 +373,7 @@ export const FranchiseMasterTab: React.FC<FranchiseMasterTabProps> = ({
   return (
     <div className="space-y-5 w-full min-w-0">
       {/* Top Controls / View Mode Bar */}
-      <div className="bg-white p-3 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
+      <div className="bg-white p-3 rounded-[12px] border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] flex items-center justify-between">
         <div className="flex items-center gap-2">
           <button
             onClick={() => setViewMode('form')}
@@ -407,10 +407,10 @@ export const FranchiseMasterTab: React.FC<FranchiseMasterTabProps> = ({
           {/* ========================================================= */}
           {/* 1. FRANCHISE COORDINATOR DETAILS                          */}
           {/* ========================================================= */}
-          <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden w-full">
-            <div className="bg-brand-primary text-white px-5 py-2.5 flex items-center shadow-xs">
-              <div className="flex items-center gap-1.5 font-bold text-sm tracking-wide">
-                <span className="text-white/90 text-base font-serif">»</span>
+          <div className="bg-white rounded-[12px] border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden w-full">
+            <div className="p-3.5 bg-slate-50 border-b border-brand-border flex items-center">
+              <div className="flex items-center gap-2 font-bold text-xs text-brand-navy tracking-wide uppercase">
+                <span className="text-brand-primary font-bold text-sm">»</span>
                 <span>Franchise Coordinator Details</span>
               </div>
             </div>
@@ -598,10 +598,10 @@ export const FranchiseMasterTab: React.FC<FranchiseMasterTabProps> = ({
           {/* ========================================================= */}
           {/* 2. FRANCHISE DETAILS                                      */}
           {/* ========================================================= */}
-          <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden w-full">
-            <div className="bg-brand-primary text-white px-5 py-2.5 flex items-center shadow-xs">
-              <div className="flex items-center gap-1.5 font-bold text-sm tracking-wide">
-                <span className="text-white/90 text-base font-serif">»</span>
+          <div className="bg-white rounded-[12px] border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden w-full">
+            <div className="p-3.5 bg-slate-50 border-b border-brand-border flex items-center">
+              <div className="flex items-center gap-2 font-bold text-xs text-brand-navy tracking-wide uppercase">
+                <span className="text-brand-primary font-bold text-sm">»</span>
                 <span>Franchise Details</span>
               </div>
             </div>
@@ -905,10 +905,10 @@ export const FranchiseMasterTab: React.FC<FranchiseMasterTabProps> = ({
           {/* ========================================================= */}
           {/* 3. BANK DETAILS                                           */}
           {/* ========================================================= */}
-          <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden w-full">
-            <div className="bg-brand-primary text-white px-5 py-2.5 flex items-center shadow-xs">
-              <div className="flex items-center gap-1.5 font-bold text-sm tracking-wide">
-                <span className="text-white/90 text-base font-serif">»</span>
+          <div className="bg-white rounded-[12px] border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden w-full">
+            <div className="p-3.5 bg-slate-50 border-b border-brand-border flex items-center">
+              <div className="flex items-center gap-2 font-bold text-xs text-brand-navy tracking-wide uppercase">
+                <span className="text-brand-primary font-bold text-sm">»</span>
                 <span>Bank Details</span>
               </div>
             </div>
@@ -975,10 +975,10 @@ export const FranchiseMasterTab: React.FC<FranchiseMasterTabProps> = ({
           {/* ========================================================= */}
           {/* 4. USER DETAILS                                           */}
           {/* ========================================================= */}
-          <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden w-full">
-            <div className="bg-brand-primary text-white px-5 py-2.5 flex items-center shadow-xs">
-              <div className="flex items-center gap-1.5 font-bold text-sm tracking-wide">
-                <span className="text-white/90 text-base font-serif">»</span>
+          <div className="bg-white rounded-[12px] border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden w-full">
+            <div className="p-3.5 bg-slate-50 border-b border-brand-border flex items-center">
+              <div className="flex items-center gap-2 font-bold text-xs text-brand-navy tracking-wide uppercase">
+                <span className="text-brand-primary font-bold text-sm">»</span>
                 <span>User Details</span>
               </div>
             </div>
@@ -1052,25 +1052,25 @@ export const FranchiseMasterTab: React.FC<FranchiseMasterTabProps> = ({
           {/* ========================================================= */}
           {/* 5. KYC DETAILS                                            */}
           {/* ========================================================= */}
-          <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden w-full">
-            <div className="bg-brand-primary text-white px-5 py-2.5 flex items-center shadow-xs">
-              <div className="flex items-center gap-1.5 font-bold text-sm tracking-wide">
-                <span className="text-white/90 text-base font-serif">»</span>
+          <div className="bg-white rounded-[12px] border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden w-full">
+            <div className="p-3.5 bg-slate-50 border-b border-brand-border flex items-center">
+              <div className="flex items-center gap-2 font-bold text-xs text-brand-navy tracking-wide uppercase">
+                <span className="text-brand-primary font-bold text-sm">»</span>
                 <span>KYC Details</span>
               </div>
             </div>
 
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse text-xs">
-                <thead>
-                  <tr className="bg-brand-primary/10 text-brand-navy border-b border-slate-200 font-bold uppercase tracking-wider text-[11px]">
-                    <th className="py-2.5 px-6 w-1/3">DOCUMENT NAME</th>
-                    <th className="py-2.5 px-6">FILE</th>
+                <thead className="bg-brand-lightbg text-brand-navy text-[12px] uppercase tracking-wider font-semibold select-none border-b border-brand-border">
+                  <tr>
+                    <th className="py-3 px-6 w-1/3 font-semibold text-brand-navy">DOCUMENT NAME</th>
+                    <th className="py-3 px-6 font-semibold text-brand-navy">FILE</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100 text-slate-700">
+                <tbody className="divide-y divide-brand-border text-slate-800 bg-white">
                   {kycDocs.map((doc, idx) => (
-                    <tr key={doc.id} className="hover:bg-slate-50/80 transition-colors">
+                    <tr key={doc.id} className="hover:bg-brand-mainbg transition-colors bg-white">
                       <td className="py-3 px-6 font-semibold text-slate-800">
                         {doc.name}
                       </td>
@@ -1136,8 +1136,8 @@ export const FranchiseMasterTab: React.FC<FranchiseMasterTabProps> = ({
         /* ========================================================= */
         /* REGISTERED FRANCHISES LIST (TABLE VIEW)                  */
         /* ========================================================= */
-        <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-          <div className="p-3.5 border-b border-slate-200 bg-slate-50 flex items-center justify-between gap-3">
+        <div className="bg-white rounded-[12px] border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden">
+          <div className="p-3.5 border-b border-brand-border bg-slate-50 flex items-center justify-between gap-3">
             <div className="relative w-full sm:w-72">
               <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
               <input
@@ -1145,7 +1145,7 @@ export const FranchiseMasterTab: React.FC<FranchiseMasterTabProps> = ({
                 value={tableSearch}
                 onChange={e => setTableSearch(e.target.value)}
                 placeholder="Search code, name, branch..."
-                className="w-full pl-9 pr-3 py-1.5 text-xs bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-brand-primary"
+                className="w-full pl-9 pr-3 py-1.5 text-xs bg-white border border-brand-border rounded-lg focus:outline-none focus:ring-1 focus:ring-brand-primary"
               />
             </div>
             <span className="text-xs text-slate-500 font-medium">
@@ -1155,21 +1155,21 @@ export const FranchiseMasterTab: React.FC<FranchiseMasterTabProps> = ({
 
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse text-xs">
-              <thead>
-                <tr className="bg-brand-primary text-white font-semibold uppercase tracking-wider text-[11px]">
-                  <th className="py-2.5 px-3">Franchise Code</th>
-                  <th className="py-2.5 px-3">Franchise Name</th>
-                  <th className="py-2.5 px-3">Branch Hub</th>
-                  <th className="py-2.5 px-3">Contact</th>
-                  <th className="py-2.5 px-3">Class / Type</th>
-                  <th className="py-2.5 px-3">Bank Details</th>
-                  <th className="py-2.5 px-3 text-center">Status</th>
-                  <th className="py-2.5 px-3 text-center">Action</th>
+              <thead className="sticky top-0 z-10 bg-brand-lightbg text-brand-navy text-[12px] uppercase tracking-wider font-semibold select-none border-b border-brand-border">
+                <tr>
+                  <th className="py-3 px-3 font-semibold text-brand-navy">Franchise Code</th>
+                  <th className="py-3 px-3 font-semibold text-brand-navy">Franchise Name</th>
+                  <th className="py-3 px-3 font-semibold text-brand-navy">Branch Hub</th>
+                  <th className="py-3 px-3 font-semibold text-brand-navy">Contact</th>
+                  <th className="py-3 px-3 font-semibold text-brand-navy">Class / Type</th>
+                  <th className="py-3 px-3 font-semibold text-brand-navy">Bank Details</th>
+                  <th className="py-3 px-3 text-center font-semibold text-brand-navy">Status</th>
+                  <th className="py-3 px-3 text-center font-semibold text-brand-navy">Action</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100 text-slate-700">
+              <tbody className="divide-y divide-brand-border text-slate-800 bg-white">
                 {filteredFranchises.map(item => (
-                  <tr key={item.id} className="hover:bg-slate-50/80 transition-colors">
+                  <tr key={item.id} className="hover:bg-brand-mainbg transition-colors bg-white">
                     <td className="py-2.5 px-3 font-semibold text-brand-primary font-mono">{item.code}</td>
                     <td className="py-2.5 px-3 font-medium text-slate-900">{item.name}</td>
                     <td className="py-2.5 px-3 text-slate-600">{item.branch}</td>

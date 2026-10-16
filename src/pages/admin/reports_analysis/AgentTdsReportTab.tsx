@@ -201,7 +201,7 @@ export const AgentTdsReportTab: React.FC = () => {
                 <select
                   value={selectedAgent}
                   onChange={(e) => setSelectedAgent(e.target.value)}
-                  className="w-full px-3.5 py-1.5 bg-white border border-slate-300 rounded-full text-[12.5px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner appearance-none pr-8 cursor-pointer"
+                  className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-xs text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all appearance-none pr-8 cursor-pointer"
                 >
                   {agents.map((a) => (
                     <option key={a} value={a}>
@@ -224,7 +224,7 @@ export const AgentTdsReportTab: React.FC = () => {
                 <select
                   value={selectedBank}
                   onChange={(e) => setSelectedBank(e.target.value)}
-                  className="w-full px-3.5 py-1.5 bg-white border border-slate-300 rounded-full text-[12.5px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner appearance-none pr-8 cursor-pointer"
+                  className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-xs text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all appearance-none pr-8 cursor-pointer"
                 >
                   {ledgerTypes.map((l) => (
                     <option key={l} value={l}>
@@ -247,7 +247,7 @@ export const AgentTdsReportTab: React.FC = () => {
                 type="date"
                 value={fromDate}
                 onChange={(e) => setFromDate(e.target.value)}
-                className="w-full px-3.5 py-1.5 bg-white border border-slate-300 rounded-full text-[12.5px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-xs text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all"
               />
             </div>
 
@@ -260,7 +260,7 @@ export const AgentTdsReportTab: React.FC = () => {
                 type="date"
                 value={toDate}
                 onChange={(e) => setToDate(e.target.value)}
-                className="w-full px-3.5 py-1.5 bg-white border border-slate-300 rounded-full text-[12.5px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-xs text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all"
               />
             </div>
           </div>
@@ -269,7 +269,7 @@ export const AgentTdsReportTab: React.FC = () => {
           <div className="flex items-center gap-3 pt-1">
             <button
               type="submit"
-              className="px-8 py-2 bg-[#0B5ED7] hover:bg-blue-700 text-white rounded-md text-[13px] font-bold shadow-sm transition-all cursor-pointer border-none active:scale-[0.98] min-w-[76px]"
+              className="px-6 py-2 bg-brand-primary hover:bg-brand-primaryHover text-white rounded-lg text-xs font-semibold shadow-sm transition-all cursor-pointer border-none active:scale-[0.98]"
             >
               Show
             </button>
@@ -277,7 +277,7 @@ export const AgentTdsReportTab: React.FC = () => {
             <button
               type="button"
               onClick={handleExport}
-              className="px-8 py-2 bg-[#E89C35] hover:bg-[#d48824] text-white rounded-md text-[13px] font-bold shadow-sm transition-all cursor-pointer border-none active:scale-[0.98] min-w-[76px]"
+              className="px-5 py-2 bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 rounded-lg text-xs font-semibold shadow-sm transition-all cursor-pointer active:scale-[0.98]"
             >
               Export
             </button>
@@ -299,78 +299,66 @@ export const AgentTdsReportTab: React.FC = () => {
         </form>
       </div>
 
-      {/* Grid */}
-      {filteredRecords.length === 0 ? (
-        <div className="w-full bg-white rounded-lg border border-brand-border shadow-xs overflow-hidden">
-          <div className="bg-[#EAEAEA] text-[#1E293B] px-4 py-3 font-semibold text-[13px] tracking-wide border-b border-slate-300">
-            NO DATA FOUND
-          </div>
-          <div className="p-8 text-center text-slate-500 text-xs">
-            No agent TDS records found for {appliedFilters.from} to {appliedFilters.to}.
-          </div>
-        </div>
-      ) : (
-        <div className="w-full bg-white rounded-lg border border-brand-border shadow-sm overflow-hidden flex flex-col">
-          <div className="bg-brand-lightbg text-brand-navy px-4 py-2.5 font-semibold text-[13px] border-b border-brand-border flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <span className="text-brand-primary font-bold">»</span>
-              <span>Agent TDS Report Entries</span>
-              <span className="bg-brand-primary/10 text-brand-primary text-xs px-2.5 py-0.5 rounded-full font-bold ml-1">
-                {filteredRecords.length} Records
-              </span>
-            </div>
-          </div>
-
-          <div className="overflow-x-auto w-full">
-            <table className="w-full text-left border-collapse min-w-[950px]">
-              <thead>
-                <tr className="bg-brand-primary text-white text-[11.5px] uppercase tracking-wider font-bold select-none border-b border-blue-700">
-                  <th className="py-2.5 px-3.5 whitespace-nowrap font-mono">Agent Code</th>
-                  <th className="py-2.5 px-3.5 whitespace-nowrap">Agent Name</th>
-                  <th className="py-2.5 px-3.5 whitespace-nowrap font-mono">PAN No</th>
-                  <th className="py-2.5 px-3.5 whitespace-nowrap">Branch</th>
-                  <th className="py-2.5 px-3.5 text-right whitespace-nowrap">Gross Comm (₹)</th>
-                  <th className="py-2.5 px-3.5 text-right whitespace-nowrap">TDS (₹)</th>
-                  <th className="py-2.5 px-3.5 text-right whitespace-nowrap">Net Payout (₹)</th>
-                  <th className="py-2.5 px-3.5 whitespace-nowrap">Quarter</th>
-                  <th className="py-2.5 px-3 text-center whitespace-nowrap">Form 16A</th>
-                  <th className="py-2.5 px-3.5 whitespace-nowrap font-mono">Certificate No</th>
+      {/* Table Card */}
+      <div className="w-full bg-white rounded-lg border border-brand-border shadow-sm overflow-hidden flex flex-col">
+        <div className="overflow-x-auto w-full custom-scrollbar min-h-[400px]">
+          <table className="w-full text-left border-collapse min-w-[950px]">
+            <thead>
+              <tr className="bg-brand-lightbg text-brand-navy text-[13px] uppercase tracking-wider font-semibold select-none border-b border-brand-border">
+                <th className="py-3 px-3.5 whitespace-nowrap font-mono">Agent Code</th>
+                <th className="py-3 px-3.5 whitespace-nowrap">Agent Name</th>
+                <th className="py-3 px-3.5 whitespace-nowrap font-mono">PAN No</th>
+                <th className="py-3 px-3.5 whitespace-nowrap">Branch</th>
+                <th className="py-3 px-3.5 text-right whitespace-nowrap">Gross Comm (₹)</th>
+                <th className="py-3 px-3.5 text-right whitespace-nowrap">TDS (₹)</th>
+                <th className="py-3 px-3.5 text-right whitespace-nowrap">Net Payout (₹)</th>
+                <th className="py-3 px-3.5 whitespace-nowrap">Quarter</th>
+                <th className="py-3 px-3 text-center whitespace-nowrap">Form 16A</th>
+                <th className="py-3 px-3.5 whitespace-nowrap font-mono">Certificate No</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-brand-border text-[13px] text-slate-800">
+              {filteredRecords.map((row) => (
+                <tr key={row.id} className="hover:bg-brand-mainbg h-[48px] transition-colors bg-white">
+                  <td className="py-3 px-3.5 font-mono font-bold text-brand-primary whitespace-nowrap">
+                    {row.agentCode}
+                  </td>
+                  <td className="py-3 px-3.5 font-semibold text-slate-900">{row.agentName}</td>
+                  <td className="py-3 px-3.5 font-mono font-semibold text-slate-700">{row.panNo}</td>
+                  <td className="py-3 px-3.5 text-slate-600">{row.branch}</td>
+                  <td className="py-3 px-3.5 text-right font-bold text-slate-900">
+                    {formatCurrency(row.grossComm)}
+                  </td>
+                  <td className="py-3 px-3.5 text-right font-bold text-rose-700">
+                    {formatCurrency(row.tdsAmount)}
+                  </td>
+                  <td className="py-3 px-3.5 text-right font-bold text-emerald-700">
+                    {formatCurrency(row.netPayout)}
+                  </td>
+                  <td className="py-3 px-3.5 text-slate-600 whitespace-nowrap">{row.quarter}</td>
+                  <td className="py-3 px-3 text-center whitespace-nowrap">
+                    <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                      {row.form16AStatus}
+                    </span>
+                  </td>
+                  <td className="py-3 px-3.5 font-mono text-[11px] text-slate-600 whitespace-nowrap">
+                    {row.certNo}
+                  </td>
                 </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100 text-[12.5px] text-slate-800">
-                {filteredRecords.map((row) => (
-                  <tr key={row.id} className="hover:bg-blue-50/50 transition-colors">
-                    <td className="py-3 px-3.5 font-mono font-bold text-brand-primary whitespace-nowrap">
-                      {row.agentCode}
-                    </td>
-                    <td className="py-3 px-3.5 font-semibold text-slate-900">{row.agentName}</td>
-                    <td className="py-3 px-3.5 font-mono font-semibold text-slate-700">{row.panNo}</td>
-                    <td className="py-3 px-3.5 text-slate-600">{row.branch}</td>
-                    <td className="py-3 px-3.5 text-right font-bold text-slate-900">
-                      {formatCurrency(row.grossComm)}
-                    </td>
-                    <td className="py-3 px-3.5 text-right font-bold text-rose-700">
-                      {formatCurrency(row.tdsAmount)}
-                    </td>
-                    <td className="py-3 px-3.5 text-right font-bold text-emerald-700">
-                      {formatCurrency(row.netPayout)}
-                    </td>
-                    <td className="py-3 px-3.5 text-slate-600 whitespace-nowrap">{row.quarter}</td>
-                    <td className="py-3 px-3 text-center whitespace-nowrap">
-                      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                        {row.form16AStatus}
-                      </span>
-                    </td>
-                    <td className="py-3 px-3.5 font-mono text-[11px] text-slate-600 whitespace-nowrap">
-                      {row.certNo}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+              ))}
+              {filteredRecords.length === 0 && (
+                <tr>
+                  <td colSpan={10} className="py-16 text-center text-slate-500">
+                    <p className="font-semibold text-slate-600 text-sm">
+                      No agent TDS records found for {appliedFilters.from} to {appliedFilters.to}.
+                    </p>
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
         </div>
-      )}
+      </div>
     </div>
   );
 };

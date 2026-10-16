@@ -95,22 +95,44 @@ const ViewAppEntry: React.FC = () => {
                     </div>
                 </div>
 
-                {/* Empty State / Table View */}
-                <div className="p-16 flex flex-col items-center justify-center text-center">
-                    <div className="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center mb-4">
-                        <Search size={32} className="text-slate-400" />
-                    </div>
-                    {hasSearched ? (
-                        <>
-                            <h3 className="text-slate-700 font-semibold mb-1">NO DATA FOUND</h3>
-                            <p className="text-slate-500 text-sm">No report entries found for the selected date range and criteria.</p>
-                        </>
-                    ) : (
-                        <>
-                            <h3 className="text-slate-700 font-semibold mb-1">WAITING FOR FILTER</h3>
-                            <p className="text-slate-500 text-sm">Please select a From and To date and click Show to view entries.</p>
-                        </>
-                    )}
+                {/* Table View matching VehicleMaster Theme */}
+                <div className="overflow-x-auto w-full">
+                    <table className="w-full text-left border-collapse whitespace-nowrap min-w-[900px]">
+                        <thead>
+                            <tr className="bg-brand-lightbg text-brand-navy text-[13px] font-semibold uppercase border-b border-brand-border">
+                                <th className="py-3 px-4">SR.NO.</th>
+                                <th className="py-3 px-4">ENTRY DATE</th>
+                                <th className="py-3 px-4">SALES EXECUTIVE</th>
+                                <th className="py-3 px-4">AGENT NAME</th>
+                                <th className="py-3 px-4">CUSTOMER NAME</th>
+                                <th className="py-3 px-4">VEHICLE NO</th>
+                                <th className="py-3 px-4 text-right">PREMIUM</th>
+                                <th className="py-3 px-4 text-center">ACTION</th>
+                            </tr>
+                        </thead>
+                        <tbody className="divide-y divide-brand-border text-[13px] bg-white">
+                            <tr>
+                                <td colSpan={8} className="py-16 text-center text-slate-500">
+                                    <div className="flex flex-col items-center justify-center">
+                                        <div className="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center mb-3">
+                                            <Search size={22} className="text-slate-400" />
+                                        </div>
+                                        {hasSearched ? (
+                                            <>
+                                                <p className="font-semibold text-slate-700 text-sm mb-1 uppercase tracking-wider">NO DATA FOUND</p>
+                                                <p className="text-slate-400 text-xs">No app entries match the selected filters for this date range.</p>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <p className="font-semibold text-slate-700 text-sm mb-1 uppercase tracking-wider">WAITING FOR FILTER</p>
+                                                <p className="text-slate-400 text-xs">Select From and To date and click Show to view entries.</p>
+                                            </>
+                                        )}
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
 
             </div>

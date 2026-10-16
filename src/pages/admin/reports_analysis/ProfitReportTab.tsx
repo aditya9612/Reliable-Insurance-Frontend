@@ -595,293 +595,267 @@ export const ProfitReportTab: React.FC = () => {
   );
 
   return (
-    <div className="space-y-4 w-full font-sans">
-      {/* Title above card matching screenshot: "Commission Report" */}
-      <div className="text-center">
-        <h3 className="text-sm font-bold text-brand-navy tracking-wide">
-          Commission Report
-        </h3>
-      </div>
+    <div className="w-full font-sans">
+      {/* Unified Table Card matching VehicleMaster (Image 2) */}
+      <div className="bg-white rounded-[12px] border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden flex flex-col w-full">
+        {/* Table Toolbar: Search on left, Date Range & Actions on right */}
+        <div className="p-4 bg-slate-50 border-b border-brand-border flex flex-col lg:flex-row items-center justify-between gap-4">
+          {/* Instant Filter Search Bar */}
+          <div className="relative w-full lg:w-[350px]">
+            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#94a3b8]" />
+            <input
+              type="text"
+              placeholder="Search Policy No, Agent, Vehicle..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-9 pr-8 py-2 bg-white border border-slate-300 rounded-lg text-sm text-brand-navy placeholder-[#94a3b8] focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all h-[40px]"
+            />
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery('')}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 bg-transparent border-none cursor-pointer"
+              >
+                <X size={15} />
+              </button>
+            )}
+          </div>
 
-      {/* =========================================================================
-          TOP FILTER CARD (Replicating reliable-erp.com/Clerk/CommissionReport.aspx)
-         ========================================================================= */}
-      <div className="bg-white rounded-xl shadow-sm border border-brand-border overflow-hidden">
-        {/* Banner Header with our Blue Theme */}
-        <div className="bg-[#0B5ED7] text-white px-5 py-2 text-[13.5px] font-semibold flex items-center shadow-xs">
-          <span className="mr-1 text-base font-serif">&raquo;</span>Commission Report
-        </div>
-
-        <div className="p-5 sm:p-6">
+          {/* Date Range & Action Buttons */}
           <form
             onSubmit={(e) => {
               e.preventDefault();
             }}
-            className="flex flex-wrap items-center gap-4 sm:gap-6"
+            className="flex flex-wrap items-center gap-3 w-full lg:w-auto justify-end"
           >
-            {/* From Date */}
-            <div className="flex flex-col sm:flex-row sm:items-center gap-1.5 sm:gap-3">
-              <label className="text-[13px] text-slate-800 font-bold whitespace-nowrap">
-                From Date
-              </label>
+            <div className="flex items-center gap-1.5">
+              <span className="text-xs font-semibold text-slate-600 whitespace-nowrap">From:</span>
               <input
                 type="date"
                 value={fromDate}
                 onChange={(e) => setFromDate(e.target.value)}
-                className="w-44 px-3.5 py-1.5 bg-white border border-slate-300 rounded-full text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                className="px-2.5 py-1.5 bg-white border border-slate-300 rounded-lg text-xs text-slate-800 focus:outline-none focus:border-brand-primary h-[38px] cursor-pointer"
               />
             </div>
 
-            {/* To Date */}
-            <div className="flex flex-col sm:flex-row sm:items-center gap-1.5 sm:gap-3">
-              <label className="text-[13px] text-slate-800 font-bold whitespace-nowrap">
-                To Date
-              </label>
+            <div className="flex items-center gap-1.5">
+              <span className="text-xs font-semibold text-slate-600 whitespace-nowrap">To:</span>
               <input
                 type="date"
                 value={toDate}
                 onChange={(e) => setToDate(e.target.value)}
-                className="w-44 px-3.5 py-1.5 bg-white border border-slate-300 rounded-full text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                className="px-2.5 py-1.5 bg-white border border-slate-300 rounded-lg text-xs text-slate-800 focus:outline-none focus:border-brand-primary h-[38px] cursor-pointer"
               />
             </div>
 
-            {/* Action Buttons: View (Blue Theme) & Export To Excel (Amber Theme) */}
-            <div className="flex items-center gap-3 pt-2 sm:pt-0">
-              <button
-                type="submit"
-                className="px-7 py-2 bg-[#0B5ED7] hover:bg-blue-700 text-white rounded-md text-[13px] font-bold shadow-sm transition-all cursor-pointer border-none active:scale-[0.98] flex items-center justify-center min-w-[80px]"
-              >
-                View
-              </button>
+            <button
+              type="submit"
+              className="px-4 py-2 bg-brand-primary hover:bg-[#1D4ED8] text-white rounded-lg font-semibold text-xs shadow-xs transition-all cursor-pointer border-none h-[38px] flex items-center gap-1.5"
+            >
+              <Eye size={14} />
+              <span>View</span>
+            </button>
 
-              <button
-                type="button"
-                onClick={handleExport}
-                className="px-6 py-2 bg-[#E89C35] hover:bg-[#d48824] text-white rounded-md text-[13px] font-bold shadow-sm transition-all cursor-pointer border-none active:scale-[0.98] flex items-center justify-center min-w-[130px]"
-              >
-                Export To Excel
-              </button>
-            </div>
+            <button
+              type="button"
+              onClick={handleExport}
+              className="px-4 py-2 bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 rounded-lg font-semibold text-xs shadow-xs transition-all cursor-pointer h-[38px] flex items-center gap-1.5"
+            >
+              <Download size={14} />
+              <span>Export</span>
+            </button>
           </form>
         </div>
-      </div>
 
-      {/* Instant Filter Search Bar */}
-      <div className="w-full max-w-sm">
-        <div className="relative">
-          <input
-            type="text"
-            placeholder="Search Policy No, Agent, Vehicle..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-full text-[13px] text-slate-800 placeholder-slate-400 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
-          />
-          {searchQuery && (
-            <button
-              onClick={() => setSearchQuery('')}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 bg-transparent border-none cursor-pointer"
-            >
-              <X size={15} />
-            </button>
-          )}
-        </div>
-      </div>
-
-      {/* =========================================================================
-          MULTI-GROUP DATA GRID (Replicating all 4 screenshots with our Blue Theme)
-         ========================================================================= */}
-      <div className="w-full bg-white rounded-lg border border-brand-border shadow-sm overflow-hidden flex flex-col">
-        <div className="overflow-x-auto w-full max-w-full">
+        {/* Multi-Group Table starting immediately beneath toolbar */}
+        <div className="overflow-x-auto w-full max-w-full custom-scrollbar min-h-[400px]">
           <table className="w-full text-left border-collapse text-[11px] whitespace-nowrap">
             {/* Header Level 1: Primary Column Names & Group Super-Headers */}
             <thead>
-              <tr className="bg-brand-primary text-white uppercase tracking-wider font-bold border-b border-blue-600 select-none">
-                <th rowSpan={2} className="py-2.5 px-3 border-r border-blue-600 sticky left-0 z-20 bg-brand-primary">
+              <tr className="bg-brand-lightbg text-brand-navy uppercase tracking-wider font-semibold border-b border-brand-border select-none text-[12px]">
+                <th rowSpan={2} className="py-3 px-3 border-r border-brand-border sticky left-0 z-20 bg-brand-lightbg">
                   DATE
                 </th>
-                <th rowSpan={2} className="py-2.5 px-3 border-r border-blue-600">
+                <th rowSpan={2} className="py-3 px-3 border-r border-brand-border">
                   REFERENCE TYPE
                 </th>
-                <th rowSpan={2} className="py-2.5 px-3.5 border-r border-blue-600 max-w-[200px]">
+                <th rowSpan={2} className="py-3 px-3.5 border-r border-brand-border max-w-[200px]">
                   INSURANCE COMPANY
                 </th>
-                <th rowSpan={2} className="py-2.5 px-3.5 border-r border-blue-600 font-mono">
+                <th rowSpan={2} className="py-3 px-3.5 border-r border-brand-border font-mono">
                   POLICY NO
                 </th>
-                <th rowSpan={2} className="py-2.5 px-3 border-r border-blue-600">
+                <th rowSpan={2} className="py-3 px-3 border-r border-brand-border">
                   SALES EXE
                 </th>
-                <th rowSpan={2} className="py-2.5 px-3 border-r border-blue-600">
+                <th rowSpan={2} className="py-3 px-3 border-r border-brand-border">
                   AGENT
                 </th>
-                <th rowSpan={2} className="py-2.5 px-2.5 border-r border-blue-600 text-center">
+                <th rowSpan={2} className="py-3 px-2.5 border-r border-brand-border text-center">
                   FRANCHISE
                 </th>
-                <th rowSpan={2} className="py-2.5 px-2.5 border-r border-blue-600 text-center">
+                <th rowSpan={2} className="py-3 px-2.5 border-r border-brand-border text-center">
                   FRANCHISE AGENT
                 </th>
-                <th rowSpan={2} className="py-2.5 px-2.5 border-r border-blue-600 text-center">
+                <th rowSpan={2} className="py-3 px-2.5 border-r border-brand-border text-center">
                   VEHICLE TYPE
                 </th>
-                <th rowSpan={2} className="py-2.5 px-3 border-r border-blue-600 font-mono">
+                <th rowSpan={2} className="py-3 px-3 border-r border-brand-border font-mono">
                   VEHICLE NO.
                 </th>
-                <th rowSpan={2} className="py-2.5 px-3 border-r border-blue-600 text-right">
+                <th rowSpan={2} className="py-3 px-3 border-r border-brand-border text-right">
                   TP PREMIUM
                 </th>
-                <th rowSpan={2} className="py-2.5 px-3 border-r border-blue-600 text-right">
+                <th rowSpan={2} className="py-3 px-3 border-r border-brand-border text-right">
                   OD PREMIUM
                 </th>
-                <th rowSpan={2} className="py-2.5 px-3 border-r border-blue-600 text-right">
+                <th rowSpan={2} className="py-3 px-3 border-r border-brand-border text-right">
                   NET PREMIUM
                 </th>
-                <th rowSpan={2} className="py-2.5 px-3 border-r border-blue-600 text-right">
+                <th rowSpan={2} className="py-3 px-3 border-r border-brand-border text-right">
                   PREMIUM AMT
                 </th>
-                <th rowSpan={2} className="py-2.5 px-3 border-r border-blue-600">
+                <th rowSpan={2} className="py-3 px-3 border-r border-brand-border">
                   PAYMENT TYPE
                 </th>
 
                 {/* Group 1: RELIABLE ASSOCIATES (11 sub-columns) */}
-                <th colSpan={11} className="py-2 px-3 text-center border-r border-blue-800 bg-[#1D4ED8]">
+                <th colSpan={11} className="py-2.5 px-3 text-center border-r border-brand-border bg-blue-100 text-brand-primary font-bold">
                   RELIABLE ASSOCIATES
                 </th>
 
                 {/* Group 2: RELIABLE AGENT (11 sub-columns) */}
-                <th colSpan={11} className="py-2 px-3 text-center border-r border-blue-800 bg-[#1E40AF]">
+                <th colSpan={11} className="py-2.5 px-3 text-center border-r border-brand-border bg-indigo-100 text-indigo-900 font-bold">
                   RELIABLE AGENT
                 </th>
 
                 {/* Group 3: FRANCHISE (11 sub-columns) */}
-                <th colSpan={11} className="py-2 px-3 text-center border-r border-blue-800 bg-[#1D4ED8]">
+                <th colSpan={11} className="py-2.5 px-3 text-center border-r border-brand-border bg-sky-100 text-sky-900 font-bold">
                   FRANCHISE
                 </th>
 
                 {/* Group 4: FRANCHISE AGENT (11 sub-columns) */}
-                <th colSpan={11} className="py-2 px-3 text-center border-r border-blue-800 bg-[#1E40AF]">
+                <th colSpan={11} className="py-2.5 px-3 text-center border-r border-brand-border bg-cyan-100 text-cyan-900 font-bold">
                   FRANCHISE AGENT
                 </th>
 
                 {/* Group 5: RELIABLE PROFIT (2 sub-columns) */}
-                <th colSpan={2} className="py-2 px-3 text-center border-r border-blue-800 bg-[#166534]">
+                <th colSpan={2} className="py-2.5 px-3 text-center border-r border-brand-border bg-emerald-100 text-emerald-900 font-bold">
                   RELIABLE PROFIT
                 </th>
 
                 {/* Group 6: FRANCHISE PROFIT (2 sub-columns) */}
-                <th colSpan={2} className="py-2 px-3 text-center border-r border-blue-800 bg-[#0F766E]">
+                <th colSpan={2} className="py-2.5 px-3 text-center border-r border-brand-border bg-teal-100 text-teal-900 font-bold">
                   FRANCHISE PROFIT
                 </th>
 
                 {/* Remaining Columns from Image 3 & 4 */}
-                <th rowSpan={2} className="py-2.5 px-3 border-r border-blue-600">
+                <th rowSpan={2} className="py-3 px-3 border-r border-brand-border">
                   POLICY TYPE
                 </th>
-                <th rowSpan={2} className="py-2.5 px-3 border-r border-blue-600">
+                <th rowSpan={2} className="py-3 px-3 border-r border-brand-border">
                   PRODUCT TYPE
                 </th>
-                <th rowSpan={2} className="py-2.5 px-3 border-r border-blue-600">
+                <th rowSpan={2} className="py-3 px-3 border-r border-brand-border">
                   MAKE
                 </th>
-                <th rowSpan={2} className="py-2.5 px-3 border-r border-blue-600">
+                <th rowSpan={2} className="py-3 px-3 border-r border-brand-border">
                   MODEL
                 </th>
-                <th rowSpan={2} className="py-2.5 px-3 border-r border-blue-600">
+                <th rowSpan={2} className="py-3 px-3 border-r border-brand-border">
                   RTO
                 </th>
-                <th rowSpan={2} className="py-2.5 px-2.5 border-r border-blue-600 text-center">
+                <th rowSpan={2} className="py-3 px-2.5 border-r border-brand-border text-center">
                   FUEL TYPE
                 </th>
-                <th rowSpan={2} className="py-2.5 px-2.5 border-r border-blue-600 text-center">
+                <th rowSpan={2} className="py-3 px-2.5 border-r border-brand-border text-center">
                   OD DISCOUNT
                 </th>
-                <th rowSpan={2} className="py-2.5 px-2.5 border-r border-blue-600 text-center">
+                <th rowSpan={2} className="py-3 px-2.5 border-r border-brand-border text-center">
                   MANUFACTURING YEAR
                 </th>
-                <th rowSpan={2} className="py-2.5 px-3 border-r border-blue-600">
+                <th rowSpan={2} className="py-3 px-3 border-r border-brand-border">
                   TYPE OF INSURANCE POLICY
                 </th>
-                <th rowSpan={2} className="py-2.5 px-2.5 border-r border-blue-600 text-right">
+                <th rowSpan={2} className="py-3 px-2.5 border-r border-brand-border text-right">
                   NCB PREMIUM
                 </th>
-                <th rowSpan={2} className="py-2.5 px-2.5 text-center">
+                <th rowSpan={2} className="py-3 px-2.5 text-center">
                   NCB(%)
                 </th>
               </tr>
 
               {/* Header Level 2: Sub-columns for Groups */}
-              <tr className="bg-[#1E40AF] text-white text-[10px] font-bold tracking-wider border-b border-blue-800 select-none">
+              <tr className="bg-slate-50 text-brand-navy text-[10px] font-semibold tracking-wider border-b border-brand-border select-none">
                 {/* RELIABLE ASSOCIATES Subheaders */}
-                <th className="py-1.5 px-2 text-right border-r border-blue-800/60">TP %</th>
-                <th className="py-1.5 px-2 text-right border-r border-blue-800/60">TP</th>
-                <th className="py-1.5 px-2 text-right border-r border-blue-800/60">OD %</th>
-                <th className="py-1.5 px-2 text-right border-r border-blue-800/60">OD</th>
-                <th className="py-1.5 px-2 text-right border-r border-blue-800/60">NET %</th>
-                <th className="py-1.5 px-2 text-right border-r border-blue-800/60">NET</th>
-                <th className="py-1.5 px-2 text-right border-r border-blue-800/60">MISP %</th>
-                <th className="py-1.5 px-2 text-right border-r border-blue-800/60">MISP</th>
-                <th className="py-1.5 px-2 text-right border-r border-blue-800/60">GROSS</th>
-                <th className="py-1.5 px-2 text-right border-r border-blue-800/60">TDS</th>
-                <th className="py-1.5 px-2.5 text-right border-r border-blue-800 font-extrabold bg-[#1D4ED8]">NET PAID</th>
+                <th className="py-2 px-2 text-right border-r border-brand-border">TP %</th>
+                <th className="py-2 px-2 text-right border-r border-brand-border">TP</th>
+                <th className="py-2 px-2 text-right border-r border-brand-border">OD %</th>
+                <th className="py-2 px-2 text-right border-r border-brand-border">OD</th>
+                <th className="py-2 px-2 text-right border-r border-brand-border">NET %</th>
+                <th className="py-2 px-2 text-right border-r border-brand-border">NET</th>
+                <th className="py-2 px-2 text-right border-r border-brand-border">MISP %</th>
+                <th className="py-2 px-2 text-right border-r border-brand-border">MISP</th>
+                <th className="py-2 px-2 text-right border-r border-brand-border">GROSS</th>
+                <th className="py-2 px-2 text-right border-r border-brand-border">TDS</th>
+                <th className="py-2 px-2.5 text-right border-r border-brand-border font-bold text-brand-primary bg-blue-50">NET PAID</th>
 
                 {/* RELIABLE AGENT Subheaders */}
-                <th className="py-1.5 px-2 text-right border-r border-blue-800/60">TP %</th>
-                <th className="py-1.5 px-2 text-right border-r border-blue-800/60">TP</th>
-                <th className="py-1.5 px-2 text-right border-r border-blue-800/60">OD %</th>
-                <th className="py-1.5 px-2 text-right border-r border-blue-800/60">OD</th>
-                <th className="py-1.5 px-2 text-right border-r border-blue-800/60">NET %</th>
-                <th className="py-1.5 px-2 text-right border-r border-blue-800/60">NET</th>
-                <th className="py-1.5 px-2 text-right border-r border-blue-800/60">MISP %</th>
-                <th className="py-1.5 px-2 text-right border-r border-blue-800/60">MISP</th>
-                <th className="py-1.5 px-2 text-right border-r border-blue-800/60">GROSS</th>
-                <th className="py-1.5 px-2 text-right border-r border-blue-800/60">TDS</th>
-                <th className="py-1.5 px-2.5 text-right border-r border-blue-800 font-extrabold bg-[#1E3A8A]">NET PAID</th>
+                <th className="py-2 px-2 text-right border-r border-brand-border">TP %</th>
+                <th className="py-2 px-2 text-right border-r border-brand-border">TP</th>
+                <th className="py-2 px-2 text-right border-r border-brand-border">OD %</th>
+                <th className="py-2 px-2 text-right border-r border-brand-border">OD</th>
+                <th className="py-2 px-2 text-right border-r border-brand-border">NET %</th>
+                <th className="py-2 px-2 text-right border-r border-brand-border">NET</th>
+                <th className="py-2 px-2 text-right border-r border-brand-border">MISP %</th>
+                <th className="py-2 px-2 text-right border-r border-brand-border">MISP</th>
+                <th className="py-2 px-2 text-right border-r border-brand-border">GROSS</th>
+                <th className="py-2 px-2 text-right border-r border-brand-border">TDS</th>
+                <th className="py-2 px-2.5 text-right border-r border-brand-border font-bold text-indigo-700 bg-indigo-50">NET PAID</th>
 
                 {/* FRANCHISE Subheaders */}
-                <th className="py-1.5 px-2 text-right border-r border-blue-800/60">TP %</th>
-                <th className="py-1.5 px-2 text-right border-r border-blue-800/60">TP</th>
-                <th className="py-1.5 px-2 text-right border-r border-blue-800/60">OD %</th>
-                <th className="py-1.5 px-2 text-right border-r border-blue-800/60">OD</th>
-                <th className="py-1.5 px-2 text-right border-r border-blue-800/60">NET %</th>
-                <th className="py-1.5 px-2 text-right border-r border-blue-800/60">NET</th>
-                <th className="py-1.5 px-2 text-right border-r border-blue-800/60">MISP %</th>
-                <th className="py-1.5 px-2 text-right border-r border-blue-800/60">MISP</th>
-                <th className="py-1.5 px-2 text-right border-r border-blue-800/60">GROSS</th>
-                <th className="py-1.5 px-2 text-right border-r border-blue-800/60">TDS</th>
-                <th className="py-1.5 px-2.5 text-right border-r border-blue-800">NET PAID</th>
+                <th className="py-2 px-2 text-right border-r border-brand-border">TP %</th>
+                <th className="py-2 px-2 text-right border-r border-brand-border">TP</th>
+                <th className="py-2 px-2 text-right border-r border-brand-border">OD %</th>
+                <th className="py-2 px-2 text-right border-r border-brand-border">OD</th>
+                <th className="py-2 px-2 text-right border-r border-brand-border">NET %</th>
+                <th className="py-2 px-2 text-right border-r border-brand-border">NET</th>
+                <th className="py-2 px-2 text-right border-r border-brand-border">MISP %</th>
+                <th className="py-2 px-2 text-right border-r border-brand-border">MISP</th>
+                <th className="py-2 px-2 text-right border-r border-brand-border">GROSS</th>
+                <th className="py-2 px-2 text-right border-r border-brand-border">TDS</th>
+                <th className="py-2 px-2.5 text-right border-r border-brand-border">NET PAID</th>
 
                 {/* FRANCHISE AGENT Subheaders */}
-                <th className="py-1.5 px-2 text-right border-r border-blue-800/60">TP %</th>
-                <th className="py-1.5 px-2 text-right border-r border-blue-800/60">TP</th>
-                <th className="py-1.5 px-2 text-right border-r border-blue-800/60">OD %</th>
-                <th className="py-1.5 px-2 text-right border-r border-blue-800/60">OD</th>
-                <th className="py-1.5 px-2 text-right border-r border-blue-800/60">NET %</th>
-                <th className="py-1.5 px-2 text-right border-r border-blue-800/60">NET</th>
-                <th className="py-1.5 px-2 text-right border-r border-blue-800/60">MISP %</th>
-                <th className="py-1.5 px-2 text-right border-r border-blue-800/60">MISP</th>
-                <th className="py-1.5 px-2 text-right border-r border-blue-800/60">GROSS</th>
-                <th className="py-1.5 px-2 text-right border-r border-blue-800/60">TDS</th>
-                <th className="py-1.5 px-2.5 text-right border-r border-blue-800">NET PAID</th>
+                <th className="py-2 px-2 text-right border-r border-brand-border">TP %</th>
+                <th className="py-2 px-2 text-right border-r border-brand-border">TP</th>
+                <th className="py-2 px-2 text-right border-r border-brand-border">OD %</th>
+                <th className="py-2 px-2 text-right border-r border-brand-border">OD</th>
+                <th className="py-2 px-2 text-right border-r border-brand-border">NET %</th>
+                <th className="py-2 px-2 text-right border-r border-brand-border">NET</th>
+                <th className="py-2 px-2 text-right border-r border-brand-border">MISP %</th>
+                <th className="py-2 px-2 text-right border-r border-brand-border">MISP</th>
+                <th className="py-2 px-2 text-right border-r border-brand-border">GROSS</th>
+                <th className="py-2 px-2 text-right border-r border-brand-border">TDS</th>
+                <th className="py-2 px-2.5 text-right border-r border-brand-border">NET PAID</th>
 
                 {/* RELIABLE PROFIT Subheaders */}
-                <th className="py-1.5 px-2 text-right border-r border-blue-800/60 bg-[#15803D]">TDS</th>
-                <th className="py-1.5 px-2.5 text-right border-r border-blue-800 font-extrabold bg-[#166534]">NET</th>
+                <th className="py-2 px-2 text-right border-r border-brand-border bg-emerald-50 text-emerald-800">TDS</th>
+                <th className="py-2 px-2.5 text-right border-r border-brand-border font-bold text-emerald-800 bg-emerald-100">NET</th>
 
                 {/* FRANCHISE PROFIT Subheaders */}
-                <th className="py-1.5 px-2 text-right border-r border-blue-800/60 bg-[#0F766E]">TDS</th>
-                <th className="py-1.5 px-2.5 text-right border-r border-blue-800 bg-[#115E59]">NET</th>
+                <th className="py-2 px-2 text-right border-r border-brand-border bg-teal-50 text-teal-800">TDS</th>
+                <th className="py-2 px-2.5 text-right border-r border-brand-border bg-teal-100 text-teal-800 font-bold">NET</th>
               </tr>
             </thead>
 
             {/* Table Body */}
-            <tbody className="divide-y divide-slate-200 text-slate-800">
-              {filteredRecords.map((row, idx) => (
+            <tbody className="divide-y divide-brand-border text-slate-800">
+              {filteredRecords.map((row) => (
                 <tr
                   key={row.id}
-                  className={`hover:bg-blue-50/60 transition-colors ${
-                    idx % 2 === 1 ? 'bg-slate-50/50' : 'bg-white'
-                  }`}
+                  className="hover:bg-brand-mainbg h-[44px] transition-colors bg-white"
                 >
-                  <td className="py-2.5 px-3 border-r border-slate-200 font-medium sticky left-0 z-10 bg-inherit">
+                  <td className="py-2 px-3 border-r border-brand-border font-medium sticky left-0 z-10 bg-inherit text-brand-primary">
                     {row.date}
                   </td>
                   <td className="py-2.5 px-3 border-r border-slate-200 font-bold text-slate-700">

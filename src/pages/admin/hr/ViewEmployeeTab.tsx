@@ -368,47 +368,47 @@ const ViewEmployeeTab: React.FC = () => {
                 </button>
             </div>
 
-            {/* TABLE CONTAINER IN ROYAL BLUE THEME */}
-            <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden flex flex-col w-full min-w-0">
+            {/* TABLE CONTAINER IN POLICY MASTER BLUE THEME */}
+            <div className="bg-white rounded-xl border border-brand-border shadow-sm overflow-hidden flex flex-col w-full min-w-0">
                 <div className="w-full overflow-x-auto min-w-0 erp-horizontal-scrollbar">
                     <table className="w-full text-left border-collapse min-w-[1900px] text-[13px]">
                         <thead>
-                            <tr className="bg-brand-primary text-white font-bold text-[12px] uppercase tracking-wider border-b-2 border-blue-700 select-none">
-                                <th className="py-3 px-3 w-16 text-center border-r border-white/20 whitespace-nowrap">View</th>
-                                <th className="py-3 px-3 w-12 text-center border-r border-white/20 whitespace-nowrap">
+                            <tr className="bg-brand-lightbg text-brand-navy font-semibold text-[12px] uppercase tracking-wider border-b border-brand-border select-none whitespace-nowrap">
+                                <th className="py-3 px-3 w-16 text-center border-r border-brand-border/60">View</th>
+                                <th className="py-3 px-3 w-12 text-center border-r border-brand-border/60">
                                     <Edit2 size={13} className="inline-block" />
                                 </th>
-                                <th className="py-3 px-3 w-14 text-center border-r border-white/20 whitespace-nowrap">ID</th>
-                                <th className="py-3 px-4 min-w-[200px] border-r border-white/20 whitespace-nowrap">Emp Name</th>
-                                <th className="py-3 px-3 min-w-[130px] border-r border-white/20 whitespace-nowrap">Address</th>
-                                <th className="py-3 px-3 min-w-[150px] border-r border-white/20 whitespace-nowrap">Mobile No</th>
-                                <th className="py-3 px-4 min-w-[210px] border-r border-white/20 whitespace-nowrap">Email Id</th>
-                                <th className="py-3 px-3 w-24 text-center border-r border-white/20 whitespace-nowrap">Gender</th>
-                                <th className="py-3 px-3 w-28 text-center border-r border-white/20 whitespace-nowrap">Marital Status</th>
-                                <th className="py-3 px-3 min-w-[130px] border-r border-white/20 whitespace-nowrap">Qualification</th>
-                                <th className="py-3 px-3 w-28 text-center border-r border-white/20 whitespace-nowrap">Date Of Joining</th>
-                                <th className="py-3 px-3 min-w-[150px] border-r border-white/20 whitespace-nowrap">Current Exprience</th>
-                                <th className="py-3 px-3 w-28 text-right pr-4 border-r border-white/20 whitespace-nowrap">Salary</th>
-                                <th className="py-3 px-4 min-w-[200px] border-r border-white/20 whitespace-nowrap">Organization Name</th>
-                                <th className="py-3 px-3 min-w-[170px] border-r border-white/20 whitespace-nowrap">Department Name</th>
-                                <th className="py-3 px-3 min-w-[130px] border-r border-white/20 whitespace-nowrap">Facility Name</th>
-                                <th className="py-3 px-3 w-24 text-center border-r border-white/20 whitespace-nowrap">Blood Group</th>
-                                <th className="py-3 px-3 min-w-[130px] border-r border-white/20 whitespace-nowrap">PanNo</th>
-                                <th className="py-3 px-3 min-w-[140px] border-r border-white/20 whitespace-nowrap">AadharNo</th>
-                                <th className="py-3 px-3 min-w-[160px] border-r border-white/20 whitespace-nowrap">AccountNo</th>
-                                <th className="py-3 px-3 min-w-[140px] border-r border-white/20 whitespace-nowrap">DrivingNo</th>
-                                <th className="py-3 px-3 min-w-[160px] border-r border-white/20 whitespace-nowrap">Bank Name</th>
-                                <th className="py-3 px-3 min-w-[140px] border-r border-white/20 whitespace-nowrap">Branch Name</th>
-                                <th className="py-3 px-3 min-w-[130px] border-r border-white/20 whitespace-nowrap">IFSCcode</th>
-                                <th className="py-3 px-4 min-w-[170px] whitespace-nowrap">Designation</th>
+                                <th className="py-3 px-3 w-14 text-center border-r border-brand-border/60">ID</th>
+                                <th className="py-3 px-4 min-w-[200px] border-r border-brand-border/60">Emp Name</th>
+                                <th className="py-3 px-3 min-w-[130px] border-r border-brand-border/60">Address</th>
+                                <th className="py-3 px-3 min-w-[150px] border-r border-brand-border/60">Mobile No</th>
+                                <th className="py-3 px-4 min-w-[210px] border-r border-brand-border/60">Email Id</th>
+                                <th className="py-3 px-3 w-24 text-center border-r border-brand-border/60">Gender</th>
+                                <th className="py-3 px-3 w-28 text-center border-r border-brand-border/60">Marital Status</th>
+                                <th className="py-3 px-3 min-w-[130px] border-r border-brand-border/60">Qualification</th>
+                                <th className="py-3 px-3 w-28 text-center border-r border-brand-border/60">Date Of Joining</th>
+                                <th className="py-3 px-3 min-w-[150px] border-r border-brand-border/60">Current Exprience</th>
+                                <th className="py-3 px-3 w-28 text-right pr-4 border-r border-brand-border/60">Salary</th>
+                                <th className="py-3 px-4 min-w-[200px] border-r border-brand-border/60">Organization Name</th>
+                                <th className="py-3 px-3 min-w-[170px] border-r border-brand-border/60">Department Name</th>
+                                <th className="py-3 px-3 min-w-[130px] border-r border-brand-border/60">Facility Name</th>
+                                <th className="py-3 px-3 w-24 text-center border-r border-brand-border/60">Blood Group</th>
+                                <th className="py-3 px-3 min-w-[130px] border-r border-brand-border/60">PanNo</th>
+                                <th className="py-3 px-3 min-w-[140px] border-r border-brand-border/60">AadharNo</th>
+                                <th className="py-3 px-3 min-w-[160px] border-r border-brand-border/60">AccountNo</th>
+                                <th className="py-3 px-3 min-w-[140px] border-r border-brand-border/60">DrivingNo</th>
+                                <th className="py-3 px-3 min-w-[160px] border-r border-brand-border/60">Bank Name</th>
+                                <th className="py-3 px-3 min-w-[140px] border-r border-brand-border/60">Branch Name</th>
+                                <th className="py-3 px-3 min-w-[130px] border-r border-brand-border/60">IFSCcode</th>
+                                <th className="py-3 px-4 min-w-[170px]">Designation</th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-slate-200">
+                        <tbody className="divide-y divide-brand-border">
                             {paginatedEmployees.map((emp, idx) => (
                                 <tr
                                     key={emp.id}
                                     className={`transition-colors h-[48px] ${
-                                        idx % 2 === 0 ? 'bg-white hover:bg-blue-50/40' : 'bg-slate-50/30 hover:bg-blue-50/40'
+                                        idx % 2 === 0 ? 'bg-white hover:bg-brand-mainbg' : 'bg-slate-50/30 hover:bg-brand-mainbg'
                                     }`}
                                 >
                                     {/* Action: View */}
@@ -416,7 +416,7 @@ const ViewEmployeeTab: React.FC = () => {
                                         <button
                                             type="button"
                                             onClick={() => setSelectedEmployee(emp)}
-                                            className="text-[#00509d] hover:text-blue-800 font-semibold text-xs underline cursor-pointer border-none bg-transparent"
+                                            className="px-2.5 py-1 bg-brand-lightbg hover:bg-blue-100 text-brand-primary font-semibold text-xs rounded transition-colors cursor-pointer border-none"
                                         >
                                             View
                                         </button>
@@ -427,15 +427,15 @@ const ViewEmployeeTab: React.FC = () => {
                                         <button
                                             type="button"
                                             onClick={() => setEditingEmployee({ ...emp })}
-                                            className="text-[#00509d] hover:text-blue-800 p-1 cursor-pointer border-none bg-transparent"
+                                            className="p-1.5 bg-brand-lightbg text-brand-primary hover:bg-[#E2E8F0] rounded-[6px] transition-colors cursor-pointer inline-flex items-center justify-center border-none"
                                             title="Edit"
                                         >
-                                            <Edit2 size={15} />
+                                            <Edit2 size={13} />
                                         </button>
                                     </td>
 
                                     {/* ID */}
-                                    <td className="py-2 px-3 text-center font-mono text-xs text-slate-600 whitespace-nowrap">
+                                    <td className="py-2 px-3 text-center font-mono text-xs font-semibold text-brand-primary whitespace-nowrap">
                                         {emp.id}
                                     </td>
 
@@ -609,15 +609,15 @@ const ViewEmployeeTab: React.FC = () => {
                 <div className="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4">
                     <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full overflow-hidden border border-slate-200 animate-in fade-in zoom-in-95 duration-150">
                         {/* Header Banner */}
-                        <div className="bg-brand-primary text-white px-6 py-4 flex items-center justify-between">
+                        <div className="bg-brand-lightbg text-brand-navy border-b border-brand-border px-6 py-4 flex items-center justify-between">
                             <div className="flex items-center gap-2">
-                                <Users size={20} />
-                                <h3 className="font-bold text-base">Employee Dossier</h3>
+                                <Users size={20} className="text-brand-primary" />
+                                <h3 className="font-bold text-base text-brand-navy">Employee Dossier</h3>
                             </div>
                             <button
                                 type="button"
                                 onClick={() => setSelectedEmployee(null)}
-                                className="text-white/80 hover:text-white p-1 rounded-full cursor-pointer bg-transparent border-none"
+                                className="text-slate-400 hover:text-slate-700 p-1 rounded-full cursor-pointer bg-transparent border-none transition-colors"
                             >
                                 <X size={20} />
                             </button>
@@ -708,15 +708,15 @@ const ViewEmployeeTab: React.FC = () => {
             {editingEmployee && (
                 <div className="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4">
                     <div className="bg-white rounded-2xl shadow-2xl max-w-xl w-full overflow-hidden border border-slate-200 animate-in fade-in zoom-in-95 duration-150">
-                        <div className="bg-brand-primary text-white px-6 py-4 flex items-center justify-between">
+                        <div className="bg-brand-lightbg text-brand-navy border-b border-brand-border px-6 py-4 flex items-center justify-between">
                             <div className="flex items-center gap-2">
-                                <Edit2 size={18} />
-                                <h3 className="font-bold text-base">Edit Employee Details</h3>
+                                <Edit2 size={18} className="text-brand-primary" />
+                                <h3 className="font-bold text-base text-brand-navy">Edit Employee Details</h3>
                             </div>
                             <button
                                 type="button"
                                 onClick={() => setEditingEmployee(null)}
-                                className="text-white/80 hover:text-white p-1 rounded-full cursor-pointer bg-transparent border-none"
+                                className="text-slate-400 hover:text-slate-700 p-1 rounded-full cursor-pointer bg-transparent border-none transition-colors"
                             >
                                 <X size={20} />
                             </button>

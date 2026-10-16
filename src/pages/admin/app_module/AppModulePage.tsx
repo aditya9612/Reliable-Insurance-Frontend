@@ -5,7 +5,7 @@ import {
   Send, MessageSquare, FileText, CheckCircle2, AlertCircle, Search,
   Upload, Download, Filter, RefreshCw, Smartphone, Eye, Calendar,
   HelpCircle, Lock, Image, CreditCard, Layers, FileSpreadsheet, Plus, X,
-  Save, Trash2
+  Save, Trash2, Sparkles, Zap, Award
 } from 'lucide-react';
 
 export type AppSubTab =
@@ -469,10 +469,51 @@ const AppModulePage: React.FC = () => {
 
   // Tab 9: Runup Upload Image
   const [runupTitle, setRunupTitle] = useState('');
+  const [selectedRunupFile, setSelectedRunupFile] = useState<File | null>(null);
+  const [selectedRunupFileName, setSelectedRunupFileName] = useState<string>('');
   const [runupBanners, setRunupBanners] = useState([
-    { id: 1, title: 'Diwali Festive Offer Banner', target: 'App Home Slider', size: '1200x500', active: true, imageUrl: 'https://placehold.co/260x140/2563EB/ffffff?text=Festive+Offer' },
-    { id: 2, title: 'Two-Wheeler Instant Policy Promo', target: 'Motor Section', size: '800x400', active: true, imageUrl: 'https://placehold.co/260x140/1e40af/ffffff?text=Two+Wheeler+Promo' },
-    { id: 3, title: 'POSP Onboarding Referral Bonus', target: 'Agent Dashboard', size: '800x400', active: false, imageUrl: 'https://placehold.co/260x140/3b82f6/ffffff?text=POSP+Referral' },
+    {
+      id: 1,
+      title: 'Diwali Festive Offer Banner',
+      target: 'App Home Slider',
+      size: '1200x500',
+      active: true,
+      tag: 'Festive Offer',
+      badgeColor: 'blue',
+      headline: 'Diwali Mega Savings',
+      subline: 'Flat 85% Off on OD Premium',
+      footerLeft: 'Valid till 31 Oct',
+      footerRight: 'CODE: DIWALI26',
+      icon: 'sparkles',
+    },
+    {
+      id: 2,
+      title: 'Two-Wheeler Instant Policy Promo',
+      target: 'Motor Section',
+      size: '800x400',
+      active: true,
+      tag: 'Instant Policy',
+      badgeColor: 'blue',
+      headline: 'Two-Wheeler Cover',
+      subline: 'Quick Renewal in 2 Mins',
+      footerLeft: 'Starting ₹499/yr',
+      footerRight: 'ZERO PAPER',
+      icon: 'zap',
+    },
+    {
+      id: 3,
+      title: 'POSP Onboarding Referral Bonus',
+      target: 'Agent Dashboard',
+      size: '800x400',
+      active: false,
+      tag: 'Referral Bonus',
+      badgeColor: 'blue',
+      headline: 'POSP Referral Scheme',
+      subline: 'Earn ₹2,000 per Active POSP',
+      footerLeft: 'Unlimited Payout',
+      footerRight: 'CLAIM NOW',
+      icon: 'award',
+    },
   ]);
   const [runupImageType, setRunupImageType] = useState<'agent' | 'executive'>('agent');
 
@@ -627,35 +668,37 @@ const AppModulePage: React.FC = () => {
         {/* Tab 1: Send SMS */}
         {activeTab === 'sendSms' && (
           <div className="flex flex-col gap-6 w-full">
-            {/* Send SMS Card - matches user's reference screenshot */}
-            <div className="bg-white rounded-2xl border border-slate-200/90 p-8 shadow-[0_10px_25px_-5px_rgba(0,0,0,0.06),0_8px_10px_-6px_rgba(0,0,0,0.04)] w-full">
-              <form onSubmit={handleSendSms} className="space-y-6">
+            {/* Send SMS Card */}
+            <div className="bg-white rounded-[12px] border border-brand-border p-6 shadow-[0_1px_2px_rgba(0,0,0,0.02)] w-full">
+              <form onSubmit={handleSendSms} className="space-y-5">
                 {/* Recipients */}
                 <div>
-                  <label htmlFor="sms-recipients" className="block text-[#374151] text-[15px] font-normal mb-2">
-                    Recipients
+                  <label htmlFor="sms-recipients" className="block text-xs font-semibold text-slate-700 mb-1.5">
+                    Recipients (comma or newline separated)
                   </label>
                   <textarea
                     id="sms-recipients"
                     value={smsRecipients}
                     onChange={(e) => setSmsRecipients(e.target.value)}
                     rows={2}
-                    className="w-full px-4 py-2.5 rounded-2xl border border-[#CBD5E1] text-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-[#0B57D0]/20 focus:border-[#0B57D0] transition-all resize"
+                    placeholder="Enter phone numbers e.g. 9823045678, 9811234567"
+                    className="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 text-slate-800 text-sm focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all resize"
                     required
                   />
                 </div>
 
                 {/* Message */}
                 <div>
-                  <label htmlFor="sms-message" className="block text-[#374151] text-[15px] font-normal mb-2">
+                  <label htmlFor="sms-message" className="block text-xs font-semibold text-slate-700 mb-1.5">
                     Message
                   </label>
                   <textarea
                     id="sms-message"
                     value={smsMessage}
                     onChange={(e) => setSmsMessage(e.target.value)}
-                    rows={6}
-                    className="w-full px-4 py-3 rounded-2xl border border-[#CBD5E1] text-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-[#0B57D0]/20 focus:border-[#0B57D0] transition-all resize"
+                    rows={5}
+                    placeholder="Type SMS message..."
+                    className="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 text-slate-800 text-sm focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all resize"
                     required
                   />
                 </div>
@@ -664,54 +707,56 @@ const AppModulePage: React.FC = () => {
                 <div className="pt-1">
                   <button
                     type="submit"
-                    className="px-7 py-2.5 bg-[#0B57D0] hover:bg-[#0948b0] active:bg-[#083c93] text-white text-[15px] font-medium rounded-lg shadow-sm transition-colors cursor-pointer"
+                    className="px-6 py-2.5 bg-brand-primary hover:bg-[#1D4ED8] text-white text-sm font-semibold rounded-lg shadow-xs transition-all cursor-pointer border-none flex items-center gap-2"
                   >
-                    Send
+                    <Send size={15} />
+                    <span>Send SMS</span>
                   </button>
                 </div>
               </form>
             </div>
 
-            {/* Logs Table */}
-            <div className="bg-white rounded-2xl border border-brand-border p-6 shadow-sm">
-              <div className="flex justify-between items-center mb-4">
+            {/* Logs Table Card (VehicleMaster Unified Layout) */}
+            <div className="w-full bg-white rounded-[12px] border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden flex flex-col">
+              <div className="p-4 bg-slate-50 border-b border-brand-border flex items-center justify-between gap-4">
                 <div>
-                  <h3 className="text-base font-bold text-brand-navy">Recent SMS Transmissions</h3>
+                  <h3 className="text-sm font-bold text-brand-navy">Recent SMS Transmissions</h3>
                   <p className="text-xs text-slate-500">Live delivery records and DLT verification audit</p>
                 </div>
                 <button
                   type="button"
                   onClick={() => showToast('SMS logs refreshed')}
-                  className="p-2 border border-slate-200 rounded-lg text-slate-600 hover:text-brand-primary hover:bg-slate-50 transition-colors cursor-pointer"
+                  className="px-3.5 py-1.5 bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 rounded-lg text-xs font-semibold shadow-xs transition-all cursor-pointer flex items-center gap-1.5"
                   title="Refresh"
                 >
-                  <RefreshCw size={15} />
+                  <RefreshCw size={14} />
+                  <span>Refresh</span>
                 </button>
               </div>
 
-              <div className="overflow-x-auto border border-slate-200 rounded-xl shadow-sm">
-                <table className="w-full text-left text-xs border-collapse">
-                  <thead className="bg-brand-primary text-white font-bold text-[12px] tracking-wider uppercase border-b-2 border-blue-700 select-none">
-                    <tr>
-                      <th className="py-3.5 px-3 border-r border-white/20">Recipient(s)</th>
-                      <th className="py-3.5 px-3 border-r border-white/20">Type</th>
-                      <th className="py-3.5 px-3 border-r border-white/20">Timestamp</th>
-                      <th className="py-3.5 px-3 border-r border-white/20">Status</th>
-                      <th className="py-3.5 px-3 text-right">Est. Cost</th>
+              <div className="overflow-x-auto w-full">
+                <table className="w-full text-left border-collapse min-w-[700px]">
+                  <thead>
+                    <tr className="bg-brand-lightbg text-brand-navy text-[13px] uppercase tracking-wider font-semibold select-none border-b border-brand-border whitespace-nowrap">
+                      <th className="py-3 px-4">Recipient(s)</th>
+                      <th className="py-3 px-4">Type</th>
+                      <th className="py-3 px-4">Timestamp</th>
+                      <th className="py-3 px-4">Status</th>
+                      <th className="py-3 px-4 text-right">Est. Cost</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-100">
+                  <tbody className="divide-y divide-brand-border text-[13px] text-slate-800">
                     {smsHistory.map((s) => (
-                      <tr key={s.id} className="hover:bg-slate-50/80 transition-colors">
-                        <td className="py-3 px-3 font-semibold text-brand-navy max-w-xs truncate">{s.recipient}</td>
-                        <td className="py-3 px-3 text-slate-600">{s.template}</td>
-                        <td className="py-3 px-3 text-slate-500 font-mono text-[11px]">{s.date}</td>
-                        <td className="py-3 px-3">
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-700">
-                            <CheckCircle2 size={11} /> {s.status}
+                      <tr key={s.id} className="hover:bg-brand-mainbg h-[48px] transition-colors bg-white">
+                        <td className="py-2.5 px-4 font-semibold text-brand-navy max-w-xs truncate">{s.recipient}</td>
+                        <td className="py-2.5 px-4 text-slate-600">{s.template}</td>
+                        <td className="py-2.5 px-4 text-slate-500 font-mono text-xs">{s.date}</td>
+                        <td className="py-2.5 px-4">
+                          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                            <CheckCircle2 size={12} /> {s.status}
                           </span>
                         </td>
-                        <td className="py-3 px-3 text-right font-mono font-bold text-slate-700">{s.cost}</td>
+                        <td className="py-2.5 px-4 text-right font-mono font-bold text-slate-800">{s.cost.replace('â‚¹', '₹')}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -724,11 +769,11 @@ const AppModulePage: React.FC = () => {
         {/* Tab 2: App Endorsement Form */}
         {activeTab === 'appEndorsement' && (
           <form onSubmit={handleSaveEndorsement} className="w-full space-y-6">
-            {/* Card 1: Â»Endorsement */}
-            <div className="bg-white rounded-2xl border border-slate-200/90 p-6 sm:p-7 shadow-[0_10px_25px_-5px_rgba(0,0,0,0.06),0_8px_10px_-6px_rgba(0,0,0,0.04)]">
-              {/* Blue Banner Header */}
-              <div className="bg-brand-primary text-white px-4 py-2.5 rounded-lg font-serif font-medium text-[15px] sm:text-base flex items-center mb-6 shadow-sm">
-                <span>Â»Endorsement</span>
+            {/* Card 1: Endorsement Parameters */}
+            <div className="bg-white rounded-[12px] border border-brand-border p-6 shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
+              <div className="mb-5 pb-3 border-b border-brand-border">
+                <h3 className="text-sm font-bold text-brand-navy">Endorsement Parameters</h3>
+                <p className="text-xs text-slate-500">Configure endorsement type, party role, and assigned agent</p>
               </div>
 
               {/* Form Fields */}
@@ -736,14 +781,14 @@ const AppModulePage: React.FC = () => {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   {/* Endorsement Type */}
                   <div>
-                    <label htmlFor="endorsement-type" className="block text-[#374151] text-[14px] font-normal mb-2">
+                    <label htmlFor="endorsement-type" className="block text-xs font-semibold text-slate-700 mb-1.5">
                       Endorsement Type
                     </label>
                     <select
                       id="endorsement-type"
                       value={endorsementType}
                       onChange={(e) => setEndorsementType(e.target.value)}
-                      className="w-full px-4 py-2 rounded-2xl border border-[#CBD5E1] text-slate-800 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all cursor-pointer"
+                      className="w-full px-3.5 py-2 rounded-lg border border-slate-300 text-slate-800 text-sm bg-white focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all cursor-pointer"
                     >
                       <option value="">--Select Endorsement Type--</option>
                       <option value="TRANSFER ENDORSEMENT">TRANSFER ENDORSEMENT</option>
@@ -753,14 +798,14 @@ const AppModulePage: React.FC = () => {
 
                   {/* User Role */}
                   <div>
-                    <label htmlFor="endorsement-user-role" className="block text-[#374151] text-[14px] font-normal mb-2">
+                    <label htmlFor="endorsement-user-role" className="block text-xs font-semibold text-slate-700 mb-1.5">
                       User Role
                     </label>
                     <select
                       id="endorsement-user-role"
                       value={endorsementUserRole}
                       onChange={(e) => setEndorsementUserRole(e.target.value)}
-                      className="w-full px-4 py-2 rounded-2xl border border-[#CBD5E1] text-slate-800 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all cursor-pointer"
+                      className="w-full px-3.5 py-2 rounded-lg border border-slate-300 text-slate-800 text-sm bg-white focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all cursor-pointer"
                     >
                       <option value="">--Select User Role--</option>
                       <option value="AGENT">AGENT</option>
@@ -772,14 +817,14 @@ const AppModulePage: React.FC = () => {
 
                   {/* Agent Name */}
                   <div>
-                    <label htmlFor="endorsement-agent-name" className="block text-[#374151] text-[14px] font-normal mb-2">
+                    <label htmlFor="endorsement-agent-name" className="block text-xs font-semibold text-slate-700 mb-1.5">
                       Agent Name
                     </label>
                     <select
                       id="endorsement-agent-name"
                       value={endorsementAgentName}
                       onChange={(e) => setEndorsementAgentName(e.target.value)}
-                      className="w-full px-4 py-2 rounded-2xl border border-[#CBD5E1] text-slate-800 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all cursor-pointer"
+                      className="w-full px-3.5 py-2 rounded-lg border border-slate-300 text-slate-800 text-sm bg-white focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all cursor-pointer"
                     >
                       <option value="">--Select Agent Name--</option>
                       <option value="AMOL LOKHANDE">AMOL LOKHANDE</option>
@@ -808,14 +853,14 @@ const AppModulePage: React.FC = () => {
                 {/* Sales Executive (Row 2) */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <div>
-                    <label htmlFor="endorsement-sales-exec" className="block text-[#374151] text-[14px] font-normal mb-2">
+                    <label htmlFor="endorsement-sales-exec" className="block text-xs font-semibold text-slate-700 mb-1.5">
                       Sales Executive
                     </label>
                     <select
                       id="endorsement-sales-exec"
                       value={endorsementSalesExec}
                       onChange={(e) => setEndorsementSalesExec(e.target.value)}
-                      className="w-full px-4 py-2 rounded-2xl border border-[#CBD5E1] text-slate-800 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all cursor-pointer"
+                      className="w-full px-3.5 py-2 rounded-lg border border-slate-300 text-slate-800 text-sm bg-white focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all cursor-pointer"
                     >
                       <option value="">--Select Sales Executive--</option>
                       <option value="MAHESH SHINDE">MAHESH SHINDE</option>
@@ -830,40 +875,41 @@ const AppModulePage: React.FC = () => {
               </div>
             </div>
 
-            {/* Card 2: Â» Document Details */}
-            <div className="bg-white rounded-2xl border border-slate-200/90 p-6 sm:p-7 shadow-[0_10px_25px_-5px_rgba(0,0,0,0.06),0_8px_10px_-6px_rgba(0,0,0,0.04)]">
-              {/* Blue Banner Header */}
-              <div className="bg-brand-primary text-white px-4 py-2.5 rounded-lg font-serif font-medium text-[15px] sm:text-base flex items-center mb-6 shadow-sm">
-                <span>Â» Document Details</span>
+            {/* Card 2: Document Details */}
+            <div className="bg-white rounded-[12px] border border-brand-border p-6 shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
+              <div className="mb-5 pb-3 border-b border-brand-border">
+                <h3 className="text-sm font-bold text-brand-navy">Document Details</h3>
+                <p className="text-xs text-slate-500">Attach supporting files and verification certificates</p>
               </div>
 
               {/* Form Controls */}
               <div className="flex flex-col md:flex-row items-start md:items-end gap-5">
                 {/* Document Name */}
                 <div className="w-full md:w-72">
-                  <label htmlFor="endorsement-doc-name" className="block text-[#374151] text-[14px] font-normal mb-2">
+                  <label htmlFor="endorsement-doc-name" className="block text-xs font-semibold text-slate-700 mb-1.5">
                     Document Name
                   </label>
                   <input
                     id="endorsement-doc-name"
                     type="text"
+                    placeholder="e.g. RC Copy, Pan Card"
                     value={endorsementDocName}
                     onChange={(e) => setEndorsementDocName(e.target.value)}
-                    className="w-full px-4 py-2 rounded-2xl border border-[#CBD5E1] text-slate-800 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all"
+                    className="w-full px-3.5 py-2 rounded-lg border border-slate-300 text-slate-800 text-sm bg-white focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all"
                   />
                 </div>
 
                 {/* Attach File */}
                 <div className="w-full md:w-auto">
-                  <label htmlFor="endorsement-doc-file" className="block text-[#374151] text-[14px] font-normal mb-2">
-                    Attach
+                  <label htmlFor="endorsement-doc-file" className="block text-xs font-semibold text-slate-700 mb-1.5">
+                    Attach File
                   </label>
-                  <div className="inline-block border border-[#CBD5E1] rounded-2xl px-3 py-1.5 bg-white">
+                  <div className="inline-block border border-slate-300 rounded-lg px-3 py-1.5 bg-white">
                     <input
                       id="endorsement-doc-file"
                       type="file"
                       onChange={(e) => setEndorsementDocFile(e.target.files?.[0] || null)}
-                      className="text-xs text-slate-600 file:mr-2 file:py-0.5 file:px-2 file:rounded-md file:border-0 file:text-xs file:font-medium file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200 cursor-pointer"
+                      className="text-xs text-slate-600 file:mr-2 file:py-0.5 file:px-2 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200 cursor-pointer"
                     />
                   </div>
                 </div>
@@ -873,9 +919,10 @@ const AppModulePage: React.FC = () => {
                   <button
                     type="button"
                     onClick={handleUploadDocument}
-                    className="px-6 py-2 bg-brand-primary hover:bg-blue-700 active:bg-blue-800 text-white text-[14px] font-medium rounded-lg shadow-sm transition-colors cursor-pointer"
+                    className="px-6 py-2 bg-brand-primary hover:bg-[#1D4ED8] text-white text-sm font-semibold rounded-lg shadow-xs transition-all cursor-pointer border-none flex items-center gap-1.5"
                   >
-                    Upload
+                    <Upload size={14} />
+                    <span>Upload</span>
                   </button>
                 </div>
               </div>
@@ -890,7 +937,7 @@ const AppModulePage: React.FC = () => {
                     {uploadedDocuments.map((doc, idx) => (
                       <div
                         key={idx}
-                        className="flex items-center gap-2 px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-700"
+                        className="flex items-center gap-2 px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-700"
                       >
                         <FileText size={14} className="text-brand-primary" />
                         <span className="font-semibold">{doc.name}</span>
@@ -898,7 +945,7 @@ const AppModulePage: React.FC = () => {
                         <button
                           type="button"
                           onClick={() => setUploadedDocuments(uploadedDocuments.filter((_, i) => i !== idx))}
-                          className="text-rose-500 hover:text-rose-700 ml-1 cursor-pointer"
+                          className="text-rose-500 hover:text-rose-700 ml-1 cursor-pointer bg-transparent border-none"
                         >
                           <X size={13} />
                         </button>
@@ -913,9 +960,10 @@ const AppModulePage: React.FC = () => {
             <div className="flex justify-center pt-2">
               <button
                 type="submit"
-                className="px-9 py-2.5 bg-brand-primary hover:bg-blue-700 active:bg-blue-800 text-white text-[15px] font-medium rounded-lg shadow-sm transition-colors cursor-pointer"
+                className="px-9 py-2.5 bg-brand-primary hover:bg-[#1D4ED8] text-white text-sm font-semibold rounded-lg shadow-xs transition-all cursor-pointer border-none flex items-center gap-2"
               >
-                Save
+                <Save size={16} />
+                <span>Save Endorsement</span>
               </button>
             </div>
           </form>
@@ -924,12 +972,12 @@ const AppModulePage: React.FC = () => {
         {/* Tab 3: Endorsement Report */}
         {activeTab === 'appEndorsementRep' && (
           <div className="w-full space-y-6">
-            {/* Filter Card matching reference photo */}
-            <div className="bg-white rounded-2xl border border-slate-200/90 p-6 sm:p-7 shadow-[0_10px_25px_-5px_rgba(0,0,0,0.06),0_8px_10px_-6px_rgba(0,0,0,0.04)] w-full">
+            {/* Filter Card */}
+            <div className="bg-white rounded-[12px] border border-brand-border p-6 shadow-[0_1px_2px_rgba(0,0,0,0.02)] w-full">
               <div className="flex flex-col sm:flex-row items-start sm:items-end gap-5">
                 {/* From Date */}
                 <div className="w-full sm:w-60">
-                  <label htmlFor="rep-from-date" className="block text-[#374151] text-[14px] font-normal mb-2">
+                  <label htmlFor="rep-from-date" className="block text-xs font-semibold text-slate-700 mb-1.5">
                     From Date
                   </label>
                   <input
@@ -937,13 +985,13 @@ const AppModulePage: React.FC = () => {
                     type="date"
                     value={repFromDate}
                     onChange={(e) => setRepFromDate(e.target.value)}
-                    className="w-full px-4 py-2 rounded-2xl border border-[#CBD5E1] text-slate-800 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all"
+                    className="w-full px-3.5 py-2 rounded-lg border border-slate-300 text-slate-800 text-sm bg-white focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all"
                   />
                 </div>
 
                 {/* To Date */}
                 <div className="w-full sm:w-60">
-                  <label htmlFor="rep-to-date" className="block text-[#374151] text-[14px] font-normal mb-2">
+                  <label htmlFor="rep-to-date" className="block text-xs font-semibold text-slate-700 mb-1.5">
                     To Date
                   </label>
                   <input
@@ -951,7 +999,7 @@ const AppModulePage: React.FC = () => {
                     type="date"
                     value={repToDate}
                     onChange={(e) => setRepToDate(e.target.value)}
-                    className="w-full px-4 py-2 rounded-2xl border border-[#CBD5E1] text-slate-800 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all"
+                    className="w-full px-3.5 py-2 rounded-lg border border-slate-300 text-slate-800 text-sm bg-white focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all"
                   />
                 </div>
 
@@ -960,116 +1008,135 @@ const AppModulePage: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => showToast(`Filtered endorsement records for ${repFromDate} to ${repToDate}`)}
-                    className="px-7 py-2.5 bg-brand-primary hover:bg-blue-700 active:bg-blue-800 text-white text-[14px] font-medium rounded-lg shadow-sm transition-colors cursor-pointer"
+                    className="px-6 py-2 bg-brand-primary hover:bg-[#1D4ED8] text-white text-sm font-semibold rounded-lg shadow-xs transition-all cursor-pointer border-none h-[38px] flex items-center justify-center gap-1.5"
                   >
-                    Show
+                    <Eye size={15} />
+                    <span>Show</span>
                   </button>
                 </div>
               </div>
             </div>
 
-            {/* Endorsement Report Table Card */}
-            <div className="bg-white rounded-2xl border border-brand-border p-6 shadow-sm w-full">
-              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4">
-                <div>
-                  <h3 className="text-base font-bold text-brand-navy">App Endorsement Requests Report</h3>
-                  <p className="text-xs text-slate-500">Live amendment audit and document verification records</p>
+            {/* Endorsement Report Table Card (VehicleMaster Unified Layout) */}
+            <div className="w-full bg-white rounded-[12px] border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden flex flex-col">
+              <div className="p-4 bg-slate-50 border-b border-brand-border flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div className="relative w-full sm:w-[350px]">
+                  <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                  <input
+                    type="text"
+                    placeholder="Search agent, transferor, type..."
+                    value={endorsementReportSearch}
+                    onChange={(e) => setEndorsementReportSearch(e.target.value)}
+                    className="w-full pl-9 pr-8 py-2 bg-white border border-slate-300 rounded-lg text-sm text-brand-navy placeholder-[#94a3b8] focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all h-[40px]"
+                  />
+                  {endorsementReportSearch && (
+                    <button
+                      type="button"
+                      onClick={() => setEndorsementReportSearch('')}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 bg-transparent border-none cursor-pointer"
+                    >
+                      <X size={15} />
+                    </button>
+                  )}
                 </div>
-                <div className="flex items-center gap-2 w-full sm:w-auto">
-                  <div className="relative flex-1 sm:w-64">
-                    <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-                    <input
-                      type="text"
-                      placeholder="Search agent / transferor..."
-                      value={endorsementReportSearch}
-                      onChange={(e) => setEndorsementReportSearch(e.target.value)}
-                      className="w-full pl-8 pr-3 py-2 rounded-lg border border-slate-300 text-xs focus:border-brand-primary focus:outline-none"
-                    />
-                  </div>
+
+                <div className="flex items-center gap-3 w-full sm:w-auto justify-end">
                   <button
                     onClick={() => showToast('Exporting Excel report...')}
-                    className="p-2 border border-slate-200 rounded-lg text-slate-600 hover:text-brand-primary hover:bg-slate-50 transition-colors cursor-pointer"
+                    className="px-4 py-2 bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 rounded-lg text-sm font-semibold shadow-xs transition-all cursor-pointer h-[40px] flex items-center justify-center gap-2"
                     title="Export Report"
                   >
                     <Download size={15} />
+                    <span>Export CSV</span>
                   </button>
                 </div>
               </div>
 
-              {/* Data Table with 20 columns matching reference photos in Blue Theme */}
-              <div className="overflow-x-auto border border-slate-200 rounded-xl shadow-sm">
-                <table className="w-full text-left text-xs border-collapse whitespace-nowrap min-w-[1500px]">
-                  <thead className="bg-brand-primary text-white font-bold text-[12px] tracking-wider uppercase border-b-2 border-blue-700 select-none">
-                    <tr>
-                      <th className="py-3.5 px-3 border-r border-white/20 text-center w-28">ACTION</th>
-                      <th className="py-3.5 px-3 border-r border-white/20">TYPE</th>
-                      <th className="py-3.5 px-3 border-r border-white/20">AGENTNAME</th>
-                      <th className="py-3.5 px-3 border-r border-white/20">EMPNAME</th>
-                      <th className="py-3.5 px-3 border-r border-white/20">TRANSFERORNAME</th>
-                      <th className="py-3.5 px-3 border-r border-white/20">TRANSFERDATE</th>
-                      <th className="py-3.5 px-3 border-r border-white/20 text-center">INSPECTION</th>
-                      <th className="py-3.5 px-3 border-r border-white/20 text-center">WRONG NAME</th>
-                      <th className="py-3.5 px-3 border-r border-white/20 text-center">CORRECT NAME</th>
-                      <th className="py-3.5 px-3 border-r border-white/20 text-center">WRONG ENGINENO</th>
-                      <th className="py-3.5 px-3 border-r border-white/20 text-center">CORRECT ENGINENO</th>
-                      <th className="py-3.5 px-3 border-r border-white/20 text-center">WRONG CHAISENO</th>
-                      <th className="py-3.5 px-3 border-r border-white/20 text-center">CORRECT CHAISENO</th>
-                      <th className="py-3.5 px-3 border-r border-white/20 text-center">WRONG ADDRESS</th>
-                      <th className="py-3.5 px-3 border-r border-white/20 text-center">CORRECT ADDRESS</th>
-                      <th className="py-3.5 px-3 border-r border-white/20 text-center">WRONG MAKE</th>
-                      <th className="py-3.5 px-3 border-r border-white/20 text-center">CORRECT MAKE</th>
-                      <th className="py-3.5 px-3 border-r border-white/20 text-center">WRONG MODULE</th>
-                      <th className="py-3.5 px-3 border-r border-white/20 text-center">CORRECT MODULE</th>
-                      <th className="py-3.5 px-3 text-center">OTHER</th>
+              {/* Data Table with 20 columns */}
+              <div className="overflow-x-auto w-full custom-scrollbar min-h-[400px]">
+                <table className="w-full text-left border-collapse min-w-[1500px]">
+                  <thead>
+                    <tr className="bg-brand-lightbg text-brand-navy text-[13px] uppercase tracking-wider font-semibold select-none border-b border-brand-border whitespace-nowrap">
+                      <th className="py-3 px-3.5 text-center w-28">ACTION</th>
+                      <th className="py-3 px-3.5">TYPE</th>
+                      <th className="py-3 px-3.5">AGENT NAME</th>
+                      <th className="py-3 px-3.5">EMP NAME</th>
+                      <th className="py-3 px-3.5">TRANSFEROR NAME</th>
+                      <th className="py-3 px-3.5">TRANSFER DATE</th>
+                      <th className="py-3 px-3 text-center">INSPECTION</th>
+                      <th className="py-3 px-3 text-center">WRONG NAME</th>
+                      <th className="py-3 px-3 text-center">CORRECT NAME</th>
+                      <th className="py-3 px-3 text-center">WRONG ENGINENO</th>
+                      <th className="py-3 px-3 text-center">CORRECT ENGINENO</th>
+                      <th className="py-3 px-3 text-center">WRONG CHAISENO</th>
+                      <th className="py-3 px-3 text-center">CORRECT CHAISENO</th>
+                      <th className="py-3 px-3 text-center">WRONG ADDRESS</th>
+                      <th className="py-3 px-3 text-center">CORRECT ADDRESS</th>
+                      <th className="py-3 px-3 text-center">WRONG MAKE</th>
+                      <th className="py-3 px-3 text-center">CORRECT MAKE</th>
+                      <th className="py-3 px-3 text-center">WRONG MODULE</th>
+                      <th className="py-3 px-3 text-center">CORRECT MODULE</th>
+                      <th className="py-3 px-3 text-center">OTHER</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-100 text-slate-700 bg-white">
-                    {endorsementsList
-                      .filter(e =>
+                  <tbody className="divide-y divide-brand-border text-[13px] text-slate-800">
+                    {(() => {
+                      const filtered = endorsementsList.filter(e =>
                         e.agentName.toLowerCase().includes(endorsementReportSearch.toLowerCase()) ||
                         e.transferorName.toLowerCase().includes(endorsementReportSearch.toLowerCase()) ||
                         e.type.toLowerCase().includes(endorsementReportSearch.toLowerCase())
-                      )
-                      .map((row, idx) => (
-                        <tr key={row.id} className={`h-[48px] hover:bg-blue-50/40 transition-colors ${idx % 2 === 0 ? 'bg-white' : 'bg-slate-50/40'}`}>
-                          <td className="py-2.5 px-3 text-center border-r border-slate-200">
+                      );
+                      if (filtered.length === 0) {
+                        return (
+                          <tr>
+                            <td colSpan={20} className="py-16 text-center text-slate-500">
+                              <p className="font-semibold text-slate-600 text-sm">No endorsement report records found.</p>
+                              <p className="text-xs text-slate-400 mt-1">Try clearing the search query or adjusting dates.</p>
+                            </td>
+                          </tr>
+                        );
+                      }
+                      return filtered.map((row) => (
+                        <tr key={row.id} className="hover:bg-brand-mainbg h-[48px] transition-colors bg-white">
+                          <td className="py-2.5 px-3.5 text-center">
                             <button
                               type="button"
                               onClick={() => setSelectedImageRecord(row)}
-                              className="font-bold text-brand-primary hover:text-blue-800 text-[11px] uppercase tracking-wider underline cursor-pointer"
+                              className="font-bold text-brand-primary hover:text-blue-800 text-[11px] uppercase tracking-wider underline cursor-pointer bg-transparent border-none"
                             >
                               VIEW IMAGES
                             </button>
                           </td>
-                          <td className="py-2.5 px-3 font-semibold text-brand-navy border-r border-slate-200">{row.type}</td>
-                          <td className="py-2.5 px-3 font-medium text-slate-800 border-r border-slate-200">{row.agentName}</td>
-                          <td className="py-2.5 px-3 text-slate-700 border-r border-slate-200">{row.empName}</td>
-                          <td className="py-2.5 px-3 font-medium text-slate-800 border-r border-slate-200">{row.transferorName}</td>
-                          <td className="py-2.5 px-3 font-mono text-[11px] text-slate-500 border-r border-slate-200">{row.transferDate}</td>
-                          <td className="py-2.5 px-3 text-center border-r border-slate-200">
+                          <td className="py-2.5 px-3.5 font-semibold text-brand-navy">{row.type}</td>
+                          <td className="py-2.5 px-3.5 font-medium text-slate-800">{row.agentName}</td>
+                          <td className="py-2.5 px-3.5 text-slate-700">{row.empName}</td>
+                          <td className="py-2.5 px-3.5 font-medium text-slate-800">{row.transferorName}</td>
+                          <td className="py-2.5 px-3.5 font-mono text-xs text-slate-500">{row.transferDate}</td>
+                          <td className="py-2.5 px-3 text-center">
                             <span className={`inline-block px-2 py-0.5 rounded text-[10px] font-bold ${
-                              row.inspection === 'YES' ? 'bg-emerald-100 text-emerald-800' :
+                              row.inspection === 'YES' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' :
                               row.inspection === 'NO' ? 'bg-slate-100 text-slate-600' :
                               'text-slate-400'
                             }`}>
                               {row.inspection}
                             </span>
                           </td>
-                          <td className="py-2.5 px-3 text-center text-slate-500 border-r border-slate-200">{row.wrongName}</td>
-                          <td className="py-2.5 px-3 text-center text-slate-500 border-r border-slate-200">{row.correctName}</td>
-                          <td className="py-2.5 px-3 text-center font-mono text-slate-600 border-r border-slate-200">{row.wrongEngineNo}</td>
-                          <td className="py-2.5 px-3 text-center font-mono text-slate-600 border-r border-slate-200">{row.correctEngineNo}</td>
-                          <td className="py-2.5 px-3 text-center font-mono text-slate-600 border-r border-slate-200">{row.wrongChaiseNo}</td>
-                          <td className="py-2.5 px-3 text-center font-mono text-slate-600 border-r border-slate-200">{row.correctChaiseNo}</td>
-                          <td className="py-2.5 px-3 text-center text-slate-500 border-r border-slate-200">{row.wrongAddress}</td>
-                          <td className="py-2.5 px-3 text-center text-slate-500 border-r border-slate-200">{row.correctAddress}</td>
-                          <td className="py-2.5 px-3 text-center text-slate-500 border-r border-slate-200">{row.wrongMake}</td>
-                          <td className="py-2.5 px-3 text-center text-slate-500 border-r border-slate-200">{row.correctMake}</td>
-                          <td className="py-2.5 px-3 text-center text-slate-500 border-r border-slate-200">{row.wrongModule}</td>
-                          <td className="py-2.5 px-3 text-center text-slate-500 border-r border-slate-200">{row.correctModule}</td>
+                          <td className="py-2.5 px-3 text-center text-slate-500">{row.wrongName}</td>
+                          <td className="py-2.5 px-3 text-center text-slate-700 font-medium">{row.correctName}</td>
+                          <td className="py-2.5 px-3 text-center font-mono text-xs text-slate-600">{row.wrongEngineNo}</td>
+                          <td className="py-2.5 px-3 text-center font-mono text-xs text-slate-800 font-medium">{row.correctEngineNo}</td>
+                          <td className="py-2.5 px-3 text-center font-mono text-xs text-slate-600">{row.wrongChaiseNo}</td>
+                          <td className="py-2.5 px-3 text-center font-mono text-xs text-slate-800 font-medium">{row.correctChaiseNo}</td>
+                          <td className="py-2.5 px-3 text-center text-slate-500">{row.wrongAddress}</td>
+                          <td className="py-2.5 px-3 text-center text-slate-700 font-medium">{row.correctAddress}</td>
+                          <td className="py-2.5 px-3 text-center text-slate-500">{row.wrongMake}</td>
+                          <td className="py-2.5 px-3 text-center text-slate-700 font-medium">{row.correctMake}</td>
+                          <td className="py-2.5 px-3 text-center text-slate-500">{row.wrongModule}</td>
+                          <td className="py-2.5 px-3 text-center text-slate-700 font-medium">{row.correctModule}</td>
                           <td className="py-2.5 px-3 text-center text-slate-500">{row.other}</td>
                         </tr>
-                      ))}
+                      ));
+                    })()}
                   </tbody>
                 </table>
               </div>
@@ -1146,18 +1213,18 @@ const AppModulePage: React.FC = () => {
         {/* Tab 4: Circular */}
         {activeTab === 'circular' && (
           <div className="w-full flex flex-col lg:flex-row items-start gap-6">
-            {/* Left Card: Â»Circular Form */}
+            {/* Left Card: Circular Form */}
             <div className="w-full lg:w-[380px] xl:w-[420px] shrink-0">
-              <div className="bg-white rounded-2xl border border-slate-200/90 p-6 sm:p-7 shadow-[0_10px_25px_-5px_rgba(0,0,0,0.06),0_8px_10px_-6px_rgba(0,0,0,0.04)] w-full">
-                {/* Standard Blue Banner Header */}
-                <div className="bg-brand-primary text-white px-4 py-2.5 rounded-lg font-serif font-medium text-[15px] sm:text-base flex items-center mb-6 shadow-sm">
-                  <span>Â»Circular Form</span>
+              <div className="bg-white rounded-[12px] border border-brand-border p-6 shadow-[0_1px_2px_rgba(0,0,0,0.02)] w-full">
+                <div className="mb-5 pb-3 border-b border-brand-border">
+                  <h3 className="text-base font-bold text-brand-navy">Circular Form</h3>
+                  <p className="text-xs text-slate-500 mt-0.5">Publish new notifications and circulars for mobile app</p>
                 </div>
 
-                <form onSubmit={handleSaveCircular} className="space-y-5">
+                <form onSubmit={handleSaveCircular} className="space-y-4">
                   {/* Circular Date */}
                   <div>
-                    <label htmlFor="circular-date" className="block text-[#374151] text-[14px] font-normal mb-2">
+                    <label htmlFor="circular-date" className="block text-slate-700 text-xs font-semibold mb-1.5 uppercase">
                       Circular Date
                     </label>
                     <input
@@ -1166,13 +1233,13 @@ const AppModulePage: React.FC = () => {
                       value={circularDate}
                       onChange={(e) => setCircularDate(e.target.value)}
                       placeholder="DD/MM/YYYY"
-                      className="w-full px-4 py-2 rounded-2xl border border-[#CBD5E1] text-slate-800 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all"
+                      className="w-full px-3.5 py-2 rounded-lg border border-slate-300 text-slate-800 text-sm bg-white focus:outline-none focus:ring-1 focus:ring-brand-primary focus:border-brand-primary transition-all"
                     />
                   </div>
 
                   {/* Subject */}
                   <div>
-                    <label htmlFor="circular-subject" className="block text-[#374151] text-[14px] font-normal mb-2">
+                    <label htmlFor="circular-subject" className="block text-slate-700 text-xs font-semibold mb-1.5 uppercase">
                       Subject
                     </label>
                     <input
@@ -1181,17 +1248,17 @@ const AppModulePage: React.FC = () => {
                       value={circularSubject}
                       onChange={(e) => setCircularSubject(e.target.value)}
                       placeholder="Enter circular subject"
-                      className="w-full px-4 py-2 rounded-2xl border border-[#CBD5E1] text-slate-800 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all"
+                      className="w-full px-3.5 py-2 rounded-lg border border-slate-300 text-slate-800 text-sm bg-white focus:outline-none focus:ring-1 focus:ring-brand-primary focus:border-brand-primary transition-all"
                       required
                     />
                   </div>
 
                   {/* Attach PDF */}
                   <div>
-                    <label htmlFor="circular-pdf" className="block text-[#374151] text-[14px] font-normal mb-2">
+                    <label htmlFor="circular-pdf" className="block text-slate-700 text-xs font-semibold mb-1.5 uppercase">
                       Attach PDF
                     </label>
-                    <div className="relative w-full rounded-2xl border border-[#CBD5E1] bg-white px-3 py-1.5 focus-within:ring-2 focus-within:ring-brand-primary/20 focus-within:border-brand-primary transition-all">
+                    <div className="relative w-full rounded-lg border border-slate-300 bg-white px-3 py-1.5 focus-within:ring-1 focus-within:ring-brand-primary focus-within:border-brand-primary transition-all">
                       <input
                         id="circular-pdf"
                         type="file"
@@ -1203,7 +1270,7 @@ const AppModulePage: React.FC = () => {
                             setCircularPdfFileName(file.name);
                           }
                         }}
-                        className="w-full text-xs text-slate-600 file:mr-3 file:py-1 file:px-3 file:rounded-xl file:border file:border-slate-300 file:text-xs file:font-semibold file:bg-slate-100 hover:file:bg-slate-200 file:text-slate-700 cursor-pointer"
+                        className="w-full text-xs text-slate-600 file:mr-3 file:py-1 file:px-3 file:rounded-lg file:border file:border-slate-300 file:text-xs file:font-semibold file:bg-slate-100 hover:file:bg-slate-200 file:text-slate-700 cursor-pointer"
                       />
                     </div>
                     {circularPdfFileName && (
@@ -1217,7 +1284,7 @@ const AppModulePage: React.FC = () => {
                   <div className="pt-2">
                     <button
                       type="submit"
-                      className="px-7 py-2 bg-brand-primary hover:bg-blue-700 active:bg-blue-800 text-white text-[14px] font-medium rounded-lg shadow-sm transition-colors cursor-pointer"
+                      className="px-7 py-2 bg-brand-primary hover:bg-[#1D4ED8] text-white text-sm font-semibold rounded-lg shadow-xs transition-colors cursor-pointer"
                     >
                       Save
                     </button>
@@ -1226,11 +1293,11 @@ const AppModulePage: React.FC = () => {
               </div>
             </div>
 
-            {/* Right Card: Circular Table in Standard Blue Theme */}
+            {/* Right Card: Circular Table in VehicleMaster Theme */}
             <div className="w-full flex-1 min-w-0">
-              <div className="bg-white rounded-2xl border border-slate-200/90 p-6 sm:p-7 shadow-[0_10px_25px_-5px_rgba(0,0,0,0.06),0_8px_10px_-6px_rgba(0,0,0,0.04)] w-full">
+              <div className="bg-white rounded-[12px] border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden flex flex-col w-full">
                 {/* Header row with search and actions */}
-                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-5">
+                <div className="p-4 bg-slate-50 border-b border-brand-border flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                   <div>
                     <h3 className="text-base font-bold text-brand-navy">Mobile App Circulars</h3>
                     <p className="text-xs text-slate-500">Official notifications and circulars published to agents & partners</p>
@@ -1243,13 +1310,13 @@ const AppModulePage: React.FC = () => {
                         placeholder="Search circulars..."
                         value={circularSearch}
                         onChange={(e) => setCircularSearch(e.target.value)}
-                        className="w-full pl-8 pr-3 py-2 rounded-lg border border-slate-300 text-xs focus:border-brand-primary focus:outline-none"
+                        className="w-full pl-8 pr-3 py-2 rounded-lg border border-slate-300 text-xs focus:border-brand-primary focus:ring-1 focus:ring-brand-primary focus:outline-none"
                       />
                     </div>
                     <button
                       type="button"
                       onClick={() => showToast('Exporting Circular list to Excel...')}
-                      className="p-2 border border-slate-200 rounded-lg text-slate-600 hover:text-brand-primary hover:bg-slate-50 transition-colors cursor-pointer"
+                      className="p-2 border border-slate-300 rounded-lg text-slate-600 hover:text-brand-primary hover:bg-slate-50 transition-colors cursor-pointer"
                       title="Export Circulars"
                     >
                       <Download size={15} />
@@ -1257,52 +1324,62 @@ const AppModulePage: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Table matching reference photo with Standard Blue header */}
-                <div className="overflow-x-auto border border-slate-200 rounded-xl shadow-sm">
-                  <table className="w-full text-left text-xs border-collapse whitespace-nowrap min-w-[700px]">
-                    <thead className="bg-brand-primary text-white font-bold text-[12px] tracking-wider uppercase border-b-2 border-blue-700 select-none">
+                {/* Table with Light-Blue Header */}
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left text-[13px] border-collapse whitespace-nowrap min-w-[700px]">
+                    <thead className="bg-brand-lightbg text-brand-navy text-[13px] uppercase tracking-wider font-semibold select-none border-b border-brand-border">
                       <tr>
-                        <th className="py-3.5 px-4 border-r border-white/20 w-52">DATE</th>
-                        <th className="py-3.5 px-4 border-r border-white/20">SUBJECT</th>
-                        <th className="py-3.5 px-4 border-r border-white/20">PDF PATH</th>
-                        <th className="py-3.5 px-4 text-center w-24">ACTION</th>
+                        <th className="py-3 px-4 font-semibold text-brand-navy w-52">DATE</th>
+                        <th className="py-3 px-4 font-semibold text-brand-navy">SUBJECT</th>
+                        <th className="py-3 px-4 font-semibold text-brand-navy">PDF PATH</th>
+                        <th className="py-3 px-4 font-semibold text-brand-navy text-center w-24">ACTION</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-100 text-slate-700 bg-white">
-                      {circularList
-                        .filter(
+                    <tbody className="divide-y divide-brand-border text-slate-800 bg-white">
+                      {(() => {
+                        const filtered = circularList.filter(
                           (c) =>
                             c.subject.toLowerCase().includes(circularSearch.toLowerCase()) ||
                             c.pdfPath.toLowerCase().includes(circularSearch.toLowerCase()) ||
                             c.date.toLowerCase().includes(circularSearch.toLowerCase())
-                        )
-                        .map((row, idx) => (
+                        );
+
+                        if (filtered.length === 0) {
+                          return (
+                            <tr>
+                              <td colSpan={4} className="py-16 text-center text-slate-400 font-medium">
+                                No circular records found matching your search.
+                              </td>
+                            </tr>
+                          );
+                        }
+
+                        return filtered.map((row) => (
                           <tr
                             key={row.id}
-                            className={`h-[48px] hover:bg-blue-50/40 transition-colors ${
-                              idx % 2 === 0 ? 'bg-white' : 'bg-slate-50/40'
-                            }`}
+                            className="h-[48px] hover:bg-brand-mainbg transition-colors bg-white"
                           >
-                            <td className="py-2.5 px-4 font-mono text-[11px] text-slate-600 border-r border-slate-200">
+                            <td className="py-2.5 px-4 font-mono text-xs text-slate-600">
                               {row.date}
                             </td>
-                            <td className="py-2.5 px-4 font-semibold text-slate-800 border-r border-slate-200">
+                            <td className="py-2.5 px-4 font-medium text-slate-800">
                               {row.subject}
                             </td>
-                            <td className="py-2.5 px-4 font-mono text-[11px] text-slate-600 border-r border-slate-200">
+                            <td className="py-2.5 px-4 font-mono text-xs text-slate-600">
                               {row.pdfPath}
                             </td>
                             <td className="py-2.5 px-4 text-center">
                               <button
                                 type="button"
                                 onClick={() => setSelectedCircularView(row)}
-                                className="font-bold text-brand-primary hover:text-blue-800 text-[11px] uppercase tracking-wider underline cursor-pointer"
+                                className="font-semibold text-brand-primary hover:text-blue-800 text-xs uppercase tracking-wider hover:underline cursor-pointer"
                               >
                                 VIEW
                               </button>
                             </td>
                           </tr>
-                        ))}
+                        ));
+                      })()}
                     </tbody>
                   </table>
                 </div>
@@ -1312,8 +1389,8 @@ const AppModulePage: React.FC = () => {
             {/* Modal: View PDF */}
             {selectedCircularView && (
               <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-fade-in">
-                <div className="bg-white rounded-2xl shadow-2xl border border-slate-200 max-w-xl w-full p-6 space-y-4">
-                  <div className="flex justify-between items-center border-b border-slate-200 pb-3">
+                <div className="bg-white rounded-[12px] shadow-2xl border border-brand-border max-w-xl w-full p-6 space-y-4">
+                  <div className="flex justify-between items-center border-b border-brand-border pb-3">
                     <div>
                       <h4 className="text-base font-bold text-brand-navy flex items-center gap-2">
                         <FileText size={18} className="text-brand-primary" />
@@ -1329,7 +1406,7 @@ const AppModulePage: React.FC = () => {
                     </button>
                   </div>
 
-                  <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-3">
+                  <div className="p-4 bg-slate-50 rounded-lg border border-brand-border space-y-3">
                     <div className="flex justify-between items-center text-xs">
                       <span className="text-slate-500 font-medium">Document File:</span>
                       <span className="font-mono font-bold text-slate-800">{selectedCircularView.pdfPath}</span>
@@ -1350,13 +1427,13 @@ const AppModulePage: React.FC = () => {
                       onClick={() => {
                         showToast(`Downloading ${selectedCircularView.pdfPath}...`);
                       }}
-                      className="px-4 py-2 bg-brand-primary hover:bg-blue-700 text-white rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer"
+                      className="px-4 py-2 bg-brand-primary hover:bg-[#1D4ED8] text-white rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer shadow-xs"
                     >
                       <Download size={14} /> Download PDF
                     </button>
                     <button
                       onClick={() => setSelectedCircularView(null)}
-                      className="px-4 py-2 border border-slate-200 hover:bg-slate-50 text-slate-700 rounded-lg text-xs font-semibold transition-colors cursor-pointer"
+                      className="px-4 py-2 border border-slate-300 hover:bg-slate-50 text-slate-700 rounded-lg text-xs font-semibold transition-colors cursor-pointer"
                     >
                       Close
                     </button>
@@ -1370,9 +1447,14 @@ const AppModulePage: React.FC = () => {
         {/* Tab 5: Send Message */}
         {activeTab === 'sendMessage' && (
           <div className="w-full space-y-6">
-            {/* Form Card matching reference photo */}
-            <div className="bg-white rounded-2xl border border-slate-200/90 p-6 sm:p-8 shadow-[0_10px_25px_-5px_rgba(0,0,0,0.06),0_8px_10px_-6px_rgba(0,0,0,0.04)] w-full">
-              <form onSubmit={handleSendMessage} className="space-y-6">
+            {/* Form Card matching reference theme */}
+            <div className="bg-white rounded-[12px] border border-brand-border p-6 sm:p-7 shadow-[0_1px_2px_rgba(0,0,0,0.02)] w-full">
+              <div className="mb-5 pb-3 border-b border-brand-border">
+                <h3 className="text-base font-bold text-brand-navy">Send In-App Notification</h3>
+                <p className="text-xs text-slate-500 mt-0.5">Broadcast push messages directly to Agent and Executive mobile devices</p>
+              </div>
+
+              <form onSubmit={handleSendMessage} className="space-y-5">
                 {/* Radio selection: Agent / Sales Executive / ALL */}
                 <div className="flex flex-wrap items-center gap-8 sm:gap-14 pt-1">
                   <label className="flex items-center gap-2.5 cursor-pointer select-none">
@@ -1384,7 +1466,7 @@ const AppModulePage: React.FC = () => {
                       onChange={() => setMsgTargetType('Agent')}
                       className="w-4 h-4 text-brand-primary accent-brand-primary focus:ring-brand-primary cursor-pointer"
                     />
-                    <span className="text-[#374151] font-semibold text-[15px]">Agent</span>
+                    <span className="text-slate-800 font-semibold text-sm">Agent</span>
                   </label>
 
                   <label className="flex items-center gap-2.5 cursor-pointer select-none">
@@ -1396,7 +1478,7 @@ const AppModulePage: React.FC = () => {
                       onChange={() => setMsgTargetType('Sales Executive')}
                       className="w-4 h-4 text-brand-primary accent-brand-primary focus:ring-brand-primary cursor-pointer"
                     />
-                    <span className="text-[#374151] font-semibold text-[15px]">Sales Executive</span>
+                    <span className="text-slate-800 font-semibold text-sm">Sales Executive</span>
                   </label>
 
                   <label className="flex items-center gap-2.5 cursor-pointer select-none">
@@ -1408,11 +1490,11 @@ const AppModulePage: React.FC = () => {
                       onChange={() => setMsgTargetType('ALL')}
                       className="w-4 h-4 text-brand-primary accent-brand-primary focus:ring-brand-primary cursor-pointer"
                     />
-                    <span className="text-[#374151] font-semibold text-[15px]">ALL</span>
+                    <span className="text-slate-800 font-semibold text-sm">ALL</span>
                   </label>
                 </div>
 
-                {/* Pill rounded search inputs */}
+                {/* Search inputs */}
                 <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6">
                   <div className="w-full sm:w-80">
                     <input
@@ -1421,7 +1503,7 @@ const AppModulePage: React.FC = () => {
                       value={msgSearchAgent}
                       onChange={(e) => setMsgSearchAgent(e.target.value)}
                       disabled={msgTargetType === 'Sales Executive'}
-                      className={`w-full px-4 py-2 rounded-2xl border border-[#CBD5E1] text-slate-800 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all placeholder:text-slate-400 ${
+                      className={`w-full px-3.5 py-2 rounded-lg border border-slate-300 text-slate-800 text-sm bg-white focus:outline-none focus:ring-1 focus:ring-brand-primary focus:border-brand-primary transition-all placeholder:text-slate-400 ${
                         msgTargetType === 'Sales Executive' ? 'bg-slate-50 opacity-60 cursor-not-allowed' : ''
                       }`}
                     />
@@ -1434,7 +1516,7 @@ const AppModulePage: React.FC = () => {
                       value={msgSearchEmp}
                       onChange={(e) => setMsgSearchEmp(e.target.value)}
                       disabled={msgTargetType === 'Agent'}
-                      className={`w-full px-4 py-2 rounded-2xl border border-[#CBD5E1] text-slate-800 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all placeholder:text-slate-400 ${
+                      className={`w-full px-3.5 py-2 rounded-lg border border-slate-300 text-slate-800 text-sm bg-white focus:outline-none focus:ring-1 focus:ring-brand-primary focus:border-brand-primary transition-all placeholder:text-slate-400 ${
                         msgTargetType === 'Agent' ? 'bg-slate-50 opacity-60 cursor-not-allowed' : ''
                       }`}
                     />
@@ -1443,16 +1525,16 @@ const AppModulePage: React.FC = () => {
 
                 {/* Message Textarea */}
                 <div>
-                  <label htmlFor="send-message-text" className="block text-[#374151] font-bold text-[15px] mb-2">
+                  <label htmlFor="send-message-text" className="block text-slate-700 font-semibold text-xs uppercase mb-1.5">
                     Message:
                   </label>
                   <textarea
                     id="send-message-text"
-                    rows={5}
+                    rows={4}
                     value={msgContent}
                     onChange={(e) => setMsgContent(e.target.value)}
                     placeholder="Type in-app broadcast message..."
-                    className="w-full px-4 py-3 rounded-2xl border border-[#CBD5E1] text-slate-800 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all resize-y"
+                    className="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 text-slate-800 text-sm bg-white focus:outline-none focus:ring-1 focus:ring-brand-primary focus:border-brand-primary transition-all resize-y"
                     required
                   />
                 </div>
@@ -1461,14 +1543,13 @@ const AppModulePage: React.FC = () => {
                 <div className="pt-1">
                   <button
                     type="submit"
-                    className="px-8 py-2.5 bg-brand-primary hover:bg-blue-700 active:bg-blue-800 text-white text-[14px] font-medium rounded-lg shadow-sm transition-colors cursor-pointer"
+                    className="px-8 py-2 bg-brand-primary hover:bg-[#1D4ED8] text-white text-sm font-semibold rounded-lg shadow-xs transition-colors cursor-pointer"
                   >
                     Send
                   </button>
                 </div>
               </form>
             </div>
-
           </div>
         )}
 
@@ -1476,11 +1557,11 @@ const AppModulePage: React.FC = () => {
         {activeTab === 'help' && (
           <div className="w-full space-y-6">
             {/* Date Range Filter Card */}
-            <div className="bg-white rounded-2xl border border-slate-200/90 p-6 sm:p-7 shadow-[0_10px_25px_-5px_rgba(0,0,0,0.06),0_8px_10px_-6px_rgba(0,0,0,0.04)] w-full">
-              <div className="flex flex-col sm:flex-row items-start sm:items-end gap-5">
+            <div className="bg-white rounded-[12px] border border-brand-border p-5 shadow-[0_1px_2px_rgba(0,0,0,0.02)] w-full">
+              <div className="flex flex-col sm:flex-row items-start sm:items-end gap-4">
                 {/* From Date */}
-                <div className="w-full sm:w-60">
-                  <label htmlFor="help-from-date" className="block text-[#374151] text-[14px] font-normal mb-2">
+                <div className="w-full sm:w-56">
+                  <label htmlFor="help-from-date" className="block text-slate-700 text-xs font-semibold uppercase mb-1.5">
                     From Date
                   </label>
                   <input
@@ -1489,13 +1570,13 @@ const AppModulePage: React.FC = () => {
                     value={helpFromDate}
                     onChange={(e) => setHelpFromDate(e.target.value)}
                     placeholder="DD/MM/YYYY"
-                    className="w-full px-4 py-2 rounded-2xl border border-[#CBD5E1] text-slate-800 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all"
+                    className="w-full px-3.5 py-2 rounded-lg border border-slate-300 text-slate-800 text-sm bg-white focus:outline-none focus:ring-1 focus:ring-brand-primary focus:border-brand-primary transition-all"
                   />
                 </div>
 
                 {/* To Date */}
-                <div className="w-full sm:w-60">
-                  <label htmlFor="help-to-date" className="block text-[#374151] text-[14px] font-normal mb-2">
+                <div className="w-full sm:w-56">
+                  <label htmlFor="help-to-date" className="block text-slate-700 text-xs font-semibold uppercase mb-1.5">
                     To Date
                   </label>
                   <input
@@ -1504,7 +1585,7 @@ const AppModulePage: React.FC = () => {
                     value={helpToDate}
                     onChange={(e) => setHelpToDate(e.target.value)}
                     placeholder="DD/MM/YYYY"
-                    className="w-full px-4 py-2 rounded-2xl border border-[#CBD5E1] text-slate-800 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all"
+                    className="w-full px-3.5 py-2 rounded-lg border border-slate-300 text-slate-800 text-sm bg-white focus:outline-none focus:ring-1 focus:ring-brand-primary focus:border-brand-primary transition-all"
                   />
                 </div>
 
@@ -1513,7 +1594,7 @@ const AppModulePage: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => showToast(`Filtered help records from ${helpFromDate} to ${helpToDate}`)}
-                    className="px-7 py-2.5 bg-brand-primary hover:bg-blue-700 active:bg-blue-800 text-white text-[14px] font-medium rounded-lg shadow-sm transition-colors cursor-pointer"
+                    className="px-6 py-2 bg-brand-primary hover:bg-[#1D4ED8] text-white text-sm font-semibold rounded-lg shadow-xs transition-colors cursor-pointer"
                   >
                     Show
                   </button>
@@ -1522,8 +1603,8 @@ const AppModulePage: React.FC = () => {
             </div>
 
             {/* Help Records Table Card */}
-            <div className="bg-white rounded-2xl border border-slate-200/90 p-6 sm:p-7 shadow-[0_10px_25px_-5px_rgba(0,0,0,0.06),0_8px_10px_-6px_rgba(0,0,0,0.04)] w-full">
-              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-5">
+            <div className="bg-white rounded-[12px] border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden flex flex-col w-full">
+              <div className="p-4 bg-slate-50 border-b border-brand-border flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                 <div>
                   <h3 className="text-base font-bold text-brand-navy">App Help Records</h3>
                   <p className="text-xs text-slate-500">Inbound help requests raised by agents from the mobile help center</p>
@@ -1536,13 +1617,13 @@ const AppModulePage: React.FC = () => {
                       placeholder="Search agent, mobile or help type..."
                       value={helpSearch}
                       onChange={(e) => setHelpSearch(e.target.value)}
-                      className="w-full pl-8 pr-3 py-2 rounded-lg border border-slate-300 text-xs focus:border-brand-primary focus:outline-none"
+                      className="w-full pl-8 pr-3 py-2 rounded-lg border border-slate-300 text-xs focus:border-brand-primary focus:ring-1 focus:ring-brand-primary focus:outline-none"
                     />
                   </div>
                   <button
                     type="button"
                     onClick={() => showToast('Exporting Help Records...')}
-                    className="p-2 border border-slate-200 rounded-lg text-slate-600 hover:text-brand-primary hover:bg-slate-50 transition-colors cursor-pointer"
+                    className="p-2 border border-slate-300 rounded-lg text-slate-600 hover:text-brand-primary hover:bg-slate-50 transition-colors cursor-pointer"
                     title="Export"
                   >
                     <Download size={15} />
@@ -1550,40 +1631,49 @@ const AppModulePage: React.FC = () => {
                 </div>
               </div>
 
-              {/* Table in Standard Royal Blue Theme */}
-              <div className="overflow-x-auto border border-slate-200 rounded-xl shadow-sm">
-                <table className="w-full text-left text-xs border-collapse whitespace-nowrap min-w-[700px]">
-                  <thead className="bg-brand-primary text-white font-bold text-[12px] tracking-wider uppercase border-b-2 border-blue-700 select-none">
+              {/* Table in VehicleMaster Theme */}
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-[13px] border-collapse whitespace-nowrap min-w-[700px]">
+                  <thead className="bg-brand-lightbg text-brand-navy text-[13px] uppercase tracking-wider font-semibold select-none border-b border-brand-border">
                     <tr>
-                      <th className="py-3.5 px-4 border-r border-white/20 w-52">HELP DATE</th>
-                      <th className="py-3.5 px-4 border-r border-white/20">SALESEX NAME</th>
-                      <th className="py-3.5 px-4 border-r border-white/20 w-36">MOBILE NO</th>
-                      <th className="py-3.5 px-4">HELP NAME</th>
+                      <th className="py-3 px-4 font-semibold text-brand-navy w-52">HELP DATE</th>
+                      <th className="py-3 px-4 font-semibold text-brand-navy">SALESEX NAME</th>
+                      <th className="py-3 px-4 font-semibold text-brand-navy w-36">MOBILE NO</th>
+                      <th className="py-3 px-4 font-semibold text-brand-navy">HELP NAME</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-100 text-slate-700 bg-white">
-                    {helpRecords
-                      .filter(
+                  <tbody className="divide-y divide-brand-border text-slate-800 bg-white">
+                    {(() => {
+                      const filtered = helpRecords.filter(
                         (r) =>
                           r.salesexName.toLowerCase().includes(helpSearch.toLowerCase()) ||
                           r.mobileNo.includes(helpSearch) ||
                           r.helpName.toLowerCase().includes(helpSearch.toLowerCase()) ||
                           r.helpDate.includes(helpSearch)
-                      )
-                      .map((row, idx) => (
+                      );
+
+                      if (filtered.length === 0) {
+                        return (
+                          <tr>
+                            <td colSpan={4} className="py-16 text-center text-slate-400 font-medium">
+                              No help records found matching your search.
+                            </td>
+                          </tr>
+                        );
+                      }
+
+                      return filtered.map((row) => (
                         <tr
                           key={row.id}
-                          className={`h-[48px] hover:bg-blue-50/40 transition-colors ${
-                            idx % 2 === 0 ? 'bg-white' : 'bg-slate-50/40'
-                          }`}
+                          className="h-[48px] hover:bg-brand-mainbg transition-colors bg-white"
                         >
-                          <td className="py-2.5 px-4 font-mono text-[11px] text-slate-600 border-r border-slate-200">
+                          <td className="py-2.5 px-4 font-mono text-xs text-slate-600">
                             {row.helpDate}
                           </td>
-                          <td className="py-2.5 px-4 font-semibold text-slate-800 border-r border-slate-200">
+                          <td className="py-2.5 px-4 font-medium text-slate-800">
                             {row.salesexName}
                           </td>
-                          <td className="py-2.5 px-4 font-mono text-[12px] text-slate-700 border-r border-slate-200">
+                          <td className="py-2.5 px-4 font-mono text-xs text-slate-700">
                             {row.mobileNo}
                           </td>
                           <td className="py-2.5 px-4">
@@ -1597,7 +1687,8 @@ const AppModulePage: React.FC = () => {
                             </span>
                           </td>
                         </tr>
-                      ))}
+                      ));
+                    })()}
                   </tbody>
                 </table>
               </div>
@@ -1607,12 +1698,14 @@ const AppModulePage: React.FC = () => {
 
         {/* Tab 7: Close Endorsement */}
         {activeTab === 'closeEndorsement' && (
-          <div className="bg-white rounded-2xl border border-brand-border p-6 shadow-sm w-full">
-            <h3 className="text-base font-bold text-brand-navy mb-2 flex items-center gap-2">
-              <X size={18} className="text-rose-500" />
-              Close / Cancel Endorsement Request
-            </h3>
-            <p className="text-xs text-slate-500 mb-5">Mark an in-flight mobile app endorsement request as closed or rejected</p>
+          <div className="bg-white rounded-[12px] border border-brand-border p-6 shadow-[0_1px_2px_rgba(0,0,0,0.02)] w-full max-w-2xl">
+            <div className="mb-5 pb-3 border-b border-brand-border">
+              <h3 className="text-base font-bold text-brand-navy flex items-center gap-2">
+                <X size={18} className="text-rose-500" />
+                Close / Cancel Endorsement Request
+              </h3>
+              <p className="text-xs text-slate-500 mt-0.5">Mark an in-flight mobile app endorsement request as closed or rejected</p>
+            </div>
 
             <form
               onSubmit={(e) => {
@@ -1623,23 +1716,23 @@ const AppModulePage: React.FC = () => {
               className="space-y-4"
             >
               <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase mb-1.5">Endorsement Request ID or Policy No</label>
+                <label className="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Endorsement Request ID or Policy No</label>
                 <input
                   type="text"
                   placeholder="e.g. END-2026-082 or POL/2026/88319"
                   value={closeEndorseId}
                   onChange={(e) => setCloseEndorseId(e.target.value)}
-                  className="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm focus:border-brand-primary focus:outline-none"
+                  className="w-full px-3.5 py-2 rounded-lg border border-slate-300 text-sm focus:border-brand-primary focus:ring-1 focus:ring-brand-primary focus:outline-none"
                   required
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase mb-1.5">Closure Reason</label>
+                <label className="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Closure Reason</label>
                 <select
                   value={closeEndorseReason}
                   onChange={(e) => setCloseEndorseReason(e.target.value)}
-                  className="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm focus:border-brand-primary focus:outline-none"
+                  className="w-full px-3.5 py-2 rounded-lg border border-slate-300 text-sm focus:border-brand-primary focus:ring-1 focus:ring-brand-primary focus:outline-none bg-white"
                 >
                   <option>POLICY EXPIRED / NOT REQUIRED</option>
                   <option>INSUFFICIENT SUPPORTING DOCUMENTS</option>
@@ -1650,18 +1743,18 @@ const AppModulePage: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase mb-1.5">Admin Closure Note</label>
+                <label className="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Admin Closure Note</label>
                 <textarea
                   rows={3}
                   placeholder="Explain why this endorsement was closed for audit..."
-                  className="w-full p-3 rounded-lg border border-slate-300 text-sm focus:border-brand-primary focus:outline-none resize-none"
+                  className="w-full p-3 rounded-lg border border-slate-300 text-sm focus:border-brand-primary focus:ring-1 focus:ring-brand-primary focus:outline-none resize-none"
                 />
               </div>
 
               <div className="flex justify-end gap-3 pt-2">
                 <button
                   type="submit"
-                  className="px-6 py-2.5 rounded-xl bg-rose-600 text-white font-bold text-sm shadow hover:bg-rose-700 transition-all flex items-center gap-2 cursor-pointer"
+                  className="px-6 py-2 rounded-lg bg-rose-600 text-white font-semibold text-sm shadow-xs hover:bg-rose-700 transition-all flex items-center gap-2 cursor-pointer"
                 >
                   <X size={15} />
                   Confirm Closure
@@ -1674,9 +1767,9 @@ const AppModulePage: React.FC = () => {
         {/* Tab 8: App LockDate / Payment Due Report */}
         {activeTab === 'appLockDateRep' && (
           <div className="w-full space-y-6">
-            {/* Three Search Inputs matching reference photo */}
-            <div className="bg-white rounded-2xl border border-slate-200/90 p-6 sm:p-7 shadow-[0_10px_25px_-5px_rgba(0,0,0,0.06),0_8px_10px_-6px_rgba(0,0,0,0.04)] w-full">
-              <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6">
+            {/* Three Search Inputs matching reference theme */}
+            <div className="bg-white rounded-[12px] border border-brand-border p-5 shadow-[0_1px_2px_rgba(0,0,0,0.02)] w-full">
+              <div className="flex flex-col sm:flex-row items-center gap-4">
                 <div className="w-full sm:flex-1 relative">
                   <Search size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
                   <input
@@ -1684,7 +1777,7 @@ const AppModulePage: React.FC = () => {
                     placeholder="Search Agent Name Here"
                     value={lockDateSearchAgent}
                     onChange={(e) => setLockDateSearchAgent(e.target.value)}
-                    className="w-full pl-9 pr-4 py-2.5 rounded-2xl border border-[#CBD5E1] text-slate-800 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all placeholder:text-slate-400"
+                    className="w-full pl-9 pr-4 py-2 rounded-lg border border-slate-300 text-slate-800 text-sm bg-white focus:outline-none focus:ring-1 focus:ring-brand-primary focus:border-brand-primary transition-all placeholder:text-slate-400"
                   />
                 </div>
                 <div className="w-full sm:flex-1 relative">
@@ -1694,7 +1787,7 @@ const AppModulePage: React.FC = () => {
                     placeholder="Search Customer Name Here"
                     value={lockDateSearchCustomer}
                     onChange={(e) => setLockDateSearchCustomer(e.target.value)}
-                    className="w-full pl-9 pr-4 py-2.5 rounded-2xl border border-[#CBD5E1] text-slate-800 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all placeholder:text-slate-400"
+                    className="w-full pl-9 pr-4 py-2 rounded-lg border border-slate-300 text-slate-800 text-sm bg-white focus:outline-none focus:ring-1 focus:ring-brand-primary focus:border-brand-primary transition-all placeholder:text-slate-400"
                   />
                 </div>
                 <div className="w-full sm:flex-1 relative">
@@ -1704,15 +1797,15 @@ const AppModulePage: React.FC = () => {
                     placeholder="Search Vehicle No Here"
                     value={lockDateSearchVehicle}
                     onChange={(e) => setLockDateSearchVehicle(e.target.value)}
-                    className="w-full pl-9 pr-4 py-2.5 rounded-2xl border border-[#CBD5E1] text-slate-800 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all placeholder:text-slate-400"
+                    className="w-full pl-9 pr-4 py-2 rounded-lg border border-slate-300 text-slate-800 text-sm bg-white focus:outline-none focus:ring-1 focus:ring-brand-primary focus:border-brand-primary transition-all placeholder:text-slate-400"
                   />
                 </div>
               </div>
             </div>
 
-            {/* Records Table in Standard Royal Blue Theme */}
-            <div className="bg-white rounded-2xl border border-slate-200/90 p-6 sm:p-7 shadow-[0_10px_25px_-5px_rgba(0,0,0,0.06),0_8px_10px_-6px_rgba(0,0,0,0.04)] w-full">
-              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-5">
+            {/* Records Table in VehicleMaster Theme */}
+            <div className="bg-white rounded-[12px] border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden flex flex-col w-full">
+              <div className="p-4 bg-slate-50 border-b border-brand-border flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                 <div>
                   <h3 className="text-base font-bold text-brand-navy">App Remaining Payment Due Report</h3>
                   <p className="text-xs text-slate-500">Mobile app transactions with outstanding payment balance</p>
@@ -1720,56 +1813,68 @@ const AppModulePage: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => showToast('Exporting Payment Due Report...')}
-                  className="p-2 border border-slate-200 rounded-lg text-slate-600 hover:text-brand-primary hover:bg-slate-50 transition-colors cursor-pointer"
+                  className="p-2 border border-slate-300 rounded-lg text-slate-600 hover:text-brand-primary hover:bg-slate-50 transition-colors cursor-pointer"
                   title="Export"
                 >
                   <Download size={15} />
                 </button>
               </div>
 
-              <div className="overflow-x-auto border border-slate-200 rounded-xl shadow-sm">
-                <table className="w-full text-left text-xs border-collapse whitespace-nowrap min-w-[1100px]">
-                  <thead className="bg-brand-primary text-white font-bold text-[12px] tracking-wider uppercase border-b-2 border-blue-700 select-none">
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-[13px] border-collapse whitespace-nowrap min-w-[1100px]">
+                  <thead className="bg-brand-lightbg text-brand-navy text-[13px] uppercase tracking-wider font-semibold select-none border-b border-brand-border">
                     <tr>
-                      <th className="py-3.5 px-3 border-r border-white/20 w-16">ID</th>
-                      <th className="py-3.5 px-3 border-r border-white/20">AGENT NAME</th>
-                      <th className="py-3.5 px-3 border-r border-white/20 w-28">MOBILE NO</th>
-                      <th className="py-3.5 px-3 border-r border-white/20 w-44">TRANS DATE</th>
-                      <th className="py-3.5 px-3 border-r border-white/20">CUSTOMER NAME</th>
-                      <th className="py-3.5 px-3 border-r border-white/20 w-32">REGISTRATION NO</th>
-                      <th className="py-3.5 px-3 border-r border-white/20 text-right w-28">CASHPAIDAMT</th>
-                      <th className="py-3.5 px-3 border-r border-white/20 text-right w-24">PREMIUM</th>
-                      <th className="py-3.5 px-3 border-r border-white/20 text-right w-28">CASHPAIDAMT</th>
-                      <th className="py-3.5 px-3 text-right w-32">REMAINING AMT</th>
+                      <th className="py-3 px-3 font-semibold text-brand-navy w-16">ID</th>
+                      <th className="py-3 px-3 font-semibold text-brand-navy">AGENT NAME</th>
+                      <th className="py-3 px-3 font-semibold text-brand-navy w-28">MOBILE NO</th>
+                      <th className="py-3 px-3 font-semibold text-brand-navy w-44">TRANS DATE</th>
+                      <th className="py-3 px-3 font-semibold text-brand-navy">CUSTOMER NAME</th>
+                      <th className="py-3 px-3 font-semibold text-brand-navy w-32">REGISTRATION NO</th>
+                      <th className="py-3 px-3 font-semibold text-brand-navy text-right w-28">CASHPAIDAMT</th>
+                      <th className="py-3 px-3 font-semibold text-brand-navy text-right w-24">PREMIUM</th>
+                      <th className="py-3 px-3 font-semibold text-brand-navy text-right w-28">CASHPAIDAMT</th>
+                      <th className="py-3 px-3 font-semibold text-brand-navy text-right w-32">REMAINING AMT</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-100 text-slate-700 bg-white">
-                    {paymentDueRecords
-                      .filter((r) => {
+                  <tbody className="divide-y divide-brand-border text-slate-800 bg-white">
+                    {(() => {
+                      const filtered = paymentDueRecords.filter((r) => {
                         const agentMatch = r.agentName.toLowerCase().includes(lockDateSearchAgent.toLowerCase());
                         const customerMatch = r.customerName.toLowerCase().includes(lockDateSearchCustomer.toLowerCase());
                         const vehicleMatch = r.registrationNo.toLowerCase().includes(lockDateSearchVehicle.toLowerCase());
                         return agentMatch && customerMatch && vehicleMatch;
-                      })
-                      .map((row, idx) => (
+                      });
+
+                      if (filtered.length === 0) {
+                        return (
+                          <tr>
+                            <td colSpan={10} className="py-16 text-center text-slate-400 font-medium">
+                              No payment due records found matching your filters.
+                            </td>
+                          </tr>
+                        );
+                      }
+
+                      return filtered.map((row) => (
                         <tr
                           key={row.id}
-                          className={`h-[48px] hover:bg-blue-50/40 transition-colors ${idx % 2 === 0 ? 'bg-white' : 'bg-slate-50/40'}`}
+                          className="h-[48px] hover:bg-brand-mainbg transition-colors bg-white"
                         >
-                          <td className="py-2.5 px-3 font-mono font-bold text-brand-primary border-r border-slate-200">{row.id}</td>
-                          <td className="py-2.5 px-3 font-medium text-slate-800 border-r border-slate-200">{row.agentName}</td>
-                          <td className="py-2.5 px-3 font-mono text-[11px] text-slate-700 border-r border-slate-200">{row.mobileNo}</td>
-                          <td className="py-2.5 px-3 font-mono text-[11px] text-slate-600 border-r border-slate-200">{row.transDate}</td>
-                          <td className="py-2.5 px-3 font-semibold text-slate-800 border-r border-slate-200">{row.customerName}</td>
-                          <td className="py-2.5 px-3 font-mono font-bold text-brand-primary border-r border-slate-200">{row.registrationNo}</td>
-                          <td className="py-2.5 px-3 text-right font-mono text-slate-700 border-r border-slate-200">{row.cashPaidAmt.toLocaleString()}</td>
-                          <td className="py-2.5 px-3 text-right font-mono font-semibold text-slate-800 border-r border-slate-200">{row.premium.toLocaleString()}</td>
-                          <td className="py-2.5 px-3 text-right font-mono text-slate-700 border-r border-slate-200">{row.cashPaidAmt2.toLocaleString()}</td>
+                          <td className="py-2.5 px-3 font-mono font-bold text-brand-primary">{row.id}</td>
+                          <td className="py-2.5 px-3 font-medium text-slate-800">{row.agentName}</td>
+                          <td className="py-2.5 px-3 font-mono text-xs text-slate-700">{row.mobileNo}</td>
+                          <td className="py-2.5 px-3 font-mono text-xs text-slate-600">{row.transDate}</td>
+                          <td className="py-2.5 px-3 font-semibold text-slate-800">{row.customerName}</td>
+                          <td className="py-2.5 px-3 font-mono font-bold text-brand-primary">{row.registrationNo}</td>
+                          <td className="py-2.5 px-3 text-right font-mono text-slate-700">₹{row.cashPaidAmt.toLocaleString('en-IN')}</td>
+                          <td className="py-2.5 px-3 text-right font-mono font-semibold text-slate-800">₹{row.premium.toLocaleString('en-IN')}</td>
+                          <td className="py-2.5 px-3 text-right font-mono text-slate-700">₹{row.cashPaidAmt2.toLocaleString('en-IN')}</td>
                           <td className="py-2.5 px-3 text-right">
-                            <span className="font-mono font-bold text-rose-600">{row.remainingAmt.toLocaleString()}</span>
+                            <span className="font-mono font-bold text-rose-600">₹{row.remainingAmt.toLocaleString('en-IN')}</span>
                           </td>
                         </tr>
-                      ))}
+                      ));
+                    })()}
                   </tbody>
                 </table>
               </div>
@@ -1781,8 +1886,8 @@ const AppModulePage: React.FC = () => {
         {activeTab === 'runupUploadImg' && (
           <div className="space-y-5">
             {/* Upload Form Card */}
-            <div className="bg-white rounded-2xl border border-brand-border p-6 shadow-sm w-full">
-              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5 flex-wrap">
+            <div className="bg-white rounded-[12px] border border-brand-border p-5 shadow-[0_1px_2px_rgba(0,0,0,0.02)] w-full">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 flex-wrap">
                 {/* Radio Buttons */}
                 <div className="flex items-center gap-5">
                   <label className="flex items-center gap-2 cursor-pointer select-none">
@@ -1793,7 +1898,7 @@ const AppModulePage: React.FC = () => {
                       onChange={() => setRunupImageType('agent')}
                       className="w-4 h-4 accent-brand-primary cursor-pointer"
                     />
-                    <span className="text-sm font-semibold text-slate-700">Agent</span>
+                    <span className="text-sm font-semibold text-slate-800">Agent</span>
                   </label>
                   <label className="flex items-center gap-2 cursor-pointer select-none">
                     <input
@@ -1803,7 +1908,7 @@ const AppModulePage: React.FC = () => {
                       onChange={() => setRunupImageType('executive')}
                       className="w-4 h-4 accent-brand-primary cursor-pointer"
                     />
-                    <span className="text-sm font-semibold text-slate-700">Executive</span>
+                    <span className="text-sm font-semibold text-slate-800">Executive</span>
                   </label>
                 </div>
 
@@ -1812,33 +1917,78 @@ const AppModulePage: React.FC = () => {
                   <input
                     type="file"
                     accept="image/*"
-                    className="w-full px-3 py-1.5 rounded-lg border border-slate-300 text-xs file:mr-3 file:py-1 file:px-2.5 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-brand-primary file:text-white cursor-pointer"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        setSelectedRunupFile(file);
+                        setSelectedRunupFileName(file.name);
+                      }
+                    }}
+                    className="w-full px-3 py-1.5 rounded-lg border border-slate-300 text-xs file:mr-3 file:py-1 file:px-2.5 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-brand-primary file:text-white cursor-pointer"
                   />
+                  {selectedRunupFileName && (
+                    <p className="text-xs text-emerald-600 font-medium mt-1 flex items-center gap-1">
+                      <CheckCircle2 size={12} /> Selected: {selectedRunupFileName}
+                    </p>
+                  )}
                 </div>
 
-                {/* Add New Image Button */}
+                {/* Add New Themed Banner Button */}
                 <button
+                  type="button"
                   onClick={() => {
+                    const newId = Date.now();
                     const newB = {
-                      id: Date.now(),
-                      title: `New ${runupImageType === 'agent' ? 'Agent' : 'Executive'} Banner`,
+                      id: newId,
+                      title: `${runupImageType === 'agent' ? 'Agent' : 'Executive'} Comprehensive Motor Promo`,
                       target: runupImageType === 'agent' ? 'App Home Slider' : 'Executive Dashboard',
                       size: '1200x500',
                       active: true,
-                      imageUrl: `https://placehold.co/260x140/2563EB/ffffff?text=New+Banner+${Date.now() % 1000}`,
+                      tag: 'Special Promo',
+                      badgeColor: 'emerald' as const,
+                      headline: 'Commercial & Private Fleet',
+                      subline: 'Instant Cashless Claims Across India',
+                      footerLeft: 'Over 4,500 Garages',
+                      footerRight: 'EXCLUSIVE',
+                      icon: 'zap',
                     };
                     setRunupBanners([...runupBanners, newB]);
-                    showToast('New image row added! Select file and click Upload.');
+                    showToast('New themed promo banner asset added!');
                   }}
-                  className="px-5 py-2 rounded-xl border-2 border-brand-primary text-brand-primary text-sm font-bold hover:bg-brand-lightbg transition-all cursor-pointer whitespace-nowrap"
+                  className="px-4 py-2 rounded-lg border border-slate-300 text-slate-700 hover:bg-slate-50 text-sm font-semibold transition-all cursor-pointer whitespace-nowrap shadow-xs"
                 >
                   Add New Image
                 </button>
 
                 {/* Upload Button */}
                 <button
-                  onClick={() => showToast('Runup images uploaded successfully!')}
-                  className="px-7 py-2 rounded-xl bg-brand-primary text-white text-sm font-bold shadow hover:bg-brand-primary/90 transition-all flex items-center justify-center gap-2 cursor-pointer whitespace-nowrap"
+                  type="button"
+                  onClick={() => {
+                    if (selectedRunupFile) {
+                      const newB = {
+                        id: Date.now(),
+                        title: selectedRunupFileName.replace(/\.[^/.]+$/, "") || 'Uploaded Banner Asset',
+                        target: runupImageType === 'agent' ? 'App Home Slider' : 'Executive Dashboard',
+                        size: '1200x500',
+                        active: true,
+                        imageUrl: URL.createObjectURL(selectedRunupFile),
+                        tag: 'Uploaded Asset',
+                        badgeColor: 'blue' as const,
+                        headline: selectedRunupFileName,
+                        subline: `${(selectedRunupFile.size / 1024).toFixed(1)} KB • ${runupImageType.toUpperCase()}`,
+                        footerLeft: 'Custom Upload',
+                        footerRight: 'ACTIVE',
+                        icon: 'award',
+                      };
+                      setRunupBanners([...runupBanners, newB]);
+                      setSelectedRunupFile(null);
+                      setSelectedRunupFileName('');
+                      showToast('Image banner uploaded and added successfully!');
+                    } else {
+                      showToast('Runup image updated successfully!');
+                    }
+                  }}
+                  className="px-6 py-2 rounded-lg bg-brand-primary hover:bg-[#1D4ED8] text-white text-sm font-semibold shadow-xs transition-all flex items-center justify-center gap-2 cursor-pointer whitespace-nowrap"
                 >
                   <Upload size={15} />
                   Upload
@@ -1847,51 +1997,94 @@ const AppModulePage: React.FC = () => {
             </div>
 
             {/* Banners Image Table */}
-            <div className="bg-white rounded-2xl border border-brand-border p-6 shadow-sm w-full">
-              <div className="flex justify-between items-center mb-4">
+            <div className="bg-white rounded-[12px] border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden flex flex-col w-full">
+              <div className="p-4 bg-slate-50 border-b border-brand-border flex justify-between items-center">
                 <h3 className="text-base font-bold text-brand-navy flex items-center gap-2">
                   <Image size={18} className="text-brand-primary" />
                   Active Runup Banners & Promo Assets
                 </h3>
-                <span className="text-xs font-semibold px-3 py-1 bg-blue-50 text-brand-primary rounded-full border border-blue-200">
+                <span className="text-xs font-semibold px-2.5 py-0.5 bg-blue-50 text-brand-primary rounded-full border border-blue-200">
                   {runupBanners.length} Uploaded Image{runupBanners.length === 1 ? '' : 's'}
                 </span>
               </div>
-              <div className="overflow-x-auto border border-slate-200 rounded-xl shadow-sm">
-                <table className="w-full text-left text-xs border-collapse whitespace-nowrap">
-                  <thead className="bg-brand-primary text-white font-bold text-[12px] tracking-wider uppercase border-b-2 border-blue-700 select-none">
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-[13px] border-collapse whitespace-nowrap">
+                  <thead className="bg-brand-lightbg text-brand-navy text-[13px] uppercase tracking-wider font-semibold select-none border-b border-brand-border">
                     <tr>
-                      <th className="py-3.5 px-4 border-r border-white/20 w-20 text-center">SR.NO.</th>
-                      <th className="py-3.5 px-6 border-r border-white/20">IMAGE</th>
-                      <th className="py-3.5 px-4 text-center w-32">DELETE</th>
+                      <th className="py-3 px-4 w-20 text-center font-semibold text-brand-navy">SR.NO.</th>
+                      <th className="py-3 px-6 font-semibold text-brand-navy">IMAGE</th>
+                      <th className="py-3 px-4 text-center w-32 font-semibold text-brand-navy">DELETE</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-100 text-slate-700 bg-white">
+                  <tbody className="divide-y divide-brand-border text-slate-800 bg-white">
                     {runupBanners.length === 0 ? (
                       <tr>
-                        <td colSpan={3} className="py-12 text-center text-slate-400 font-medium">
+                        <td colSpan={3} className="py-16 text-center text-slate-400 font-medium">
                           No banner images found. Use the form above to add and upload new assets.
                         </td>
                       </tr>
                     ) : (
                       runupBanners.map((b, idx) => (
-                        <tr key={b.id} className={`hover:bg-blue-50/40 transition-colors ${idx % 2 === 0 ? 'bg-white' : 'bg-slate-50/40'}`}>
-                          <td className="py-4 px-4 text-center font-bold text-slate-800 border-r border-slate-200">{idx + 1}</td>
-                          <td className="py-4 px-6 border-r border-slate-200">
+                        <tr key={b.id} className="hover:bg-brand-mainbg transition-colors bg-white">
+                          <td className="py-3.5 px-4 text-center font-bold text-slate-800">{idx + 1}</td>
+                          <td className="py-3.5 px-6">
                             <div className="flex items-center gap-4">
-                              <div className="w-[200px] h-[95px] rounded-lg overflow-hidden border border-slate-200 shadow-sm bg-slate-100 flex-shrink-0">
-                                <img
-                                  src={b.imageUrl}
-                                  alt={b.title}
-                                  className="w-full h-full object-cover"
-                                  onError={(e) => {
-                                    (e.target as HTMLImageElement).src = 'https://placehold.co/260x140/2563EB/ffffff?text=Image+Banner';
-                                  }}
-                                />
+                              {/* Themed Photo Card Container */}
+                              <div className="w-[220px] h-[95px] rounded-lg overflow-hidden border border-brand-border bg-gradient-to-br from-[#F8FAFD] via-[#F4F8FC] to-[#EAF2FF] shadow-xs shrink-0 select-none relative flex flex-col justify-between p-2.5">
+                                {b.imageUrl ? (
+                                  <div className="relative w-full h-full -m-2.5">
+                                    <img
+                                      src={b.imageUrl}
+                                      alt={b.title}
+                                      className="w-full h-full object-cover"
+                                    />
+                                    <span className="absolute top-1.5 left-1.5 bg-brand-navy/80 backdrop-blur-xs text-white text-[9px] font-bold px-1.5 py-0.5 rounded">
+                                      UPLOADED
+                                    </span>
+                                  </div>
+                                ) : (
+                                  <>
+                                    {/* Top Row: Pill Tag + Brand Name */}
+                                    <div className="flex items-center justify-between z-10">
+                                      <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider bg-blue-50 text-brand-primary border border-blue-200/80">
+                                        {b.icon === 'sparkles' ? (
+                                          <Sparkles size={9} className="text-brand-primary" />
+                                        ) : b.icon === 'zap' ? (
+                                          <Zap size={9} className="text-brand-primary" />
+                                        ) : (
+                                          <Award size={9} className="text-brand-primary" />
+                                        )}
+                                        {b.tag || 'PROMO'}
+                                      </span>
+                                      <span className="text-[9px] font-bold text-slate-400 tracking-wider">RELIABLE</span>
+                                    </div>
+
+                                    {/* Middle: Headline + Subline in Brand Theme */}
+                                    <div className="my-auto z-10">
+                                      <p className="font-bold text-[12px] text-brand-navy leading-tight line-clamp-1">
+                                        {b.headline || b.title}
+                                      </p>
+                                      <p className="text-[10px] text-slate-500 font-medium line-clamp-1 mt-0.5">
+                                        {b.subline || b.target}
+                                      </p>
+                                    </div>
+
+                                    {/* Bottom: Detail + Code Badge */}
+                                    <div className="flex items-center justify-between pt-1 border-t border-slate-200/60 z-10">
+                                      <span className="text-[9px] text-slate-600 font-medium truncate max-w-[120px]">
+                                        {b.footerLeft || 'In-App Exclusive'}
+                                      </span>
+                                      <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-blue-100/80 text-brand-primary border border-blue-200/60">
+                                        {b.footerRight || 'ACTIVE'}
+                                      </span>
+                                    </div>
+                                  </>
+                                )}
                               </div>
+
                               <div className="space-y-1">
                                 <p className="font-semibold text-slate-900 text-sm">{b.title}</p>
-                                <div className="flex items-center gap-2 text-[11px] text-slate-500">
+                                <div className="flex items-center gap-2 text-xs text-slate-500">
                                   <span className="px-2 py-0.5 rounded bg-slate-100 text-slate-700 font-medium">{b.target}</span>
                                   <span>•</span>
                                   <span>{b.size}</span>
@@ -1899,13 +2092,13 @@ const AppModulePage: React.FC = () => {
                               </div>
                             </div>
                           </td>
-                          <td className="py-4 px-4 text-center">
+                          <td className="py-3.5 px-4 text-center">
                             <button
                               onClick={() => {
                                 setRunupBanners(runupBanners.filter(x => x.id !== b.id));
                                 showToast(`Deleted "${b.title}"`);
                               }}
-                              className="font-bold text-xs text-brand-primary hover:text-blue-800 uppercase tracking-wider hover:underline transition-colors cursor-pointer px-3 py-1.5 rounded-lg hover:bg-blue-50"
+                              className="font-semibold text-xs text-rose-600 hover:text-rose-800 uppercase tracking-wider hover:underline transition-colors cursor-pointer px-3 py-1.5 rounded-lg hover:bg-rose-50"
                             >
                               DELETE
                             </button>
@@ -1924,15 +2117,14 @@ const AppModulePage: React.FC = () => {
         {activeTab === 'paymentMode' && (
           <div className="space-y-6 w-full">
             {/* Payment Mode Selection Form Card */}
-            <div className="bg-white rounded-2xl border border-brand-border p-6 shadow-sm w-full">
-              {/* Header Ribbon */}
-              <div className="bg-brand-primary text-white font-bold text-sm px-4 py-2.5 rounded-xl shadow-sm flex items-center gap-2 mb-6">
-                <span className="text-white/80 font-mono text-base font-black">»</span>
-                <span>Payment Mode Selected</span>
+            <div className="bg-white rounded-[12px] border border-brand-border p-6 shadow-[0_1px_2px_rgba(0,0,0,0.02)] w-full">
+              <div className="mb-5 pb-3 border-b border-brand-border">
+                <h3 className="text-base font-bold text-brand-navy">Payment Mode Configuration</h3>
+                <p className="text-xs text-slate-500 mt-0.5">Enable or disable allowed payment instruments per agent, executive, or franchise</p>
               </div>
 
               {/* Target Type Radio Buttons */}
-              <div className="flex items-center gap-6 sm:gap-10 mb-6 flex-wrap pb-4 border-b border-slate-100">
+              <div className="flex items-center gap-6 sm:gap-10 mb-6 flex-wrap pb-4 border-b border-brand-border">
                 <label className="flex items-center gap-2.5 cursor-pointer select-none">
                   <input
                     type="radio"
@@ -1944,7 +2136,7 @@ const AppModulePage: React.FC = () => {
                     }}
                     className="w-4 h-4 accent-brand-primary cursor-pointer"
                   />
-                  <span className="text-sm font-bold text-slate-800">Agent</span>
+                  <span className="text-sm font-semibold text-slate-800">Agent</span>
                 </label>
 
                 <label className="flex items-center gap-2.5 cursor-pointer select-none">
@@ -1958,7 +2150,7 @@ const AppModulePage: React.FC = () => {
                     }}
                     className="w-4 h-4 accent-brand-primary cursor-pointer"
                   />
-                  <span className="text-sm font-bold text-slate-800">Sales Executive</span>
+                  <span className="text-sm font-semibold text-slate-800">Sales Executive</span>
                 </label>
 
                 <label className="flex items-center gap-2.5 cursor-pointer select-none">
@@ -1972,7 +2164,7 @@ const AppModulePage: React.FC = () => {
                     }}
                     className="w-4 h-4 accent-brand-primary cursor-pointer"
                   />
-                  <span className="text-sm font-bold text-slate-800">Franchise Agent</span>
+                  <span className="text-sm font-semibold text-slate-800">Franchise Agent</span>
                 </label>
               </div>
 
@@ -1981,7 +2173,7 @@ const AppModulePage: React.FC = () => {
                 {/* Row 1: Agent / Person Selector, CASH, CHEQUE */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 uppercase mb-1.5">
+                    <label className="block text-xs font-semibold text-slate-700 uppercase mb-1.5">
                       {paymentTargetType === 'agent'
                         ? 'Agent'
                         : paymentTargetType === 'executive'
@@ -1991,7 +2183,7 @@ const AppModulePage: React.FC = () => {
                     <select
                       value={selectedPaymentPerson}
                       onChange={(e) => setSelectedPaymentPerson(e.target.value)}
-                      className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs focus:border-brand-primary focus:outline-none bg-white text-slate-800"
+                      className="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm focus:border-brand-primary focus:ring-1 focus:ring-brand-primary focus:outline-none bg-white text-slate-800"
                     >
                       <option value="">
                         {paymentTargetType === 'agent'
@@ -2034,11 +2226,11 @@ const AppModulePage: React.FC = () => {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 uppercase mb-1.5">CASH</label>
+                    <label className="block text-xs font-semibold text-slate-700 uppercase mb-1.5">CASH</label>
                     <select
                       value={paymentSettings.cash}
                       onChange={(e) => setPaymentSettings({ ...paymentSettings, cash: e.target.value })}
-                      className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs focus:border-brand-primary focus:outline-none bg-white text-slate-800"
+                      className="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm focus:border-brand-primary focus:ring-1 focus:ring-brand-primary focus:outline-none bg-white text-slate-800"
                     >
                       <option value="ON">ON</option>
                       <option value="OFF">OFF</option>
@@ -2046,11 +2238,11 @@ const AppModulePage: React.FC = () => {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 uppercase mb-1.5">CHEQUE</label>
+                    <label className="block text-xs font-semibold text-slate-700 uppercase mb-1.5">CHEQUE</label>
                     <select
                       value={paymentSettings.cheque}
                       onChange={(e) => setPaymentSettings({ ...paymentSettings, cheque: e.target.value })}
-                      className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs focus:border-brand-primary focus:outline-none bg-white text-slate-800"
+                      className="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm focus:border-brand-primary focus:ring-1 focus:ring-brand-primary focus:outline-none bg-white text-slate-800"
                     >
                       <option value="ON">ON</option>
                       <option value="OFF">OFF</option>
@@ -2061,11 +2253,11 @@ const AppModulePage: React.FC = () => {
                 {/* Row 2: NEFT, RTGS, DD */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 uppercase mb-1.5">NEFT</label>
+                    <label className="block text-xs font-semibold text-slate-700 uppercase mb-1.5">NEFT</label>
                     <select
                       value={paymentSettings.neft}
                       onChange={(e) => setPaymentSettings({ ...paymentSettings, neft: e.target.value })}
-                      className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs focus:border-brand-primary focus:outline-none bg-white text-slate-800"
+                      className="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm focus:border-brand-primary focus:ring-1 focus:ring-brand-primary focus:outline-none bg-white text-slate-800"
                     >
                       <option value="ON">ON</option>
                       <option value="OFF">OFF</option>
@@ -2073,11 +2265,11 @@ const AppModulePage: React.FC = () => {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 uppercase mb-1.5">RTGS</label>
+                    <label className="block text-xs font-semibold text-slate-700 uppercase mb-1.5">RTGS</label>
                     <select
                       value={paymentSettings.rtgs}
                       onChange={(e) => setPaymentSettings({ ...paymentSettings, rtgs: e.target.value })}
-                      className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs focus:border-brand-primary focus:outline-none bg-white text-slate-800"
+                      className="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm focus:border-brand-primary focus:outline-none bg-white text-slate-800"
                     >
                       <option value="ON">ON</option>
                       <option value="OFF">OFF</option>
@@ -2085,11 +2277,11 @@ const AppModulePage: React.FC = () => {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 uppercase mb-1.5">DD</label>
+                    <label className="block text-xs font-semibold text-slate-700 uppercase mb-1.5">DD</label>
                     <select
                       value={paymentSettings.dd}
                       onChange={(e) => setPaymentSettings({ ...paymentSettings, dd: e.target.value })}
-                      className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs focus:border-brand-primary focus:outline-none bg-white text-slate-800"
+                      className="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm focus:border-brand-primary focus:outline-none bg-white text-slate-800"
                     >
                       <option value="ON">ON</option>
                       <option value="OFF">OFF</option>
@@ -2100,11 +2292,11 @@ const AppModulePage: React.FC = () => {
                 {/* Row 3: Online To RA, Ewallet, Online To InsuranceCompany, EMI */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 uppercase mb-1.5">Online To RA</label>
+                    <label className="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Online To RA</label>
                     <select
                       value={paymentSettings.onlineToRa}
                       onChange={(e) => setPaymentSettings({ ...paymentSettings, onlineToRa: e.target.value })}
-                      className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs focus:border-brand-primary focus:outline-none bg-white text-slate-800"
+                      className="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm focus:border-brand-primary focus:outline-none bg-white text-slate-800"
                     >
                       <option value="ON">ON</option>
                       <option value="OFF">OFF</option>
@@ -2112,11 +2304,11 @@ const AppModulePage: React.FC = () => {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 uppercase mb-1.5">Ewallet</label>
+                    <label className="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Ewallet</label>
                     <select
                       value={paymentSettings.ewallet}
                       onChange={(e) => setPaymentSettings({ ...paymentSettings, ewallet: e.target.value })}
-                      className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs focus:border-brand-primary focus:outline-none bg-white text-slate-800"
+                      className="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm focus:border-brand-primary focus:outline-none bg-white text-slate-800"
                     >
                       <option value="ON">ON</option>
                       <option value="OFF">OFF</option>
@@ -2124,11 +2316,11 @@ const AppModulePage: React.FC = () => {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 uppercase mb-1.5">Online To InsuranceCompany</label>
+                    <label className="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Online To InsuranceCompany</label>
                     <select
                       value={paymentSettings.onlineToIc}
                       onChange={(e) => setPaymentSettings({ ...paymentSettings, onlineToIc: e.target.value })}
-                      className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs focus:border-brand-primary focus:outline-none bg-white text-slate-800"
+                      className="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm focus:border-brand-primary focus:outline-none bg-white text-slate-800"
                     >
                       <option value="ON">ON</option>
                       <option value="OFF">OFF</option>
@@ -2136,11 +2328,11 @@ const AppModulePage: React.FC = () => {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 uppercase mb-1.5">EMI</label>
+                    <label className="block text-xs font-semibold text-slate-700 uppercase mb-1.5">EMI</label>
                     <select
                       value={paymentSettings.emi}
                       onChange={(e) => setPaymentSettings({ ...paymentSettings, emi: e.target.value })}
-                      className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs focus:border-brand-primary focus:outline-none bg-white text-slate-800"
+                      className="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm focus:border-brand-primary focus:outline-none bg-white text-slate-800"
                     >
                       <option value="ON">ON</option>
                       <option value="OFF">OFF</option>
@@ -2164,10 +2356,10 @@ const AppModulePage: React.FC = () => {
                           : 'Franchise Agent';
                       showToast(`Payment mode configuration saved for ${selectedPaymentPerson} (${targetLabel})`);
                     }}
-                    className="px-8 py-2.5 rounded-xl bg-brand-primary text-white text-xs font-bold shadow hover:bg-blue-700 transition-all flex items-center gap-2 cursor-pointer uppercase tracking-wider"
+                    className="px-8 py-2 rounded-lg bg-brand-primary hover:bg-[#1D4ED8] text-white text-sm font-semibold shadow-xs transition-colors flex items-center gap-2 cursor-pointer"
                   >
                     <Save size={15} />
-                    save
+                    Save
                   </button>
                 </div>
               </div>
@@ -2180,11 +2372,10 @@ const AppModulePage: React.FC = () => {
           <div className="space-y-6 w-full">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               {/* Form Card (Left) */}
-              <div className="bg-white rounded-2xl border border-brand-border p-6 shadow-sm lg:col-span-1">
-                {/* Ribbon Header */}
-                <div className="bg-brand-primary text-white font-bold text-sm px-4 py-2.5 rounded-xl shadow-sm flex items-center gap-2 mb-5">
-                  <span className="text-white/80 font-mono text-base font-black">»</span>
-                  <span>Grid for App Form</span>
+              <div className="bg-white rounded-[12px] border border-brand-border p-6 shadow-[0_1px_2px_rgba(0,0,0,0.02)] lg:col-span-1">
+                <div className="mb-5 pb-3 border-b border-brand-border">
+                  <h3 className="text-base font-bold text-brand-navy">Grid for App Form</h3>
+                  <p className="text-xs text-slate-500 mt-0.5">Attach commission payout and rate grid files</p>
                 </div>
 
                 <form
@@ -2208,30 +2399,30 @@ const AppModulePage: React.FC = () => {
                   className="space-y-4"
                 >
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 uppercase mb-1.5">Text</label>
+                    <label className="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Text</label>
                     <input
                       type="text"
                       placeholder="e.g. Q3 Payout Grid Policy"
                       value={gridAppText}
                       onChange={(e) => setGridAppText(e.target.value)}
-                      className="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-xs focus:border-brand-primary focus:outline-none bg-white text-slate-800"
+                      className="w-full px-3.5 py-2 rounded-lg border border-slate-300 text-sm focus:border-brand-primary focus:ring-1 focus:ring-brand-primary focus:outline-none bg-white text-slate-800"
                       required
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 uppercase mb-1.5">From Date</label>
+                    <label className="block text-xs font-semibold text-slate-700 uppercase mb-1.5">From Date</label>
                     <input
                       type="date"
                       value={gridAppFromDate}
                       onChange={(e) => setGridAppFromDate(e.target.value)}
-                      className="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-xs focus:border-brand-primary focus:outline-none bg-white text-slate-800"
+                      className="w-full px-3.5 py-2 rounded-lg border border-slate-300 text-sm focus:border-brand-primary focus:ring-1 focus:ring-brand-primary focus:outline-none bg-white text-slate-800"
                       required
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 uppercase mb-1.5">Attachment File</label>
+                    <label className="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Attachment File</label>
                     <input
                       type="file"
                       onChange={(e) => {
@@ -2239,14 +2430,14 @@ const AppModulePage: React.FC = () => {
                           setGridAppFile(e.target.files[0].name);
                         }
                       }}
-                      className="w-full px-3 py-1.5 rounded-xl border border-slate-300 text-xs file:mr-3 file:py-1 file:px-2.5 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-brand-primary file:text-white cursor-pointer"
+                      className="w-full px-3 py-1.5 rounded-lg border border-slate-300 text-xs file:mr-3 file:py-1 file:px-2.5 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-brand-primary file:text-white cursor-pointer"
                     />
                   </div>
 
                   <div className="pt-2">
                     <button
                       type="submit"
-                      className="px-8 py-2.5 rounded-xl bg-brand-primary text-white text-xs font-bold shadow hover:bg-blue-700 transition-all flex items-center justify-center gap-2 cursor-pointer uppercase tracking-wider"
+                      className="px-7 py-2 rounded-lg bg-brand-primary hover:bg-[#1D4ED8] text-white text-sm font-semibold shadow-xs transition-colors flex items-center justify-center gap-2 cursor-pointer"
                     >
                       <Save size={15} />
                       Save
@@ -2256,8 +2447,8 @@ const AppModulePage: React.FC = () => {
               </div>
 
               {/* Report Area / Table (Right) */}
-              <div className="bg-white rounded-2xl border border-brand-border p-6 shadow-sm lg:col-span-2">
-                <div className="flex justify-between items-center mb-4">
+              <div className="bg-white rounded-[12px] border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden flex flex-col lg:col-span-2 w-full">
+                <div className="p-4 bg-slate-50 border-b border-brand-border flex justify-between items-center">
                   <div>
                     <h3 className="text-base font-bold text-brand-navy flex items-center gap-2">
                       <Layers size={18} className="text-brand-primary" />
@@ -2265,68 +2456,67 @@ const AppModulePage: React.FC = () => {
                     </h3>
                     <p className="text-xs text-slate-500">Live grids deployed to the agent & partner mobile applications</p>
                   </div>
-                  <span className="text-xs font-semibold px-3 py-1 bg-blue-50 text-brand-primary rounded-full border border-blue-200">
+                  <span className="text-xs font-semibold px-2.5 py-0.5 bg-blue-50 text-brand-primary rounded-full border border-blue-200">
                     {appGridRecords.length} Record{appGridRecords.length === 1 ? '' : 's'}
                   </span>
                 </div>
 
-                {appGridRecords.length === 0 ? (
-                  <div className="py-16 border border-slate-200 rounded-xl text-center bg-slate-50/50">
-                    <p className="text-sm font-bold text-slate-500 uppercase tracking-wider">NO DATA FOUND</p>
-                    <p className="text-xs text-slate-400 mt-1">Upload a new grid file from the form on the left to see records here.</p>
-                  </div>
-                ) : (
-                  <div className="overflow-x-auto border border-slate-200 rounded-xl shadow-sm">
-                    <table className="w-full text-left text-xs border-collapse whitespace-nowrap">
-                      <thead className="bg-brand-primary text-white font-bold text-[12px] tracking-wider uppercase border-b-2 border-blue-700 select-none">
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left text-[13px] border-collapse whitespace-nowrap">
+                    <thead className="bg-brand-lightbg text-brand-navy text-[13px] uppercase tracking-wider font-semibold select-none border-b border-brand-border">
+                      <tr>
+                        <th className="py-3 px-3 text-center w-16 font-semibold text-brand-navy">SR.NO.</th>
+                        <th className="py-3 px-4 font-semibold text-brand-navy">TEXT</th>
+                        <th className="py-3 px-4 w-32 font-semibold text-brand-navy">FROM DATE</th>
+                        <th className="py-3 px-4 w-44 font-semibold text-brand-navy">FILE</th>
+                        <th className="py-3 px-3 text-center w-24 font-semibold text-brand-navy">ACTION</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-brand-border text-slate-800 bg-white">
+                      {appGridRecords.length === 0 ? (
                         <tr>
-                          <th className="py-3.5 px-3 border-r border-white/20 text-center w-16">SR.NO.</th>
-                          <th className="py-3.5 px-4 border-r border-white/20">TEXT</th>
-                          <th className="py-3.5 px-4 border-r border-white/20 w-32">FROM DATE</th>
-                          <th className="py-3.5 px-4 border-r border-white/20 w-44">FILE</th>
-                          <th className="py-3.5 px-3 text-center w-24">ACTION</th>
+                          <td colSpan={5} className="py-16 text-center text-slate-400 font-medium">
+                            No grid records found. Upload a new grid file from the form on the left.
+                          </td>
                         </tr>
-                      </thead>
-                      <tbody className="divide-y divide-slate-100 text-slate-700 bg-white">
-                        {appGridRecords.map((r, idx) => (
+                      ) : (
+                        appGridRecords.map((r, idx) => (
                           <tr
                             key={r.id}
-                            className={`hover:bg-blue-50/40 transition-colors ${
-                              idx % 2 === 0 ? 'bg-white' : 'bg-slate-50/40'
-                            }`}
+                            className="h-[48px] hover:bg-brand-mainbg transition-colors bg-white"
                           >
-                            <td className="py-3.5 px-3 text-center font-bold text-slate-800 border-r border-slate-200">
+                            <td className="py-2.5 px-3 text-center font-bold text-slate-800">
                               {idx + 1}
                             </td>
-                            <td className="py-3.5 px-4 font-semibold text-slate-900 border-r border-slate-200">
+                            <td className="py-2.5 px-4 font-medium text-slate-900">
                               {r.text}
                             </td>
-                            <td className="py-3.5 px-4 font-medium text-slate-600 border-r border-slate-200">
+                            <td className="py-2.5 px-4 font-mono text-xs text-slate-600">
                               {r.fromDate}
                             </td>
-                            <td className="py-3.5 px-4 border-r border-slate-200">
-                              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-blue-50 text-brand-primary font-medium text-[11px] border border-blue-200">
+                            <td className="py-2.5 px-4">
+                              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-blue-50 text-brand-primary font-medium text-xs border border-blue-200">
                                 <FileText size={12} />
                                 {r.fileName}
                               </span>
                             </td>
-                            <td className="py-3.5 px-3 text-center">
+                            <td className="py-2.5 px-3 text-center">
                               <button
                                 onClick={() => {
                                   setAppGridRecords(appGridRecords.filter((x) => x.id !== r.id));
                                   showToast(`Deleted grid record "${r.text}"`);
                                 }}
-                                className="font-bold text-xs text-red-600 hover:text-red-800 uppercase tracking-wider hover:underline transition-colors cursor-pointer px-2 py-1 rounded hover:bg-red-50"
+                                className="font-semibold text-xs text-rose-600 hover:text-rose-800 uppercase tracking-wider hover:underline transition-colors cursor-pointer px-2 py-1 rounded hover:bg-rose-50"
                               >
                                 DELETE
                               </button>
                             </td>
                           </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                )}
+                        ))
+                      )}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
 
@@ -2337,7 +2527,7 @@ const AppModulePage: React.FC = () => {
                   handleTabChange('paymentMode');
                   showToast('Navigated back to Payment Mode');
                 }}
-                className="px-10 py-2.5 rounded-xl bg-brand-primary text-white text-xs font-bold shadow hover:bg-blue-700 transition-all cursor-pointer uppercase tracking-wider flex items-center gap-2"
+                className="px-6 py-2 rounded-lg border border-slate-300 hover:bg-slate-50 text-slate-700 text-sm font-semibold transition-all cursor-pointer flex items-center gap-2"
               >
                 Back
               </button>
@@ -2349,8 +2539,8 @@ const AppModulePage: React.FC = () => {
         {activeTab === 'quotationReport' && (
           <div className="space-y-6 w-full">
             {/* Filter Card */}
-            <div className="bg-white rounded-2xl border border-brand-border p-6 shadow-sm w-full">
-              <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 flex-wrap">
+            <div className="bg-white rounded-[12px] border border-brand-border p-5 shadow-[0_1px_2px_rgba(0,0,0,0.02)] w-full">
+              <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-5 flex-wrap">
                 {/* Status Radio Buttons */}
                 <div className="flex items-center gap-6">
                   <label className="flex items-center gap-2.5 cursor-pointer select-none">
@@ -2361,7 +2551,7 @@ const AppModulePage: React.FC = () => {
                       onChange={() => setQuoteStatusFilter('accepted')}
                       className="w-4 h-4 accent-brand-primary cursor-pointer"
                     />
-                    <span className="text-sm font-bold text-slate-800">Accepted</span>
+                    <span className="text-sm font-semibold text-slate-800">Accepted</span>
                   </label>
 
                   <label className="flex items-center gap-2.5 cursor-pointer select-none">
@@ -2372,29 +2562,29 @@ const AppModulePage: React.FC = () => {
                       onChange={() => setQuoteStatusFilter('cancel')}
                       className="w-4 h-4 accent-brand-primary cursor-pointer"
                     />
-                    <span className="text-sm font-bold text-slate-800">Cancel</span>
+                    <span className="text-sm font-semibold text-slate-800">Cancel</span>
                   </label>
                 </div>
 
                 {/* Date Filters & Show Button */}
                 <div className="flex items-center gap-4 flex-wrap">
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 uppercase mb-1">From Date</label>
+                    <label className="block text-xs font-semibold text-slate-700 uppercase mb-1">From Date</label>
                     <input
                       type="date"
                       value={quoteFromDate}
                       onChange={(e) => setQuoteFromDate(e.target.value)}
-                      className="px-3.5 py-2 rounded-xl border border-slate-300 text-xs focus:border-brand-primary focus:outline-none bg-white text-slate-800"
+                      className="px-3.5 py-2 rounded-lg border border-slate-300 text-xs focus:border-brand-primary focus:ring-1 focus:ring-brand-primary focus:outline-none bg-white text-slate-800"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 uppercase mb-1">To Date</label>
+                    <label className="block text-xs font-semibold text-slate-700 uppercase mb-1">To Date</label>
                     <input
                       type="date"
                       value={quoteToDate}
                       onChange={(e) => setQuoteToDate(e.target.value)}
-                      className="px-3.5 py-2 rounded-xl border border-slate-300 text-xs focus:border-brand-primary focus:outline-none bg-white text-slate-800"
+                      className="px-3.5 py-2 rounded-lg border border-slate-300 text-xs focus:border-brand-primary focus:ring-1 focus:ring-brand-primary focus:outline-none bg-white text-slate-800"
                     />
                   </div>
 
@@ -2403,7 +2593,7 @@ const AppModulePage: React.FC = () => {
                       onClick={() => {
                         showToast(`Showing ${quoteStatusFilter === 'accepted' ? 'Accepted' : 'Cancelled'} quotations`);
                       }}
-                      className="px-8 py-2 rounded-xl bg-brand-primary text-white text-xs font-bold shadow hover:bg-blue-700 transition-all flex items-center gap-2 cursor-pointer uppercase tracking-wider"
+                      className="px-6 py-2 rounded-lg bg-brand-primary hover:bg-[#1D4ED8] text-white text-sm font-semibold shadow-xs transition-colors cursor-pointer"
                     >
                       Show
                     </button>
@@ -2412,19 +2602,19 @@ const AppModulePage: React.FC = () => {
               </div>
             </div>
 
-            {/* Quotations Report Table Card */}
-            <div className="bg-white rounded-2xl border border-brand-border p-6 shadow-sm w-full">
+            {/* Quotations Report Table Card in VehicleMaster Theme */}
+            <div className="bg-white rounded-[12px] border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden flex flex-col w-full">
               {/* Controls Bar: Export Button & Search Filter */}
-              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4">
+              <div className="p-4 bg-slate-50 border-b border-brand-border flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                 <div className="flex items-center gap-3">
                   <button
                     onClick={() => showToast('Exporting quotation report data to Excel...')}
-                    className="px-6 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold shadow transition-all cursor-pointer uppercase tracking-wider flex items-center gap-2"
+                    className="px-4 py-2 border border-slate-300 rounded-lg text-slate-700 hover:text-brand-primary hover:bg-slate-50 text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer"
                   >
                     <Download size={14} />
                     Export
                   </button>
-                  <span className="text-xs font-semibold px-3 py-1 bg-blue-50 text-brand-primary rounded-full border border-blue-200">
+                  <span className="text-xs font-semibold px-2.5 py-0.5 bg-blue-50 text-brand-primary rounded-full border border-blue-200">
                     {
                       quotationsList
                         .filter((q) => q.status === quoteStatusFilter)
@@ -2441,105 +2631,102 @@ const AppModulePage: React.FC = () => {
                 </div>
 
                 <div className="relative w-full sm:w-64">
-                  <Search size={14} className="absolute left-3 top-2.5 text-slate-400" />
+                  <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
                   <input
                     type="text"
                     placeholder="Search customer, vehicle, ID..."
                     value={quotationSearch}
                     onChange={(e) => setQuotationSearch(e.target.value)}
-                    className="w-full pl-9 pr-3 py-1.5 rounded-xl border border-slate-300 text-xs focus:border-brand-primary focus:outline-none"
+                    className="w-full pl-8 pr-3 py-2 rounded-lg border border-slate-300 text-xs focus:border-brand-primary focus:ring-1 focus:ring-brand-primary focus:outline-none"
                   />
                 </div>
               </div>
 
-              {/* Table or Empty Notice */}
-              {(() => {
-                const filtered = quotationsList
-                  .filter((q) => q.status === quoteStatusFilter)
-                  .filter(
-                    (q) =>
-                      q.customer.toLowerCase().includes(quotationSearch.toLowerCase()) ||
-                      q.vehicle.toLowerCase().includes(quotationSearch.toLowerCase()) ||
-                      q.id.toLowerCase().includes(quotationSearch.toLowerCase()) ||
-                      q.agent.toLowerCase().includes(quotationSearch.toLowerCase())
-                  );
+              {/* Table with Light-Blue Header */}
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-[13px] border-collapse whitespace-nowrap min-w-[950px]">
+                  <thead className="bg-brand-lightbg text-brand-navy text-[13px] uppercase tracking-wider font-semibold select-none border-b border-brand-border">
+                    <tr>
+                      <th className="py-3 px-3 text-center w-14 font-semibold text-brand-navy">SR.NO.</th>
+                      <th className="py-3 px-3.5 w-32 font-semibold text-brand-navy">QUOTE ID</th>
+                      <th className="py-3 px-4 font-semibold text-brand-navy">CUSTOMER NAME</th>
+                      <th className="py-3 px-4 font-semibold text-brand-navy">VEHICLE DETAILS</th>
+                      <th className="py-3 px-4 font-semibold text-brand-navy">AGENT</th>
+                      <th className="py-3 px-3 text-right w-28 font-semibold text-brand-navy">PREMIUM</th>
+                      <th className="py-3 px-3 text-center w-28 font-semibold text-brand-navy">DATE</th>
+                      <th className="py-3 px-3 text-center w-24 font-semibold text-brand-navy">STATUS</th>
+                      <th className="py-3 px-3 text-center w-20 font-semibold text-brand-navy">ACTION</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-brand-border text-slate-800 bg-white">
+                    {(() => {
+                      const filtered = quotationsList
+                        .filter((q) => q.status === quoteStatusFilter)
+                        .filter(
+                          (q) =>
+                            q.customer.toLowerCase().includes(quotationSearch.toLowerCase()) ||
+                            q.vehicle.toLowerCase().includes(quotationSearch.toLowerCase()) ||
+                            q.id.toLowerCase().includes(quotationSearch.toLowerCase()) ||
+                            q.agent.toLowerCase().includes(quotationSearch.toLowerCase())
+                        );
 
-                if (filtered.length === 0) {
-                  return (
-                    <div className="py-16 border border-slate-200 rounded-xl text-center bg-slate-50/50">
-                      <p className="text-sm font-bold text-slate-500 uppercase tracking-wider">NO DATA FOUND</p>
-                      <p className="text-xs text-slate-400 mt-1">No quotation records matching the selected status and date range.</p>
-                    </div>
-                  );
-                }
-
-                return (
-                  <div className="overflow-x-auto border border-slate-200 rounded-xl shadow-sm">
-                    <table className="w-full text-left text-xs border-collapse whitespace-nowrap min-w-[950px]">
-                      <thead className="bg-brand-primary text-white font-bold text-[12px] tracking-wider uppercase border-b-2 border-blue-700 select-none">
-                        <tr>
-                          <th className="py-3.5 px-3 border-r border-white/20 text-center w-14">SR.NO.</th>
-                          <th className="py-3.5 px-3.5 border-r border-white/20 w-32">QUOTE ID</th>
-                          <th className="py-3.5 px-4 border-r border-white/20">CUSTOMER NAME</th>
-                          <th className="py-3.5 px-4 border-r border-white/20">VEHICLE DETAILS</th>
-                          <th className="py-3.5 px-4 border-r border-white/20">AGENT</th>
-                          <th className="py-3.5 px-3 border-r border-white/20 text-right w-28">PREMIUM</th>
-                          <th className="py-3.5 px-3 border-r border-white/20 text-center w-28">DATE</th>
-                          <th className="py-3.5 px-3 border-r border-white/20 text-center w-24">STATUS</th>
-                          <th className="py-3.5 px-3 text-center w-20">ACTION</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-slate-100 text-slate-700 bg-white">
-                        {filtered.map((q, idx) => (
-                          <tr
-                            key={q.id}
-                            className={`hover:bg-blue-50/40 transition-colors ${
-                              idx % 2 === 0 ? 'bg-white' : 'bg-slate-50/40'
-                            }`}
-                          >
-                            <td className="py-3 px-3 text-center font-bold text-slate-800 border-r border-slate-200">
-                              {idx + 1}
-                            </td>
-                            <td className="py-3 px-3.5 font-mono font-bold text-brand-primary border-r border-slate-200">
-                              {q.id}
-                            </td>
-                            <td className="py-3 px-4 font-semibold text-slate-900 border-r border-slate-200">
-                              {q.customer}
-                            </td>
-                            <td className="py-3 px-4 text-slate-700 border-r border-slate-200">{q.vehicle}</td>
-                            <td className="py-3 px-4 text-slate-600 border-r border-slate-200">{q.agent}</td>
-                            <td className="py-3 px-3 text-right font-mono font-bold text-slate-900 border-r border-slate-200">
-                              ₹{q.premium.toLocaleString('en-IN')}
-                            </td>
-                            <td className="py-3 px-3 text-center text-slate-500 font-mono text-[11px] border-r border-slate-200">
-                              {q.date}
-                            </td>
-                            <td className="py-3 px-3 text-center border-r border-slate-200">
-                              <span
-                                className={`inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold ${
-                                  q.status === 'accepted'
-                                    ? 'bg-emerald-100 text-emerald-800 border border-emerald-200'
-                                    : 'bg-rose-50 text-rose-700 border border-rose-200'
-                                }`}
-                              >
-                                {q.status === 'accepted' ? 'Accepted' : 'Cancelled'}
-                              </span>
-                            </td>
-                            <td className="py-3 px-3 text-center">
-                              <button
-                                onClick={() => showToast(`Viewing quotation details for ${q.id}...`)}
-                                className="font-bold text-xs text-brand-primary hover:text-blue-800 uppercase tracking-wider hover:underline transition-colors cursor-pointer px-2 py-1 rounded hover:bg-blue-50"
-                              >
-                                VIEW
-                              </button>
+                      if (filtered.length === 0) {
+                        return (
+                          <tr>
+                            <td colSpan={9} className="py-16 text-center text-slate-400 font-medium">
+                              No quotation records matching the selected status and date range.
                             </td>
                           </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                );
-              })()}
+                        );
+                      }
+
+                      return filtered.map((q, idx) => (
+                        <tr
+                          key={q.id}
+                          className="h-[48px] hover:bg-brand-mainbg transition-colors bg-white"
+                        >
+                          <td className="py-2.5 px-3 text-center font-bold text-slate-800">
+                            {idx + 1}
+                          </td>
+                          <td className="py-2.5 px-3.5 font-mono font-bold text-brand-primary">
+                            {q.id}
+                          </td>
+                          <td className="py-2.5 px-4 font-semibold text-slate-900">
+                            {q.customer}
+                          </td>
+                          <td className="py-2.5 px-4 text-slate-700">{q.vehicle}</td>
+                          <td className="py-2.5 px-4 text-slate-600">{q.agent}</td>
+                          <td className="py-2.5 px-3 text-right font-mono font-bold text-slate-900">
+                            ₹{q.premium.toLocaleString('en-IN')}
+                          </td>
+                          <td className="py-2.5 px-3 text-center text-slate-500 font-mono text-xs">
+                            {q.date}
+                          </td>
+                          <td className="py-2.5 px-3 text-center">
+                            <span
+                              className={`inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold ${
+                                q.status === 'accepted'
+                                  ? 'bg-emerald-100 text-emerald-800 border border-emerald-200'
+                                  : 'bg-rose-50 text-rose-700 border border-rose-200'
+                              }`}
+                            >
+                              {q.status === 'accepted' ? 'Accepted' : 'Cancelled'}
+                            </span>
+                          </td>
+                          <td className="py-2.5 px-3 text-center">
+                            <button
+                              onClick={() => showToast(`Viewing quotation details for ${q.id}...`)}
+                              className="font-semibold text-xs text-brand-primary hover:text-blue-800 uppercase tracking-wider hover:underline transition-colors cursor-pointer px-2 py-1 rounded hover:bg-blue-50"
+                            >
+                              VIEW
+                            </button>
+                          </td>
+                        </tr>
+                      ));
+                    })()}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         )}

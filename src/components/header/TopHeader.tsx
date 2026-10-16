@@ -79,7 +79,13 @@ const TopHeader: React.FC<TopHeaderProps> = ({ isCollapsed, toggleSidebar }) => 
                                 </div>
 
                                 <div className="p-1">
-                                    <button className="w-full text-left px-3 py-2 text-sm text-brand-navy hover:bg-brand-lightbg rounded-md flex items-center gap-2 cursor-pointer transition-colors">
+                                    <button
+                                        onClick={() => {
+                                            setIsDropdownOpen(false);
+                                            navigate('/my-page');
+                                        }}
+                                        className="w-full text-left px-3 py-2 text-sm text-brand-navy hover:bg-brand-lightbg rounded-md flex items-center gap-2 cursor-pointer transition-colors"
+                                    >
                                         <User size={16} className="text-brand-muted" /> My Profile
                                     </button>
                                     <button className="w-full text-left px-3 py-2 text-sm text-brand-navy hover:bg-brand-lightbg rounded-md flex items-center gap-2 cursor-pointer transition-colors">

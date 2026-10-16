@@ -128,11 +128,11 @@ const HolidayMasterTab: React.FC = () => {
             {/* 2-COLUMN LAYOUT MATCHING USER SCREENSHOT IN BLUE THEME */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start w-full min-w-0">
                 {/* LEFT CARD: »Holiday Details (MATCHING SCREENSHOT) */}
-                <div className="lg:col-span-4 xl:col-span-3.5 bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-                    {/* Header Banner: »Holiday Details in Blue Theme */}
-                    <div className="bg-brand-primary text-white px-5 py-3 flex items-center shadow-xs">
+                <div className="lg:col-span-4 xl:col-span-3.5 bg-white rounded-xl border border-brand-border shadow-sm overflow-hidden">
+                    {/* Header Banner: »Holiday Details in Light Blue Theme */}
+                    <div className="bg-brand-lightbg text-brand-navy border-b border-brand-border px-5 py-3 flex items-center shadow-xs">
                         <div className="flex items-center gap-1.5 font-bold text-[15px] tracking-wide">
-                            <span className="text-white/90 text-lg font-serif">»</span>
+                            <span className="text-brand-primary text-lg font-bold">»</span>
                             <span>Holiday Details</span>
                         </div>
                     </div>
@@ -190,27 +190,26 @@ const HolidayMasterTab: React.FC = () => {
                     </div>
                 </div>
 
-                {/* RIGHT TABLE: HOLIDAY DESCRIPTION, DATE, EDIT, DELETE (MATCHING SCREENSHOT) */}
-                <div className="lg:col-span-8 xl:col-span-8.5 bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden flex flex-col min-w-0">
+                {/* RIGHT TABLE: HOLIDAY DESCRIPTION, DATE, EDIT, DELETE (POLICY MASTER BLUE THEME) */}
+                <div className="lg:col-span-8 xl:col-span-8.5 bg-white rounded-xl border border-brand-border shadow-sm overflow-hidden flex flex-col min-w-0">
                     <div className="w-full overflow-x-auto min-w-0">
                         <table className="w-full text-left border-collapse min-w-[500px]">
                             <thead>
-                                <tr className="bg-brand-primary text-white font-bold text-[13px] tracking-wide uppercase border-b-2 border-blue-700 select-none">
-                                    <th className="py-3 px-5 border-r border-white/20 whitespace-nowrap">
+                                <tr className="bg-brand-lightbg text-brand-navy font-semibold text-[13px] tracking-wide uppercase border-b border-brand-border select-none whitespace-nowrap">
+                                    <th className="py-3 px-5">
                                         HOLIDAY DESCRIPTION
                                     </th>
-                                    <th className="py-3 px-5 border-r border-white/20 whitespace-nowrap">
+                                    <th className="py-3 px-5">
                                         DATE
                                     </th>
-                                    <th className="py-3 px-4 w-12 text-center border-r border-white/20">
-                                        {/* Edit icon header */}
+                                    <th className="py-3 px-4 w-12 text-center">
                                     </th>
                                     <th className="py-3 px-5 w-28 text-center">
-                                        {/* Delete column header */}
+                                        ACTION
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody className="divide-y divide-slate-200 text-[13px]">
+                            <tbody className="divide-y divide-brand-border text-[13px]">
                                 {holidays.map((h, idx) => (
                                     <tr
                                         key={h.id}
@@ -218,12 +217,12 @@ const HolidayMasterTab: React.FC = () => {
                                             editingId === h.id
                                                 ? 'bg-blue-50/80 font-medium'
                                                 : idx % 2 === 0
-                                                ? 'bg-white hover:bg-slate-50/70'
-                                                : 'bg-slate-50/30 hover:bg-slate-50/70'
+                                                ? 'bg-white hover:bg-brand-mainbg'
+                                                : 'bg-slate-50/30 hover:bg-brand-mainbg'
                                         }`}
                                     >
                                         {/* Description */}
-                                        <td className="py-2.5 px-5 font-semibold text-slate-800 whitespace-nowrap">
+                                        <td className="py-2.5 px-5 font-semibold text-brand-navy whitespace-nowrap">
                                             {h.description}
                                         </td>
 
@@ -237,22 +236,22 @@ const HolidayMasterTab: React.FC = () => {
                                             <button
                                                 type="button"
                                                 onClick={() => handleEdit(h)}
-                                                className="text-[#00509d] hover:text-blue-700 p-1.5 rounded hover:bg-blue-100/50 transition-colors cursor-pointer border-none bg-transparent"
+                                                className="p-1.5 bg-brand-lightbg text-brand-primary hover:bg-[#E2E8F0] rounded-[6px] transition-colors cursor-pointer inline-flex items-center justify-center border-none"
                                                 title="Edit"
                                             >
                                                 <Edit2 size={16} />
                                             </button>
                                         </td>
 
-                                        {/* Delete Button matching screenshot with trash can + DELETE text */}
+                                        {/* Delete Button */}
                                         <td className="py-2.5 px-4 text-center whitespace-nowrap">
                                             <button
                                                 type="button"
                                                 onClick={() => handleDelete(h.id)}
-                                                className="inline-flex items-center gap-1.5 text-[#00509d] hover:text-rose-600 font-serif font-medium text-[13px] tracking-wide transition-colors cursor-pointer border-none bg-transparent p-1 rounded hover:bg-rose-50"
+                                                className="inline-flex items-center gap-1 text-[#2563EB] hover:text-[#1D4ED8] font-bold text-xs uppercase cursor-pointer hover:bg-blue-50 px-2 py-1 rounded transition border-none bg-transparent"
                                                 title="Delete"
                                             >
-                                                <Trash2 size={16} className="shrink-0" />
+                                                <Trash2 size={15} />
                                                 <span>DELETE</span>
                                             </button>
                                         </td>

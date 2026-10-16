@@ -452,7 +452,7 @@ export const CompanyWiseAgentGridTab: React.FC = () => {
                     <select
                       value={selectedBranch}
                       onChange={(e) => setSelectedBranch(e.target.value)}
-                      className="w-full px-3.5 py-1.5 bg-white border border-slate-300 rounded-full text-[12.5px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner appearance-none pr-8 cursor-pointer"
+                      className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-xs text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all appearance-none pr-8 cursor-pointer"
                     >
                       <option value="">--Select Branch--</option>
                       {branches.map((b) => (
@@ -475,7 +475,7 @@ export const CompanyWiseAgentGridTab: React.FC = () => {
                     <select
                       value={effectiveDate}
                       onChange={(e) => setEffectiveDate(e.target.value)}
-                      className="w-full px-3.5 py-1.5 bg-white border border-slate-300 rounded-full text-[12.5px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner appearance-none pr-8 cursor-pointer"
+                      className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-xs text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all appearance-none pr-8 cursor-pointer"
                     >
                       <option value="">--Select Date--</option>
                       <option value="01/04/2026">01/04/2026</option>
@@ -491,7 +491,7 @@ export const CompanyWiseAgentGridTab: React.FC = () => {
             </div>
           </div>
 
-          {/* Row 2: To Date + View (Amber) & Reset (Red) */}
+          {/* Row 2: To Date + View & Reset */}
           <div className="flex flex-wrap items-end gap-4 pt-2 border-t border-slate-100">
             <div className="w-56">
               <label className="block text-[12px] font-bold text-slate-700 mb-1">
@@ -501,7 +501,7 @@ export const CompanyWiseAgentGridTab: React.FC = () => {
                 <select
                   value={toDate}
                   onChange={(e) => setToDate(e.target.value)}
-                  className="w-full px-3.5 py-1.5 bg-white border border-slate-300 rounded-full text-[12.5px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner appearance-none pr-8 cursor-pointer"
+                  className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-xs text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all appearance-none pr-8 cursor-pointer"
                 >
                   <option value="">--Select Date--</option>
                   <option value="14/10/2026">14/10/2026</option>
@@ -514,28 +514,25 @@ export const CompanyWiseAgentGridTab: React.FC = () => {
             </div>
 
             <div className="flex items-center gap-3">
-              {/* View Button (Amber/Orange matching screenshot) */}
               <button
                 type="submit"
-                className="px-7 py-2 bg-[#E89C35] hover:bg-[#d48824] text-white rounded-md text-[13px] font-bold shadow-sm transition-all cursor-pointer border-none active:scale-[0.98] min-w-[76px]"
+                className="px-6 py-2 bg-brand-primary hover:bg-brand-primaryHover text-white rounded-lg text-xs font-semibold shadow-sm transition-all cursor-pointer border-none active:scale-[0.98]"
               >
                 View
               </button>
 
-              {/* Reset Button (Red/Crimson matching screenshot) */}
               <button
                 type="button"
                 onClick={handleReset}
-                className="px-7 py-2 bg-[#D32F2F] hover:bg-[#b71c1c] text-white rounded-md text-[13px] font-bold shadow-sm transition-all cursor-pointer border-none active:scale-[0.98] min-w-[76px]"
+                className="px-5 py-2 bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 rounded-lg text-xs font-semibold shadow-sm transition-all cursor-pointer active:scale-[0.98]"
               >
                 Reset
               </button>
 
-              {/* Export Button */}
               <button
                 type="button"
                 onClick={handleExport}
-                className="px-6 py-2 bg-[#0B5ED7] hover:bg-blue-700 text-white rounded-md text-[13px] font-bold shadow-sm transition-all cursor-pointer border-none active:scale-[0.98] ml-2 flex items-center gap-1.5"
+                className="px-5 py-2 bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 rounded-lg text-xs font-semibold shadow-sm transition-all cursor-pointer active:scale-[0.98] ml-1 flex items-center gap-1.5"
               >
                 <Download size={14} />
                 <span>Export CSV</span>
@@ -545,83 +542,70 @@ export const CompanyWiseAgentGridTab: React.FC = () => {
         </form>
       </div>
 
-      {/* Quick Search Bar */}
-      <div className="w-full max-w-sm">
-        <div className="relative">
-          <input
-            type="text"
-            placeholder="Search Company, Segment, Agent..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-full text-[13px] text-slate-800 placeholder-slate-400 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
-          />
-          {searchQuery && (
-            <button
-              onClick={() => setSearchQuery('')}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 bg-transparent border-none cursor-pointer"
-            >
-              <X size={15} />
-            </button>
-          )}
-        </div>
-      </div>
-
       {/* =========================================================================
-          DATA GRID (Styled with our Blue Theme)
+          DATA GRID (Styled with VehicleMaster layout)
          ========================================================================= */}
-      {filteredRecords.length === 0 ? (
-        <div className="w-full bg-white rounded-lg border border-brand-border shadow-xs overflow-hidden">
-          <div className="bg-[#EAEAEA] text-[#1E293B] px-4 py-3 font-semibold text-[13px] tracking-wide border-b border-slate-300 flex items-center justify-between">
-            <span>NO DATA FOUND</span>
+      <div className="w-full bg-white rounded-lg border border-brand-border shadow-sm overflow-hidden flex flex-col">
+        {/* Top Toolbar matching VehicleMaster */}
+        <div className="p-3.5 bg-slate-50 border-b border-brand-border flex flex-wrap items-center justify-between gap-3">
+          <div className="relative w-full max-w-sm">
+            <input
+              type="text"
+              placeholder="Search Company, Segment, Agent..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-lg text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all"
+            />
+            {searchQuery && (
+              <button
+                type="button"
+                onClick={() => setSearchQuery('')}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 bg-transparent border-none cursor-pointer"
+              >
+                <X size={15} />
+              </button>
+            )}
           </div>
-          <div className="p-8 text-center text-slate-500 text-xs">
-            <p className="font-medium text-slate-600">
-              No commission grid records found for {entitySubType}.
-            </p>
-            <p className="text-[11px] text-slate-400 mt-1">
-              Select "Reliable Agent" or click Reset to view active grid mappings.
-            </p>
+          <div className="flex items-center gap-2 text-xs text-slate-500">
+            <span>Broker: <strong className="text-slate-700">{selectedBroker}</strong></span>
+            <span className="text-slate-300">|</span>
+            <span>Category: <strong className="text-slate-700">{partyType} - {entitySubType}</strong></span>
           </div>
         </div>
-      ) : (
-        <div className="w-full bg-white rounded-lg border border-brand-border shadow-sm overflow-hidden flex flex-col">
-          {/* Table Header Bar */}
-          <div className="bg-brand-lightbg text-brand-navy px-4 py-2.5 font-semibold text-[13px] border-b border-brand-border flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <span className="text-brand-primary font-bold">»</span>
-              <span>
-                Company Wise Agent Grid: <strong className="text-slate-900">{entitySubType}</strong>
-              </span>
-              <span className="bg-brand-primary/10 text-brand-primary text-xs px-2.5 py-0.5 rounded-full font-bold ml-1">
-                {filteredRecords.length} Records
-              </span>
-            </div>
-            <div className="text-xs text-slate-500">
-              Broker: <strong className="text-slate-700">{selectedBroker}</strong>
-            </div>
-          </div>
 
-          {/* Table */}
-          <div className="overflow-x-auto w-full">
-            <table className="w-full text-left border-collapse min-w-[950px]">
-              <thead>
-                <tr className="bg-brand-primary text-white text-[11.5px] uppercase tracking-wider font-bold select-none border-b border-blue-700">
-                  <th className="py-2.5 px-3.5 whitespace-nowrap">Agent Code</th>
-                  <th className="py-2.5 px-3.5 whitespace-nowrap">Agent Name</th>
-                  <th className="py-2.5 px-3.5 whitespace-nowrap">Branch</th>
-                  <th className="py-2.5 px-3.5 whitespace-nowrap">Company</th>
-                  <th className="py-2.5 px-3.5 whitespace-nowrap">Segment</th>
-                  <th className="py-2.5 px-3 text-center whitespace-nowrap">OD Comm %</th>
-                  <th className="py-2.5 px-3 text-center whitespace-nowrap">TP Comm %</th>
-                  <th className="py-2.5 px-3 text-center whitespace-nowrap">Net Comm %</th>
-                  <th className="py-2.5 px-3 text-center whitespace-nowrap">Reward %</th>
-                  <th className="py-2.5 px-3.5 whitespace-nowrap">Effective Date</th>
-                  <th className="py-2.5 px-3.5 text-center whitespace-nowrap">Status</th>
+        {/* Table */}
+        <div className="overflow-x-auto w-full">
+          <table className="w-full text-left border-collapse min-w-[950px]">
+            <thead>
+              <tr className="bg-brand-lightbg text-brand-navy text-[13px] uppercase tracking-wider font-semibold select-none border-b border-brand-border">
+                <th className="py-3 px-3.5 whitespace-nowrap">Agent Code</th>
+                <th className="py-3 px-3.5 whitespace-nowrap">Agent Name</th>
+                <th className="py-3 px-3.5 whitespace-nowrap">Branch</th>
+                <th className="py-3 px-3.5 whitespace-nowrap">Company</th>
+                <th className="py-3 px-3.5 whitespace-nowrap">Segment</th>
+                <th className="py-3 px-3 text-center whitespace-nowrap">OD Comm %</th>
+                <th className="py-3 px-3 text-center whitespace-nowrap">TP Comm %</th>
+                <th className="py-3 px-3 text-center whitespace-nowrap">Net Comm %</th>
+                <th className="py-3 px-3 text-center whitespace-nowrap">Reward %</th>
+                <th className="py-3 px-3.5 whitespace-nowrap">Effective Date</th>
+                <th className="py-3 px-3.5 text-center whitespace-nowrap">Status</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-brand-border text-[13px] text-slate-800">
+              {filteredRecords.length === 0 ? (
+                <tr>
+                  <td colSpan={11} className="py-12 text-center text-slate-500 text-xs">
+                    <p className="font-medium text-slate-600">
+                      No commission grid records found for {entitySubType}.
+                    </p>
+                    <p className="text-[11px] text-slate-400 mt-1">
+                      Select "Reliable Agent" or click Reset to view active grid mappings.
+                    </p>
+                  </td>
                 </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100 text-[12.5px] text-slate-800">
-                {filteredRecords.map((row) => (
-                  <tr key={row.id} className="hover:bg-blue-50/50 transition-colors">
+              ) : (
+                filteredRecords.map((row) => (
+                  <tr key={row.id} className="hover:bg-brand-mainbg h-[48px] transition-colors bg-white">
                     <td className="py-3 px-3.5 font-mono font-bold text-brand-primary whitespace-nowrap">
                       {row.agentCode}
                     </td>
@@ -664,12 +648,14 @@ export const CompanyWiseAgentGridTab: React.FC = () => {
                       </span>
                     </td>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
 
-          {/* Table Footer */}
+        {/* Table Footer */}
+        {filteredRecords.length > 0 && (
           <div className="bg-slate-50 border-t border-brand-border px-4 py-2.5 flex items-center justify-between text-xs text-slate-600">
             <div>
               Showing <span className="font-bold text-slate-800">{filteredRecords.length}</span> commission grid configurations
@@ -678,8 +664,8 @@ export const CompanyWiseAgentGridTab: React.FC = () => {
               Entity Category: <strong className="text-slate-800">{partyType} - {entitySubType}</strong>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };

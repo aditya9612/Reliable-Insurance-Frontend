@@ -78,6 +78,7 @@ const Breadcrumbs = () => {
         'reports': 'Reports',
         'mis': 'MIS Reports',
         'general': 'General Reports',
+        'my-page': 'My Page',
     };
 
     return (

@@ -172,9 +172,6 @@ export const Recon: React.FC = () => {
           {/* TAB 1: IMPORT COMPANY COMMISSION (Photo 1) */}
           {activeTab === 'importCompanyCommission' && (
             <div className="p-5 border-b border-slate-200 space-y-4">
-              <div className="bg-[#0B5ED7] text-white px-5 py-2.5 font-semibold text-[13.5px] rounded-lg flex items-center shadow-xs">
-                <span className="mr-1 text-base font-serif">&raquo;</span>Import Company Commission
-              </div>
 
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end pt-1">
                 <div>
@@ -230,10 +227,7 @@ export const Recon: React.FC = () => {
           {/* TAB 3: IDEAL RECONCILIATION */}
           {activeTab === 'idealReconciliation' && (
             <div className="p-5 border-b border-slate-200 space-y-4">
-              <div className="bg-[#0B5ED7] text-white px-5 py-2.5 font-semibold text-[13.5px] rounded-lg flex items-center shadow-xs">
-                <span className="mr-1 text-base font-serif">&raquo;</span>Ideal Reconciliation
-              </div>
-              <div className="text-center font-bold text-sm text-[#0B5ED7] pb-1">
+              <div className="text-center font-bold text-sm text-brand-primary pb-1">
                 Company Commission Data Match with Transaction
               </div>
 
@@ -458,7 +452,7 @@ export const Recon: React.FC = () => {
                         <tbody className="divide-y divide-brand-border text-[13px]">
                           {paginatedData.map((row, idx) => (
                             <tr key={row.id} className="hover:bg-brand-mainbg h-[48px] transition-colors bg-white">
-                              <td className="py-2.5 px-4 font-medium text-slate-500">{(currentPage - 1) * itemsPerPage + idx + 1}</td>
+                              <td className="py-2.5 px-4 font-medium text-brand-primary">{(currentPage - 1) * itemsPerPage + idx + 1}</td>
                               <td className="py-2.5 px-4 text-slate-700">{row.transDate}</td>
                               <td className="py-2.5 px-4 font-semibold text-slate-800">{row.companyName}</td>
                               <td className="py-2.5 px-4 font-mono text-[#0869D8]">{row.policyNo}</td>
@@ -490,9 +484,6 @@ export const Recon: React.FC = () => {
           {/* TAB 2: RECONCILIATION REPORT */}
           {activeTab === 'reconciliationReport' && (
             <div className="p-5 border-b border-slate-200 space-y-4">
-              <div className="bg-[#0B5ED7] text-white px-5 py-2.5 font-semibold text-[13.5px] rounded-lg flex items-center shadow-xs">
-                <span className="mr-1 text-base font-serif">&raquo;</span>Reconciliation Report
-              </div>
 
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end pt-1">
                 <div>
@@ -590,7 +581,7 @@ export const Recon: React.FC = () => {
                       <tbody className="divide-y divide-brand-border text-[13px]">
                         {paginatedData.map((row, idx) => (
                           <tr key={row.id} className="hover:bg-brand-mainbg h-[48px] transition-colors bg-white">
-                            <td className="py-2.5 px-4 font-medium text-slate-500">{(currentPage - 1) * itemsPerPage + idx + 1}</td>
+                            <td className="py-2.5 px-4 font-medium text-brand-primary">{(currentPage - 1) * itemsPerPage + idx + 1}</td>
                             <td className="py-2.5 px-4 text-slate-700">{row.transDate}</td>
                             <td className="py-2.5 px-4 font-semibold text-slate-800">{row.companyName}</td>
                             <td className="py-2.5 px-4 font-mono text-[#0869D8]">{row.policyNo}</td>

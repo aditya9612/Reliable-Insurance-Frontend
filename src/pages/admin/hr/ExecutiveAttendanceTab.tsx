@@ -229,7 +229,7 @@ const ExecutiveAttendanceTab: React.FC = () => {
             )}
 
             {/* TOP CARD: EXACT UI FROM USER SCREENSHOT */}
-            <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6 sm:p-7">
+            <div className="bg-white rounded-xl border border-brand-border shadow-sm p-6 sm:p-7">
                 {/* 1. Radio Buttons Row */}
                 <div className="flex flex-wrap items-center gap-6 sm:gap-10 pb-5 border-b border-slate-100">
                     {/* Radio 1: Executive Attendance */}
@@ -430,20 +430,20 @@ const ExecutiveAttendanceTab: React.FC = () => {
                     {selectedMode === 'Executive Attendance' && (
                         <table className="text-left border-collapse w-full min-w-[1050px] text-[13px]">
                             <thead>
-                                <tr className="bg-brand-primary text-white font-bold text-[12px] tracking-wider uppercase border-b-2 border-blue-700 select-none">
-                                    <th className="py-3.5 px-4 w-16 text-center border-r border-white/20 whitespace-nowrap">SR. NO.</th>
-                                    <th className="py-3.5 px-4 w-32 border-r border-white/20 whitespace-nowrap">EMP CODE</th>
-                                    <th className="py-3.5 px-4 w-64 border-r border-white/20 whitespace-nowrap">EMPLOYEE NAME</th>
-                                    <th className="py-3.5 px-4 w-52 border-r border-white/20 whitespace-nowrap">DESIGNATION</th>
-                                    <th className="py-3.5 px-4 w-36 border-r border-white/20 whitespace-nowrap">BRANCH</th>
-                                    <th className="py-3.5 px-4 w-24 text-center border-r border-white/20 whitespace-nowrap">TOTAL DAYS</th>
-                                    <th className="py-3.5 px-4 w-24 text-center border-r border-white/20 whitespace-nowrap">PRESENT</th>
-                                    <th className="py-3.5 px-4 w-24 text-center border-r border-white/20 whitespace-nowrap">ABSENT</th>
-                                    <th className="py-3.5 px-4 w-24 text-center border-r border-white/20 whitespace-nowrap">LEAVE</th>
-                                    <th className="py-3.5 px-4 w-24 text-center border-r border-white/20 whitespace-nowrap">LATE</th>
-                                    <th className="py-3.5 px-4 w-32 text-center border-r border-white/20 whitespace-nowrap">DUTY HOURS</th>
-                                    <th className="py-3.5 px-4 w-28 text-center border-r border-white/20 whitespace-nowrap">RATING</th>
-                                    <th className="py-3.5 px-4 w-28 text-right whitespace-nowrap">ACTION</th>
+                                <tr className="bg-brand-lightbg text-brand-navy font-semibold text-[12px] tracking-wider uppercase border-b border-brand-border select-none">
+                                    <th className="py-3 px-4 w-16 text-center border-r border-brand-border whitespace-nowrap">SR. NO.</th>
+                                    <th className="py-3 px-4 w-32 border-r border-brand-border whitespace-nowrap">EMP CODE</th>
+                                    <th className="py-3 px-4 w-64 border-r border-brand-border whitespace-nowrap">EMPLOYEE NAME</th>
+                                    <th className="py-3 px-4 w-52 border-r border-brand-border whitespace-nowrap">DESIGNATION</th>
+                                    <th className="py-3 px-4 w-36 border-r border-brand-border whitespace-nowrap">BRANCH</th>
+                                    <th className="py-3 px-4 w-24 text-center border-r border-brand-border whitespace-nowrap">TOTAL DAYS</th>
+                                    <th className="py-3 px-4 w-24 text-center border-r border-brand-border whitespace-nowrap">PRESENT</th>
+                                    <th className="py-3 px-4 w-24 text-center border-r border-brand-border whitespace-nowrap">ABSENT</th>
+                                    <th className="py-3 px-4 w-24 text-center border-r border-brand-border whitespace-nowrap">LEAVE</th>
+                                    <th className="py-3 px-4 w-24 text-center border-r border-brand-border whitespace-nowrap">LATE</th>
+                                    <th className="py-3 px-4 w-32 text-center border-r border-brand-border whitespace-nowrap">DUTY HOURS</th>
+                                    <th className="py-3 px-4 w-28 text-center border-r border-brand-border whitespace-nowrap">RATING</th>
+                                    <th className="py-3 px-4 w-28 text-right whitespace-nowrap">ACTION</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-brand-border text-slate-700 bg-white">
@@ -489,20 +489,20 @@ const ExecutiveAttendanceTab: React.FC = () => {
                     {selectedMode === 'Presenty' && (
                         <table className="text-left border-collapse w-full min-w-[1200px] text-[12px]">
                             <thead>
-                                <tr className="bg-brand-primary text-white font-bold text-[11px] tracking-wider uppercase border-b-2 border-blue-700 select-none">
-                                    <th className="py-3 px-3 w-14 text-center border-r border-white/20">SR.</th>
-                                    <th className="py-3 px-3 w-28 border-r border-white/20">EMP CODE</th>
-                                    <th className="py-3 px-4 w-52 border-r border-white/20">EMPLOYEE NAME</th>
-                                    <th className="py-3 px-3 w-28 border-r border-white/20">BRANCH</th>
+                                <tr className="bg-brand-lightbg text-brand-navy font-semibold text-[11px] tracking-wider uppercase border-b border-brand-border select-none">
+                                    <th className="py-3 px-3 w-14 text-center border-r border-brand-border">SR.</th>
+                                    <th className="py-3 px-3 w-28 border-r border-brand-border">EMP CODE</th>
+                                    <th className="py-3 px-4 w-52 border-r border-brand-border">EMPLOYEE NAME</th>
+                                    <th className="py-3 px-3 w-28 border-r border-brand-border">BRANCH</th>
                                     {/* 15 Sample Days for month */}
                                     {Array.from({ length: 15 }, (_, i) => (
-                                        <th key={i} className="py-2 px-2 text-center w-8 border-r border-white/20">
+                                        <th key={i} className="py-2 px-2 text-center w-8 border-r border-brand-border">
                                             {i + 1}
                                         </th>
                                     ))}
-                                    <th className="py-3 px-3 w-16 text-center border-r border-white/20">P</th>
-                                    <th className="py-3 px-3 w-16 text-center border-r border-white/20">A</th>
-                                    <th className="py-3 px-3 w-16 text-center border-r border-white/20">L</th>
+                                    <th className="py-3 px-3 w-16 text-center border-r border-brand-border">P</th>
+                                    <th className="py-3 px-3 w-16 text-center border-r border-brand-border">A</th>
+                                    <th className="py-3 px-3 w-16 text-center border-r border-brand-border">L</th>
                                     <th className="py-3 px-3 w-20 text-center">RATE</th>
                                 </tr>
                             </thead>
@@ -546,18 +546,18 @@ const ExecutiveAttendanceTab: React.FC = () => {
                     {selectedMode === 'Daily Attendance' && (
                         <table className="text-left border-collapse w-full min-w-[1000px] text-[13px]">
                             <thead>
-                                <tr className="bg-brand-primary text-white font-bold text-[12px] tracking-wider uppercase border-b-2 border-blue-700 select-none">
-                                    <th className="py-3.5 px-4 w-16 text-center border-r border-white/20 whitespace-nowrap">SR.</th>
-                                    <th className="py-3.5 px-4 w-32 border-r border-white/20 whitespace-nowrap">EMP CODE</th>
-                                    <th className="py-3.5 px-4 w-60 border-r border-white/20 whitespace-nowrap">EMPLOYEE NAME</th>
-                                    <th className="py-3.5 px-4 w-36 border-r border-white/20 whitespace-nowrap">BRANCH</th>
-                                    <th className="py-3.5 px-4 w-32 border-r border-white/20 whitespace-nowrap">DATE</th>
-                                    <th className="py-3.5 px-4 w-32 border-r border-white/20 whitespace-nowrap">PUNCH IN</th>
-                                    <th className="py-3.5 px-4 w-32 border-r border-white/20 whitespace-nowrap">PUNCH OUT</th>
-                                    <th className="py-3.5 px-4 w-32 text-center border-r border-white/20 whitespace-nowrap">WORK HOURS</th>
-                                    <th className="py-3.5 px-4 w-28 text-center border-r border-white/20 whitespace-nowrap">OVERTIME</th>
-                                    <th className="py-3.5 px-4 w-44 border-r border-white/20 whitespace-nowrap">BIOMETRIC DEVICE</th>
-                                    <th className="py-3.5 px-4 w-28 text-center whitespace-nowrap">STATUS</th>
+                                <tr className="bg-brand-lightbg text-brand-navy font-semibold text-[12px] tracking-wider uppercase border-b border-brand-border select-none">
+                                    <th className="py-3 px-4 w-16 text-center border-r border-brand-border whitespace-nowrap">SR.</th>
+                                    <th className="py-3 px-4 w-32 border-r border-brand-border whitespace-nowrap">EMP CODE</th>
+                                    <th className="py-3 px-4 w-60 border-r border-brand-border whitespace-nowrap">EMPLOYEE NAME</th>
+                                    <th className="py-3 px-4 w-36 border-r border-brand-border whitespace-nowrap">BRANCH</th>
+                                    <th className="py-3 px-4 w-32 border-r border-brand-border whitespace-nowrap">DATE</th>
+                                    <th className="py-3 px-4 w-32 border-r border-brand-border whitespace-nowrap">PUNCH IN</th>
+                                    <th className="py-3 px-4 w-32 border-r border-brand-border whitespace-nowrap">PUNCH OUT</th>
+                                    <th className="py-3 px-4 w-32 text-center border-r border-brand-border whitespace-nowrap">WORK HOURS</th>
+                                    <th className="py-3 px-4 w-28 text-center border-r border-brand-border whitespace-nowrap">OVERTIME</th>
+                                    <th className="py-3 px-4 w-44 border-r border-brand-border whitespace-nowrap">BIOMETRIC DEVICE</th>
+                                    <th className="py-3 px-4 w-28 text-center whitespace-nowrap">STATUS</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-brand-border text-slate-700 bg-white">
@@ -592,17 +592,17 @@ const ExecutiveAttendanceTab: React.FC = () => {
                     {selectedMode === 'Not Sign In' && (
                         <table className="text-left border-collapse w-full min-w-[1000px] text-[13px]">
                             <thead>
-                                <tr className="bg-brand-primary text-white font-bold text-[12px] tracking-wider uppercase border-b-2 border-blue-700 select-none">
-                                    <th className="py-3.5 px-4 w-16 text-center border-r border-white/20 whitespace-nowrap">SR.</th>
-                                    <th className="py-3.5 px-4 w-32 border-r border-white/20 whitespace-nowrap">EMP CODE</th>
-                                    <th className="py-3.5 px-4 w-60 border-r border-white/20 whitespace-nowrap">EMPLOYEE NAME</th>
-                                    <th className="py-3.5 px-4 w-36 border-r border-white/20 whitespace-nowrap">DEPARTMENT</th>
-                                    <th className="py-3.5 px-4 w-36 border-r border-white/20 whitespace-nowrap">BRANCH</th>
-                                    <th className="py-3.5 px-4 w-36 border-r border-white/20 whitespace-nowrap">MOBILE NUMBER</th>
-                                    <th className="py-3.5 px-4 w-48 border-r border-white/20 whitespace-nowrap">EMAIL ID</th>
-                                    <th className="py-3.5 px-4 w-44 border-r border-white/20 whitespace-nowrap">SHIFT TIMING</th>
-                                    <th className="py-3.5 px-4 w-44 border-r border-white/20 whitespace-nowrap">LAST ACTIVE</th>
-                                    <th className="py-3.5 px-4 w-32 text-right whitespace-nowrap">ACTION</th>
+                                <tr className="bg-brand-lightbg text-brand-navy font-semibold text-[12px] tracking-wider uppercase border-b border-brand-border select-none">
+                                    <th className="py-3 px-4 w-16 text-center border-r border-brand-border whitespace-nowrap">SR.</th>
+                                    <th className="py-3 px-4 w-32 border-r border-brand-border whitespace-nowrap">EMP CODE</th>
+                                    <th className="py-3 px-4 w-60 border-r border-brand-border whitespace-nowrap">EMPLOYEE NAME</th>
+                                    <th className="py-3 px-4 w-36 border-r border-brand-border whitespace-nowrap">DEPARTMENT</th>
+                                    <th className="py-3 px-4 w-36 border-r border-brand-border whitespace-nowrap">BRANCH</th>
+                                    <th className="py-3 px-4 w-36 border-r border-brand-border whitespace-nowrap">MOBILE NUMBER</th>
+                                    <th className="py-3 px-4 w-48 border-r border-brand-border whitespace-nowrap">EMAIL ID</th>
+                                    <th className="py-3 px-4 w-44 border-r border-brand-border whitespace-nowrap">SHIFT TIMING</th>
+                                    <th className="py-3 px-4 w-44 border-r border-brand-border whitespace-nowrap">LAST ACTIVE</th>
+                                    <th className="py-3 px-4 w-32 text-right whitespace-nowrap">ACTION</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-brand-border text-slate-700 bg-white">

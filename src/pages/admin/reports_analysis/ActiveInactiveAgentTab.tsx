@@ -239,7 +239,7 @@ export const ActiveInactiveAgentTab: React.FC = () => {
           <div className="flex items-center gap-3 pt-1">
             <button
               type="submit"
-              className="px-8 py-2 bg-[#0B5ED7] hover:bg-blue-700 text-white rounded-md text-[13px] font-bold shadow-sm transition-all cursor-pointer border-none active:scale-[0.98] min-w-[76px]"
+              className="px-6 py-2 bg-brand-primary hover:bg-brand-primaryHover text-white rounded-lg text-xs font-semibold shadow-sm transition-all cursor-pointer border-none active:scale-[0.98]"
             >
               Show
             </button>
@@ -247,7 +247,7 @@ export const ActiveInactiveAgentTab: React.FC = () => {
             <button
               type="button"
               onClick={handleExport}
-              className="px-8 py-2 bg-[#E89C35] hover:bg-[#d48824] text-white rounded-md text-[13px] font-bold shadow-sm transition-all cursor-pointer border-none active:scale-[0.98] min-w-[76px]"
+              className="px-5 py-2 bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 rounded-lg text-xs font-semibold shadow-sm transition-all cursor-pointer active:scale-[0.98]"
             >
               Export
             </button>
@@ -255,48 +255,54 @@ export const ActiveInactiveAgentTab: React.FC = () => {
         </form>
       </div>
 
-      {/* Secondary Search input matching Photo 4: "Search Customer Name Here" / Agent Name */}
-      <div className="w-full max-w-sm">
-        <input
-          type="text"
-          placeholder="Search Customer / Agent Name Here"
-          value={searchName}
-          onChange={(e) => setSearchName(e.target.value)}
-          className="w-full px-4 py-2 bg-white border border-slate-300 rounded-full text-[13px] text-slate-800 placeholder-slate-400 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
-        />
-      </div>
-
-      {/* Data Grid */}
+      {/* Table Card */}
       <div className="w-full bg-white rounded-lg border border-brand-border shadow-sm overflow-hidden flex flex-col">
-        <div className="bg-brand-lightbg text-brand-navy px-4 py-2.5 font-semibold text-[13px] border-b border-brand-border flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <span className="text-brand-primary font-bold">»</span>
-            <span>
-              {appliedFilters.status} Agents ({filteredRecords.length} Records)
-            </span>
+        {/* Table Toolbar */}
+        <div className="p-4 bg-slate-50 border-b border-brand-border flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="relative w-full sm:w-[350px]">
+            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+            <input
+              type="text"
+              placeholder="Search Customer / Agent Name Here..."
+              value={searchName}
+              onChange={(e) => setSearchName(e.target.value)}
+              className="w-full pl-9 pr-8 py-2 bg-white border border-slate-300 rounded-lg text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all h-[38px]"
+            />
+            {searchName && (
+              <button
+                onClick={() => setSearchName('')}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 bg-transparent border-none cursor-pointer"
+              >
+                <X size={15} />
+              </button>
+            )}
+          </div>
+
+          <div className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
+            {appliedFilters.status} Agents: <span className="text-brand-primary font-bold">{filteredRecords.length}</span>
           </div>
         </div>
 
-        <div className="overflow-x-auto w-full">
+        <div className="overflow-x-auto w-full custom-scrollbar min-h-[400px]">
           <table className="w-full text-left border-collapse min-w-[950px]">
             <thead>
-              <tr className="bg-brand-primary text-white text-[11.5px] uppercase tracking-wider font-bold select-none border-b border-blue-700">
-                <th className="py-2.5 px-3.5 whitespace-nowrap font-mono">Agent Code</th>
-                <th className="py-2.5 px-3.5 whitespace-nowrap">Agent Name</th>
-                <th className="py-2.5 px-3.5 whitespace-nowrap">Branch</th>
-                <th className="py-2.5 px-3.5 whitespace-nowrap font-mono">Mobile</th>
-                <th className="py-2.5 px-3.5 whitespace-nowrap">Reg Date</th>
-                <th className="py-2.5 px-3.5 whitespace-nowrap">Last Business</th>
-                <th className="py-2.5 px-3 text-center whitespace-nowrap">Policies</th>
-                <th className="py-2.5 px-3.5 text-right whitespace-nowrap">Total Prem (₹)</th>
-                <th className="py-2.5 px-3 text-center whitespace-nowrap">Status</th>
-                <th className="py-2.5 px-3.5 whitespace-nowrap">Reason / Note</th>
-                <th className="py-2.5 px-3.5 whitespace-nowrap">Executive</th>
+              <tr className="bg-brand-lightbg text-brand-navy text-[13px] uppercase tracking-wider font-semibold select-none border-b border-brand-border">
+                <th className="py-3 px-3.5 whitespace-nowrap font-mono">Agent Code</th>
+                <th className="py-3 px-3.5 whitespace-nowrap">Agent Name</th>
+                <th className="py-3 px-3.5 whitespace-nowrap">Branch</th>
+                <th className="py-3 px-3.5 whitespace-nowrap font-mono">Mobile</th>
+                <th className="py-3 px-3.5 whitespace-nowrap">Reg Date</th>
+                <th className="py-3 px-3.5 whitespace-nowrap">Last Business</th>
+                <th className="py-3 px-3 text-center whitespace-nowrap">Policies</th>
+                <th className="py-3 px-3.5 text-right whitespace-nowrap">Total Prem (₹)</th>
+                <th className="py-3 px-3 text-center whitespace-nowrap">Status</th>
+                <th className="py-3 px-3.5 whitespace-nowrap">Reason / Note</th>
+                <th className="py-3 px-3.5 whitespace-nowrap">Executive</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100 text-[12.5px] text-slate-800">
+            <tbody className="divide-y divide-brand-border text-[13px] text-slate-800">
               {filteredRecords.map((row) => (
-                <tr key={row.id} className="hover:bg-blue-50/50 transition-colors">
+                <tr key={row.id} className="hover:bg-brand-mainbg h-[48px] transition-colors bg-white">
                   <td className="py-3 px-3.5 font-mono font-bold text-brand-primary whitespace-nowrap">
                     {row.agentCode}
                   </td>
@@ -328,6 +334,15 @@ export const ActiveInactiveAgentTab: React.FC = () => {
                   <td className="py-3 px-3.5 text-slate-700 whitespace-nowrap font-medium">{row.executive}</td>
                 </tr>
               ))}
+              {filteredRecords.length === 0 && (
+                <tr>
+                  <td colSpan={11} className="py-16 text-center text-slate-500">
+                    <p className="font-semibold text-slate-600 text-sm">
+                      No {appliedFilters.status.toLowerCase()} agent records found matching "{searchName}".
+                    </p>
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>

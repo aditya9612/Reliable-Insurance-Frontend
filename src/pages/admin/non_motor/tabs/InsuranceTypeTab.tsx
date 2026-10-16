@@ -89,9 +89,9 @@ export const InsuranceTypeTab: React.FC<InsuranceTypeTabProps> = ({ showToast })
   return (
     <div className="space-y-4">
       {/* Top quick stats banner */}
-      <div className="flex flex-wrap items-center gap-3 bg-blue-50/70 border border-blue-100 rounded-lg p-2.5 px-4 text-xs font-semibold text-slate-700">
-        <span className="flex items-center gap-1.5 text-blue-700">
-          <Layers size={14} /> Total Types Defined: <strong className="text-blue-900">{insuranceTypes.length}</strong>
+      <div className="flex flex-wrap items-center gap-3 bg-slate-50 border border-brand-border rounded-[12px] p-3 px-4 text-xs font-semibold text-slate-700">
+        <span className="flex items-center gap-1.5 text-brand-primary">
+          <Layers size={14} /> Total Types Defined: <strong className="text-brand-navy">{insuranceTypes.length}</strong>
         </span>
         <span className="text-slate-300">|</span>
         <span className="text-slate-600">
@@ -102,17 +102,17 @@ export const InsuranceTypeTab: React.FC<InsuranceTypeTabProps> = ({ showToast })
       {/* Grid: Left Form (approx 1/3) + Right Table (approx 2/3) matching Screenshot 2 */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
         {/* LEFT COLUMN: » Insurance Type Master Form */}
-        <div className="lg:col-span-4 bg-white rounded-xl shadow-sm border border-slate-200/80 overflow-hidden">
+        <div className="lg:col-span-4 bg-white rounded-[12px] shadow-[0_1px_2px_rgba(0,0,0,0.02)] border border-brand-border overflow-hidden">
           {/* Header Banner */}
-          <div className="bg-gradient-to-r from-blue-700 via-blue-600 to-indigo-700 px-4 py-2.5 flex items-center justify-between text-white shadow-sm">
+          <div className="p-3.5 bg-slate-50 border-b border-brand-border flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <span className="text-blue-200 font-bold text-sm">»</span>
-              <h2 className="text-xs font-bold tracking-wide uppercase">
-                {editingId ? '» Edit Insurance Type' : '» Insurance Type Master'}
+              <span className="text-brand-primary font-bold text-sm">»</span>
+              <h2 className="text-xs font-bold text-brand-navy tracking-wide uppercase">
+                {editingId ? 'Edit Insurance Type' : 'Insurance Type Master'}
               </h2>
             </div>
             {editingId && (
-              <span className="text-[10px] bg-white/20 px-2 py-0.5 rounded-full text-blue-100 font-medium">
+              <span className="text-[10px] bg-blue-50 border border-blue-200 px-2 py-0.5 rounded-full text-brand-primary font-semibold">
                 Edit Mode
               </span>
             )}
@@ -127,7 +127,7 @@ export const InsuranceTypeTab: React.FC<InsuranceTypeTabProps> = ({ showToast })
               <select
                 value={companyName}
                 onChange={(e) => setCompanyName(e.target.value)}
-                className="w-full h-9 rounded-full border border-slate-300 bg-white px-3.5 text-xs text-slate-800 focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-600 shadow-inner"
+                className="w-full h-9 rounded-full border border-slate-300 bg-white px-3.5 text-xs text-slate-800 focus:border-brand-primary focus:outline-none focus:ring-1 focus:ring-brand-primary shadow-inner"
               >
                 <option value="">--Select Company--</option>
                 {mockInsuranceCompanies.map((c) => (
@@ -147,14 +147,14 @@ export const InsuranceTypeTab: React.FC<InsuranceTypeTabProps> = ({ showToast })
                 placeholder="e.g. HEALTH, FIRE, MARINE"
                 value={typeName}
                 onChange={(e) => setTypeName(e.target.value)}
-                className="w-full h-9 rounded-full border border-slate-300 bg-white px-3.5 text-xs text-slate-800 focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-600 shadow-inner"
+                className="w-full h-9 rounded-full border border-slate-300 bg-white px-3.5 text-xs text-slate-800 focus:border-brand-primary focus:outline-none focus:ring-1 focus:ring-brand-primary shadow-inner"
               />
             </div>
 
             <div className="pt-2 flex items-center gap-2">
               <button
                 type="submit"
-                className="h-9 px-6 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white text-xs font-semibold rounded-lg shadow-sm hover:shadow transition-all flex items-center gap-1.5"
+                className="h-9 px-6 bg-brand-primary hover:bg-[#1D4ED8] active:bg-blue-800 text-white text-xs font-semibold rounded-lg shadow-sm hover:shadow transition-all flex items-center gap-1.5"
               >
                 <Save size={13} />
                 {editingId ? 'Update' : 'Save'}
@@ -178,10 +178,10 @@ export const InsuranceTypeTab: React.FC<InsuranceTypeTabProps> = ({ showToast })
         </div>
 
         {/* RIGHT COLUMN: Table matching Screenshot 2 */}
-        <div className="lg:col-span-8 bg-white rounded-xl shadow-sm border border-slate-200/80 overflow-hidden">
+        <div className="lg:col-span-8 bg-white rounded-[12px] shadow-[0_1px_2px_rgba(0,0,0,0.02)] border border-brand-border overflow-hidden">
           {/* Table Header Filter Bar */}
-          <div className="p-3 border-b border-slate-200/80 bg-slate-50/70 flex items-center justify-between gap-3">
-            <span className="text-xs font-bold text-slate-700 uppercase tracking-wider">
+          <div className="p-3.5 border-b border-brand-border bg-slate-50 flex items-center justify-between gap-3">
+            <span className="text-xs font-bold text-brand-navy uppercase tracking-wider">
               Insurance Type Directory ({filteredItems.length})
             </span>
             <div className="relative w-64">
@@ -191,7 +191,7 @@ export const InsuranceTypeTab: React.FC<InsuranceTypeTabProps> = ({ showToast })
                 placeholder="Search types & companies..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full h-8 pl-8 pr-3 rounded-lg border border-slate-300 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600"
+                className="w-full h-8 pl-8 pr-3 rounded-lg border border-brand-border text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary"
               />
             </div>
           </div>
@@ -199,14 +199,14 @@ export const InsuranceTypeTab: React.FC<InsuranceTypeTabProps> = ({ showToast })
           {/* Table */}
           <div className="overflow-x-auto max-h-[560px]">
             <table className="w-full text-left text-xs border-collapse">
-              <thead className="sticky top-0 z-10">
-                <tr className="bg-[#102A4C] text-white uppercase text-[11px] font-semibold tracking-wider">
-                  <th className="py-2.5 px-4 w-44">INSURANCE TYPE</th>
-                  <th className="py-2.5 px-4">INSURANCE COMPANY</th>
-                  <th className="py-2.5 px-4 w-20 text-center">ACTIONS</th>
+              <thead className="sticky top-0 z-10 bg-brand-lightbg text-brand-navy text-[12px] uppercase tracking-wider font-semibold select-none border-b border-brand-border">
+                <tr>
+                  <th className="py-3 px-4 w-44 font-semibold text-brand-navy">INSURANCE TYPE</th>
+                  <th className="py-3 px-4 font-semibold text-brand-navy">INSURANCE COMPANY</th>
+                  <th className="py-3 px-4 w-20 text-center font-semibold text-brand-navy">ACTIONS</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-200/80">
+              <tbody className="divide-y divide-brand-border bg-white text-slate-800">
                 {filteredItems.length === 0 ? (
                   <tr>
                     <td colSpan={3} className="py-10 text-center text-slate-400 font-medium">
@@ -215,8 +215,8 @@ export const InsuranceTypeTab: React.FC<InsuranceTypeTabProps> = ({ showToast })
                   </tr>
                 ) : (
                   filteredItems.map((item) => (
-                    <tr key={item.id} className="hover:bg-blue-50/40 transition-colors">
-                      <td className="py-2.5 px-4 font-semibold text-blue-700 tracking-wide">
+                    <tr key={item.id} className="hover:bg-brand-mainbg transition-colors bg-white">
+                      <td className="py-2.5 px-4 font-semibold text-brand-primary tracking-wide">
                         {item.insuranceType}
                       </td>
                       <td className="py-2.5 px-4 text-slate-800 font-medium">
@@ -227,7 +227,7 @@ export const InsuranceTypeTab: React.FC<InsuranceTypeTabProps> = ({ showToast })
                           <button
                             type="button"
                             onClick={() => handleEdit(item)}
-                            className="p-1 rounded text-blue-600 hover:bg-blue-100 transition-colors"
+                            className="p-1 rounded text-brand-primary hover:bg-blue-100 transition-colors"
                             title="Edit"
                           >
                             <Edit2 size={13} />

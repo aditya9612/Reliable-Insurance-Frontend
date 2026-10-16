@@ -68,8 +68,8 @@ export const commissionCategories: CommissionCategory[] = [
         icon: TrendingUp,
         defaultTab: 'executive-self-incentive',
         tabs: [
-            { id: 'executive-self-incentive', label: 'Executive Self Insentive' },
-            { id: 'multiple-executive-self-incentive', label: 'Multiple Executive Self Insentive' },
+            { id: 'executive-self-incentive', label: 'Executive Self Incentive' },
+            { id: 'multiple-executive-self-incentive', label: 'Multiple Executive Self Incentive' },
         ]
     },
     {
@@ -99,7 +99,7 @@ export const commissionCategories: CommissionCategory[] = [
         icon: Calculator,
         defaultTab: 'check-grid',
         tabs: [
-            { id: 'check-grid', label: 'Check Grid Simulator' },
+            { id: 'check-grid', label: 'Check Grid' },
         ]
     },
 ];
@@ -303,41 +303,50 @@ const CommissionGrid: React.FC = () => {
                 }
             />
 
-            {/* Commission Category Navigation Bar (Page Top Side) */}
-            <div className="bg-white p-1.5 sm:p-2 rounded-xl border border-brand-border/80 shadow-xs w-full overflow-hidden">
-                <div className="flex items-center w-full flex-nowrap gap-1 sm:gap-1.5 justify-between">
-                    {commissionCategories.map(cat => {
-                        const isSelected = cat.id === currentCategory.id;
-                        const Icon = cat.icon;
+            {/* 2-Row Full-Width Navigation Box (Matching 2nd Attached Photo) */}
+            <div className="bg-white rounded-2xl border border-brand-border p-3 space-y-2.5 shadow-sm w-full max-w-full">
+                {/* Row 1: First 9 Tabs - Spreading Full Width */}
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-9 gap-2 w-full border-b border-brand-border pb-2.5">
+                    {allCommissionTabs.slice(0, 9).map((tabItem) => {
+                        const isActive = activeTab === tabItem.id;
                         return (
                             <button
-                                key={cat.id}
-                                onClick={() => handleTabChange(cat.defaultTab)}
-                                className={`flex-1 flex items-center justify-center gap-1.5 px-2 sm:px-2.5 py-2 rounded-lg text-xs xl:text-[13px] font-semibold whitespace-nowrap transition-all duration-150 cursor-pointer border-none min-w-0 ${
-                                    isSelected
-                                        ? 'bg-brand-primary text-white shadow-xs'
-                                        : 'bg-transparent text-slate-600 hover:text-slate-900 hover:bg-slate-100/90'
+                                key={tabItem.id}
+                                onClick={() => handleTabChange(tabItem.id)}
+                                className={`w-full py-2.5 px-2 rounded-xl text-[11px] xl:text-[12px] transition-all cursor-pointer border-none text-center font-bold flex items-center justify-center ${
+                                    isActive
+                                        ? 'bg-brand-primary text-white shadow-sm'
+                                        : 'bg-[#F1F5F9] hover:bg-slate-200 text-[#0F172A]'
                                 }`}
+                                title={tabItem.label}
                             >
-                                <Icon size={14} className={isSelected ? 'text-white shrink-0' : 'text-slate-400 shrink-0'} />
-                                <span className="truncate">{cat.label}</span>
-                                <span className={`px-1.5 py-0.5 rounded-full text-[10px] xl:text-[11px] font-bold shrink-0 ${
-                                    isSelected ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-500'
-                                }`}>
-                                    {cat.tabs.length}
-                                </span>
+                                <span className="truncate">{tabItem.label}</span>
+                            </button>
+                        );
+                    })}
+                </div>
+
+                {/* Row 2: Remaining 8 Tabs - Spreading Full Width */}
+                <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-2 w-full">
+                    {allCommissionTabs.slice(9).map((tabItem) => {
+                        const isActive = activeTab === tabItem.id;
+                        return (
+                            <button
+                                key={tabItem.id}
+                                onClick={() => handleTabChange(tabItem.id)}
+                                className={`w-full py-2.5 px-2 rounded-xl text-[11px] xl:text-[12px] transition-all cursor-pointer border-none text-center font-bold flex items-center justify-center ${
+                                    isActive
+                                        ? 'bg-brand-primary text-white shadow-sm'
+                                        : 'bg-[#F1F5F9] hover:bg-slate-200 text-[#0F172A]'
+                                }`}
+                                title={tabItem.label}
+                            >
+                                <span className="truncate">{tabItem.label}</span>
                             </button>
                         );
                     })}
                 </div>
             </div>
-
-            {/* Horizontal Sub-Tabs for Active Category */}
-            <UnderlineTabs
-                tabs={currentCategory.tabs}
-                activeTab={activeTab}
-                onTabChange={handleTabChange}
-            />
 
             {/* 1, 6, 8, 9: AGENT COMMISSION & LATEST AGENT COMMISSION */}
             {(activeTab === 'agent-commission' || activeTab === 'latest-agent-commission' || activeTab === 'new-agent-commission') && (

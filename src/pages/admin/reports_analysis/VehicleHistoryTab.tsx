@@ -177,73 +177,259 @@ export const VehicleHistoryTab: React.FC = () => {
     document.body.removeChild(link);
   };
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [tableSearch, setTableSearch] = useState('');
+
+  const displayRecords = useMemo(() => {
+    if (!tableSearch.trim()) return filteredRecords;
+    const q = tableSearch.toLowerCase();
+    return filteredRecords.filter(
+      (r) =>
+        r.regNo.toLowerCase().includes(q) ||
+        r.makeModel.toLowerCase().includes(q) ||
+        r.policyNo.toLowerCase().includes(q) ||
+        r.insurer.toLowerCase().includes(q)
+    );
+  }, [filteredRecords, tableSearch]);
+
+  const totalPages = Math.max(1, Math.ceil(displayRecords.length / itemsPerPage));
+  const paginatedRecords = useMemo(() => {
+    const start = (currentPage - 1) * itemsPerPage;
+    return displayRecords.slice(start, start + itemsPerPage);
+  }, [displayRecords, currentPage, itemsPerPage]);
+
   return (
     <div className="space-y-4 w-full font-sans">
       {/* Top Filter Card */}
-      <div className="bg-white rounded-xl shadow-sm border border-brand-border overflow-hidden">
-        <div className="bg-[#0B5ED7] text-white px-5 py-2.5 text-[13.5px] font-semibold flex items-center shadow-xs">
-          <span className="mr-1 text-base font-serif">&raquo;</span>Vehicle History
-        </div>
+      <div className="bg-white rounded-[12px] shadow-[0_1px_2px_rgba(0,0,0,0.02)] border border-brand-border overflow-hidden">
 
-        <div className="p-5 sm:p-6">
-          <form onSubmit={handleView} className="flex flex-wrap items-center gap-5 sm:gap-8">
+        <div className="p-4 sm:p-5">
+          <form onSubmit={handleView} className="flex flex-wrap items-center gap-4 sm:gap-6">
             {/* Financial Year */}
-            <div className="flex items-center gap-3">
-              <label className="text-[13px] text-slate-800 font-bold whitespace-nowrap">
+            <div className="flex items-center gap-2.5">
+              <label className="text-[13px] text-slate-700 font-semibold whitespace-nowrap">
                 Financial Year
               </label>
-              <div className="relative">
-                <select
-                  value={financialYear}
-                  onChange={(e) => setFinancialYear(e.target.value)}
-                  className="px-4 py-1.5 bg-white border border-slate-300 rounded-full text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner appearance-none pr-8 cursor-pointer min-w-[140px]"
-                >
-                  <option value="2026-2027">2026-2027</option>
-                  <option value="2025-2026">2025-2026</option>
-                  <option value="2024-2025">2024-2025</option>
-                </select>
-                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-slate-500 text-xs">
-                  ▼
-                </div>
-              </div>
+              <select
+                value={financialYear}
+                onChange={(e) => setFinancialYear(e.target.value)}
+                className="px-3.5 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all cursor-pointer min-w-[140px]"
+              >
+                <option value="2026-2027">2026-2027</option>
+                <option value="2025-2026">2025-2026</option>
+                <option value="2024-2025">2024-2025</option>
+              </select>
             </div>
 
             {/* Registration No */}
-            <div className="flex items-center gap-3">
-              <label className="text-[13px] text-slate-800 font-bold whitespace-nowrap">
+            <div className="flex items-center gap-2.5">
+              <label className="text-[13px] text-slate-700 font-semibold whitespace-nowrap">
                 Registration No.
               </label>
               <input
                 type="text"
                 value={registrationNo}
                 onChange={(e) => setRegistrationNo(e.target.value)}
-                placeholder=""
-                className="w-40 px-3.5 py-1.5 bg-white border border-slate-300 rounded-[10px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner uppercase font-mono"
-              />
+                placeholder="e.g. MH-12"
+                className="w-40 px-3.5 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all uppercase font-mono"
+              >
+              </input>
             </div>
 
             {/* Policy No */}
-            <div className="flex items-center gap-3">
-              <label className="text-[13px] text-slate-800 font-bold whitespace-nowrap">
+            <div className="flex items-center gap-2.5">
+              <label className="text-[13px] text-slate-700 font-semibold whitespace-nowrap">
                 Policy No.
               </label>
               <input
                 type="text"
                 value={policyNo}
                 onChange={(e) => setPolicyNo(e.target.value)}
-                placeholder=""
-                className="w-44 px-3.5 py-1.5 bg-white border border-slate-300 rounded-[10px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner uppercase font-mono"
-              />
+                placeholder="e.g. POL-MOT"
+                className="w-44 px-3.5 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all font-mono"
+              >
+              </input>
             </div>
 
             {/* View Button */}
             <button
               type="submit"
-              className="px-7 py-2 bg-[#0B5ED7] hover:bg-blue-700 text-white rounded-md text-[13px] font-bold shadow-sm transition-all cursor-pointer border-none active:scale-[0.98] min-w-[76px]"
+              className="px-6 py-2 bg-brand-primary hover:bg-[#1D4ED8] text-white rounded-lg text-sm font-semibold shadow-xs transition-all cursor-pointer border-none h-[38px] flex items-center justify-center gap-2"
             >
-              View
+              <Eye size={15} />
+              <span>View</span>
             </button>
           </form>
+        </div>
+      </div>
+
+      {/* Table Container Card (Exact VehicleMaster Styling) */}
+      <div className="bg-white rounded-[12px] border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden flex flex-col w-full">
+        {/* Toolbar */}
+        <div className="p-4 bg-slate-50 border-b border-brand-border flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="relative w-full sm:w-[350px]">
+            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#94a3b8]" />
+            <input
+              type="text"
+              placeholder="Search Vehicle History..."
+              value={tableSearch}
+              onChange={(e) => {
+                setTableSearch(e.target.value);
+                setCurrentPage(1);
+              }}
+              className="w-full pl-9 pr-4 py-2 bg-white border border-slate-300 rounded-lg text-sm text-brand-navy placeholder-[#94a3b8] focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all h-[40px]"
+            />
+          </div>
+
+          <button
+            onClick={handleExport}
+            className="w-full sm:w-auto px-4 py-2 bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 rounded-lg font-semibold text-sm transition-all duration-200 cursor-pointer h-[40px] flex items-center justify-center gap-2 shadow-xs"
+          >
+            <Download size={16} />
+            <span>Export CSV</span>
+          </button>
+        </div>
+
+        {/* Table Content */}
+        <div className="overflow-x-auto w-full">
+          <table className="w-full text-left border-collapse min-w-[1000px]">
+            <thead>
+              <tr className="bg-brand-lightbg text-brand-navy text-[13px] font-semibold uppercase border-b border-brand-border whitespace-nowrap">
+                <th className="py-3 px-4 text-center w-16">SR. NO.</th>
+                <th className="py-3 px-4 font-mono">REGISTRATION NO</th>
+                <th className="py-3 px-4">MAKE & MODEL</th>
+                <th className="py-3 px-4 text-center">MFG YEAR</th>
+                <th className="py-3 px-4 font-mono">CHASSIS NO</th>
+                <th className="py-3 px-4">POLICY YEAR</th>
+                <th className="py-3 px-4 font-mono">POLICY NO</th>
+                <th className="py-3 px-4">INSURER</th>
+                <th className="py-3 px-4 text-right">PREMIUM</th>
+                <th className="py-3 px-4 text-center">CLAIM</th>
+                <th className="py-3 px-4 text-center">NCB %</th>
+                <th className="py-3 px-4 text-center">STATUS</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-brand-border text-[13px]">
+              {paginatedRecords.length === 0 ? (
+                <tr>
+                  <td colSpan={12} className="py-12 text-center text-slate-400 font-medium">
+                    No vehicle records found
+                  </td>
+                </tr>
+              ) : (
+                paginatedRecords.map((r, idx) => (
+                  <tr
+                    key={r.id}
+                    className="hover:bg-brand-mainbg h-[48px] transition-colors bg-white"
+                  >
+                    <td className="py-2.5 px-4 font-medium text-brand-primary text-center">
+                      {(currentPage - 1) * itemsPerPage + idx + 1}
+                    </td>
+                    <td className="py-2.5 px-4 font-mono font-bold text-slate-900">
+                      {r.regNo}
+                    </td>
+                    <td className="py-2.5 px-4 font-semibold text-slate-800">
+                      {r.makeModel}
+                    </td>
+                    <td className="py-2.5 px-4 text-center text-slate-600">
+                      {r.mfgYear}
+                    </td>
+                    <td className="py-2.5 px-4 font-mono text-[11px] text-slate-500">
+                      {r.chassisNo}
+                    </td>
+                    <td className="py-2.5 px-4 text-slate-600">
+                      {r.policyYear}
+                    </td>
+                    <td className="py-2.5 px-4 font-mono font-semibold text-brand-primary">
+                      {r.policyNo}
+                    </td>
+                    <td className="py-2.5 px-4 text-slate-700">
+                      {r.insurer}
+                    </td>
+                    <td className="py-2.5 px-4 text-right font-bold text-slate-900">
+                      {formatCurrency(r.premium)}
+                    </td>
+                    <td className="py-2.5 px-4 text-center">
+                      <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${
+                        r.claimFiled === 'Yes'
+                          ? 'bg-rose-50 text-rose-700 border border-rose-200'
+                          : 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                      }`}>
+                        {r.claimFiled}
+                      </span>
+                    </td>
+                    <td className="py-2.5 px-4 text-center font-bold text-slate-700">
+                      {r.ncb}%
+                    </td>
+                    <td className="py-2.5 px-4 text-center">
+                      <span className={`px-2.5 py-0.5 rounded-full text-xs font-semibold ${
+                        r.status.includes('Active')
+                          ? 'bg-blue-50 text-brand-primary border border-blue-200'
+                          : 'bg-slate-100 text-slate-600 border border-slate-200'
+                      }`}>
+                        {r.status}
+                      </span>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Pagination Footer (Exact VehicleMaster Styling) */}
+        <div className="p-4 bg-white border-t border-brand-border flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-[#64748b]">
+          <div className="flex items-center gap-2">
+            <span>Records per page:</span>
+            <select
+              value={itemsPerPage}
+              onChange={(e) => {
+                setItemsPerPage(Number(e.target.value));
+                setCurrentPage(1);
+              }}
+              className="bg-white border border-slate-300 rounded px-2 py-1 text-sm text-brand-navy focus:outline-none focus:border-brand-primary cursor-pointer"
+            >
+              <option value={10}>10</option>
+              <option value={20}>20</option>
+              <option value={50}>50</option>
+            </select>
+          </div>
+
+          <div>
+            Showing {displayRecords.length === 0 ? 0 : (currentPage - 1) * itemsPerPage + 1} -{' '}
+            {Math.min(currentPage * itemsPerPage, displayRecords.length)} of {displayRecords.length} records
+          </div>
+
+          <div className="flex items-center gap-1">
+            <button
+              onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+              disabled={currentPage === 1}
+              className="px-2.5 py-1 border border-slate-200 rounded text-slate-600 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer"
+            >
+              &lt;
+            </button>
+            {Array.from({ length: totalPages }).map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setCurrentPage(i + 1)}
+                className={`w-8 h-8 rounded flex items-center justify-center font-medium transition-colors cursor-pointer ${
+                  currentPage === i + 1
+                    ? 'bg-brand-primary text-white'
+                    : 'text-slate-600 hover:bg-slate-50'
+                }`}
+              >
+                {i + 1}
+              </button>
+            ))}
+            <button
+              onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+              disabled={currentPage === totalPages}
+              className="px-2.5 py-1 border border-slate-200 rounded text-slate-600 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer"
+            >
+              &gt;
+            </button>
+          </div>
         </div>
       </div>
     </div>

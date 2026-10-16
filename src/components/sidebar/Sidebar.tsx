@@ -4,7 +4,7 @@ import {
     LayoutDashboard, Database, Users, Briefcase, FileText, Settings,
     ChevronDown, ChevronRight, UserPlus, FileSpreadsheet, Building2,
     Shield, Map, MessageSquare, Download, Layers, UserCheck, Percent, BarChart2,
-    Smartphone, ShieldCheck, Landmark
+    Smartphone, ShieldCheck, Landmark, User, FileCheck, RefreshCw, Headphones
 } from 'lucide-react';
 import { useAuthContext } from '../../context/AuthContext';
 
@@ -28,7 +28,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
     // Group 8 — Other Modules
 
     type NavItem = { name: string; path: string; icon?: React.ElementType; matchPaths?: string[] };
-    type NavGroup = { title: string; icon: React.ElementType; children?: NavItem[]; path?: string };
+    type NavGroup = { title: string; icon: React.ElementType; children?: NavItem[]; path?: string; matchPaths?: string[] };
 
     const navGroups: NavGroup[] = isAdmin ? [
         {
@@ -125,14 +125,34 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
             title: 'OPERATIONS',
             icon: Briefcase,
             children: [
-                { name: 'Claims', path: '/operations/claims' },
-                { name: 'Renewal', path: '/operations/renewal' },
                 { name: 'Caliber Policy', path: '/operations/caliber-policy' },
                 { name: 'Sales', path: '/operations/sales' },
                 { name: 'POSP', path: '/operations/posp' },
-                { name: 'Business Master', path: '/operations/business-master' },
-                { name: 'Support', path: '/operations/support' },
             ]
+        },
+        {
+            title: 'BUSINESS MASTER',
+            icon: Building2,
+            path: '/operations/business-master',
+            matchPaths: ['/business-master']
+        },
+        {
+            title: 'SUPPORT',
+            icon: Headphones,
+            path: '/operations/support',
+            matchPaths: ['/support']
+        },
+        {
+            title: 'CLAIMS',
+            icon: FileCheck,
+            path: '/operations/claims',
+            matchPaths: ['/claims']
+        },
+        {
+            title: 'RENEWAL',
+            icon: RefreshCw,
+            path: '/operations/renewal',
+            matchPaths: ['/renewal']
         },
         {
             title: 'REPORTS',
@@ -164,10 +184,14 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
             path: '/app'
         },
         {
+            title: 'MY PAGE',
+            icon: User,
+            path: '/my-page'
+        },
+        {
             title: 'OTHER MODULES',
             icon: Layers,
             children: [
-                { name: 'My Page', path: '/other/my-page' },
                 { name: 'Download App', path: '/other/download' },
                 { name: 'Chat Board', path: '/other/chat' },
                 { name: 'Old Data', path: '/other/old-data' },
@@ -184,6 +208,13 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
 
     const isPathActive = (path: string) => location.pathname === path || (path !== '/' && location.pathname.startsWith(path));
 
+    const isGroupPathActive = (group: NavGroup) => {
+        if (!group.path) return false;
+        if (isPathActive(group.path)) return true;
+        if (group.matchPaths && group.matchPaths.some(p => isPathActive(p))) return true;
+        return false;
+    };
+
     const isChildActive = (child: NavItem) => {
         if (location.pathname === child.path) return true;
         if (child.matchPaths && child.matchPaths.some(p => location.pathname === p || location.pathname.startsWith(p))) {
@@ -198,7 +229,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
     const isGroupActive = (children?: NavItem[]) => children?.some(c => isChildActive(c));
 
     const [expandedGroups, setExpandedGroups] = useState<string[]>(() => {
-        const activeGroup = navGroups.find(g => isGroupActive(g.children) || (g.path && isPathActive(g.path)));
+        const activeGroup = navGroups.find(g => isGroupActive(g.children) || isGroupPathActive(g));
         return activeGroup ? [activeGroup.title] : [];
     });
 
@@ -279,13 +310,13 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
                                         to={group.path || '#'}
                                         onClick={() => { if (window.innerWidth < 768) setIsCollapsed(true); }}
                                         className={() => {
-                                            const active = group.path ? isPathActive(group.path) : false;
+                                            const active = isGroupPathActive(group);
                                             return `flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors group border-l-[3px] border-transparent ${active ? 'bg-brand-navydark text-white !border-brand-primary' : 'text-[#B8C7D9] hover:bg-brand-navydark hover:text-white'}`;
                                         }}
                                         title={isCollapsed ? group.title : ''}
                                     >
-                                        <Icon size={20} className={(group.path && isPathActive(group.path)) ? 'text-brand-primary' : 'text-[#8FA7C2] group-hover:text-white'} />
-                                        {!isCollapsed && <span className={`text-sm font-medium ${group.path && isPathActive(group.path) ? 'text-white' : 'text-[#B8C7D9]'}`}>{group.title}</span>}
+                                        <Icon size={20} className={isGroupPathActive(group) ? 'text-brand-primary' : 'text-[#8FA7C2] group-hover:text-white'} />
+                                        {!isCollapsed && <span className={`text-sm font-medium ${isGroupPathActive(group) ? 'text-white' : 'text-[#B8C7D9]'}`}>{group.title}</span>}
                                     </NavLink>
                                 )}
 

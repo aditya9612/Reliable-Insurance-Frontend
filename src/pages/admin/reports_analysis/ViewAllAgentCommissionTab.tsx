@@ -286,12 +286,7 @@ export const ViewAllAgentCommissionTab: React.FC = () => {
       {/* =========================================================================
           MAIN FILTER CARD (Matches legacy reliable-erp.com/Clerk/ViewAllAgentComm.aspx)
          ========================================================================= */}
-      <div className="bg-white rounded-[10px] p-6 sm:p-7 shadow-sm border border-slate-200/80">
-        {/* Blue Banner Header */}
-        <div className="bg-brand-primary text-white px-4 py-2.5 rounded-[6px] font-normal text-[15px] flex items-center shadow-xs mb-6">
-          <span className="mr-0.5 text-base font-serif">&raquo;</span>View All Agent Commissioners
-        </div>
-
+      <div className="bg-white rounded-[12px] p-6 shadow-[0_1px_2px_rgba(0,0,0,0.02)] border border-brand-border">
         <div className="space-y-6">
           {/* Row 1: Agent, Branch, From Date, To Date */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-end">
@@ -309,10 +304,10 @@ export const ViewAllAgentCommissionTab: React.FC = () => {
                   }}
                   className="w-4 h-4 text-brand-primary rounded border-slate-300 focus:ring-brand-primary cursor-pointer accent-brand-primary"
                 />
-                <label htmlFor="all-agents" className="text-[13px] text-slate-700 font-semibold cursor-pointer select-none">
+                <label htmlFor="all-agents" className="text-xs font-semibold text-slate-700 cursor-pointer select-none">
                   All
                 </label>
-                <label className="text-[13px] text-slate-700 font-semibold ml-3">
+                <label className="text-xs font-semibold text-slate-700 ml-3">
                   Agent
                 </label>
               </div>
@@ -322,7 +317,7 @@ export const ViewAllAgentCommissionTab: React.FC = () => {
                   value={selectedAgent}
                   disabled={allAgents}
                   onChange={(e) => setSelectedAgent(e.target.value)}
-                  className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary disabled:bg-slate-100 disabled:text-slate-400 transition-all shadow-inner cursor-pointer appearance-none pr-8"
+                  className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary disabled:bg-slate-100 disabled:text-slate-400 transition-all cursor-pointer appearance-none pr-8"
                 >
                   <option value="">--Select Agent Name--</option>
                   {agentsList.map(name => (
@@ -349,10 +344,10 @@ export const ViewAllAgentCommissionTab: React.FC = () => {
                   }}
                   className="w-4 h-4 text-brand-primary rounded border-slate-300 focus:ring-brand-primary cursor-pointer accent-brand-primary"
                 />
-                <label htmlFor="all-branches" className="text-[13px] text-slate-700 font-semibold cursor-pointer select-none">
+                <label htmlFor="all-branches" className="text-xs font-semibold text-slate-700 cursor-pointer select-none">
                   All
                 </label>
-                <label className="text-[13px] text-slate-700 font-semibold ml-3">
+                <label className="text-xs font-semibold text-slate-700 ml-3">
                   Branch
                 </label>
               </div>
@@ -362,7 +357,7 @@ export const ViewAllAgentCommissionTab: React.FC = () => {
                   value={selectedBranch}
                   disabled={allBranches}
                   onChange={(e) => setSelectedBranch(e.target.value)}
-                  className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary disabled:bg-slate-100 disabled:text-slate-400 transition-all shadow-inner cursor-pointer appearance-none pr-8"
+                  className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary disabled:bg-slate-100 disabled:text-slate-400 transition-all cursor-pointer appearance-none pr-8"
                 >
                   <option value="">--Select Branch Name--</option>
                   {branchesList.map(branch => (
@@ -377,23 +372,23 @@ export const ViewAllAgentCommissionTab: React.FC = () => {
 
             {/* From Date */}
             <div>
-              <label className="block text-[13px] text-slate-700 font-semibold mb-1.5">From Date</label>
+              <label className="block text-xs font-semibold text-slate-700 mb-1.5">From Date</label>
               <input
                 type="date"
                 value={fromDate}
                 onChange={(e) => setFromDate(e.target.value)}
-                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all"
               />
             </div>
 
             {/* To Date */}
             <div>
-              <label className="block text-[13px] text-slate-700 font-semibold mb-1.5">To Date</label>
+              <label className="block text-xs font-semibold text-slate-700 mb-1.5">To Date</label>
               <input
                 type="date"
                 value={toDate}
                 onChange={(e) => setToDate(e.target.value)}
-                className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all"
               />
             </div>
           </div>
@@ -402,12 +397,12 @@ export const ViewAllAgentCommissionTab: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 items-end">
             {/* Payment Type */}
             <div>
-              <label className="block text-[13px] text-slate-700 font-semibold mb-1.5">Payment Type</label>
+              <label className="block text-xs font-semibold text-slate-700 mb-1.5">Payment Type</label>
               <div className="relative">
                 <select
                   value={paymentType}
                   onChange={(e) => setPaymentType(e.target.value)}
-                  className="w-full px-4 py-2 bg-white border border-slate-300 rounded-[22px] text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner cursor-pointer appearance-none pr-8"
+                  className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all cursor-pointer appearance-none pr-8"
                 >
                   <option value="All">All</option>
                   <option value="Cash">Cash</option>
@@ -423,7 +418,7 @@ export const ViewAllAgentCommissionTab: React.FC = () => {
 
             {/* Status Radios (ALL, PAID, UNPAID) */}
             <div className="flex items-center gap-3.5 pb-2">
-              <label className="inline-flex items-center gap-1.5 text-[12.5px] font-bold text-slate-700 cursor-pointer select-none">
+              <label className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-700 cursor-pointer select-none">
                 <input
                   type="radio"
                   name="commStatus"
@@ -435,7 +430,7 @@ export const ViewAllAgentCommissionTab: React.FC = () => {
                 ALL
               </label>
 
-              <label className="inline-flex items-center gap-1.5 text-[12.5px] font-bold text-slate-700 cursor-pointer select-none">
+              <label className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-700 cursor-pointer select-none">
                 <input
                   type="radio"
                   name="commStatus"
@@ -447,7 +442,7 @@ export const ViewAllAgentCommissionTab: React.FC = () => {
                 PAID
               </label>
 
-              <label className="inline-flex items-center gap-1.5 text-[12.5px] font-bold text-slate-700 cursor-pointer select-none">
+              <label className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-700 cursor-pointer select-none">
                 <input
                   type="radio"
                   name="commStatus"
@@ -462,24 +457,24 @@ export const ViewAllAgentCommissionTab: React.FC = () => {
 
             {/* Total Amount Output */}
             <div>
-              <label className="block text-[13px] text-slate-700 font-semibold mb-1.5">Total Amount</label>
-              <div className="w-full px-4 py-2 bg-slate-100 border border-slate-300 rounded-[22px] text-[13px] font-bold text-slate-800 shadow-inner min-h-[38px] flex items-center">
+              <label className="block text-xs font-semibold text-slate-700 mb-1.5">Total Amount</label>
+              <div className="w-full px-3.5 py-2 bg-slate-100 border border-slate-300 rounded-lg text-sm font-bold text-slate-800 min-h-[38px] flex items-center font-mono">
                 {formatCurrency(totalAmount)}
               </div>
             </div>
 
             {/* Paid Amount Output */}
             <div>
-              <label className="block text-[13px] text-slate-700 font-semibold mb-1.5">Paid Amount</label>
-              <div className="w-full px-4 py-2 bg-emerald-50 border border-emerald-200 rounded-[22px] text-[13px] font-bold text-emerald-700 shadow-inner min-h-[38px] flex items-center">
+              <label className="block text-xs font-semibold text-slate-700 mb-1.5">Paid Amount</label>
+              <div className="w-full px-3.5 py-2 bg-emerald-50 border border-emerald-200 rounded-lg text-sm font-bold text-emerald-700 min-h-[38px] flex items-center font-mono">
                 {formatCurrency(paidAmount)}
               </div>
             </div>
 
             {/* Unpaid Amount Output */}
             <div>
-              <label className="block text-[13px] text-slate-700 font-semibold mb-1.5">Unpaid Amount</label>
-              <div className="w-full px-4 py-2 bg-rose-50 border border-rose-200 rounded-[22px] text-[13px] font-bold text-rose-700 shadow-inner min-h-[38px] flex items-center">
+              <label className="block text-xs font-semibold text-slate-700 mb-1.5">Unpaid Amount</label>
+              <div className="w-full px-3.5 py-2 bg-rose-50 border border-rose-200 rounded-lg text-sm font-bold text-rose-700 min-h-[38px] flex items-center font-mono">
                 {formatCurrency(unpaidAmount)}
               </div>
             </div>
@@ -490,7 +485,7 @@ export const ViewAllAgentCommissionTab: React.FC = () => {
             <button
               type="button"
               onClick={handleView}
-              className="px-6 py-2 bg-brand-primary hover:bg-blue-700 text-white rounded-md text-[13px] font-semibold shadow-sm transition-all cursor-pointer flex items-center gap-2 border-none active:scale-[0.98]"
+              className="px-5 py-2 bg-brand-primary hover:bg-[#1D4ED8] text-white rounded-lg text-sm font-semibold shadow-xs transition-all cursor-pointer flex items-center gap-2 border-none active:scale-[0.98]"
             >
               <Eye size={16} />
               <span>View</span>
@@ -499,16 +494,16 @@ export const ViewAllAgentCommissionTab: React.FC = () => {
             <button
               type="button"
               onClick={handleExportCSV}
-              className="px-6 py-2 bg-brand-primary hover:bg-blue-700 text-white rounded-md text-[13px] font-semibold shadow-sm transition-all cursor-pointer flex items-center gap-2 border-none active:scale-[0.98]"
+              className="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-sm font-semibold shadow-xs transition-all cursor-pointer flex items-center gap-2 border-none active:scale-[0.98]"
             >
               <Download size={16} />
-              <span>Export</span>
+              <span>Export CSV</span>
             </button>
 
             <button
               type="button"
               onClick={handleExportPDF}
-              className="px-6 py-2 bg-brand-primary hover:bg-blue-700 text-white rounded-md text-[13px] font-semibold shadow-sm transition-all cursor-pointer flex items-center gap-2 border-none active:scale-[0.98]"
+              className="px-5 py-2 bg-slate-700 hover:bg-slate-800 text-white rounded-lg text-sm font-semibold shadow-xs transition-all cursor-pointer flex items-center gap-2 border-none active:scale-[0.98]"
             >
               <Printer size={16} />
               <span>Export to PDF</span>
@@ -518,21 +513,14 @@ export const ViewAllAgentCommissionTab: React.FC = () => {
       </div>
 
       {/* =========================================================================
-          COMMISSION RESULTS TABLE CARD (With Blue Header Theme)
+          COMMISSION RESULTS TABLE CARD (With VehicleMaster Theme)
          ========================================================================= */}
-      <div className="bg-white rounded-[10px] shadow-sm border border-slate-200/80 overflow-hidden flex flex-col">
-        {/* Table Banner Header */}
-        <div className="bg-brand-primary text-white px-4 py-3 flex flex-wrap items-center justify-between gap-3">
-          <div className="flex items-center gap-2">
-            <span className="font-serif text-lg font-bold">&raquo;</span>
-            <span className="font-bold text-[14px] tracking-wide">
-              Agent Commission Grid ({filteredRecords.length} Records)
-            </span>
-          </div>
-
+      <div className="bg-white rounded-[12px] shadow-[0_1px_2px_rgba(0,0,0,0.02)] border border-brand-border overflow-hidden flex flex-col w-full">
+        {/* Table Search & Title Toolbar */}
+        <div className="p-4 bg-slate-50 border-b border-brand-border flex flex-col sm:flex-row items-center justify-between gap-4">
           {/* Table quick search */}
-          <div className="relative min-w-[240px]">
-            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+          <div className="relative w-full sm:w-[350px]">
+            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
             <input
               type="text"
               placeholder="Search agent, policy, branch..."
@@ -541,102 +529,108 @@ export const ViewAllAgentCommissionTab: React.FC = () => {
                 setSearchQuery(e.target.value);
                 setCurrentPage(1);
               }}
-              className="w-full pl-8 pr-3 py-1.5 text-xs bg-white text-slate-800 rounded-full border border-blue-300 focus:outline-none focus:ring-2 focus:ring-white"
+              className="w-full pl-9 pr-4 py-2 bg-white border border-slate-300 rounded-lg text-sm text-brand-navy placeholder-[#94a3b8] focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all h-[40px]"
             />
+          </div>
+
+          <div className="flex items-center gap-2">
+            <span className="text-xs bg-brand-primary/10 text-brand-primary px-2.5 py-1 rounded-full font-semibold">
+              {filteredRecords.length} Records
+            </span>
           </div>
         </div>
 
         {/* Responsive Table Scroll Container */}
         <div className="overflow-x-auto w-full min-w-0">
-          <table className="w-full text-left border-collapse text-[12.5px] min-w-[1300px]">
-            {/* Table Header with Blue Theme */}
+          <table className="w-full text-left border-collapse min-w-[1300px]">
+            {/* Table Header with VehicleMaster Blue Theme */}
             <thead>
-              <tr className="bg-brand-primary text-white font-bold text-[11.5px] tracking-wider uppercase border-b-2 border-blue-700 select-none">
-                <th className="py-3 px-3 text-center w-12 border-r border-white/20">SR</th>
-                <th className="py-3 px-3.5 border-r border-white/20">AGENT CODE & NAME</th>
-                <th className="py-3 px-3 border-r border-white/20">BRANCH</th>
-                <th className="py-3 px-3 border-r border-white/20">POLICY NO</th>
-                <th className="py-3 px-3.5 border-r border-white/20">INSURANCE COMPANY</th>
-                <th className="py-3 px-3 border-r border-white/20">SEGMENT</th>
-                <th className="py-3 px-3 text-center border-r border-white/20">PAYMENT TYPE</th>
-                <th className="py-3 px-3 text-right border-r border-white/20">GROSS PREM (₹)</th>
-                <th className="py-3 px-3 text-right border-r border-white/20">NET PREM (₹)</th>
-                <th className="py-3 px-2.5 text-center border-r border-white/20">OD %</th>
-                <th className="py-3 px-2.5 text-center border-r border-white/20">TP %</th>
-                <th className="py-3 px-3 text-right border-r border-white/20">COMM AMOUNT (₹)</th>
-                <th className="py-3 px-3 text-center border-r border-white/20">PAYOUT DATE</th>
-                <th className="py-3 px-3 text-center border-r border-white/20">STATUS</th>
-                <th className="py-3 px-3 text-center">ACTION</th>
+              <tr className="bg-brand-lightbg text-brand-navy text-[13px] font-semibold uppercase border-b border-brand-border whitespace-nowrap">
+                <th className="py-3 px-4 text-center w-14">SR. NO.</th>
+                <th className="py-3 px-4">AGENT CODE & NAME</th>
+                <th className="py-3 px-4">BRANCH</th>
+                <th className="py-3 px-4">POLICY NO</th>
+                <th className="py-3 px-4">INSURANCE COMPANY</th>
+                <th className="py-3 px-4">SEGMENT</th>
+                <th className="py-3 px-4 text-center">PAYMENT TYPE</th>
+                <th className="py-3 px-4 text-right">GROSS PREM (₹)</th>
+                <th className="py-3 px-4 text-right">NET PREM (₹)</th>
+                <th className="py-3 px-4 text-center">OD %</th>
+                <th className="py-3 px-4 text-center">TP %</th>
+                <th className="py-3 px-4 text-right">COMM AMOUNT (₹)</th>
+                <th className="py-3 px-4 text-center">PAYOUT DATE</th>
+                <th className="py-3 px-4 text-center">STATUS</th>
+                <th className="py-3 px-4 text-center w-20">ACTION</th>
               </tr>
             </thead>
 
-            <tbody className="divide-y divide-slate-200">
+            <tbody className="divide-y divide-brand-border text-[13px]">
               {paginatedRecords.length > 0 ? (
                 paginatedRecords.map((row, index) => {
                   const isPaid = row.status === 'Paid';
                   return (
                     <tr
                       key={row.id}
-                      className="hover:bg-blue-50/40 transition-colors odd:bg-white even:bg-slate-50/50"
+                      className="hover:bg-brand-mainbg h-[48px] transition-colors bg-white"
                     >
-                      <td className="py-3 px-3 text-center text-slate-500 font-medium">
+                      <td className="py-2.5 px-4 text-center font-medium text-brand-primary">
                         {(currentPage - 1) * itemsPerPage + index + 1}
                       </td>
 
-                      <td className="py-3 px-3.5">
-                        <div className="font-bold text-slate-900">{row.agentName}</div>
+                      <td className="py-2.5 px-4">
+                        <div className="font-semibold text-brand-navy">{row.agentName}</div>
                         <div className="text-[11px] font-mono text-brand-primary">
                           {row.agentCode} {row.mobile && `• ${row.mobile}`}
                         </div>
                       </td>
 
-                      <td className="py-3 px-3 text-slate-700 font-medium whitespace-nowrap">
+                      <td className="py-2.5 px-4 text-slate-700 font-medium whitespace-nowrap">
                         {row.branch}
                       </td>
 
-                      <td className="py-3 px-3 font-mono font-bold text-brand-primary whitespace-nowrap">
+                      <td className="py-2.5 px-4 font-mono font-bold text-brand-primary whitespace-nowrap">
                         {row.policyNo}
                       </td>
 
-                      <td className="py-3 px-3.5 text-slate-800 font-medium">
+                      <td className="py-2.5 px-4 text-slate-800 font-medium">
                         {row.company}
                       </td>
 
-                      <td className="py-3 px-3 text-slate-700 whitespace-nowrap">
+                      <td className="py-2.5 px-4 text-slate-700 whitespace-nowrap">
                         {row.segment}
                       </td>
 
-                      <td className="py-3 px-3 text-center">
+                      <td className="py-2.5 px-4 text-center">
                         <span className="inline-block px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-slate-100 text-slate-700 border border-slate-300">
                           {row.paymentType}
                         </span>
                       </td>
 
-                      <td className="py-3 px-3 text-right font-medium text-slate-700 whitespace-nowrap">
+                      <td className="py-2.5 px-4 text-right font-medium text-slate-700 font-mono whitespace-nowrap">
                         {formatCurrency(row.grossPremium)}
                       </td>
 
-                      <td className="py-3 px-3 text-right font-medium text-slate-700 whitespace-nowrap">
+                      <td className="py-2.5 px-4 text-right font-medium text-slate-700 font-mono whitespace-nowrap">
                         {formatCurrency(row.netPremium)}
                       </td>
 
-                      <td className="py-3 px-2.5 text-center font-bold text-indigo-700">
+                      <td className="py-2.5 px-4 text-center font-bold text-brand-primary">
                         {row.odComm}%
                       </td>
 
-                      <td className="py-3 px-2.5 text-center text-slate-600">
+                      <td className="py-2.5 px-4 text-center text-slate-600">
                         {row.tpComm}%
                       </td>
 
-                      <td className="py-3 px-3 text-right font-bold text-emerald-700 whitespace-nowrap">
+                      <td className="py-2.5 px-4 text-right font-bold text-emerald-700 font-mono whitespace-nowrap">
                         {formatCurrency(row.commAmount)}
                       </td>
 
-                      <td className="py-3 px-3 text-center text-slate-600 whitespace-nowrap">
+                      <td className="py-2.5 px-4 text-center text-slate-600 whitespace-nowrap">
                         {row.payoutDate}
                       </td>
 
-                      <td className="py-3 px-3 text-center whitespace-nowrap">
+                      <td className="py-2.5 px-4 text-center whitespace-nowrap">
                         <span
                           className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold border ${isPaid
                             ? 'bg-emerald-50 text-emerald-700 border-emerald-300'
@@ -647,13 +641,13 @@ export const ViewAllAgentCommissionTab: React.FC = () => {
                         </span>
                       </td>
 
-                      <td className="py-3 px-3 text-center">
+                      <td className="py-2.5 px-4 text-center">
                         <button
                           onClick={() => setSelectedPolicyDoc(row)}
-                          className="p-1.5 rounded-lg bg-blue-50 hover:bg-brand-primary text-brand-primary hover:text-white transition-colors cursor-pointer border-none"
+                          className="p-1.5 bg-brand-lightbg text-brand-primary hover:bg-[#E2E8F0] rounded-[6px] transition-colors cursor-pointer inline-flex items-center justify-center border-none"
                           title="View Details"
                         >
-                          <Eye size={14} />
+                          <Eye size={16} strokeWidth={1.5} />
                         </button>
                       </td>
                     </tr>
@@ -671,31 +665,63 @@ export const ViewAllAgentCommissionTab: React.FC = () => {
           </table>
         </div>
 
-        {/* Table Footer with Pagination */}
-        <div className="p-3.5 bg-slate-50 border-t border-slate-200 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-600">
-          <div>
-            Showing <span className="font-bold">{filteredRecords.length > 0 ? (currentPage - 1) * itemsPerPage + 1 : 0}</span> to{' '}
-            <span className="font-bold">{Math.min(currentPage * itemsPerPage, filteredRecords.length)}</span> of{' '}
-            <span className="font-bold">{filteredRecords.length}</span> records
+        {/* Standard Footer Pagination Bar matching VehicleMaster */}
+        <div className="p-4 bg-white border-t border-brand-border flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-2 text-sm text-brand-muted font-medium">
+            <span>Records per page:</span>
+            <select
+              value={itemsPerPage}
+              onChange={(e) => {
+                setItemsPerPage(Number(e.target.value));
+                setCurrentPage(1);
+              }}
+              className="border border-brand-border rounded px-2 py-1 text-sm bg-white text-brand-navy focus:outline-none focus:border-brand-primary"
+            >
+              <option value={10}>10</option>
+              <option value={25}>25</option>
+              <option value={50}>50</option>
+            </select>
           </div>
 
-          <div className="flex items-center gap-1.5">
+          <div className="text-sm text-brand-muted font-medium">
+            Showing {filteredRecords.length === 0 ? 0 : (currentPage - 1) * itemsPerPage + 1} - {Math.min(currentPage * itemsPerPage, filteredRecords.length)} of {filteredRecords.length} records
+          </div>
+
+          <div className="flex items-center gap-1">
             <button
-              disabled={currentPage === 1}
               onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-              className="px-3 py-1 bg-white border border-slate-300 rounded-md font-semibold text-slate-700 hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+              disabled={currentPage === 1}
+              className={`px-3 py-1 rounded text-sm font-medium border border-brand-border ${
+                currentPage === 1
+                  ? 'text-slate-300 cursor-not-allowed bg-slate-50'
+                  : 'text-brand-navy hover:bg-brand-mainbg cursor-pointer'
+              }`}
             >
-              Previous
+              &lt;
             </button>
-            <span className="px-2 font-bold text-slate-800">
-              Page {currentPage} of {totalPages}
-            </span>
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+              <button
+                key={page}
+                onClick={() => setCurrentPage(page)}
+                className={`px-3 py-1 rounded text-sm font-medium ${
+                  currentPage === page
+                    ? 'bg-brand-primary text-white'
+                    : 'text-brand-navy hover:bg-brand-mainbg border border-brand-border'
+                }`}
+              >
+                {page}
+              </button>
+            ))}
             <button
-              disabled={currentPage === totalPages}
               onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-              className="px-3 py-1 bg-white border border-slate-300 rounded-md font-semibold text-slate-700 hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+              disabled={currentPage === totalPages || totalPages === 0}
+              className={`px-3 py-1 rounded text-sm font-medium border border-brand-border ${
+                currentPage === totalPages || totalPages === 0
+                  ? 'text-slate-300 cursor-not-allowed bg-slate-50'
+                  : 'text-brand-navy hover:bg-brand-mainbg cursor-pointer'
+              }`}
             >
-              Next
+              &gt;
             </button>
           </div>
         </div>

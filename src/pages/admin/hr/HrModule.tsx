@@ -1,13 +1,24 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import PageHeader from '../../../components/page-header/PageHeader';
-import UnderlineTabs, { TabItem } from '../../../components/tabs/UnderlineTabs';
+import { TabItem } from '../../../components/tabs/UnderlineTabs';
 import ExecutiveAttendanceTab from './ExecutiveAttendanceTab';
 import StaffAttendanceTab from './StaffAttendanceTab';
 import HolidayMasterTab from './HolidayMasterTab';
 import EmployeeMasterTab from './EmployeeMasterTab';
 import ViewEmployeeTab from './ViewEmployeeTab';
 import SalaryProcessTab from './SalaryProcessTab';
+import EmployeePaymentTab from './EmployeePaymentTab';
+import SalarySlipTab from './SalarySlipTab';
+import EmployeeAdvanceTab from './EmployeeAdvanceTab';
+import ViewEmployeeAdvanceTab from './ViewEmployeeAdvanceTab';
+import LeaveManagementTab from './LeaveManagementTab';
+import LeaveTypeTab from './LeaveTypeTab';
+import ApplyLeaveTab from './ApplyLeaveTab';
+import LeaveReportTab from './LeaveReportTab';
+import OrganizationMasterTab from './OrganizationMasterTab';
+import DepartmentMasterTab from './DepartmentMasterTab';
+import DesignationMasterTab from './DesignationMasterTab';
 import {
     Search, Plus, Edit2, Trash2, X, CheckCircle2, Clock, Calendar,
     DollarSign, CreditCard, Building, User, Users, FileText, Check,
@@ -119,10 +130,6 @@ const HrModule: React.FC = () => {
     const activeTab = (tab && allHrTabs.some(t => t.id === tab))
         ? (tab as HrSubTab)
         : 'executive-attendance';
-
-    const currentCategory = hrCategories.find(c =>
-        c.tabs.some(t => t.id === activeTab)
-    ) || hrCategories[0];
 
     const handleTabChange = (newTabId: string) => {
         navigate(`/hr/${newTabId}`);
@@ -504,41 +511,50 @@ const HrModule: React.FC = () => {
                 }
             />
 
-            {/* HR Category Navigation Bar (Page Top Side) */}
-            <div className="bg-white p-2 sm:p-2.5 rounded-xl border border-brand-border/80 shadow-xs flex items-center justify-between gap-3 overflow-x-auto">
-                <div className="flex items-center gap-1.5 min-w-max">
-                    {hrCategories.map(cat => {
-                        const isSelected = cat.id === currentCategory.id;
-                        const Icon = cat.icon;
+            {/* 2-Row Full-Width Sub-Tabs Navigation — Exact Policy Master UI */}
+            <div className="bg-white rounded-2xl border border-brand-border p-3 space-y-2.5 shadow-sm w-full max-w-full">
+                {/* Row 1: First 9 Tabs - Spreading Full Width with Separation Line */}
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-9 gap-2 w-full border-b border-brand-border pb-2.5">
+                    {allHrTabs.slice(0, 9).map((tabItem) => {
+                        const isActive = activeTab === tabItem.id;
                         return (
                             <button
-                                key={cat.id}
-                                onClick={() => handleTabChange(cat.defaultTab)}
-                                className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-[13px] font-semibold whitespace-nowrap transition-all duration-150 cursor-pointer border-none ${
-                                    isSelected
-                                        ? 'bg-brand-primary text-white shadow-xs'
-                                        : 'bg-transparent text-slate-600 hover:text-slate-900 hover:bg-slate-100/90'
+                                key={tabItem.id}
+                                onClick={() => handleTabChange(tabItem.id)}
+                                className={`w-full py-2.5 px-2 rounded-xl text-[11px] xl:text-[12px] transition-all cursor-pointer border-none text-center font-bold flex items-center justify-center ${
+                                    isActive
+                                        ? 'bg-brand-primary text-white shadow-sm'
+                                        : 'bg-[#F1F5F9] hover:bg-slate-200 text-[#0F172A]'
                                 }`}
+                                title={tabItem.label}
                             >
-                                <Icon size={15} className={isSelected ? 'text-white' : 'text-slate-400'} />
-                                <span>{cat.label}</span>
-                                <span className={`px-1.5 py-0.5 rounded-full text-[11px] font-bold ${
-                                    isSelected ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-500'
-                                }`}>
-                                    {cat.tabs.length}
-                                </span>
+                                <span className="truncate">{tabItem.label}</span>
+                            </button>
+                        );
+                    })}
+                </div>
+
+                {/* Row 2: Remaining 8 Tabs - Spreading Full Width */}
+                <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-2 w-full">
+                    {allHrTabs.slice(9).map((tabItem) => {
+                        const isActive = activeTab === tabItem.id;
+                        return (
+                            <button
+                                key={tabItem.id}
+                                onClick={() => handleTabChange(tabItem.id)}
+                                className={`w-full py-2.5 px-2 rounded-xl text-[11px] xl:text-[12px] transition-all cursor-pointer border-none text-center font-bold flex items-center justify-center ${
+                                    isActive
+                                        ? 'bg-brand-primary text-white shadow-sm'
+                                        : 'bg-[#F1F5F9] hover:bg-slate-200 text-[#0F172A]'
+                                }`}
+                                title={tabItem.label}
+                            >
+                                <span className="truncate">{tabItem.label}</span>
                             </button>
                         );
                     })}
                 </div>
             </div>
-
-            {/* Horizontal Sub-Tabs for Active Category */}
-            <UnderlineTabs
-                tabs={currentCategory.tabs}
-                activeTab={activeTab}
-                onTabChange={handleTabChange}
-            />
 
             {/* 1: EXECUTIVE ATTENDANCE */}
             {activeTab === 'executive-attendance' && (
@@ -557,60 +573,7 @@ const HrModule: React.FC = () => {
 
             {/* 4: EMPLOYEE PAYMENT */}
             {activeTab === 'employee-payment' && (
-                <div key={activeTab} className="tab-transition-wrapper space-y-4">
-                    <div className="bg-white rounded-[12px] border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden flex flex-col w-full min-w-0">
-                        <div className="p-4 bg-white border-b border-brand-border flex flex-col sm:flex-row items-center justify-between gap-4">
-                            <div className="relative w-full sm:w-80">
-                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-brand-primary" size={18} />
-                                <input
-                                    type="text"
-                                    placeholder="Search batch, bank, disbursement..."
-                                    value={searchQuery}
-                                    onChange={(e) => setSearchQuery(e.target.value)}
-                                    className="w-full pl-9 pr-4 py-2 bg-white border border-brand-border rounded-[8px] text-[14px] text-brand-navy placeholder-[#66809F] focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all"
-                                />
-                            </div>
-                            <div className="text-sm text-brand-muted font-medium">
-                                Payment Batches: <span className="font-semibold text-brand-navy">{paymentDisbursements.length}</span>
-                            </div>
-                        </div>
-
-                        <div className="w-full overflow-hidden min-w-0">
-                            <table className="w-full text-left border-collapse table-fixed">
-                                <thead>
-                                    <tr className="bg-brand-lightbg text-brand-navy text-[13px] font-semibold uppercase border-b border-brand-border">
-                                        <th className="py-3 px-3 w-[15%]">BATCH ID</th>
-                                        <th className="py-3 px-3 w-[14%]">TOTAL EMPLOYEES</th>
-                                        <th className="py-3 px-3 w-[14%]">TOTAL AMOUNT</th>
-                                        <th className="py-3 px-3 w-[12%]">PAYMENT DATE</th>
-                                        <th className="py-3 px-3 w-[16%]">DISBURSEMENT MODE</th>
-                                        <th className="py-3 px-3 w-[13%]">BANK</th>
-                                        <th className="py-3 px-3 text-center w-[16%]">STATUS</th>
-                                    </tr>
-                                </thead>
-                                <tbody className="divide-y divide-brand-border text-[13px]">
-                                    {paymentDisbursements
-                                        .filter(p => !searchQuery || p.batchId.toLowerCase().includes(searchQuery.toLowerCase()) || p.bank.toLowerCase().includes(searchQuery.toLowerCase()))
-                                        .map(p => (
-                                            <tr key={p.id} className="hover:bg-brand-mainbg h-[52px] transition-colors bg-white">
-                                                <td className="py-2.5 px-3 font-mono text-xs font-semibold text-brand-primary whitespace-nowrap">{p.batchId}</td>
-                                                <td className="py-2.5 px-3 font-medium text-brand-navy text-xs">{p.totalEmployees} Employees</td>
-                                                <td className="py-2.5 px-3 font-bold text-brand-navy text-xs font-mono">{p.totalAmount}</td>
-                                                <td className="py-2.5 px-3 text-xs text-brand-muted whitespace-nowrap">{p.payDate}</td>
-                                                <td className="py-2.5 px-3 text-xs font-medium text-brand-navy truncate" title={p.mode}>{p.mode}</td>
-                                                <td className="py-2.5 px-3 text-xs font-semibold text-brand-navy truncate" title={p.bank}>{p.bank}</td>
-                                                <td className="py-2.5 px-3 text-center">
-                                                    <span className="inline-block px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-100 text-emerald-800 whitespace-nowrap">
-                                                        {p.status}
-                                                    </span>
-                                                </td>
-                                            </tr>
-                                        ))}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
+                <EmployeePaymentTab />
             )}
 
             {/* 5: HOLIDAY MASTER */}
@@ -630,620 +593,52 @@ const HrModule: React.FC = () => {
 
             {/* 8: LEAVE MANAGEMENT */}
             {activeTab === 'leave-management' && (
-                <div key={activeTab} className="tab-transition-wrapper space-y-4">
-                    <div className="bg-white rounded-[12px] border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden flex flex-col w-full min-w-0">
-                        <div className="p-4 bg-white border-b border-brand-border flex flex-col sm:flex-row items-center justify-between gap-4">
-                            <h4 className="font-bold text-brand-navy text-sm">Leave Applications & Approval Queue</h4>
-                            <button onClick={() => setModalType('APPLY_LEAVE')} className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-brand-primary text-white rounded-[8px] text-xs font-semibold hover:bg-[#1D4ED8] transition-colors cursor-pointer border-none shadow-sm">
-                                <Plus size={14} /> Apply Leave
-                            </button>
-                        </div>
-
-                        <div className="w-full overflow-hidden min-w-0">
-                            <table className="w-full text-left border-collapse table-fixed">
-                                <thead>
-                                    <tr className="bg-brand-lightbg text-brand-navy text-[13px] font-semibold uppercase border-b border-brand-border">
-                                        <th className="py-3 px-3 w-[9%]">EMP CODE</th>
-                                        <th className="py-3 px-3 w-[15%]">EMPLOYEE NAME</th>
-                                        <th className="py-3 px-3 w-[13%]">LEAVE TYPE</th>
-                                        <th className="py-3 px-3 w-[9%]">FROM</th>
-                                        <th className="py-3 px-3 w-[9%]">TO</th>
-                                        <th className="py-3 px-3 text-center w-[6%]">DAYS</th>
-                                        <th className="py-3 px-3 w-[14%]">REASON</th>
-                                        <th className="py-3 px-3 text-center w-[10%]">STATUS</th>
-                                        <th className="py-3 px-3 text-center w-[15%]">ACTION</th>
-                                    </tr>
-                                </thead>
-                                <tbody className="divide-y divide-brand-border text-[13px]">
-                                    {leaveApplications.map(l => (
-                                        <tr key={l.id} className="hover:bg-brand-mainbg h-[52px] transition-colors bg-white">
-                                            <td className="py-2.5 px-3 font-mono text-xs text-brand-primary font-medium whitespace-nowrap">{l.empCode}</td>
-                                            <td className="py-2.5 px-3 font-medium text-brand-navy truncate text-xs" title={l.name}>{l.name}</td>
-                                            <td className="py-2.5 px-3 text-brand-navy font-medium truncate text-xs" title={l.leaveType}>{l.leaveType}</td>
-                                            <td className="py-2.5 px-3 text-xs font-mono text-brand-muted whitespace-nowrap">{l.from}</td>
-                                            <td className="py-2.5 px-3 text-xs font-mono text-brand-muted whitespace-nowrap">{l.to}</td>
-                                            <td className="py-2.5 px-3 text-center font-bold text-brand-navy text-xs">{l.days}</td>
-                                            <td className="py-2.5 px-3 text-xs text-brand-muted truncate max-w-0" title={l.reason}>{l.reason}</td>
-                                            <td className="py-2.5 px-3 text-center">
-                                                <span className={`inline-block px-2.5 py-0.5 rounded-full text-[11px] font-semibold whitespace-nowrap ${l.status === 'APPROVED' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}`}>
-                                                    {l.status}
-                                                </span>
-                                            </td>
-                                            <td className="py-2.5 px-3 text-center">
-                                                {l.status === 'PENDING' ? (
-                                                    <div className="inline-flex items-center justify-center gap-1.5 whitespace-nowrap">
-                                                        <button onClick={() => { setLeaveApplications(prev => prev.map(x => x.id === l.id ? { ...x, status: 'APPROVED' } : x)); showToast(`Leave for ${l.name} approved.`); }} className="px-2.5 py-1 text-xs font-semibold bg-emerald-50 text-emerald-700 hover:bg-emerald-100 rounded-[6px] border border-emerald-200 cursor-pointer transition-colors whitespace-nowrap">
-                                                            Approve
-                                                        </button>
-                                                        <button onClick={() => { setLeaveApplications(prev => prev.map(x => x.id === l.id ? { ...x, status: 'REJECTED' } : x)); showToast(`Leave for ${l.name} rejected.`); }} className="px-2.5 py-1 text-xs font-semibold bg-rose-50 text-rose-700 hover:bg-rose-100 rounded-[6px] border border-rose-200 cursor-pointer transition-colors whitespace-nowrap">
-                                                            Reject
-                                                        </button>
-                                                    </div>
-                                                ) : (
-                                                    <span className="inline-block px-2.5 py-0.5 text-xs text-brand-muted font-medium bg-slate-50 rounded-[4px]">
-                                                        Done
-                                                    </span>
-                                                )}
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
+                <LeaveManagementTab />
             )}
 
             {/* 16: APPLY LEAVE */}
             {activeTab === 'apply-leave' && (
-                <div key={activeTab} className="tab-transition-wrapper space-y-4">
-                    {/* Leave Quota Overview Cards */}
-                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 w-full min-w-0">
-                        <div className="bg-white p-4 rounded-[12px] border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] min-w-0">
-                            <div className="text-xs font-semibold text-brand-muted uppercase">Casual Leave (CL)</div>
-                            <div className="text-2xl font-bold text-brand-navy mt-1">8 <span className="text-xs text-emerald-600 font-normal">/ 12 Days Left</span></div>
-                        </div>
-                        <div className="bg-white p-4 rounded-[12px] border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] min-w-0">
-                            <div className="text-xs font-semibold text-brand-muted uppercase">Sick Leave (SL)</div>
-                            <div className="text-2xl font-bold text-brand-navy mt-1">8 <span className="text-xs text-emerald-600 font-normal">/ 10 Days Left</span></div>
-                        </div>
-                        <div className="bg-white p-4 rounded-[12px] border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] min-w-0">
-                            <div className="text-xs font-semibold text-brand-muted uppercase">Privilege Leave (PL)</div>
-                            <div className="text-2xl font-bold text-brand-navy mt-1">14 <span className="text-xs text-emerald-600 font-normal">/ 18 Days Left</span></div>
-                        </div>
-                        <div className="bg-white p-4 rounded-[12px] border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] min-w-0">
-                            <div className="text-xs font-semibold text-brand-muted uppercase">Loss of Pay (LOP)</div>
-                            <div className="text-2xl font-bold text-brand-primary mt-1">0 <span className="text-xs text-brand-muted font-normal">Days Taken</span></div>
-                        </div>
-                    </div>
-
-                    <div className="bg-white rounded-[12px] border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden flex flex-col w-full min-w-0">
-                        <div className="p-4 bg-white border-b border-brand-border flex flex-col sm:flex-row items-center justify-between gap-4">
-                            <h4 className="font-bold text-brand-navy text-sm">Submitted Applications & Leave History</h4>
-                            <button onClick={() => setModalType('APPLY_LEAVE')} className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-brand-primary text-white rounded-[8px] text-xs font-semibold hover:bg-[#1D4ED8] transition-colors cursor-pointer border-none shadow-sm">
-                                <Plus size={14} /> New Leave Request
-                            </button>
-                        </div>
-
-                        <div className="w-full overflow-hidden min-w-0">
-                            <table className="w-full text-left border-collapse table-fixed">
-                                <thead>
-                                    <tr className="bg-brand-lightbg text-brand-navy text-[13px] font-semibold uppercase border-b border-brand-border">
-                                        <th className="py-3 px-3 w-[10%]">EMP CODE</th>
-                                        <th className="py-3 px-3 w-[16%]">EMPLOYEE NAME</th>
-                                        <th className="py-3 px-3 w-[14%]">LEAVE TYPE</th>
-                                        <th className="py-3 px-3 w-[10%]">FROM</th>
-                                        <th className="py-3 px-3 w-[10%]">TO</th>
-                                        <th className="py-3 px-3 text-center w-[7%]">DAYS</th>
-                                        <th className="py-3 px-3 w-[18%]">REASON</th>
-                                        <th className="py-3 px-3 text-center w-[15%]">STATUS</th>
-                                    </tr>
-                                </thead>
-                                <tbody className="divide-y divide-brand-border text-[13px]">
-                                    {leaveApplications.map(l => (
-                                        <tr key={l.id} className="hover:bg-brand-mainbg h-[52px] transition-colors bg-white">
-                                            <td className="py-2.5 px-3 font-mono text-xs text-brand-primary font-medium whitespace-nowrap">{l.empCode}</td>
-                                            <td className="py-2.5 px-3 font-medium text-brand-navy truncate text-xs" title={l.name}>{l.name}</td>
-                                            <td className="py-2.5 px-3 text-brand-navy font-medium truncate text-xs" title={l.leaveType}>{l.leaveType}</td>
-                                            <td className="py-2.5 px-3 text-xs font-mono text-brand-muted whitespace-nowrap">{l.from}</td>
-                                            <td className="py-2.5 px-3 text-xs font-mono text-brand-muted whitespace-nowrap">{l.to}</td>
-                                            <td className="py-2.5 px-3 text-center font-bold text-brand-navy text-xs">{l.days}</td>
-                                            <td className="py-2.5 px-3 text-xs text-brand-muted truncate max-w-0" title={l.reason}>{l.reason}</td>
-                                            <td className="py-2.5 px-3 text-center">
-                                                <span className={`inline-block px-2.5 py-0.5 rounded-full text-[11px] font-semibold whitespace-nowrap ${l.status === 'APPROVED' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}`}>
-                                                    {l.status}
-                                                </span>
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
+                <ApplyLeaveTab />
             )}
 
             {/* 17: LEAVE REPORT */}
             {activeTab === 'leave-report' && (
-                <div key={activeTab} className="tab-transition-wrapper space-y-4">
-                    {/* Summary Metrics */}
-                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 w-full min-w-0">
-                        <div className="bg-white p-4 rounded-[12px] border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] min-w-0">
-                            <div className="text-xs font-semibold text-brand-muted uppercase">Total Staff Members</div>
-                            <div className="text-2xl font-bold text-brand-navy mt-1">64</div>
-                        </div>
-                        <div className="bg-white p-4 rounded-[12px] border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] min-w-0">
-                            <div className="text-xs font-semibold text-brand-muted uppercase">Total Leaves Taken</div>
-                            <div className="text-2xl font-bold text-amber-600 mt-1">33 <span className="text-xs text-brand-muted font-normal">Days</span></div>
-                        </div>
-                        <div className="bg-white p-4 rounded-[12px] border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] min-w-0">
-                            <div className="text-xs font-semibold text-brand-muted uppercase">Available Pool</div>
-                            <div className="text-2xl font-bold text-emerald-600 mt-1">207 <span className="text-xs text-brand-muted font-normal">Days</span></div>
-                        </div>
-                        <div className="bg-white p-4 rounded-[12px] border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] min-w-0">
-                            <div className="text-xs font-semibold text-brand-muted uppercase">Loss of Pay (LOP) Cases</div>
-                            <div className="text-2xl font-bold text-brand-primary mt-1">1</div>
-                        </div>
-                    </div>
-
-                    <div className="bg-white rounded-[12px] border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden flex flex-col w-full min-w-0">
-                        <div className="p-4 bg-white border-b border-brand-border flex flex-col sm:flex-row items-center justify-between gap-4">
-                            <h4 className="font-bold text-brand-navy text-sm">Annual Leave Quota & Utilization Summary (FY 2026-27)</h4>
-                            <button onClick={() => showToast('Leave utilization report exported as CSV')} className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-slate-800 text-white rounded-[8px] text-xs font-semibold hover:bg-slate-900 transition-colors cursor-pointer border-none shadow-sm">
-                                <Download size={14} /> Export Report
-                            </button>
-                        </div>
-
-                        <div className="w-full overflow-hidden min-w-0">
-                            <table className="w-full text-left border-collapse table-fixed">
-                                <thead>
-                                    <tr className="bg-brand-lightbg text-brand-navy text-[13px] font-semibold uppercase border-b border-brand-border">
-                                        <th className="py-3 px-3 w-[10%]">EMP CODE</th>
-                                        <th className="py-3 px-3 w-[18%]">EMPLOYEE NAME</th>
-                                        <th className="py-3 px-3 w-[16%]">DEPARTMENT</th>
-                                        <th className="py-3 px-3 text-center w-[14%]">ANNUAL QUOTA</th>
-                                        <th className="py-3 px-3 text-center w-[14%]">LEAVES TAKEN</th>
-                                        <th className="py-3 px-3 text-center w-[14%]">BALANCE DAYS</th>
-                                        <th className="py-3 px-3 text-center w-[14%]">UTILIZATION</th>
-                                    </tr>
-                                </thead>
-                                <tbody className="divide-y divide-brand-border text-[13px]">
-                                    {leaveReports.map(r => (
-                                        <tr key={r.id} className="hover:bg-brand-mainbg h-[52px] transition-colors bg-white">
-                                            <td className="py-2.5 px-3 font-mono text-xs text-brand-primary font-medium whitespace-nowrap">{r.empCode}</td>
-                                            <td className="py-2.5 px-3 font-medium text-brand-navy truncate text-xs" title={r.name}>{r.name}</td>
-                                            <td className="py-2.5 px-3 text-xs text-brand-navy font-medium truncate" title={r.department}>{r.department}</td>
-                                            <td className="py-2.5 px-3 text-center font-bold text-brand-navy text-xs">{r.quota} Days</td>
-                                            <td className="py-2.5 px-3 text-center font-bold text-amber-600 text-xs">{r.taken} Days</td>
-                                            <td className="py-2.5 px-3 text-center font-bold text-emerald-700 text-xs">{r.balance} Days</td>
-                                            <td className="py-2.5 px-3 text-center">
-                                                <span className={`inline-block px-2.5 py-0.5 rounded-full text-[11px] font-semibold whitespace-nowrap ${r.status === 'HEALTHY' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}`}>
-                                                    {r.utilization} ({r.status})
-                                                </span>
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
+                <LeaveReportTab />
             )}
 
             {/* 9: LEAVE TYPE */}
             {activeTab === 'leave-type' && (
-                <div key={activeTab} className="tab-transition-wrapper space-y-4">
-                    <div className="bg-white rounded-[12px] border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden flex flex-col w-full min-w-0">
-                        <div className="w-full overflow-hidden min-w-0">
-                            <table className="w-full text-left border-collapse table-fixed">
-                                <thead>
-                                    <tr className="bg-brand-lightbg text-brand-navy text-[13px] font-semibold uppercase border-b border-brand-border">
-                                        <th className="py-3 px-3 w-[15%]">LEAVE CODE</th>
-                                        <th className="py-3 px-3 w-[35%]">LEAVE NAME</th>
-                                        <th className="py-3 px-3 text-center w-[16%]">DAYS PER YEAR</th>
-                                        <th className="py-3 px-3 text-center w-[17%]">CARRY FORWARD</th>
-                                        <th className="py-3 px-3 text-center w-[17%]">ENCASHABLE</th>
-                                    </tr>
-                                </thead>
-                                <tbody className="divide-y divide-brand-border text-[13px]">
-                                    {leaveTypes.map(lt => (
-                                        <tr key={lt.id} className="hover:bg-brand-mainbg h-[52px] transition-colors bg-white">
-                                            <td className="py-2.5 px-3 font-mono font-medium text-brand-primary text-xs whitespace-nowrap">{lt.code}</td>
-                                            <td className="py-2.5 px-3 font-medium text-brand-navy truncate text-xs" title={lt.name}>{lt.name}</td>
-                                            <td className="py-2.5 px-3 text-center font-bold text-brand-navy text-xs">{lt.daysPerYear}</td>
-                                            <td className="py-2.5 px-3 text-center">
-                                                <span className={`inline-block px-2 py-0.5 rounded text-[11px] font-semibold whitespace-nowrap ${lt.carryForward ? 'bg-emerald-50 text-emerald-700' : 'bg-slate-100 text-slate-600'}`}>
-                                                    {lt.carryForward ? 'Yes' : 'No'}
-                                                </span>
-                                            </td>
-                                            <td className="py-2.5 px-3 text-center">
-                                                <span className={`inline-block px-2 py-0.5 rounded text-[11px] font-semibold whitespace-nowrap ${lt.encashable ? 'bg-emerald-50 text-emerald-700' : 'bg-slate-100 text-slate-600'}`}>
-                                                    {lt.encashable ? 'Yes' : 'No'}
-                                                </span>
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
+                <LeaveTypeTab />
             )}
 
             {/* 10: ORGANIZATION MASTER */}
             {activeTab === 'organization-master' && (
-                <div key={activeTab} className="tab-transition-wrapper space-y-4">
-                    <div className="bg-white rounded-[12px] border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden flex flex-col w-full min-w-0">
-                        <div className="w-full overflow-hidden min-w-0">
-                            <table className="w-full text-left border-collapse table-fixed">
-                                <thead>
-                                    <tr className="bg-brand-lightbg text-brand-navy text-[13px] font-semibold uppercase border-b border-brand-border">
-                                        <th className="py-3 px-3 w-[10%]">CODE</th>
-                                        <th className="py-3 px-3 w-[24%]">ORGANIZATION LEGAL NAME</th>
-                                        <th className="py-3 px-3 w-[15%]">REGISTRATION / ROC NO</th>
-                                        <th className="py-3 px-3 w-[14%]">CIN NO</th>
-                                        <th className="py-3 px-3 w-[15%]">HEAD OFFICE</th>
-                                        <th className="py-3 px-3 text-center w-[10%]">BRANCHES</th>
-                                        <th className="py-3 px-3 text-center w-[12%]">STATUS</th>
-                                    </tr>
-                                </thead>
-                                <tbody className="divide-y divide-brand-border text-[13px]">
-                                    {organizations.map(org => (
-                                        <tr key={org.id} className="hover:bg-brand-mainbg h-[52px] transition-colors bg-white">
-                                            <td className="py-2.5 px-3 font-mono font-medium text-brand-primary text-xs whitespace-nowrap">{org.orgCode}</td>
-                                            <td className="py-2.5 px-3 font-semibold text-brand-navy truncate text-xs" title={org.orgName}>{org.orgName}</td>
-                                            <td className="py-2.5 px-3 font-mono text-xs text-brand-muted truncate" title={org.regNo}>{org.regNo}</td>
-                                            <td className="py-2.5 px-3 font-mono text-xs text-brand-muted truncate" title={org.cin}>{org.cin}</td>
-                                            <td className="py-2.5 px-3 text-xs text-brand-navy truncate" title={org.headOffice}>{org.headOffice}</td>
-                                            <td className="py-2.5 px-3 text-center font-bold text-brand-navy text-xs">{org.branchesCount}</td>
-                                            <td className="py-2.5 px-3 text-center">
-                                                <span className="inline-block px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-100 text-emerald-800 whitespace-nowrap">
-                                                    {org.status}
-                                                </span>
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
+                <OrganizationMasterTab />
             )}
 
             {/* 11: DEPARTMENT MASTER */}
             {activeTab === 'department-master' && (
-                <div key={activeTab} className="tab-transition-wrapper space-y-4">
-                    <div className="bg-white rounded-[12px] border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden flex flex-col w-full min-w-0">
-                        <div className="w-full overflow-hidden min-w-0">
-                            <table className="w-full text-left border-collapse table-fixed">
-                                <thead>
-                                    <tr className="bg-brand-lightbg text-brand-navy text-[13px] font-semibold uppercase border-b border-brand-border">
-                                        <th className="py-3 px-3 w-[12%]">CODE</th>
-                                        <th className="py-3 px-3 w-[28%]">DEPARTMENT NAME</th>
-                                        <th className="py-3 px-3 w-[24%]">FUNCTIONAL HEAD</th>
-                                        <th className="py-3 px-3 text-center w-[16%]">STAFF COUNT</th>
-                                        <th className="py-3 px-3 text-right pr-4 w-[20%]">BUDGET ALLOCATION</th>
-                                    </tr>
-                                </thead>
-                                <tbody className="divide-y divide-brand-border text-[13px]">
-                                    {departments.map(d => (
-                                        <tr key={d.id} className="hover:bg-brand-mainbg h-[52px] transition-colors bg-white">
-                                            <td className="py-2.5 px-3 font-mono font-medium text-brand-muted text-xs whitespace-nowrap">{d.code}</td>
-                                            <td className="py-2.5 px-3 font-semibold text-brand-navy truncate text-xs" title={d.name}>{d.name}</td>
-                                            <td className="py-2.5 px-3 text-brand-navy font-medium truncate text-xs" title={d.head}>{d.head}</td>
-                                            <td className="py-2.5 px-3 text-center font-bold text-brand-navy text-xs">{d.totalStaff}</td>
-                                            <td className="py-2.5 px-3 text-right pr-4 font-mono text-xs font-semibold text-brand-navy whitespace-nowrap">{d.budgetAllocation}</td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
+                <DepartmentMasterTab />
             )}
 
             {/* 12: SALARY SLIP */}
-            {activeTab === 'salary-slip' && (() => {
-                const currentSlip = salarySlipDataMap[selectedSlipEmpCode] || salarySlipDataMap['EMP0014'];
-                const totalEarnings = currentSlip.basic + currentSlip.hra + currentSlip.specialAllowance + currentSlip.conveyance + currentSlip.medical;
-                const totalDeductions = currentSlip.pf + currentSlip.pt + currentSlip.tds + currentSlip.advanceRecovery;
-                const netSalary = totalEarnings - totalDeductions;
+            {activeTab === 'salary-slip' && (
+                <SalarySlipTab />
+            )}
 
-                return (
-                    <div key={activeTab} className="tab-transition-wrapper space-y-4 w-full min-w-0">
-                        {/* Control Toolbar */}
-                        <div className="bg-white rounded-[12px] border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] p-4 flex flex-col md:flex-row items-center justify-between gap-4 w-full min-w-0">
-                            <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
-                                <div className="flex items-center gap-2">
-                                    <span className="text-xs font-semibold text-brand-muted whitespace-nowrap">Employee:</span>
-                                    <select
-                                        value={selectedSlipEmpCode}
-                                        onChange={(e) => setSelectedSlipEmpCode(e.target.value)}
-                                        className="px-3 py-1.5 border border-brand-border rounded-[8px] text-xs font-semibold text-brand-navy bg-white focus:outline-none focus:border-brand-primary cursor-pointer"
-                                    >
-                                        {employees.map(emp => (
-                                            <option key={emp.empCode} value={emp.empCode}>
-                                                {emp.name} ({emp.empCode})
-                                            </option>
-                                        ))}
-                                    </select>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                    <span className="text-xs font-semibold text-brand-muted whitespace-nowrap">Pay Period:</span>
-                                    <select
-                                        value={selectedSlipMonth}
-                                        onChange={(e) => setSelectedSlipMonth(e.target.value)}
-                                        className="px-3 py-1.5 border border-brand-border rounded-[8px] text-xs font-semibold text-brand-navy bg-white focus:outline-none focus:border-brand-primary cursor-pointer"
-                                    >
-                                        <option value="September 2026">September 2026</option>
-                                        <option value="August 2026">August 2026</option>
-                                        <option value="July 2026">July 2026</option>
-                                    </select>
-                                </div>
-                            </div>
+            {/* 13: EMPLOYEE ADVANCE */}
+            {activeTab === 'employee-advance' && (
+                <EmployeeAdvanceTab />
+            )}
 
-                            <div className="flex items-center gap-2 w-full md:w-auto justify-end">
-                                <button
-                                    onClick={() => {
-                                        window.print();
-                                    }}
-                                    className="px-3.5 py-1.5 border border-brand-border bg-white hover:bg-brand-lightbg text-brand-navy text-xs font-semibold rounded-[8px] flex items-center gap-1.5 cursor-pointer shadow-sm transition-colors"
-                                >
-                                    <Printer size={14} /> Print Slip
-                                </button>
-                                <button
-                                    onClick={() => showToast(`Payslip for ${currentSlip.name} downloaded as PDF`)}
-                                    className="px-3.5 py-1.5 bg-brand-primary text-white text-xs font-semibold rounded-[8px] hover:bg-[#1D4ED8] flex items-center gap-1.5 cursor-pointer border-none shadow-sm transition-colors"
-                                >
-                                    <Download size={14} /> Download PDF
-                                </button>
-                                <button
-                                    onClick={() => showToast(`Payslip emailed to ${currentSlip.name} (${currentSlip.empCode})`)}
-                                    className="px-3.5 py-1.5 border border-brand-border bg-white hover:bg-brand-lightbg text-brand-navy text-xs font-semibold rounded-[8px] flex items-center gap-1.5 cursor-pointer shadow-sm transition-colors"
-                                >
-                                    <Send size={14} /> Send Email
-                                </button>
-                            </div>
-                        </div>
-
-                        {/* Full Width Payslip Document Card */}
-                        <div className="bg-white rounded-[12px] border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] p-6 lg:p-8 w-full min-w-0 space-y-6">
-                            {/* Company Branding & Payslip Cycle Header */}
-                            <div className="border-b border-brand-border pb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
-                                <div className="flex items-start gap-4">
-                                    <div className="w-12 h-12 rounded-[10px] bg-brand-primary/10 text-brand-primary flex items-center justify-center flex-shrink-0 font-bold border border-brand-primary/20">
-                                        <Building size={24} />
-                                    </div>
-                                    <div>
-                                        <h3 className="font-bold text-brand-navy text-lg leading-tight">Reliable Associates Insurance Brokers Pvt. Ltd.</h3>
-                                        <p className="text-xs text-brand-muted mt-0.5">Corporate Office: Unit 401-403, City Hub, Near ST Bus Stand, Baramati, Pune - 413102</p>
-                                        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1.5 text-[11px] text-brand-muted">
-                                            <span>IRDAI Reg. No: <strong className="text-brand-navy font-semibold">789</strong></span>
-                                            <span>•</span>
-                                            <span>CIN: <strong className="text-brand-navy font-semibold">U66010PN2018PTC178942</strong></span>
-                                            <span>•</span>
-                                            <span>GSTIN: <strong className="text-brand-navy font-semibold">27AABCR9812K1Z9</strong></span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="bg-brand-lightbg border border-brand-border rounded-[10px] p-3.5 md:text-right flex-shrink-0 space-y-1">
-                                    <div className="text-xs font-bold text-brand-primary uppercase tracking-wider">Salary Slip • {selectedSlipMonth}</div>
-                                    <div className="text-xs font-mono font-semibold text-brand-navy">Slip ID: PAY-2026-SEP-{currentSlip.empCode.slice(-4)}</div>
-                                    <div className="text-[11px] font-medium text-emerald-600 flex items-center md:justify-end gap-1">
-                                        <CheckCircle2 size={12} /> Disbursed on 01/10/2026
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Employee Metadata 4-Column Responsive Grid */}
-                            <div className="bg-brand-lightbg/70 border border-brand-border rounded-[10px] p-5">
-                                <h5 className="text-[11px] font-bold text-brand-muted uppercase tracking-wider mb-3">Employee Information</h5>
-                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs">
-                                    <div className="space-y-2">
-                                        <div><span className="text-brand-muted block text-[11px]">Employee Code</span><strong className="font-mono text-brand-navy text-xs">{currentSlip.empCode}</strong></div>
-                                        <div><span className="text-brand-muted block text-[11px]">Employee Name</span><strong className="text-brand-navy text-xs">{currentSlip.name}</strong></div>
-                                        <div><span className="text-brand-muted block text-[11px]">Date of Joining</span><span className="text-brand-navy font-medium text-xs">{currentSlip.doj}</span></div>
-                                    </div>
-                                    <div className="space-y-2">
-                                        <div><span className="text-brand-muted block text-[11px]">Designation</span><strong className="text-brand-navy text-xs">{currentSlip.designation}</strong></div>
-                                        <div><span className="text-brand-muted block text-[11px]">Department</span><span className="text-brand-navy font-medium text-xs">{currentSlip.department}</span></div>
-                                        <div><span className="text-brand-muted block text-[11px]">Branch Office</span><span className="text-brand-navy font-medium text-xs">{currentSlip.branch}</span></div>
-                                    </div>
-                                    <div className="space-y-2">
-                                        <div><span className="text-brand-muted block text-[11px]">Bank Name</span><strong className="text-brand-navy text-xs">{currentSlip.bankName}</strong></div>
-                                        <div><span className="text-brand-muted block text-[11px]">Account Number</span><strong className="font-mono text-brand-navy text-xs">{currentSlip.bankAcc}</strong></div>
-                                        <div><span className="text-brand-muted block text-[11px]">PAN / UAN</span><span className="font-mono text-brand-navy text-xs">{currentSlip.pan} / {currentSlip.uan}</span></div>
-                                    </div>
-                                    <div className="space-y-2">
-                                        <div><span className="text-brand-muted block text-[11px]">Total Days in Month</span><strong className="text-brand-navy text-xs">{currentSlip.workingDays} Days</strong></div>
-                                        <div><span className="text-brand-muted block text-[11px]">Payable Days</span><strong className="text-emerald-700 font-bold text-xs">{currentSlip.paidDays} Days</strong></div>
-                                        <div><span className="text-brand-muted block text-[11px]">Loss of Pay (LOP)</span><span className="text-brand-navy font-medium text-xs">{currentSlip.lopDays} Days</span></div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Earnings & Deductions Tables */}
-                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 text-sm">
-                                {/* Earnings */}
-                                <div className="border border-brand-border rounded-[10px] overflow-hidden flex flex-col justify-between">
-                                    <div>
-                                        <div className="bg-brand-lightbg px-4 py-3 font-bold text-xs text-brand-navy uppercase tracking-wider border-b border-brand-border flex items-center justify-between">
-                                            <span>Earnings (Allowances & Basic)</span>
-                                            <span className="text-[11px] text-brand-muted font-normal">Amount</span>
-                                        </div>
-                                        <div className="p-4 space-y-3 text-xs">
-                                            <div className="flex justify-between items-center py-1 border-b border-brand-border/40">
-                                                <span className="text-brand-navy font-medium">Basic Salary</span>
-                                                <span className="font-mono font-semibold text-brand-navy">₹ {currentSlip.basic.toLocaleString('en-IN')}</span>
-                                            </div>
-                                            <div className="flex justify-between items-center py-1 border-b border-brand-border/40">
-                                                <span className="text-brand-navy font-medium">House Rent Allowance (HRA)</span>
-                                                <span className="font-mono font-semibold text-brand-navy">₹ {currentSlip.hra.toLocaleString('en-IN')}</span>
-                                            </div>
-                                            <div className="flex justify-between items-center py-1 border-b border-brand-border/40">
-                                                <span className="text-brand-navy font-medium">Special Allowance</span>
-                                                <span className="font-mono font-semibold text-brand-navy">₹ {currentSlip.specialAllowance.toLocaleString('en-IN')}</span>
-                                            </div>
-                                            <div className="flex justify-between items-center py-1 border-b border-brand-border/40">
-                                                <span className="text-brand-navy font-medium">Conveyance Allowance</span>
-                                                <span className="font-mono font-semibold text-brand-navy">₹ {currentSlip.conveyance.toLocaleString('en-IN')}</span>
-                                            </div>
-                                            <div className="flex justify-between items-center py-1 text-brand-muted">
-                                                <span>Medical & Other Allowances</span>
-                                                <span className="font-mono">₹ 0</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="bg-brand-lightbg/80 border-t border-brand-border px-4 py-3 flex justify-between items-center font-bold text-brand-navy">
-                                        <span className="text-xs uppercase tracking-wide">Total Gross Earnings (A)</span>
-                                        <span className="font-mono text-sm text-brand-navy">₹ {totalEarnings.toLocaleString('en-IN')}</span>
-                                    </div>
-                                </div>
-
-                                {/* Deductions */}
-                                <div className="border border-brand-border rounded-[10px] overflow-hidden flex flex-col justify-between">
-                                    <div>
-                                        <div className="bg-brand-lightbg px-4 py-3 font-bold text-xs text-brand-navy uppercase tracking-wider border-b border-brand-border flex items-center justify-between">
-                                            <span>Deductions (Statutory & Adjustments)</span>
-                                            <span className="text-[11px] text-brand-muted font-normal">Amount</span>
-                                        </div>
-                                        <div className="p-4 space-y-3 text-xs">
-                                            <div className="flex justify-between items-center py-1 border-b border-brand-border/40">
-                                                <span className="text-brand-navy font-medium">Provident Fund (PF - Employee)</span>
-                                                <span className="font-mono font-semibold text-rose-600">₹ {currentSlip.pf.toLocaleString('en-IN')}</span>
-                                            </div>
-                                            <div className="flex justify-between items-center py-1 border-b border-brand-border/40">
-                                                <span className="text-brand-navy font-medium">Professional Tax (PT)</span>
-                                                <span className="font-mono font-semibold text-rose-600">₹ {currentSlip.pt.toLocaleString('en-IN')}</span>
-                                            </div>
-                                            <div className="flex justify-between items-center py-1 border-b border-brand-border/40">
-                                                <span className="text-brand-navy font-medium">TDS / Income Tax</span>
-                                                <span className="font-mono font-semibold text-rose-600">₹ {currentSlip.tds.toLocaleString('en-IN')}</span>
-                                            </div>
-                                            <div className="flex justify-between items-center py-1 border-b border-brand-border/40 text-brand-muted">
-                                                <span>Advance / EMI Recovery</span>
-                                                <span className="font-mono">₹ {currentSlip.advanceRecovery.toLocaleString('en-IN')}</span>
-                                            </div>
-                                            <div className="flex justify-between items-center py-1 text-brand-muted">
-                                                <span>Other Statutory Deductions</span>
-                                                <span className="font-mono">₹ 0</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="bg-rose-50/60 border-t border-rose-200 px-4 py-3 flex justify-between items-center font-bold text-rose-700">
-                                        <span className="text-xs uppercase tracking-wide">Total Deductions (B)</span>
-                                        <span className="font-mono text-sm text-rose-700">₹ {totalDeductions.toLocaleString('en-IN')}</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Net Salary Summary Banner */}
-                            <div className="p-5 bg-gradient-to-r from-emerald-50 via-teal-50 to-blue-50 border border-emerald-200 rounded-[10px] flex flex-col md:flex-row items-center justify-between gap-4 shadow-sm w-full">
-                                <div className="space-y-1">
-                                    <span className="text-xs font-bold text-emerald-950 uppercase tracking-wider block">Net Take Home Pay (A - B)</span>
-                                    <div className="text-sm font-semibold text-emerald-900">{currentSlip.amountInWords}</div>
-                                    <div className="text-[11px] text-emerald-700 font-medium">Disbursed via Direct Bank NEFT ({currentSlip.txnRef}) on 01/10/2026</div>
-                                </div>
-                                <div className="md:text-right flex-shrink-0">
-                                    <span className="text-[11px] text-emerald-800 font-semibold block uppercase tracking-wider">Net Disbursed Amount</span>
-                                    <span className="text-2xl sm:text-3xl font-black font-mono text-emerald-700">₹ {netSalary.toLocaleString('en-IN')}</span>
-                                </div>
-                            </div>
-
-                            {/* Disclaimer & Authorization Footer */}
-                            <div className="pt-4 border-t border-brand-border flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-brand-muted">
-                                <div>Note: This is a system-generated salary slip authenticated electronically and does not require a physical signature.</div>
-                                <div className="font-semibold text-brand-navy">Reliable Associates Insurance Brokers Pvt. Ltd. • Human Resources</div>
-                            </div>
-                        </div>
-                    </div>
-                );
-            })()}
-
-            {/* 13 & 14: EMPLOYEE ADVANCE & VIEW EMPLOYEE ADVANCE */}
-            {(activeTab === 'employee-advance' || activeTab === 'view-employee-advance') && (
-                <div key={activeTab} className="tab-transition-wrapper space-y-4">
-                    <div className="bg-white rounded-[12px] border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden flex flex-col w-full min-w-0">
-                        <div className="p-4 bg-white border-b border-brand-border flex flex-col sm:flex-row items-center justify-between gap-4">
-                            <h4 className="font-bold text-brand-navy text-sm">Salary Advance Records & EMI Recovery</h4>
-                            <button onClick={() => setModalType('ADVANCE')} className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-brand-primary text-white rounded-[8px] text-xs font-semibold hover:bg-[#1D4ED8] transition-colors cursor-pointer border-none shadow-sm">
-                                <Plus size={14} /> New Advance Request
-                            </button>
-                        </div>
-
-                        <div className="w-full overflow-hidden min-w-0">
-                            <table className="w-full text-left border-collapse table-fixed">
-                                <thead>
-                                    <tr className="bg-brand-lightbg text-brand-navy text-[13px] font-semibold uppercase border-b border-brand-border">
-                                        <th className="py-3 px-3 w-[10%]">EMP CODE</th>
-                                        <th className="py-3 px-3 w-[15%]">EMPLOYEE NAME</th>
-                                        <th className="py-3 px-3 text-right w-[11%]">ADVANCE AMOUNT</th>
-                                        <th className="py-3 px-3 w-[11%]">REQUEST DATE</th>
-                                        <th className="py-3 px-3 text-center w-[8%]">EMI MONTHS</th>
-                                        <th className="py-3 px-3 text-right w-[11%]">EMI / MONTH</th>
-                                        <th className="py-3 px-3 text-right w-[11%]">RECOVERED</th>
-                                        <th className="py-3 px-3 text-right w-[11%]">BALANCE</th>
-                                        <th className="py-3 px-3 text-center w-[12%]">STATUS</th>
-                                    </tr>
-                                </thead>
-                                <tbody className="divide-y divide-brand-border text-[13px]">
-                                    {employeeAdvances.map(a => (
-                                        <tr key={a.id} className="hover:bg-brand-mainbg h-[52px] transition-colors bg-white">
-                                            <td className="py-2.5 px-3 font-mono text-xs text-brand-primary font-medium whitespace-nowrap">{a.empCode}</td>
-                                            <td className="py-2.5 px-3 font-medium text-brand-navy truncate text-xs" title={a.name}>{a.name}</td>
-                                            <td className="py-2.5 px-3 text-right font-mono text-xs font-bold text-brand-navy whitespace-nowrap">₹ {a.advanceAmount.toLocaleString()}</td>
-                                            <td className="py-2.5 px-3 text-xs text-brand-muted whitespace-nowrap">{a.requestDate}</td>
-                                            <td className="py-2.5 px-3 text-center text-xs font-semibold text-brand-navy whitespace-nowrap">{a.emiCount} Mos</td>
-                                            <td className="py-2.5 px-3 text-right font-mono text-xs text-brand-navy whitespace-nowrap">₹ {a.emiAmount.toLocaleString()}</td>
-                                            <td className="py-2.5 px-3 text-right font-mono text-xs text-emerald-700 font-medium whitespace-nowrap">₹ {a.recoveredAmount.toLocaleString()}</td>
-                                            <td className="py-2.5 px-3 text-right font-mono text-xs text-rose-700 font-bold whitespace-nowrap">₹ {a.balance.toLocaleString()}</td>
-                                            <td className="py-2.5 px-3 text-center">
-                                                <span className={`inline-block px-2.5 py-0.5 rounded-full text-[11px] font-semibold whitespace-nowrap ${a.status === 'ACTIVE' ? 'bg-amber-100 text-amber-800' : 'bg-emerald-100 text-emerald-800'}`}>
-                                                    {a.status}
-                                                </span>
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
+            {/* 14: VIEW EMPLOYEE ADVANCE */}
+            {activeTab === 'view-employee-advance' && (
+                <ViewEmployeeAdvanceTab />
             )}
 
             {/* 15: DESIGNATION MASTER */}
             {activeTab === 'designation-master' && (
-                <div key={activeTab} className="tab-transition-wrapper space-y-4">
-                    <div className="bg-white rounded-[12px] border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden flex flex-col w-full min-w-0">
-                        <div className="w-full overflow-hidden min-w-0">
-                            <table className="w-full text-left border-collapse table-fixed">
-                                <thead>
-                                    <tr className="bg-brand-lightbg text-brand-navy text-[13px] font-semibold uppercase border-b border-brand-border">
-                                        <th className="py-3 px-3 w-[12%]">CODE</th>
-                                        <th className="py-3 px-3 w-[28%]">DESIGNATION TITLE</th>
-                                        <th className="py-3 px-3 w-[22%]">DEPARTMENT</th>
-                                        <th className="py-3 px-3 text-center w-[16%]">GRADE BAND</th>
-                                        <th className="py-3 px-3 w-[22%]">REPORTING AUTHORITY</th>
-                                    </tr>
-                                </thead>
-                                <tbody className="divide-y divide-brand-border text-[13px]">
-                                    {designations.map(d => (
-                                        <tr key={d.id} className="hover:bg-brand-mainbg h-[52px] transition-colors bg-white">
-                                            <td className="py-2.5 px-3 font-mono text-xs text-brand-muted font-medium whitespace-nowrap">{d.code}</td>
-                                            <td className="py-2.5 px-3 font-semibold text-brand-navy truncate text-xs" title={d.title}>{d.title}</td>
-                                            <td className="py-2.5 px-3 text-brand-navy font-medium truncate text-xs" title={d.department}>{d.department}</td>
-                                            <td className="py-2.5 px-3 text-center">
-                                                <span className="inline-block px-2.5 py-0.5 bg-brand-lightbg text-brand-navy rounded-[6px] font-semibold text-xs whitespace-nowrap">{d.grade}</span>
-                                            </td>
-                                            <td className="py-2.5 px-3 text-brand-muted text-xs truncate" title={d.reportingTo}>{d.reportingTo}</td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
+                <DesignationMasterTab />
             )}
 
             {/* MODALS */}

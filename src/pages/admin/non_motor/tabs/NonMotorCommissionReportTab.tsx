@@ -218,27 +218,27 @@ export const NonMotorCommissionReportTab: React.FC<NonMotorCommissionReportTabPr
       {/* ========================================================= */}
       {/* LEDGER TABLE IN BLUE THEME                                */}
       {/* ========================================================= */}
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+      <div className="bg-white rounded-[12px] border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse text-xs whitespace-nowrap">
-            <thead>
-              <tr className="bg-brand-primary text-white font-semibold uppercase tracking-wider text-[11px]">
-                <th className="py-2.5 px-3">Voucher No</th>
-                <th className="py-2.5 px-3">Date</th>
-                <th className="py-2.5 px-3">Policy No</th>
-                <th className="py-2.5 px-4 min-w-[200px]">Client / Insured</th>
-                <th className="py-2.5 px-3">Insurance Type</th>
-                <th className="py-2.5 px-3">Company</th>
-                <th className="py-2.5 px-3">Executive</th>
-                <th className="py-2.5 px-3 text-right">Gross Prem (₹)</th>
-                <th className="py-2.5 px-3 text-right">Comm %</th>
-                <th className="py-2.5 px-3 text-right">Comm (₹)</th>
-                <th className="py-2.5 px-3 text-right">TDS (₹)</th>
-                <th className="py-2.5 px-3 text-right font-bold">Net Payable (₹)</th>
-                <th className="py-2.5 px-3 text-center">Status</th>
+            <thead className="sticky top-0 z-10 bg-brand-lightbg text-brand-navy text-[12px] uppercase tracking-wider font-semibold select-none border-b border-brand-border">
+              <tr>
+                <th className="py-3 px-3 font-semibold text-brand-navy">Voucher No</th>
+                <th className="py-3 px-3 font-semibold text-brand-navy">Date</th>
+                <th className="py-3 px-3 font-semibold text-brand-navy">Policy No</th>
+                <th className="py-3 px-4 font-semibold text-brand-navy min-w-[200px]">Client / Insured</th>
+                <th className="py-3 px-3 font-semibold text-brand-navy">Insurance Type</th>
+                <th className="py-3 px-3 font-semibold text-brand-navy">Company</th>
+                <th className="py-3 px-3 font-semibold text-brand-navy">Executive</th>
+                <th className="py-3 px-3 text-right font-semibold text-brand-navy">Gross Prem (₹)</th>
+                <th className="py-3 px-3 text-right font-semibold text-brand-navy">Comm %</th>
+                <th className="py-3 px-3 text-right font-semibold text-brand-navy">Comm (₹)</th>
+                <th className="py-3 px-3 text-right font-semibold text-brand-navy">TDS (₹)</th>
+                <th className="py-3 px-3 text-right font-semibold text-brand-navy">Net Payable (₹)</th>
+                <th className="py-3 px-3 text-center font-semibold text-brand-navy">Status</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100 text-slate-700">
+            <tbody className="divide-y divide-brand-border text-slate-800 bg-white">
               {filteredReports.length === 0 ? (
                 <tr>
                   <td colSpan={13} className="py-8 text-center text-slate-400">
@@ -248,7 +248,7 @@ export const NonMotorCommissionReportTab: React.FC<NonMotorCommissionReportTabPr
                 </tr>
               ) : (
                 filteredReports.map(item => (
-                  <tr key={item.id} className="hover:bg-slate-50 transition-colors">
+                  <tr key={item.id} className="hover:bg-brand-mainbg transition-colors bg-white">
                     <td className="py-2.5 px-3 font-mono font-bold text-brand-primary">{item.voucherNo}</td>
                     <td className="py-2.5 px-3 text-slate-500 font-mono">{item.date}</td>
                     <td className="py-2.5 px-3 font-medium text-slate-900">{item.policyNo}</td>
