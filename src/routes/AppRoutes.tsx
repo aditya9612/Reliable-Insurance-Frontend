@@ -60,6 +60,7 @@ import OnlineAppRequest from '../pages/admin/operations/transactions/OnlineAppRe
 
 // Reports & Other Modules
 import MyPage from '../pages/admin/other_modules/MyPage'
+import OthersOutstanding from '../pages/admin/other_modules/OthersOutstanding'
 import MisReports from '../pages/admin/reports_analysis/MisReports'
 import Recon from '../pages/admin/reports_analysis/Recon'
 import TargetPage from '../pages/admin/reports_analysis/TargetPage'
@@ -156,6 +157,9 @@ const AppRoutes = () => {
 
             {/* Other Modules */}
             <Route path="/other/my-page" element={<MyPage />} />
+            <Route path="/other/outstanding" element={<OthersOutstanding />} />
+            <Route path="/others/outstanding" element={<Navigate to="/other/outstanding" replace />} />
+            <Route path="/others" element={<Navigate to="/other/outstanding" replace />} />
           </Route>
         </Route>
       </Routes>

@@ -4,7 +4,7 @@ import PageHeader from '../../../components/page-header/PageHeader';
 import {
     Search, X, Download, Filter, Eye, CheckCircle2, ArrowLeft,
     Calendar, Plus, RefreshCw, FileText, Check, AlertCircle, Trash2,
-    DollarSign, CreditCard, Clock, ChevronDown
+    DollarSign, CreditCard, Clock, ChevronDown, RotateCcw
 } from 'lucide-react';
 
 export type AccountSubTab =
@@ -62,7 +62,7 @@ interface PolicyRequestItem {
     agentName: string;
     empName: string;
     referenceType: string;
-    status: 'PENDING' | 'APPROVED' | 'REJECTED';
+    status: 'PENDING' | 'APPROVED' | 'REJECTED' | 'RETURNED TO CASH APPROVAL';
 }
 
 interface VoucherItem {
@@ -130,7 +130,18 @@ const AccountModule: React.FC = () => {
 
     const activeTab = (tab as AccountSubTab) || 'cash-approval';
 
+    // Auto-navigate to Other's Outstanding page when insurance-outstanding is selected
+    React.useEffect(() => {
+        if (tab === 'insurance-outstanding') {
+            navigate('/other/outstanding', { replace: true });
+        }
+    }, [tab, navigate]);
+
     const handleTabChange = (tabId: string) => {
+        if (tabId === 'insurance-outstanding') {
+            navigate('/other/outstanding');
+            return;
+        }
         navigate(`/accounts/${tabId}`);
     };
 
@@ -644,6 +655,1209 @@ const AccountModule: React.FC = () => {
         }
     };
 
+    // Paid Commission State (Matching ERP AgentCommisionPaymentReport.aspx)
+    interface PaidCommissionItem {
+        id: number;
+        transDate: string;
+        branchName: string;
+        agentName: string;
+        totalComm: number;
+        advAmt: number;
+        netAmount: number;
+        narration: string;
+        bankBranch: string;
+        ifscCode: string;
+        accountNo: string;
+        status: string;
+    }
+
+    const [paidCommissions] = useState<PaidCommissionItem[]>([
+        {
+            id: 1,
+            transDate: '01/10/2026',
+            branchName: 'SOLAPUR',
+            agentName: 'AJITKUMAR PRABHAKAR KATULE',
+            totalComm: 2387.00,
+            advAmt: 0.00,
+            netAmount: 2387.00,
+            narration: 'FEDERAL BANK - 3530 NEFT OK- PAID 14/10/2026- 14/10/2026',
+            bankBranch: 'KARMALA',
+            ifscCode: 'ICIC0003753',
+            accountNo: '375301501029',
+            status: 'PAID'
+        },
+        {
+            id: 2,
+            transDate: '01/10/2026',
+            branchName: 'PUNE',
+            agentName: 'AAYUSH UMESH TIJARE',
+            totalComm: 1380.00,
+            advAmt: 0.00,
+            netAmount: 1380.00,
+            narration: 'FEDERAL BANK - 3530 NEFT OK- PAID 06/10/2026- 06/10/2026',
+            bankBranch: 'PIMPARICHINCHWAD',
+            ifscCode: 'KKBK0000725',
+            accountNo: '2914128825',
+            status: 'PAID'
+        },
+        {
+            id: 3,
+            transDate: '01/10/2026',
+            branchName: 'GOA',
+            agentName: 'SIDDHARTH H GAD',
+            totalComm: 18995.00,
+            advAmt: 0.00,
+            netAmount: 18995.00,
+            narration: 'FEDERAL BANK - 3530 NEFT OK- PAID 10/10/2026- 10/10/2026',
+            bankBranch: 'NORTH GOA',
+            ifscCode: 'IDFB0041240',
+            accountNo: '10176133729',
+            status: 'PAID'
+        },
+        {
+            id: 4,
+            transDate: '02/10/2026',
+            branchName: 'GOA',
+            agentName: 'SIDDHARTH H GAD',
+            totalComm: 19267.00,
+            advAmt: 0.00,
+            netAmount: 19267.00,
+            narration: 'FEDERAL BANK - 3530 NEFT OK- PAID 10/10/2026- 10/10/2026',
+            bankBranch: 'NORTH GOA',
+            ifscCode: 'IDFB0041240',
+            accountNo: '10176133729',
+            status: 'PAID'
+        },
+        {
+            id: 5,
+            transDate: '02/10/2026',
+            branchName: 'BEED',
+            agentName: 'SANJAY PATIL',
+            totalComm: 4306.00,
+            advAmt: 0.00,
+            netAmount: 4306.00,
+            narration: 'FEDERAL BANK - 3530 NEFT OK- PAID 10/10/2026- 10/10/2026',
+            bankBranch: 'BEED',
+            ifscCode: 'HDFC0001784',
+            accountNo: '50200080890424',
+            status: 'PAID'
+        },
+        {
+            id: 6,
+            transDate: '03/10/2026',
+            branchName: 'BARAMATI',
+            agentName: 'SUNIL ARUN PANDHARE',
+            totalComm: 7520.00,
+            advAmt: 0.00,
+            netAmount: 7520.00,
+            narration: 'BOM BANK - 9081 NEFT OK- PAID 12/10/2026- 12/10/2026',
+            bankBranch: 'BARAMATI',
+            ifscCode: 'MAHB0000123',
+            accountNo: '60124890123',
+            status: 'PAID'
+        },
+        {
+            id: 7,
+            transDate: '04/10/2026',
+            branchName: 'KOLHAPUR',
+            agentName: 'PRAKASH KESHO DEOKAR',
+            totalComm: 11450.00,
+            advAmt: 0.00,
+            netAmount: 11450.00,
+            narration: 'HDFC BANK - 4452 NEFT OK- PAID 15/10/2026- 15/10/2026',
+            bankBranch: 'KOLHAPUR CITY',
+            ifscCode: 'HDFC0000180',
+            accountNo: '50100234891102',
+            status: 'PAID'
+        },
+        {
+            id: 8,
+            transDate: '05/10/2026',
+            branchName: 'SATARA',
+            agentName: 'SATARA STANDARD AGENT',
+            totalComm: 9840.00,
+            advAmt: 0.00,
+            netAmount: 9840.00,
+            narration: 'ICICI BANK - 1209 NEFT OK- PAID 15/10/2026- 15/10/2026',
+            bankBranch: 'SATARA',
+            ifscCode: 'ICIC0001045',
+            accountNo: '104501509923',
+            status: 'PAID'
+        }
+    ]);
+
+    const [paidBranch, setPaidBranch] = useState('');
+    const [paidFromDate, setPaidFromDate] = useState('01/10/2026');
+    const [paidToDate, setPaidToDate] = useState('16/10/2026');
+    const [paidSearchQuery, setPaidSearchQuery] = useState('');
+    const [paidPage, setPaidPage] = useState(1);
+    const [paidPerPage, setPaidPerPage] = useState(10);
+
+    const filteredPaidCommissions = paidCommissions.filter(item => {
+        if (paidBranch && item.branchName !== paidBranch) return false;
+        if (!paidSearchQuery.trim()) return true;
+        const q = paidSearchQuery.toLowerCase();
+        return (
+            item.agentName.toLowerCase().includes(q) ||
+            item.branchName.toLowerCase().includes(q) ||
+            item.accountNo.toLowerCase().includes(q) ||
+            item.ifscCode.toLowerCase().includes(q) ||
+            item.narration.toLowerCase().includes(q) ||
+            item.bankBranch.toLowerCase().includes(q)
+        );
+    });
+
+    const totalPaidCommCount = filteredPaidCommissions.length;
+    const totalPaidCommAmount = filteredPaidCommissions.reduce((acc, curr) => acc + curr.netAmount, 0);
+    const totalPaidPages = Math.ceil(filteredPaidCommissions.length / paidPerPage) || 1;
+    const paginatedPaidCommissions = filteredPaidCommissions.slice(
+        (paidPage - 1) * paidPerPage,
+        paidPage * paidPerPage
+    );
+
+    // Commission Recalculate State (Matching all columns from ERP AgentCommissionRecalculation.aspx)
+    interface CommissionRecalcItem {
+        id: number;
+        regNo: string;
+        branch: string;
+        agentName: string;
+        productType: string;
+        policyType: string;
+        insuranceCompany: string;
+        amount: number;
+        paymentType: string;
+        paymentDetails: string;
+        premiumAmount: number;
+        customerName: string;
+        referenceType: string;
+        odDiscount: number;
+        tpPremium: number;
+        odPremium: number;
+        netPremium: number;
+        policyNo: string;
+        date: string;
+        agentGridTp: number;
+        agentCommAmtTp: number;
+        tdsAmtTp: number;
+        netCommTp: number;
+        agentGridOd: number;
+        agentCommAmtOd: number;
+        tdsAmtOd: number;
+        netCommOd: number;
+        agentGridNet: number;
+        agentCommAmtNet: number;
+        tdsAmtNet: number;
+        manufacturingYear: string;
+        netCommNet: number;
+        fuelType: string;
+        brokerName: string;
+    }
+
+    const [recalcCommissions] = useState<CommissionRecalcItem[]>([
+        {
+            id: 1,
+            regNo: 'MH02DG1914',
+            branch: 'SANGLI',
+            agentName: 'RUTURAJ PRAKASH JADHAV',
+            productType: 'STP',
+            policyType: 'PRIVATE CAR',
+            insuranceCompany: 'TATA AIG GENERAL INSURANCE CO. LTD',
+            amount: 0.00,
+            paymentType: 'ONLINE TO INSURANCE COMPANY',
+            paymentDetails: 'NA',
+            premiumAmount: 5017.00,
+            customerName: 'SAGAR SANJAY PADIYAR',
+            referenceType: 'AGENT',
+            odDiscount: 0,
+            tpPremium: 3416.00,
+            odPremium: 0.00,
+            netPremium: 4251.00,
+            policyNo: '6206841079',
+            date: '16/10/2026',
+            agentGridTp: 0,
+            agentCommAmtTp: 0,
+            tdsAmtTp: 0,
+            netCommTp: 0,
+            agentGridOd: 0,
+            agentCommAmtOd: 0,
+            tdsAmtOd: 0,
+            netCommOd: 0,
+            agentGridNet: 54,
+            agentCommAmtNet: 2296,
+            tdsAmtNet: 46,
+            manufacturingYear: '31/10/2013 00:00:00',
+            netCommNet: 2250,
+            fuelType: 'CNG',
+            brokerName: 'IDEAL BROKERS - BROKING'
+        },
+        {
+            id: 2,
+            regNo: 'MH09GJ5408',
+            branch: 'SANGLI',
+            agentName: 'RUTURAJ PRAKASH JADHAV',
+            productType: 'COMPREHENSIVE',
+            policyType: 'GCV 3500 - 7000 GVW',
+            insuranceCompany: 'LIBERTY GENERAL INSURANCE LIMITED',
+            amount: 0.00,
+            paymentType: 'ONLINE TO INSURANCE COMPANY',
+            paymentDetails: 'NA',
+            premiumAmount: 21862.00,
+            customerName: 'DHANAJI MHAKU KATRAT',
+            referenceType: 'AGENT',
+            odDiscount: 80,
+            tpPremium: 16049.00,
+            odPremium: 3771.31,
+            netPremium: 20295.00,
+            policyNo: '201340040226790306000000',
+            date: '16/10/2026',
+            agentGridTp: 0,
+            agentCommAmtTp: 0,
+            tdsAmtTp: 0,
+            netCommTp: 0,
+            agentGridOd: 0,
+            agentCommAmtOd: 0,
+            tdsAmtOd: 0,
+            netCommOd: 0,
+            agentGridNet: 31,
+            agentCommAmtNet: 6291,
+            tdsAmtNet: 126,
+            manufacturingYear: '31/07/2025 00:00:00',
+            netCommNet: 6165,
+            fuelType: 'DIESEL',
+            brokerName: 'IDEAL BROKERS - BROKING'
+        },
+        {
+            id: 3,
+            regNo: 'MH37AD1447',
+            branch: 'AKOLA',
+            agentName: 'SHRIKRUSHNA SOPAN PATIL',
+            productType: 'COMPREHENSIVE',
+            policyType: 'MISC-D-TRACTOR',
+            insuranceCompany: 'SBI GENERAL INSURANCE COMPANY LIMITED',
+            amount: 0.00,
+            paymentType: 'ONLINE TO INSURANCE COMPANY',
+            paymentDetails: 'NA',
+            premiumAmount: 9361.00,
+            customerName: 'AKSHAY CHANDRASHEKHAR RATHOD',
+            referenceType: 'AGENT',
+            odDiscount: 75,
+            tpPremium: 7267.00,
+            odPremium: 616.00,
+            netPremium: 7932.83,
+            policyNo: 'POCMVMI0100555033',
+            date: '16/10/2026',
+            agentGridTp: 0,
+            agentCommAmtTp: 0,
+            tdsAmtTp: 0,
+            netCommTp: 0,
+            agentGridOd: 0,
+            agentCommAmtOd: 0,
+            tdsAmtOd: 0,
+            netCommOd: 0,
+            agentGridNet: 48,
+            agentCommAmtNet: 3808,
+            tdsAmtNet: 76,
+            manufacturingYear: '11/12/2021 00:00:00',
+            netCommNet: 3732,
+            fuelType: 'DIESEL',
+            brokerName: 'IDEAL BROKERS - BROKING'
+        },
+        {
+            id: 4,
+            regNo: 'MH30BD1515',
+            branch: 'AKOLA',
+            agentName: 'SHRIKRUSHNA SOPAN PATIL',
+            productType: 'STP',
+            policyType: 'GCV > 40001 - 45000 GVW',
+            insuranceCompany: 'UNIVERSAL SOMPO GENERAL INSURANCE CO. LTD',
+            amount: 0.00,
+            paymentType: 'ONLINE TO INSURANCE COMPANY',
+            paymentDetails: 'NA',
+            premiumAmount: 46572.00,
+            customerName: 'OBEROI CONSTRUCTIONS',
+            referenceType: 'AGENT',
+            odDiscount: 0,
+            tpPremium: 44242.00,
+            odPremium: 0.00,
+            netPremium: 44342.00,
+            policyNo: 'AVO/2317/70265200',
+            date: '16/10/2026',
+            agentGridTp: 0,
+            agentCommAmtTp: 0,
+            tdsAmtTp: 0,
+            netCommTp: 0,
+            agentGridOd: 0,
+            agentCommAmtOd: 0,
+            tdsAmtOd: 0,
+            netCommOd: 0,
+            agentGridNet: 31,
+            agentCommAmtNet: 13746,
+            tdsAmtNet: 275,
+            manufacturingYear: '23/10/2023 00:00:00',
+            netCommNet: 13471,
+            fuelType: 'DIESEL',
+            brokerName: 'IDEAL BROKERS - BROKING'
+        },
+        {
+            id: 5,
+            regNo: 'MH17DC9113',
+            branch: 'BARAMATI',
+            agentName: 'SHEKHAR MARUTI ANBHULE',
+            productType: 'SAOD',
+            policyType: 'PRIVATE CAR',
+            insuranceCompany: 'HDFC ERGO GENERAL INSURANCE CO. LTD',
+            amount: 0.00,
+            paymentType: 'ONLINE TO INSURANCE COMPANY',
+            paymentDetails: 'NA',
+            premiumAmount: 20753.00,
+            customerName: 'DATTATRYA MARUTI VIDHATE',
+            referenceType: 'AGENT',
+            odDiscount: 0,
+            tpPremium: 0.00,
+            odPremium: 17587.00,
+            netPremium: 17587.00,
+            policyNo: '2302209092387700000',
+            date: '16/10/2026',
+            agentGridTp: 0,
+            agentCommAmtTp: 0,
+            tdsAmtTp: 0,
+            netCommTp: 0,
+            agentGridOd: 10,
+            agentCommAmtOd: 1759,
+            tdsAmtOd: 35,
+            netCommOd: 1724,
+            agentGridNet: 0,
+            agentCommAmtNet: 0,
+            tdsAmtNet: 0,
+            manufacturingYear: '01/10/2024 00:00:00',
+            netCommNet: 0,
+            fuelType: 'DIESEL',
+            brokerName: 'IDEAL BROKERS - BROKING'
+        },
+        {
+            id: 6,
+            regNo: 'MH14LX4025',
+            branch: 'SANGLI',
+            agentName: 'RUTURAJ PRAKASH JADHAV',
+            productType: 'COMPREHENSIVE',
+            policyType: 'GCV ABOVE 40001 GVW',
+            insuranceCompany: 'MAGMA HDI GENERAL INSURANCE COMPANY',
+            amount: 0.00,
+            paymentType: 'ONLINE TO INSURANCE COMPANY',
+            paymentDetails: 'NA',
+            premiumAmount: 62484.00,
+            customerName: 'SHAKIR ALI KHAN',
+            referenceType: 'AGENT',
+            odDiscount: 84,
+            tpPremium: 44242.00,
+            odPremium: 13035.00,
+            netPremium: 57827.00,
+            policyNo: 'P0027200038/4103/101919',
+            date: '16/10/2026',
+            agentGridTp: 0,
+            agentCommAmtTp: 0,
+            tdsAmtTp: 0,
+            netCommTp: 0,
+            agentGridOd: 0,
+            agentCommAmtOd: 0,
+            tdsAmtOd: 0,
+            netCommOd: 0,
+            agentGridNet: 21,
+            agentCommAmtNet: 12144,
+            tdsAmtNet: 243,
+            manufacturingYear: '12/11/2024 00:00:00',
+            netCommNet: 11901,
+            fuelType: 'DIESEL',
+            brokerName: 'IDEAL BROKERS - BROKING'
+        },
+        {
+            id: 7,
+            regNo: 'MH12RQ8821',
+            branch: 'PUNE',
+            agentName: 'AAYUSH UMESH TIJARE',
+            productType: 'COMPREHENSIVE',
+            policyType: 'PRIVATE CAR',
+            insuranceCompany: 'ICICI LOMBARD GENERAL INSURANCE CO. LTD',
+            amount: 0.00,
+            paymentType: 'ONLINE TO INSURANCE COMPANY',
+            paymentDetails: 'NA',
+            premiumAmount: 18450.00,
+            customerName: 'BALIRAM TANHAJI DHORE',
+            referenceType: 'AGENT',
+            odDiscount: 70,
+            tpPremium: 7267.00,
+            odPremium: 686.00,
+            netPremium: 8328.07,
+            policyNo: 'POCMVMI0100554960',
+            date: '16/10/2026',
+            agentGridTp: 0,
+            agentCommAmtTp: 0,
+            tdsAmtTp: 0,
+            netCommTp: 0,
+            agentGridOd: 0,
+            agentCommAmtOd: 0,
+            tdsAmtOd: 0,
+            netCommOd: 0,
+            agentGridNet: 48,
+            agentCommAmtNet: 3997,
+            tdsAmtNet: 80,
+            manufacturingYear: '02/03/2021 00:00:00',
+            netCommNet: 3917,
+            fuelType: 'DIESEL',
+            brokerName: 'IDEAL BROKERS - BROKING'
+        },
+        {
+            id: 8,
+            regNo: 'MH11BV3309',
+            branch: 'SATARA',
+            agentName: 'SATARA STANDARD AGENT',
+            productType: 'STP',
+            policyType: 'TWO WHEELER',
+            insuranceCompany: 'BAJAJ ALLIANZ GENERAL INSURANCE CO. LTD',
+            amount: 0.00,
+            paymentType: 'ONLINE TO INSURANCE COMPANY',
+            paymentDetails: 'NA',
+            premiumAmount: 3290.00,
+            customerName: 'SHAIKH TAYYAB SHAIKH MUNIR',
+            referenceType: 'AGENT',
+            odDiscount: 0,
+            tpPremium: 35313.00,
+            odPremium: 2418.00,
+            netPremium: 38196.00,
+            policyNo: '215007/31/27/001267',
+            date: '16/10/2026',
+            agentGridTp: 0,
+            agentCommAmtTp: 0,
+            tdsAmtTp: 0,
+            netCommTp: 0,
+            agentGridOd: 0,
+            agentCommAmtOd: 0,
+            tdsAmtOd: 0,
+            netCommOd: 0,
+            agentGridNet: 23,
+            agentCommAmtNet: 8785,
+            tdsAmtNet: 176,
+            manufacturingYear: '17/11/2018 00:00:00',
+            netCommNet: 8609,
+            fuelType: 'DIESEL',
+            brokerName: 'IDEAL BROKERS - BROKING'
+        },
+        {
+            id: 9,
+            regNo: 'MH14CL9901',
+            branch: 'PUNE',
+            agentName: 'AJITKUMAR PRABHAKAR KATULE',
+            productType: 'COMPREHENSIVE',
+            policyType: 'PASSENGER VEHICLE',
+            insuranceCompany: 'TATA AIG GENERAL INSURANCE CO. LTD',
+            amount: 0.00,
+            paymentType: 'ONLINE TO INSURANCE COMPANY',
+            paymentDetails: 'NA',
+            premiumAmount: 54013.00,
+            customerName: 'ADISHIV MERCANTILE LLP',
+            referenceType: 'AGENT',
+            odDiscount: 85,
+            tpPremium: 35313.00,
+            odPremium: 10480.00,
+            netPremium: 54013.00,
+            policyNo: 'VGC1648727000100',
+            date: '16/10/2026',
+            agentGridTp: 0,
+            agentCommAmtTp: 0,
+            tdsAmtTp: 0,
+            netCommTp: 0,
+            agentGridOd: 0,
+            agentCommAmtOd: 0,
+            tdsAmtOd: 0,
+            netCommOd: 0,
+            agentGridNet: 23.5,
+            agentCommAmtNet: 12693,
+            tdsAmtNet: 254,
+            manufacturingYear: '15/10/2026 00:00:00',
+            netCommNet: 12439,
+            fuelType: 'DIESEL',
+            brokerName: 'IDEAL BROKERS - BROKING'
+        }
+    ]);
+
+    // Recalculate Filter State
+    const [recalcFromDate, setRecalcFromDate] = useState('16/10/2026');
+    const [recalcToDate, setRecalcToDate] = useState('16/10/2026');
+    const [recalcCompany, setRecalcCompany] = useState('');
+    const [recalcBranch, setRecalcBranch] = useState('');
+    const [recalcAgent, setRecalcAgent] = useState('');
+    const [recalcPolicyType, setRecalcPolicyType] = useState('');
+    const [recalcSearchQuery, setRecalcSearchQuery] = useState('');
+    const [selectedRecalcIds, setSelectedRecalcIds] = useState<number[]>([]);
+    const [hasRecalcViewed, setHasRecalcViewed] = useState(false);
+    const [recalcPage, setRecalcPage] = useState(1);
+    const [recalcPerPage, setRecalcPerPage] = useState(10);
+
+    const isRecalcFormFilled = Boolean(recalcCompany && recalcBranch && recalcAgent && recalcPolicyType);
+
+    const filteredRecalcCommissions = (!hasRecalcViewed || !isRecalcFormFilled) ? [] : recalcCommissions.filter(item => {
+        if (recalcCompany && item.insuranceCompany !== recalcCompany) return false;
+        if (recalcBranch && item.branch !== recalcBranch) return false;
+        if (recalcAgent && item.agentName !== recalcAgent) return false;
+        if (recalcPolicyType && item.policyType !== recalcPolicyType) return false;
+        if (!recalcSearchQuery.trim()) return true;
+        const q = recalcSearchQuery.toLowerCase();
+        return (
+            item.regNo.toLowerCase().includes(q) ||
+            item.agentName.toLowerCase().includes(q) ||
+            item.branch.toLowerCase().includes(q) ||
+            item.insuranceCompany.toLowerCase().includes(q) ||
+            item.policyType.toLowerCase().includes(q) ||
+            item.customerName.toLowerCase().includes(q) ||
+            item.policyNo.toLowerCase().includes(q) ||
+            item.brokerName.toLowerCase().includes(q) ||
+            item.fuelType.toLowerCase().includes(q)
+        );
+    });
+
+    const totalRecalcCount = filteredRecalcCommissions.length;
+    const totalRecalcPremium = filteredRecalcCommissions.reduce((acc, curr) => acc + curr.premiumAmount, 0);
+    const totalRecalcPages = Math.ceil(filteredRecalcCommissions.length / recalcPerPage) || 1;
+    const paginatedRecalcCommissions = filteredRecalcCommissions.slice(
+        (recalcPage - 1) * recalcPerPage,
+        recalcPage * recalcPerPage
+    );
+
+    const handleToggleSelectAllRecalc = () => {
+        const paginatedIds = paginatedRecalcCommissions.map(i => i.id);
+        const allSelected = paginatedIds.length > 0 && paginatedIds.every(id => selectedRecalcIds.includes(id));
+        if (allSelected) {
+            setSelectedRecalcIds(prev => prev.filter(id => !paginatedIds.includes(id)));
+        } else {
+            setSelectedRecalcIds(prev => Array.from(new Set([...prev, ...paginatedIds])));
+        }
+    };
+
+    const handleToggleRecalc = (id: number) => {
+        setSelectedRecalcIds(prev => prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]);
+    };
+
+    const handleRecalcView = () => {
+        if (!isRecalcFormFilled) {
+            showToast('Please select all form fields (Company, Branch, Agent, Policy Type) before viewing.');
+            setHasRecalcViewed(false);
+            return;
+        }
+        setHasRecalcViewed(true);
+        setRecalcPage(1);
+        showToast('Commission recalculate records loaded!');
+    };
+
+    const handleRecalcReset = () => {
+        setRecalcCompany('');
+        setRecalcBranch('');
+        setRecalcAgent('');
+        setRecalcPolicyType('');
+        setRecalcSearchQuery('');
+        setSelectedRecalcIds([]);
+        setHasRecalcViewed(false);
+        setRecalcPage(1);
+    };
+
+    const handleSubmitRecalculate = () => {
+        if (selectedRecalcIds.length === 0) {
+            showToast('Please select at least one record to submit for recalculation.');
+            return;
+        }
+        showToast(`${selectedRecalcIds.length} commission entries submitted for recalculation successfully!`);
+        setSelectedRecalcIds([]);
+    };
+
+    // Paid Entry Recalculation State (Matching ERP Adm_CutNPayRecalculation.aspx)
+    const [paidRecalcFromDate, setPaidRecalcFromDate] = useState('01/12/2024');
+    const [paidRecalcToDate, setPaidRecalcToDate] = useState('16/10/2026');
+    const [paidRecalcCompany, setPaidRecalcCompany] = useState('');
+    const [paidRecalcBranch, setPaidRecalcBranch] = useState('');
+    const [paidRecalcAgent, setPaidRecalcAgent] = useState('');
+    const [paidRecalcPolicyType, setPaidRecalcPolicyType] = useState('');
+    const [paidRecalcSearchQuery, setPaidRecalcSearchQuery] = useState('');
+    const [selectedPaidRecalcIds, setSelectedPaidRecalcIds] = useState<number[]>([]);
+    const [hasPaidRecalcViewed, setHasPaidRecalcViewed] = useState(false);
+    const [paidRecalcPage, setPaidRecalcPage] = useState(1);
+    const [paidRecalcPerPage, setPaidRecalcPerPage] = useState(10);
+
+    const isPaidRecalcFormFilled = Boolean(
+        paidRecalcFromDate.trim() &&
+        paidRecalcToDate.trim() &&
+        paidRecalcCompany.trim() &&
+        paidRecalcBranch.trim() &&
+        paidRecalcAgent.trim() &&
+        paidRecalcPolicyType.trim()
+    );
+
+    const [paidRecalcRecords] = useState<CommissionRecalcItem[]>([
+        {
+            id: 1,
+            regNo: 'MH12PT2922',
+            branch: 'PUNE',
+            agentName: 'PARMESHWAR VENKATRAO BIRADAR',
+            productType: 'STP',
+            policyType: 'PRIVATE CAR',
+            insuranceCompany: 'MAGMA HDI GENERAL INSURANCE COMPANY LIMITED',
+            amount: 0,
+            paymentType: 'ONLINE TO RELIABLE',
+            paymentDetails: 'NA',
+            premiumAmount: 5031,
+            customerName: 'ROSHANA SANTOSH CHINCHAWADE',
+            referenceType: 'AGENT',
+            odDiscount: 0,
+            tpPremium: 3416,
+            odPremium: 0,
+            netPremium: 4266,
+            policyNo: 'P0025200039/4190/100256',
+            date: '02/12/2024',
+            agentGridTp: 0,
+            agentCommAmtTp: 0,
+            tdsAmtTp: 0,
+            netCommTp: 0,
+            agentGridOd: 0,
+            agentCommAmtOd: 0,
+            tdsAmtOd: 0,
+            netCommOd: 0,
+            agentGridNet: 39,
+            agentCommAmtNet: 1664,
+            tdsAmtNet: 0,
+            manufacturingYear: '10/11/2017 00:00:00',
+            netCommNet: 1664,
+            fuelType: 'DIESEL',
+            brokerName: 'RELIABLE - ASSOCIATES'
+        },
+        {
+            id: 2,
+            regNo: 'MH14AH6422',
+            branch: 'PUNE',
+            agentName: 'PARMESHWAR VENKATRAO BIRADAR',
+            productType: 'STP',
+            policyType: 'GCV 7501 - 12000 GVW',
+            insuranceCompany: 'TATA AIG GENERAL INSURANCE CO. LTD',
+            amount: 0,
+            paymentType: 'ONLINE TO RELIABLE',
+            paymentDetails: 'FEDERAL BANK - 003787',
+            premiumAmount: 31009,
+            customerName: 'SANDEEP MARUTI JAGTAP',
+            referenceType: 'AGENT',
+            odDiscount: 0,
+            tpPremium: 27186,
+            odPremium: 0,
+            netPremium: 27881,
+            policyNo: '6302458756',
+            date: '11/12/2024',
+            agentGridTp: 0,
+            agentCommAmtTp: 0,
+            tdsAmtTp: 0,
+            netCommTp: 0,
+            agentGridOd: 0,
+            agentCommAmtOd: 0,
+            tdsAmtOd: 0,
+            netCommOd: 0,
+            agentGridNet: 41,
+            agentCommAmtNet: 11341,
+            tdsAmtNet: 0,
+            manufacturingYear: '15/12/2023 00:00:00',
+            netCommNet: 11341,
+            fuelType: 'DIESEL',
+            brokerName: 'RELIABLE - ASSOCIATES'
+        },
+        {
+            id: 3,
+            regNo: 'MH14HU5192',
+            branch: 'PUNE',
+            agentName: 'PARMESHWAR VENKATRAO BIRADAR',
+            productType: 'COMPREHENSIVE',
+            policyType: 'PCV - TAXI 4 + 1',
+            insuranceCompany: 'INDUSIND GENERAL INSURANCE CO. LTD',
+            amount: 0,
+            paymentType: 'ONLINE TO RELIABLE',
+            paymentDetails: 'NA',
+            premiumAmount: 18599,
+            customerName: 'SAIRAJ TOURS AND TRAVELS TRANSFER',
+            referenceType: 'AGENT',
+            odDiscount: 0,
+            tpPremium: 11852,
+            odPremium: 3800,
+            netPremium: 15762,
+            policyNo: '170422423380026504',
+            date: '13/12/2024',
+            agentGridTp: 0,
+            agentCommAmtTp: 0,
+            tdsAmtTp: 0,
+            netCommTp: 0,
+            agentGridOd: 0,
+            agentCommAmtOd: 0,
+            tdsAmtOd: 0,
+            netCommOd: 0,
+            agentGridNet: 22,
+            agentCommAmtNet: 3468,
+            tdsAmtNet: 0,
+            manufacturingYear: '04/03/2020 00:00:00',
+            netCommNet: 3468,
+            fuelType: 'PETROL',
+            brokerName: 'EFFICIENT - BROKER'
+        },
+        {
+            id: 4,
+            regNo: 'MH12PQ9009',
+            branch: 'PUNE',
+            agentName: 'PARMESHWAR VENKATRAO BIRADAR',
+            productType: 'COMPREHENSIVE',
+            policyType: 'EMPLOYEE BUS ABOVE 12 SEATERS',
+            insuranceCompany: 'TATA AIG GENERAL INSURANCE CO. LTD',
+            amount: 0,
+            paymentType: 'ONLINE TO INSURANCE COMPANY',
+            paymentDetails: 'NA',
+            premiumAmount: 55125,
+            customerName: 'BALAJI RATNA MULTISERVICES PVT LTD',
+            referenceType: 'AGENT',
+            odDiscount: 0,
+            tpPremium: 45915,
+            odPremium: 751,
+            netPremium: 46716,
+            policyNo: '6302477292',
+            date: '16/12/2024',
+            agentGridTp: 0,
+            agentCommAmtTp: 0,
+            tdsAmtTp: 0,
+            netCommTp: 0,
+            agentGridOd: 0,
+            agentCommAmtOd: 0,
+            tdsAmtOd: 0,
+            netCommOd: 0,
+            agentGridNet: 54,
+            agentCommAmtNet: 25227,
+            tdsAmtNet: 252,
+            manufacturingYear: '21/12/2017 00:00:00',
+            netCommNet: 24975,
+            fuelType: 'DIESEL',
+            brokerName: 'RELIABLE - ASSOCIATES'
+        },
+        {
+            id: 5,
+            regNo: 'MH12WJ1091',
+            branch: 'PUNE',
+            agentName: 'PARMESHWAR VENKATRAO BIRADAR',
+            productType: 'COMPREHENSIVE',
+            policyType: 'GCV 12001 - 20000 GVW',
+            insuranceCompany: 'MAGMA HDI GENERAL INSURANCE COMPANY LIMITED',
+            amount: 0,
+            paymentType: 'ONLINE TO INSURANCE COMPANY',
+            paymentDetails: 'NA',
+            premiumAmount: 47775,
+            customerName: 'SANJAY JADHAV',
+            referenceType: 'AGENT',
+            odDiscount: 0,
+            tpPremium: 35313,
+            odPremium: 6820,
+            netPremium: 42283,
+            policyNo: 'P0025200039/4103/102173',
+            date: '26/12/2024',
+            agentGridTp: 0,
+            agentCommAmtTp: 0,
+            tdsAmtTp: 0,
+            netCommTp: 0,
+            agentGridOd: 0,
+            agentCommAmtOd: 0,
+            tdsAmtOd: 0,
+            netCommOd: 0,
+            agentGridNet: 24,
+            agentCommAmtNet: 10148,
+            tdsAmtNet: 101,
+            manufacturingYear: '31/01/2024 00:00:00',
+            netCommNet: 10047,
+            fuelType: 'DIESEL',
+            brokerName: 'RELIABLE - ASSOCIATES'
+        },
+        {
+            id: 6,
+            regNo: 'MH12WJ1092',
+            branch: 'PUNE',
+            agentName: 'PARMESHWAR VENKATRAO BIRADAR',
+            productType: 'COMPREHENSIVE',
+            policyType: 'GCV 12001 - 20000 GVW',
+            insuranceCompany: 'MAGMA HDI GENERAL INSURANCE COMPANY LIMITED',
+            amount: 0,
+            paymentType: 'ONLINE TO INSURANCE COMPANY',
+            paymentDetails: 'NA',
+            premiumAmount: 47775,
+            customerName: 'SANJAY JADHAV',
+            referenceType: 'AGENT',
+            odDiscount: 0,
+            tpPremium: 35313,
+            odPremium: 6820,
+            netPremium: 42283,
+            policyNo: 'P0025200039/4103/102171',
+            date: '26/12/2024',
+            agentGridTp: 0,
+            agentCommAmtTp: 0,
+            tdsAmtTp: 0,
+            netCommTp: 0,
+            agentGridOd: 0,
+            agentCommAmtOd: 0,
+            tdsAmtOd: 0,
+            netCommOd: 0,
+            agentGridNet: 24,
+            agentCommAmtNet: 10148,
+            tdsAmtNet: 101,
+            manufacturingYear: '31/01/2024 00:00:00',
+            netCommNet: 10047,
+            fuelType: 'DIESEL',
+            brokerName: 'RELIABLE - ASSOCIATES'
+        },
+        {
+            id: 7,
+            regNo: 'MH12WJ1093',
+            branch: 'PUNE',
+            agentName: 'PARMESHWAR VENKATRAO BIRADAR',
+            productType: 'COMPREHENSIVE',
+            policyType: 'GCV 12001 - 20000 GVW',
+            insuranceCompany: 'MAGMA HDI GENERAL INSURANCE COMPANY LIMITED',
+            amount: 0,
+            paymentType: 'ONLINE TO INSURANCE COMPANY',
+            paymentDetails: 'NA',
+            premiumAmount: 47775,
+            customerName: 'SANJAY JADHAV',
+            referenceType: 'AGENT',
+            odDiscount: 0,
+            tpPremium: 35313,
+            odPremium: 6820,
+            netPremium: 42283,
+            policyNo: 'P0025200039/4103/102174',
+            date: '28/12/2024',
+            agentGridTp: 0,
+            agentCommAmtTp: 0,
+            tdsAmtTp: 0,
+            netCommTp: 0,
+            agentGridOd: 0,
+            agentCommAmtOd: 0,
+            tdsAmtOd: 0,
+            netCommOd: 0,
+            agentGridNet: 24,
+            agentCommAmtNet: 10148,
+            tdsAmtNet: 101,
+            manufacturingYear: '31/01/2024 00:00:00',
+            netCommNet: 10047,
+            fuelType: 'DIESEL',
+            brokerName: 'RELIABLE - ASSOCIATES'
+        },
+        {
+            id: 8,
+            regNo: 'MH12RN8801',
+            branch: 'PUNE',
+            agentName: 'PARMESHWAR VENKATRAO BIRADAR',
+            productType: 'STP',
+            policyType: 'GCV 0-2300 GVW',
+            insuranceCompany: 'ROYAL SUNDARAM GENERAL INSURANCE CO. LTD',
+            amount: 0,
+            paymentType: 'ONLINE TO RELIABLE',
+            paymentDetails: 'NA',
+            premiumAmount: 18450,
+            customerName: 'PRAVIN ANAND SHINDE',
+            referenceType: 'AGENT',
+            odDiscount: 0,
+            tpPremium: 14200,
+            odPremium: 0,
+            netPremium: 15600,
+            policyNo: 'RSG20240091823',
+            date: '05/12/2024',
+            agentGridTp: 0,
+            agentCommAmtTp: 0,
+            tdsAmtTp: 0,
+            netCommTp: 0,
+            agentGridOd: 0,
+            agentCommAmtOd: 0,
+            tdsAmtOd: 0,
+            netCommOd: 0,
+            agentGridNet: 35,
+            agentCommAmtNet: 5460,
+            tdsAmtNet: 55,
+            manufacturingYear: '18/05/2021 00:00:00',
+            netCommNet: 5405,
+            fuelType: 'DIESEL',
+            brokerName: 'RELIABLE - ASSOCIATES'
+        }
+    ]);
+
+    const filteredPaidRecalcRecords = (!hasPaidRecalcViewed || !isPaidRecalcFormFilled) ? [] : paidRecalcRecords.filter(item => {
+        if (paidRecalcCompany && !item.insuranceCompany.toLowerCase().includes(paidRecalcCompany.toLowerCase().trim())) return false;
+        if (paidRecalcBranch && item.branch !== paidRecalcBranch) return false;
+        if (paidRecalcAgent && item.agentName !== paidRecalcAgent) return false;
+        if (paidRecalcPolicyType && item.policyType !== paidRecalcPolicyType) return false;
+        if (!paidRecalcSearchQuery.trim()) return true;
+        const q = paidRecalcSearchQuery.toLowerCase();
+        return (
+            item.regNo.toLowerCase().includes(q) ||
+            item.agentName.toLowerCase().includes(q) ||
+            item.branch.toLowerCase().includes(q) ||
+            item.insuranceCompany.toLowerCase().includes(q) ||
+            item.policyType.toLowerCase().includes(q) ||
+            item.customerName.toLowerCase().includes(q) ||
+            item.policyNo.toLowerCase().includes(q) ||
+            item.brokerName.toLowerCase().includes(q) ||
+            item.fuelType.toLowerCase().includes(q)
+        );
+    });
+
+    const totalPaidRecalcPages = Math.ceil(filteredPaidRecalcRecords.length / paidRecalcPerPage) || 1;
+    const paginatedPaidRecalcRecords = filteredPaidRecalcRecords.slice(
+        (paidRecalcPage - 1) * paidRecalcPerPage,
+        paidRecalcPage * paidRecalcPerPage
+    );
+
+    const handleToggleSelectAllPaidRecalc = () => {
+        const paginatedIds = paginatedPaidRecalcRecords.map(i => i.id);
+        const allSelected = paginatedIds.length > 0 && paginatedIds.every(id => selectedPaidRecalcIds.includes(id));
+        if (allSelected) {
+            setSelectedPaidRecalcIds(prev => prev.filter(id => !paginatedIds.includes(id)));
+        } else {
+            setSelectedPaidRecalcIds(prev => Array.from(new Set([...prev, ...paginatedIds])));
+        }
+    };
+
+    const handleTogglePaidRecalc = (id: number) => {
+        setSelectedPaidRecalcIds(prev => prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]);
+    };
+
+    const handlePaidRecalcView = () => {
+        if (!isPaidRecalcFormFilled) {
+            showToast('Please fill all form fields before viewing records.');
+            setHasPaidRecalcViewed(false);
+            return;
+        }
+        setHasPaidRecalcViewed(true);
+        setPaidRecalcPage(1);
+        showToast('Paid entry recalculation records loaded!');
+    };
+
+    const handlePaidRecalcReset = () => {
+        setPaidRecalcCompany('');
+        setPaidRecalcBranch('');
+        setPaidRecalcAgent('');
+        setPaidRecalcPolicyType('');
+        setPaidRecalcSearchQuery('');
+        setSelectedPaidRecalcIds([]);
+        setHasPaidRecalcViewed(false);
+        setPaidRecalcPage(1);
+    };
+
+    const handleSubmitPaidRecalc = () => {
+        if (selectedPaidRecalcIds.length === 0) {
+            showToast('Please select at least one record to submit for recalculation.');
+            return;
+        }
+        showToast(`${selectedPaidRecalcIds.length} paid entries submitted for recalculation successfully!`);
+        setSelectedPaidRecalcIds([]);
+    };
+
+    // Account Report State (Matching ERP reliable-erp.com/Clerk/Rpt_AccountDetails.aspx)
+    interface AccountReportItem {
+        id: number;
+        docNo: string;
+        transactionType: string;
+        accountDate: string;
+        ledgerName: string;
+        amount: number;
+        narration: string;
+        agentName: string;
+        branchName: string;
+        policyNo: string;
+        customerName: string;
+        registrationNo: string;
+        paymentType: string;
+        narration2: string;
+        ledgerType: string;
+    }
+
+    const [accountReports] = useState<AccountReportItem[]>([
+        {
+            id: 1,
+            docNo: '100145546',
+            transactionType: 'PAYMENT',
+            accountDate: '01/01/2025',
+            ledgerName: 'RELIANCE PREMIUM PAYABLE',
+            amount: 19420.00,
+            narration: 'PAY TO RELIANCE PREMIUM PAYABLEWITH CHEQUE NO-104167-MS SHREEJA ENTERPRISES',
+            agentName: 'BAPURAO BUJANG MOHITE',
+            branchName: 'BARAMATI',
+            policyNo: '132/00/00/0526/FCP/0000182276',
+            customerName: 'MS SHREEJA ENTERPRISES',
+            registrationNo: 'NON-MOTOR',
+            paymentType: 'CHEQUE',
+            narration2: 'PAY TO RELIANCE PREMIUM PAYABLEWITH CHEQUE NO-104167',
+            ledgerType: 'BALANCE SHEET ITEM'
+        },
+        {
+            id: 2,
+            docNo: '100145546',
+            transactionType: 'PAYMENT',
+            accountDate: '01/01/2025',
+            ledgerName: 'RELIANCE PREMIUM PAYABLE',
+            amount: 9077.00,
+            narration: 'PAY TO RELIANCE PREMIUM PAYABLEWITH CHEQUE NO-104167-MS SHREEJA ENTERPRISES',
+            agentName: 'BAPURAO BUJANG MOHITE',
+            branchName: 'BARAMATI',
+            policyNo: '132/00/00/0526/FCP/0000182276',
+            customerName: 'MS SHREEJA ENTERPRISES',
+            registrationNo: 'NON-MOTOR',
+            paymentType: 'CHEQUE',
+            narration2: 'PAY TO RELIANCE PREMIUM PAYABLEWITH CHEQUE NO-104167',
+            ledgerType: 'BALANCE SHEET ITEM'
+        },
+        {
+            id: 3,
+            docNo: '100145546',
+            transactionType: 'PAYMENT',
+            accountDate: '01/01/2025',
+            ledgerName: 'RELIANCE PREMIUM PAYABLE',
+            amount: 9077.00,
+            narration: 'PAY TO RELIANCE PREMIUM PAYABLEWITH CHEQUE NO-104167-MS SHREEJA ENTERPRISES',
+            agentName: 'BAPURAO BUJANG MOHITE',
+            branchName: 'BARAMATI',
+            policyNo: '132/00/00/0526/FCP/0000182276',
+            customerName: 'MS SHREEJA ENTERPRISES',
+            registrationNo: 'NON-MOTOR',
+            paymentType: 'CHEQUE',
+            narration2: 'PAY TO RELIANCE PREMIUM PAYABLEWITH CHEQUE NO-104167',
+            ledgerType: 'BALANCE SHEET ITEM'
+        },
+        {
+            id: 4,
+            docNo: '100145546',
+            transactionType: 'PAYMENT',
+            accountDate: '01/01/2025',
+            ledgerName: 'RELIANCE PREMIUM PAYABLE',
+            amount: 19275.00,
+            narration: 'PAY TO RELIANCE PREMIUM PAYABLEWITH CHEQUE NO-104167-MS SHREEJA ENTERPRISES',
+            agentName: 'BAPURAO BUJANG MOHITE',
+            branchName: 'BARAMATI',
+            policyNo: '132/00/00/0526/FCP/0000182276',
+            customerName: 'MS SHREEJA ENTERPRISES',
+            registrationNo: 'NON-MOTOR',
+            paymentType: 'CHEQUE',
+            narration2: 'PAY TO RELIANCE PREMIUM PAYABLEWITH CHEQUE NO-104167',
+            ledgerType: 'BALANCE SHEET ITEM'
+        },
+        {
+            id: 5,
+            docNo: '100145546',
+            transactionType: 'PAYMENT',
+            accountDate: '01/01/2025',
+            ledgerName: 'RELIANCE PREMIUM PAYABLE',
+            amount: 4827.00,
+            narration: 'PAY TO RELIANCE PREMIUM PAYABLEWITH CHEQUE NO-104167-MS SHREEJA ENTERPRISES',
+            agentName: 'BAPURAO BUJANG MOHITE',
+            branchName: 'BARAMATI',
+            policyNo: '132/00/00/0526/FCP/0000182276',
+            customerName: 'MS SHREEJA ENTERPRISES',
+            registrationNo: 'NON-MOTOR',
+            paymentType: 'CHEQUE',
+            narration2: 'PAY TO RELIANCE PREMIUM PAYABLEWITH CHEQUE NO-104167',
+            ledgerType: 'BALANCE SHEET ITEM'
+        },
+        {
+            id: 6,
+            docNo: '100145546',
+            transactionType: 'PAYMENT',
+            accountDate: '01/01/2025',
+            ledgerName: 'RELIANCE PREMIUM PAYABLE',
+            amount: 18476.00,
+            narration: 'PAY TO RELIANCE PREMIUM PAYABLEWITH CHEQUE NO-104167-MS SHREEJA ENTERPRISES',
+            agentName: 'BAPURAO BUJANG MOHITE',
+            branchName: 'BARAMATI',
+            policyNo: '132/00/00/0526/FCP/0000182276',
+            customerName: 'MS SHREEJA ENTERPRISES',
+            registrationNo: 'NON-MOTOR',
+            paymentType: 'CHEQUE',
+            narration2: 'PAY TO RELIANCE PREMIUM PAYABLEWITH CHEQUE NO-104167',
+            ledgerType: 'BALANCE SHEET ITEM'
+        },
+        {
+            id: 7,
+            docNo: '100145546',
+            transactionType: 'PAYMENT',
+            accountDate: '01/01/2025',
+            ledgerName: 'RELIANCE PREMIUM PAYABLE',
+            amount: 19420.00,
+            narration: 'PAY TO RELIANCE PREMIUM PAYABLEWITH CHEQUE NO-104167-MS SHREEJA ENTERPRISES',
+            agentName: 'BAPURAO BUJANG MOHITE',
+            branchName: 'BARAMATI',
+            policyNo: '132/00/00/0526/FCP/0000182276',
+            customerName: 'MS SHREEJA ENTERPRISES',
+            registrationNo: 'NON-MOTOR',
+            paymentType: 'CHEQUE',
+            narration2: 'PAY TO RELIANCE PREMIUM PAYABLEWITH CHEQUE NO-104167',
+            ledgerType: 'BALANCE SHEET ITEM'
+        },
+        {
+            id: 8,
+            docNo: '100145550',
+            transactionType: 'PAYMENT',
+            accountDate: '02/01/2025',
+            ledgerName: 'HDFC ERGO PREMIUM PAYABLE',
+            amount: 32450.00,
+            narration: 'PAY TO HDFC ERGO PREMIUM PAYABLE WITH NEFT REF-901234-ADITYA MOTORS',
+            agentName: 'ASHWINI SHAILENDRA JOSHI',
+            branchName: 'AKOLA',
+            policyNo: '2311200145890000',
+            customerName: 'ADITYA MOTORS PVT LTD',
+            registrationNo: 'MH30AF8812',
+            paymentType: 'NEFT',
+            narration2: 'PAY TO HDFC ERGO PREMIUM PAYABLE WITH NEFT REF-901234',
+            ledgerType: 'BALANCE SHEET ITEM'
+        },
+        {
+            id: 9,
+            docNo: '100145555',
+            transactionType: 'RECEIPT',
+            accountDate: '03/01/2025',
+            ledgerName: 'COMMISSION RECEIVABLE',
+            amount: 14800.00,
+            narration: 'COMMISSION RECEIVED VIA RTGS FROM TATA AIG GENERAL INSURANCE',
+            agentName: 'RUTURAJ PRAKASH JADHAV',
+            branchName: 'SANGLI',
+            policyNo: '6206841079',
+            customerName: 'SAGAR SANJAY PADIYAR',
+            registrationNo: 'MH02DG1914',
+            paymentType: 'ONLINE',
+            narration2: 'COMMISSION RECEIVED VIA RTGS FROM TATA AIG',
+            ledgerType: 'PROFIT & LOSS ITEM'
+        }
+    ]);
+
+    const [rptFromDate, setRptFromDate] = useState('01/01/2025');
+    const [rptToDate, setRptToDate] = useState('01/10/2026');
+    const [rptBranch, setRptBranch] = useState('');
+    const [rptTxnType, setRptTxnType] = useState('');
+    const [rptSearchQuery, setRptSearchQuery] = useState('');
+    const [rptPage, setRptPage] = useState(1);
+    const [rptPerPage, setRptPerPage] = useState(10);
+
+    const filteredAccountReports = accountReports.filter(item => {
+        if (rptBranch && item.branchName !== rptBranch) return false;
+        if (rptTxnType && item.transactionType !== rptTxnType) return false;
+        if (!rptSearchQuery.trim()) return true;
+        const q = rptSearchQuery.toLowerCase();
+        return (
+            item.customerName.toLowerCase().includes(q) ||
+            item.registrationNo.toLowerCase().includes(q) ||
+            item.docNo.toLowerCase().includes(q) ||
+            item.policyNo.toLowerCase().includes(q) ||
+            item.agentName.toLowerCase().includes(q) ||
+            item.ledgerName.toLowerCase().includes(q)
+        );
+    });
+
+    const totalRptCount = filteredAccountReports.length;
+    const totalRptAmount = filteredAccountReports.reduce((acc, curr) => acc + curr.amount, 0);
+    const totalRptPages = Math.ceil(filteredAccountReports.length / rptPerPage) || 1;
+    const paginatedAccountReports = filteredAccountReports.slice(
+        (rptPage - 1) * rptPerPage,
+        rptPage * rptPerPage
+    );
+
     const handleToggleCommission = (id: number) => {
         setSelectedCommIds(prev => prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]);
     };
@@ -698,6 +1912,1335 @@ const AccountModule: React.FC = () => {
             i.agentTds
         ]);
         exportTableToCsv('Pending_Commission_Details', headers, rows);
+    };
+
+    // --- State for Tab: Return to Cash Approval (reliable-erp.com/Clerk/adm_returnToCashApproval.aspx) ---
+    const [returnCashRegNo, setReturnCashRegNo] = useState('');
+    const [hasReturnCashSearched, setHasReturnCashSearched] = useState(false);
+    const [returnCashRecords, setReturnCashRecords] = useState<PolicyRequestItem[]>([
+        {
+            id: 201,
+            date: '14/10/2026',
+            customerName: 'SANTOSH PATIL',
+            policyNo: 'POL-782137',
+            regNo: '1237',
+            paymentMode: 'CASH',
+            agentCommAmt: 2450,
+            amount: 18500,
+            agentName: 'AMOL DESHMUKH',
+            empName: 'RUTUJA NITIN MANE',
+            referenceType: 'AGENT',
+            status: 'APPROVED'
+        },
+        {
+            id: 202,
+            date: '29/04/2025',
+            customerName: 'VAIBHAV DOMBALE',
+            policyNo: '6303008428',
+            regNo: 'MH08CA3094',
+            paymentMode: 'ONLINE TO RELIABLE',
+            agentCommAmt: 6283,
+            amount: 32852,
+            agentName: 'BANDGAR SATISH ABASO',
+            empName: 'SHEKHAR RAJENDRA KUMBHAR',
+            referenceType: 'AGENT',
+            status: 'APPROVED'
+        },
+        {
+            id: 203,
+            date: '10/05/2026',
+            customerName: 'ARVIND VILAS SHIRSATH',
+            policyNo: 'POL-441209',
+            regNo: 'MH42K3635',
+            paymentMode: 'CASH',
+            agentCommAmt: 2057,
+            amount: 9700,
+            agentName: 'ENTERPRISES VIGHNAHARTA',
+            empName: 'RUTUJA NITIN MANE',
+            referenceType: 'AGENT',
+            status: 'APPROVED'
+        }
+    ]);
+
+    const handleReturnCashView = () => {
+        if (!returnCashRegNo.trim()) {
+            showToast('Please enter Registration No to search.');
+            return;
+        }
+        setHasReturnCashSearched(true);
+        const matched = returnCashRecords.filter(r =>
+            r.regNo.toLowerCase().includes(returnCashRegNo.trim().toLowerCase())
+        );
+        if (matched.length > 0) {
+            showToast(`Found ${matched.length} record(s) for Registration No: ${returnCashRegNo.trim()}`);
+        } else {
+            showToast(`No records found for Registration No: ${returnCashRegNo.trim()}`);
+        }
+    };
+
+    const handleReturnToCashApproval = (id: number, regNo: string) => {
+        setReturnCashRecords(prev => prev.map(r => r.id === id ? { ...r, status: 'RETURNED TO CASH APPROVAL' } : r));
+        showToast(`Registration No ${regNo} successfully returned to Cash Approval!`);
+    };
+
+    const filteredReturnCashRecords = !hasReturnCashSearched
+        ? []
+        : returnCashRecords.filter(r =>
+            r.regNo.toLowerCase().includes(returnCashRegNo.trim().toLowerCase())
+        );
+
+    // --- State for Tab: Cash Back Approval (reliable-erp.com/Clerk/CashBackAmtApproval.aspx) ---
+    interface CashBackApprovalItem {
+        id: number;
+        transDate: string;
+        cashbackDate: string;
+        registrationNo: string;
+        customerName: string;
+        salesExecutive: string;
+        policyNo: string;
+        insuranceCompany: string;
+        productType: string;
+        policyType: string;
+        netPremium: number;
+        paymentType: string;
+        cashbackAmt: number;
+        status: 'PENDING' | 'APPROVED';
+    }
+
+    const [cashbackSearchQuery, setCashbackSearchQuery] = useState('');
+    const [cashbackPage, setCashbackPage] = useState(1);
+    const [cashbackPerPage, setCashbackPerPage] = useState(10);
+
+    const [cashbackRecords, setCashbackRecords] = useState<CashBackApprovalItem[]>([
+        {
+            id: 1,
+            transDate: '09/06/2026',
+            cashbackDate: '-',
+            registrationNo: 'MH45MV4134',
+            customerName: 'M/S.MAULI CONSTRUCTION',
+            salesExecutive: 'AVINASH BHARAT KORATKAR',
+            policyNo: 'VGC1559297000100',
+            insuranceCompany: 'ROYAL SUNDARAM GENERAL INSURANCE CO. LIMITED',
+            productType: 'COMPREHENSIVE',
+            policyType: 'GCV 20001 - 40000 GVW',
+            netPremium: 59354,
+            paymentType: 'ONLINE TO INSURANCE COMPANY',
+            cashbackAmt: 13500,
+            status: 'PENDING'
+        },
+        {
+            id: 2,
+            transDate: '09/06/2026',
+            cashbackDate: '-',
+            registrationNo: 'MH45MV8112',
+            customerName: 'M/S.MAULI CONSTRUCTION',
+            salesExecutive: 'AVINASH BHARAT KORATKAR',
+            policyNo: 'VGC1559294000100',
+            insuranceCompany: 'ROYAL SUNDARAM GENERAL INSURANCE CO. LIMITED',
+            productType: 'COMPREHENSIVE',
+            policyType: 'GCV 20001 - 40000 GVW',
+            netPremium: 59354,
+            paymentType: 'ONLINE TO INSURANCE COMPANY',
+            cashbackAmt: 13500,
+            status: 'PENDING'
+        },
+        {
+            id: 3,
+            transDate: '09/06/2026',
+            cashbackDate: '-',
+            registrationNo: 'MH45MV8109',
+            customerName: 'M/S.MAULI CONSTRUCTION',
+            salesExecutive: 'AVINASH BHARAT KORATKAR',
+            policyNo: 'VGC1559289000100',
+            insuranceCompany: 'ROYAL SUNDARAM GENERAL INSURANCE CO. LIMITED',
+            productType: 'COMPREHENSIVE',
+            policyType: 'GCV 20001 - 40000 GVW',
+            netPremium: 59354,
+            paymentType: 'ONLINE TO INSURANCE COMPANY',
+            cashbackAmt: 13500,
+            status: 'PENDING'
+        },
+        {
+            id: 4,
+            transDate: '09/06/2026',
+            cashbackDate: '-',
+            registrationNo: 'MH45MV8436',
+            customerName: 'M/S.MAULI CONSTRUCTION',
+            salesExecutive: 'AVINASH BHARAT KORATKAR',
+            policyNo: 'VGC1559250000100',
+            insuranceCompany: 'ROYAL SUNDARAM GENERAL INSURANCE CO. LIMITED',
+            productType: 'COMPREHENSIVE',
+            policyType: 'GCV 20001 - 40000 GVW',
+            netPremium: 59354,
+            paymentType: 'ONLINE TO INSURANCE COMPANY',
+            cashbackAmt: 13500,
+            status: 'PENDING'
+        },
+        {
+            id: 5,
+            transDate: '09/06/2026',
+            cashbackDate: '-',
+            registrationNo: 'MH45MV4175',
+            customerName: 'M/S.MAULI CONSTRUCTION',
+            salesExecutive: 'AVINASH BHARAT KORATKAR',
+            policyNo: 'VGC1559251000100',
+            insuranceCompany: 'ROYAL SUNDARAM GENERAL INSURANCE CO. LIMITED',
+            productType: 'COMPREHENSIVE',
+            policyType: 'GCV 20001 - 40000 GVW',
+            netPremium: 59354,
+            paymentType: 'ONLINE TO INSURANCE COMPANY',
+            cashbackAmt: 13500,
+            status: 'PENDING'
+        },
+        {
+            id: 6,
+            transDate: '09/06/2026',
+            cashbackDate: '-',
+            registrationNo: 'MH45MV8442',
+            customerName: 'MAULI CONSTRUCTION',
+            salesExecutive: 'AVINASH BHARAT KORATKAR',
+            policyNo: 'VGC1559258000100',
+            insuranceCompany: 'ROYAL SUNDARAM GENERAL INSURANCE CO. LIMITED',
+            productType: 'COMPREHENSIVE',
+            policyType: 'GCV 20001 - 40000 GVW',
+            netPremium: 59354,
+            paymentType: 'ONLINE TO INSURANCE COMPANY',
+            cashbackAmt: 13500,
+            status: 'PENDING'
+        },
+        {
+            id: 7,
+            transDate: '09/06/2026',
+            cashbackDate: '-',
+            registrationNo: 'MH45MV4054',
+            customerName: 'MAULI CONSTRUCTION',
+            salesExecutive: 'AVINASH BHARAT KORATKAR',
+            policyNo: 'VGC1559263000100',
+            insuranceCompany: 'ROYAL SUNDARAM GENERAL INSURANCE CO. LIMITED',
+            productType: 'COMPREHENSIVE',
+            policyType: 'GCV 20001 - 40000 GVW',
+            netPremium: 59354,
+            paymentType: 'ONLINE TO INSURANCE COMPANY',
+            cashbackAmt: 13500,
+            status: 'PENDING'
+        }
+    ]);
+
+    const filteredCashbackRecords = cashbackRecords.filter(item => {
+        if (!cashbackSearchQuery.trim()) return true;
+        const q = cashbackSearchQuery.toLowerCase().trim();
+        return (
+            item.registrationNo.toLowerCase().includes(q) ||
+            item.customerName.toLowerCase().includes(q) ||
+            item.salesExecutive.toLowerCase().includes(q) ||
+            item.policyNo.toLowerCase().includes(q) ||
+            item.insuranceCompany.toLowerCase().includes(q)
+        );
+    });
+
+    const totalCashbackCount = filteredCashbackRecords.length;
+    const totalCashbackAmount = filteredCashbackRecords.reduce((acc, curr) => acc + curr.cashbackAmt, 0);
+    const totalCashbackPages = Math.ceil(filteredCashbackRecords.length / cashbackPerPage) || 1;
+    const paginatedCashbackRecords = filteredCashbackRecords.slice(
+        (cashbackPage - 1) * cashbackPerPage,
+        cashbackPage * cashbackPerPage
+    );
+
+    const handleApproveCashback = (id: number, regNo: string) => {
+        setCashbackRecords(prev => prev.map(c => c.id === id ? { ...c, status: 'APPROVED', cashbackDate: '16/10/2026' } : c));
+        showToast(`Cash back for ${regNo} approved successfully!`);
+    };
+
+    const handleExportCashback = () => {
+        const headers = ['TRANSDATE', 'CASHBACKDATE', 'REGISTRATIONNO', 'CUSTOMER NAME', 'SALES EXECUTIVE', 'POLICYNO', 'INSURANCECOMPANY', 'PRODUCTTYPE', 'POLICYTYPE', 'NETPERMIUM', 'PAYMENTTYPE', 'CASHBACKAMT', 'STATUS'];
+        const rows = filteredCashbackRecords.map(i => [
+            i.transDate,
+            i.cashbackDate,
+            i.registrationNo,
+            i.customerName,
+            i.salesExecutive,
+            i.policyNo,
+            i.insuranceCompany,
+            i.productType,
+            i.policyType,
+            i.netPremium,
+            i.paymentType,
+            i.cashbackAmt,
+            i.status
+        ]);
+        exportTableToCsv('CashBack_Approval_Report', headers, rows);
+    };
+
+    /* =========================================================================
+       13. CHEQUE RECON (reliable-erp.com/Clerk/rptchequeDepositeStatusforbank.aspx)
+       ========================================================================= */
+    interface ChequeReconItem {
+        id: number;
+        reconType: 'RA' | 'CUSTOMER';
+        companyName: string;
+        branchName: string;
+        policyType: string;
+        policyNo: string;
+        transDate: string;
+        customerName: string;
+        registrationNo: string;
+        agentName: string;
+        employeeName: string;
+        proposalAmt: number;
+        paymentType: string;
+        chequeNo: string;
+        remark: string;
+        createUser: string;
+        createDate: string;
+        referenceType: 'AGENT' | 'DIRECT';
+        status: 'PENDING' | 'DEPOSITED';
+    }
+
+    const [chequeReconType, setChequeReconType] = useState<'RA' | 'CUSTOMER'>('CUSTOMER');
+    const [chequeReconFromDate, setChequeReconFromDate] = useState('16/10/2026');
+    const [hasChequeReconSubmitted, setHasChequeReconSubmitted] = useState(false);
+    const [chequeReconSearchQuery, setChequeReconSearchQuery] = useState('');
+    const [selectedChequeReconIds, setSelectedChequeReconIds] = useState<number[]>([]);
+    const [chequeReconPage, setChequeReconPage] = useState(1);
+    const [chequeReconPerPage, setChequeReconPerPage] = useState(10);
+
+    const [chequeReconRecords, setChequeReconRecords] = useState<ChequeReconItem[]>([
+        {
+            id: 1,
+            reconType: 'CUSTOMER',
+            companyName: 'TATA AIG GENERAL INSURANCE CO. LTD',
+            branchName: 'KEY CHANNEL',
+            policyType: 'PRIVATE CAR',
+            policyNo: '6208019845',
+            transDate: '12/10/2026',
+            customerName: 'GOPAL PRAKASH RAUT',
+            registrationNo: 'MH28BW2137',
+            agentName: 'SHIVANI PRADIP BHUYAR',
+            employeeName: 'MANGESH RAVINDRA KAMBLE',
+            proposalAmt: 39525.00,
+            paymentType: 'CHEQUE',
+            chequeNo: '014010',
+            remark: 'SANIYA GADADE',
+            createUser: 'SNEHAL JADHAV',
+            createDate: '13/10/2026 11:15:51',
+            referenceType: 'AGENT',
+            status: 'PENDING'
+        },
+        {
+            id: 2,
+            reconType: 'CUSTOMER',
+            companyName: 'UNIVERSAL SOMPO GENERAL INSURANCE CO. LTD',
+            branchName: 'BARAMATI',
+            policyType: 'GCV ABOVE 45001 GVW',
+            policyNo: 'AVO/2315/20258292',
+            transDate: '10/10/2026',
+            customerName: 'VISHNUKUMAR LOGISTIC',
+            registrationNo: 'NL01AJ3646',
+            agentName: '-',
+            employeeName: 'ARVIND DNYANESHWAR GAWADE',
+            proposalAmt: 59339.00,
+            paymentType: 'CHEQUE',
+            chequeNo: '134665',
+            remark: 'SANTOSH BANSODE',
+            createUser: 'SNEHAL JADHAV',
+            createDate: '12/10/2026 12:59:42',
+            referenceType: 'DIRECT',
+            status: 'PENDING'
+        },
+        {
+            id: 3,
+            reconType: 'CUSTOMER',
+            companyName: 'UNIVERSAL SOMPO GENERAL INSURANCE CO. LTD',
+            branchName: 'BARAMATI',
+            policyType: 'GCV ABOVE 45001 GVW',
+            policyNo: 'AVO/2315/20258288',
+            transDate: '10/10/2026',
+            customerName: 'VISHNUKUMAR LOGISTIC',
+            registrationNo: 'NL01AJ3647',
+            agentName: '-',
+            employeeName: 'ARVIND DNYANESHWAR GAWADE',
+            proposalAmt: 59339.00,
+            paymentType: 'CHEQUE',
+            chequeNo: '134665',
+            remark: 'SANTOSH BANSODE',
+            createUser: 'SNEHAL JADHAV',
+            createDate: '12/10/2026 12:55:15',
+            referenceType: 'DIRECT',
+            status: 'PENDING'
+        },
+        {
+            id: 4,
+            reconType: 'CUSTOMER',
+            companyName: 'UNIVERSAL SOMPO GENERAL INSURANCE CO. LTD',
+            branchName: 'BARAMATI',
+            policyType: 'GCV ABOVE 45001 GVW',
+            policyNo: 'AVO/2315/20257097',
+            transDate: '10/10/2026',
+            customerName: 'VISHNUKUMAR LOGISTIC',
+            registrationNo: 'NL01AJ3650',
+            agentName: '-',
+            employeeName: 'ARVIND DNYANESHWAR GAWADE',
+            proposalAmt: 58328.00,
+            paymentType: 'CHEQUE',
+            chequeNo: '134664',
+            remark: 'SANTOSH BANSODE',
+            createUser: 'SNEHAL JADHAV',
+            createDate: '12/10/2026 12:40:19',
+            referenceType: 'DIRECT',
+            status: 'PENDING'
+        },
+        {
+            id: 5,
+            reconType: 'CUSTOMER',
+            companyName: 'UNIVERSAL SOMPO GENERAL INSURANCE CO. LTD',
+            branchName: 'BARAMATI',
+            policyType: 'GCV ABOVE 45001 GVW',
+            policyNo: 'AVO/2315/20257091',
+            transDate: '10/10/2026',
+            customerName: 'VISHNUKUMAR LOGISTIC',
+            registrationNo: 'NL01AJ3648',
+            agentName: '-',
+            employeeName: 'ARVIND DNYANESHWAR GAWADE',
+            proposalAmt: 58273.00,
+            paymentType: 'CHEQUE',
+            chequeNo: '134664',
+            remark: 'SANTOSH BANSODE',
+            createUser: 'SNEHAL JADHAV',
+            createDate: '12/10/2026 12:33:56',
+            referenceType: 'DIRECT',
+            status: 'PENDING'
+        },
+        {
+            id: 6,
+            reconType: 'CUSTOMER',
+            companyName: 'UNIVERSAL SOMPO GENERAL INSURANCE CO. LTD',
+            branchName: 'BARAMATI',
+            policyType: 'GCV > 40001 - 45000 GVW',
+            policyNo: 'AVO/2315/20257088',
+            transDate: '10/10/2026',
+            customerName: 'HARSHVARDHAN HANUMANT KOKARE',
+            registrationNo: 'MH12QW6022',
+            agentName: '-',
+            employeeName: 'ARVIND DNYANESHWAR GAWADE',
+            proposalAmt: 54098.00,
+            paymentType: 'CHEQUE',
+            chequeNo: '134664',
+            remark: 'SANTOSH BANSODE',
+            createUser: 'SNEHAL JADHAV',
+            createDate: '12/10/2026 12:50:34',
+            referenceType: 'DIRECT',
+            status: 'PENDING'
+        },
+        {
+            id: 7,
+            reconType: 'CUSTOMER',
+            companyName: 'TATA AIG GENERAL INSURANCE CO. LTD',
+            branchName: 'KEY CHANNEL',
+            policyType: 'GCV 7501 - 12000 GVW',
+            policyNo: '6304382177',
+            transDate: '10/10/2026',
+            customerName: 'RAMPHER YADAV',
+            registrationNo: 'MH14RJ6117',
+            agentName: 'MADHULIKA RAJBAHADUR SINGH',
+            employeeName: 'NITIN YASHODHAN BALAKSHE',
+            proposalAmt: 29107.00,
+            paymentType: 'CHEQUE',
+            chequeNo: '000117',
+            remark: 'SIDDESH SHINDE',
+            createUser: 'SNEHAL JADHAV',
+            createDate: '13/10/2026 11:54:45',
+            referenceType: 'AGENT',
+            status: 'PENDING'
+        },
+        {
+            id: 8,
+            reconType: 'CUSTOMER',
+            companyName: 'ROYAL SUNDARAM GENERAL INSURANCE CO.',
+            branchName: 'PUNE',
+            policyType: 'GCV 20001 - 40000 GVW',
+            policyNo: 'VGC1643825000100',
+            transDate: '07/10/2026',
+            customerName: 'MANOJ BABAN BOTRE',
+            registrationNo: 'MH42T7586',
+            agentName: 'RAHUL CHANDRAKANT GAIKWAD',
+            employeeName: 'NITIN YASHODHAN BALAKSHE',
+            proposalAmt: 85334.12,
+            paymentType: 'CHEQUE',
+            chequeNo: '000201',
+            remark: 'SIDDESH SHINDE',
+            createUser: 'SNEHAL JADHAV',
+            createDate: '12/10/2026 10:28:30',
+            referenceType: 'AGENT',
+            status: 'PENDING'
+        },
+        {
+            id: 9,
+            reconType: 'RA',
+            companyName: 'RELIANCE GENERAL INSURANCE CO. LTD',
+            branchName: 'SOLAPUR',
+            policyType: 'COMMERCIAL VEHICLE',
+            policyNo: '140122423340000142',
+            transDate: '15/10/2026',
+            customerName: 'SHREEJA ENTERPRISES',
+            registrationNo: 'MH13CU7819',
+            agentName: 'SANTOSH JADHAV',
+            employeeName: 'ARVIND DNYANESHWAR GAWADE',
+            proposalAmt: 42100.00,
+            paymentType: 'CHEQUE',
+            chequeNo: '104167',
+            remark: 'DEPOSITED IN ICICI BANK',
+            createUser: 'SNEHAL JADHAV',
+            createDate: '15/10/2026 14:20:10',
+            referenceType: 'AGENT',
+            status: 'PENDING'
+        },
+        {
+            id: 10,
+            reconType: 'RA',
+            companyName: 'HDFC ERGO GENERAL INSURANCE CO. LTD',
+            branchName: 'PUNE',
+            policyType: 'PRIVATE CAR',
+            policyNo: '2311200456100',
+            transDate: '14/10/2026',
+            customerName: 'VINAYAK TRANSPORT',
+            registrationNo: 'MH12RN4590',
+            agentName: 'ANIKET KULKARNI',
+            employeeName: 'NITIN YASHODHAN BALAKSHE',
+            proposalAmt: 64200.00,
+            paymentType: 'CHEQUE',
+            chequeNo: '209841',
+            remark: 'BRANCH CHEQUE DROP',
+            createUser: 'SNEHAL JADHAV',
+            createDate: '14/10/2026 16:45:00',
+            referenceType: 'AGENT',
+            status: 'PENDING'
+        }
+    ]);
+
+    const filteredChequeReconRecords = chequeReconRecords.filter(item => {
+        if (item.reconType !== chequeReconType) return false;
+        if (!chequeReconSearchQuery.trim()) return true;
+        const q = chequeReconSearchQuery.toLowerCase().trim();
+        return (
+            item.customerName.toLowerCase().includes(q) ||
+            item.registrationNo.toLowerCase().includes(q) ||
+            item.chequeNo.toLowerCase().includes(q) ||
+            item.policyNo.toLowerCase().includes(q) ||
+            item.companyName.toLowerCase().includes(q) ||
+            item.branchName.toLowerCase().includes(q) ||
+            item.agentName.toLowerCase().includes(q) ||
+            item.employeeName.toLowerCase().includes(q) ||
+            item.remark.toLowerCase().includes(q)
+        );
+    });
+
+    const totalChequeCount = filteredChequeReconRecords.length;
+    const totalChequeAmount = filteredChequeReconRecords.reduce((acc, curr) => acc + curr.proposalAmt, 0);
+    const totalChequePages = Math.ceil(filteredChequeReconRecords.length / chequeReconPerPage) || 1;
+    const paginatedChequeRecords = filteredChequeReconRecords.slice(
+        (chequeReconPage - 1) * chequeReconPerPage,
+        chequeReconPage * chequeReconPerPage
+    );
+
+    const handleChequeReconSubmit = () => {
+        if (!chequeReconFromDate.trim()) {
+            showToast('Please enter From Date');
+            return;
+        }
+        setHasChequeReconSubmitted(true);
+        setChequeReconPage(1);
+        setSelectedChequeReconIds([]);
+        showToast('Cheque records loaded successfully!');
+    };
+
+    const handleChequeReconReset = () => {
+        setHasChequeReconSubmitted(false);
+        setChequeReconSearchQuery('');
+        setSelectedChequeReconIds([]);
+        setChequeReconPage(1);
+    };
+
+    const handleToggleSelectAllCheques = () => {
+        const pageIds = paginatedChequeRecords.map(item => item.id);
+        const allSelected = pageIds.length > 0 && pageIds.every(id => selectedChequeReconIds.includes(id));
+        if (allSelected) {
+            setSelectedChequeReconIds(prev => prev.filter(id => !pageIds.includes(id)));
+        } else {
+            setSelectedChequeReconIds(prev => Array.from(new Set([...prev, ...pageIds])));
+        }
+    };
+
+    const handleToggleCheque = (id: number) => {
+        setSelectedChequeReconIds(prev =>
+            prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
+        );
+    };
+
+    const handleDepositSelectedCheques = () => {
+        if (selectedChequeReconIds.length === 0) {
+            showToast('Please select at least one cheque to reconcile / deposit');
+            return;
+        }
+        setChequeReconRecords(prev => prev.map(c =>
+            selectedChequeReconIds.includes(c.id) ? { ...c, status: 'DEPOSITED' } : c
+        ));
+        showToast(`${selectedChequeReconIds.length} cheque(s) marked as deposited/reconciled!`);
+        setSelectedChequeReconIds([]);
+    };
+
+    const handleExportCheques = () => {
+        const headers = [
+            'COMPANY NAME', 'BRANCH NAME', 'POLICY TYPE', 'POLICY NO', 'TRANS DATE',
+            'CUSTOMER NAME', 'REGISTRATION NO', 'AGENT NAME', 'EMPLOYEE NAME',
+            'PROPOSAL AMT', 'PAYMENTTYPE', 'CHEQUE NO.', 'REMARK', 'CREATE USER',
+            'CREATE DATE', 'REFERENCE TYPE', 'STATUS'
+        ];
+        const rows = filteredChequeReconRecords.map(i => [
+            i.companyName,
+            i.branchName,
+            i.policyType,
+            i.policyNo,
+            i.transDate,
+            i.customerName,
+            i.registrationNo,
+            i.agentName,
+            i.employeeName,
+            i.proposalAmt,
+            i.paymentType,
+            i.chequeNo,
+            i.remark,
+            i.createUser,
+            i.createDate,
+            i.referenceType,
+            i.status
+        ]);
+        exportTableToCsv(`Cheque_Recon_${chequeReconType}_Report`, headers, rows);
+    };
+
+    /* =========================================================================
+       14. RECEIVING AMOUNT (reliable-erp.com/Clerk/viewReceivingAmountt.aspx)
+       ========================================================================= */
+    interface ReceivingPolicyDetail {
+        customerName: string;
+        registrationNo: string;
+        actualPremiumAmt: number;
+    }
+
+    interface ReceivingAmountItem {
+        id: number;
+        category: string;
+        totalPremium: number;
+        pendingPremium: number;
+        depositPremium: number;
+        cutNPay: number;
+        shortfall: number;
+        status: 'SHORT FALL' | 'CLEAR' | 'PENDING';
+        createdDate: string;
+        executiveName: string;
+        policyDetails: ReceivingPolicyDetail[];
+    }
+
+    const receivingCategories = [
+        { id: 'Online RA Pre Approval', label: 'Online RA Pre Approval', count: 3 },
+        { id: 'Pending ERP Entry', label: 'Pending ERP Entry', count: 9 },
+        { id: 'Online To Reliable Approval', label: 'Online To Reliable Approval', count: 4 },
+        { id: 'Pending Premium Cash', label: 'Pending Premium Cash', count: 4 },
+        { id: 'Cash Received Premium', label: 'Cash Received Premium', count: 38 },
+        { id: 'Premium Shortfall', label: 'Premium Shortfall', count: 62 },
+        { id: 'RA Cheque Recon', label: 'RA Cheque Recon', count: 0 },
+    ];
+
+    const [receivingActiveCategory, setReceivingActiveCategory] = useState('Cash Received Premium');
+    const [receivingSearchQuery, setReceivingSearchQuery] = useState('');
+    const [receivingPage, setReceivingPage] = useState(1);
+    const [receivingPerPage, setReceivingPerPage] = useState(10);
+    const [viewingReceivingRecord, setViewingReceivingRecord] = useState<ReceivingAmountItem | null>(null);
+
+    const [receivingRecords, setReceivingRecords] = useState<ReceivingAmountItem[]>([
+        {
+            id: 1,
+            category: 'Cash Received Premium',
+            totalPremium: 19815,
+            pendingPremium: 19815,
+            depositPremium: 19815,
+            cutNPay: 0,
+            shortfall: 0,
+            status: 'SHORT FALL',
+            createdDate: '21/06/2024',
+            executiveName: 'SANTOSH PHULCHAND BANSODE',
+            policyDetails: [
+                { customerName: 'SUSHANT SUNIL GALINDE', registrationNo: 'MH42AX3799', actualPremiumAmt: 19815 }
+            ]
+        },
+        {
+            id: 2,
+            category: 'Cash Received Premium',
+            totalPremium: 20205,
+            pendingPremium: 20205,
+            depositPremium: 0,
+            cutNPay: 0,
+            shortfall: 0,
+            status: 'SHORT FALL',
+            createdDate: '07/12/2024',
+            executiveName: 'NILAKSHI NARENDRA KULKARNI',
+            policyDetails: [
+                { customerName: 'GANESH DATTU WAGHMARE', registrationNo: 'MH12TV0205', actualPremiumAmt: 20205 }
+            ]
+        },
+        {
+            id: 3,
+            category: 'Cash Received Premium',
+            totalPremium: 18093,
+            pendingPremium: 16000,
+            depositPremium: 16000,
+            cutNPay: 2092,
+            shortfall: 16000,
+            status: 'SHORT FALL',
+            createdDate: '03/03/2025',
+            executiveName: 'ARVIND DNYANESHWAR GAWADE',
+            policyDetails: [
+                { customerName: 'PRAMOD PANDURANG SATAV', registrationNo: 'MH12AQ2375', actualPremiumAmt: 18093 }
+            ]
+        },
+        {
+            id: 4,
+            category: 'Cash Received Premium',
+            totalPremium: 31581,
+            pendingPremium: 31581,
+            depositPremium: 31581,
+            cutNPay: 0,
+            shortfall: 31581,
+            status: 'SHORT FALL',
+            createdDate: '31/05/2025',
+            executiveName: 'ARVIND DNYANESHWAR GAWADE',
+            policyDetails: [
+                { customerName: 'ANIL SHANKAR DOIPHODE', registrationNo: 'MH12MV3232', actualPremiumAmt: 31581 }
+            ]
+        },
+        {
+            id: 5,
+            category: 'Cash Received Premium',
+            totalPremium: 18551,
+            pendingPremium: 18550,
+            depositPremium: 0,
+            cutNPay: 0,
+            shortfall: 18550,
+            status: 'SHORT FALL',
+            createdDate: '03/06/2025',
+            executiveName: 'RUPESH RAMESH GAIKWAD',
+            policyDetails: [
+                { customerName: 'RIZA RAFIQ SHAIKH', registrationNo: 'MH12UJ9285', actualPremiumAmt: 18551 }
+            ]
+        },
+        {
+            id: 6,
+            category: 'Cash Received Premium',
+            totalPremium: 30280,
+            pendingPremium: 30280,
+            depositPremium: 30280,
+            cutNPay: 0,
+            shortfall: 0,
+            status: 'CLEAR',
+            createdDate: '06/06/2025',
+            executiveName: 'ARVIND DNYANESHWAR GAWADE',
+            policyDetails: [
+                { customerName: 'MANISHA JEETENDRA BANSODE', registrationNo: 'NON-MOTOR', actualPremiumAmt: 30280 }
+            ]
+        },
+        {
+            id: 7,
+            category: 'Cash Received Premium',
+            totalPremium: 14031,
+            pendingPremium: 14031,
+            depositPremium: 0,
+            cutNPay: 0,
+            shortfall: 14031,
+            status: 'SHORT FALL',
+            createdDate: '15/06/2025',
+            executiveName: 'ARVIND DNYANESHWAR GAWADE',
+            policyDetails: [
+                { customerName: 'MANISHA JEETENDRA BANSODE', registrationNo: 'MH42AS8003', actualPremiumAmt: 14031 }
+            ]
+        },
+        {
+            id: 8,
+            category: 'Cash Received Premium',
+            totalPremium: 12416,
+            pendingPremium: 12416,
+            depositPremium: 12416,
+            cutNPay: 0,
+            shortfall: 12416,
+            status: 'SHORT FALL',
+            createdDate: '22/11/2025',
+            executiveName: 'ARVIND DNYANESHWAR GAWADE',
+            policyDetails: [
+                { customerName: 'SATYAWAN RAMCHANDRA NANAWARE', registrationNo: 'MH42AH7755', actualPremiumAmt: 12416 }
+            ]
+        },
+        {
+            id: 9,
+            category: 'Cash Received Premium',
+            totalPremium: 6914,
+            pendingPremium: 6914,
+            depositPremium: 6914,
+            cutNPay: 0,
+            shortfall: 6914,
+            status: 'SHORT FALL',
+            createdDate: '30/11/2025',
+            executiveName: 'ARVIND DNYANESHWAR GAWADE',
+            policyDetails: [
+                { customerName: 'SHASHIKANTA SHANTILAL GADIYA', registrationNo: 'MH42AH1458', actualPremiumAmt: 6914 }
+            ]
+        },
+        {
+            id: 10,
+            category: 'Online RA Pre Approval',
+            totalPremium: 25400,
+            pendingPremium: 25400,
+            depositPremium: 25400,
+            cutNPay: 0,
+            shortfall: 0,
+            status: 'CLEAR',
+            createdDate: '10/01/2026',
+            executiveName: 'SANTOSH PHULCHAND BANSODE',
+            policyDetails: [
+                { customerName: 'VIKRAM BALASAHEB PAWAR', registrationNo: 'MH12PQ4580', actualPremiumAmt: 25400 }
+            ]
+        },
+        {
+            id: 11,
+            category: 'Pending ERP Entry',
+            totalPremium: 45000,
+            pendingPremium: 45000,
+            depositPremium: 20000,
+            cutNPay: 0,
+            shortfall: 25000,
+            status: 'SHORT FALL',
+            createdDate: '12/02/2026',
+            executiveName: 'RUPESH RAMESH GAIKWAD',
+            policyDetails: [
+                { customerName: 'SHREE BALAJI LOGISTICS', registrationNo: 'MH14CL9012', actualPremiumAmt: 45000 }
+            ]
+        },
+        {
+            id: 12,
+            category: 'Premium Shortfall',
+            totalPremium: 38200,
+            pendingPremium: 38200,
+            depositPremium: 10000,
+            cutNPay: 0,
+            shortfall: 28200,
+            status: 'SHORT FALL',
+            createdDate: '05/03/2026',
+            executiveName: 'ARVIND DNYANESHWAR GAWADE',
+            policyDetails: [
+                { customerName: 'MAHESH DILIP SHINDE', registrationNo: 'MH45B8890', actualPremiumAmt: 38200 }
+            ]
+        }
+    ]);
+
+    const filteredReceivingRecords = receivingRecords.filter(item => {
+        if (receivingActiveCategory && item.category !== receivingActiveCategory) return false;
+        if (!receivingSearchQuery.trim()) return true;
+        const q = receivingSearchQuery.toLowerCase().trim();
+        const matchesMain = (
+            item.executiveName.toLowerCase().includes(q) ||
+            item.createdDate.toLowerCase().includes(q) ||
+            item.status.toLowerCase().includes(q) ||
+            item.totalPremium.toString().includes(q)
+        );
+        const matchesDetails = item.policyDetails.some(d =>
+            d.customerName.toLowerCase().includes(q) ||
+            d.registrationNo.toLowerCase().includes(q)
+        );
+        return matchesMain || matchesDetails;
+    });
+
+    const totalReceivingCount = filteredReceivingRecords.length;
+    const totalReceivingPremium = filteredReceivingRecords.reduce((acc, curr) => acc + curr.totalPremium, 0);
+    const totalReceivingPending = filteredReceivingRecords.reduce((acc, curr) => acc + curr.pendingPremium, 0);
+    const totalReceivingDeposit = filteredReceivingRecords.reduce((acc, curr) => acc + curr.depositPremium, 0);
+    const totalReceivingShortfall = filteredReceivingRecords.reduce((acc, curr) => acc + curr.shortfall, 0);
+
+    const totalReceivingPages = Math.ceil(filteredReceivingRecords.length / receivingPerPage) || 1;
+    const paginatedReceivingRecords = filteredReceivingRecords.slice(
+        (receivingPage - 1) * receivingPerPage,
+        receivingPage * receivingPerPage
+    );
+
+    const handleDeleteReceivingRecord = (id: number) => {
+        setReceivingRecords(prev => prev.filter(r => r.id !== id));
+        showToast('Receiving amount record deleted successfully');
+    };
+
+    const handleExportReceiving = () => {
+        const headers = [
+            'CATEGORY', 'TOTAL PREMIUM', 'TOTAL PENDING PREMIUM', 'DEPOSIT PREMIUM',
+            'CUT N PAY', 'SHORT FALL', 'STATUS', 'CREATED DATE', 'EXECUTIVE NAME',
+            'CUSTOMER NAME', 'REGISTRATION NO', 'ACTUAL PREMIUM'
+        ];
+        const rows: (string | number)[][] = [];
+        filteredReceivingRecords.forEach(i => {
+            if (i.policyDetails.length === 0) {
+                rows.push([
+                    i.category, i.totalPremium, i.pendingPremium, i.depositPremium,
+                    i.cutNPay, i.shortfall, i.status, i.createdDate, i.executiveName,
+                    '-', '-', '-'
+                ]);
+            } else {
+                i.policyDetails.forEach(d => {
+                    rows.push([
+                        i.category, i.totalPremium, i.pendingPremium, i.depositPremium,
+                        i.cutNPay, i.shortfall, i.status, i.createdDate, i.executiveName,
+                        d.customerName, d.registrationNo, d.actualPremiumAmt
+                    ]);
+                });
+            }
+        });
+        exportTableToCsv(`Receiving_Amount_${receivingActiveCategory.replace(/\s+/g, '_')}_Report`, headers, rows);
+    };
+
+    /* =========================================================================
+       15. ONLINE RA PRE APPROVAL (reliable-erp.com/Clerk/viewAppTransactionAccountApproval.aspx)
+       ========================================================================= */
+    interface OnlineRAPreApprovalItem {
+        id: string;
+        date: string;
+        premium: number;
+        insuranceCompany: string;
+        productType: string;
+        policyMode: string;
+        paymentMode: string;
+        cashStatus: string;
+        raPaymentStatus: string;
+        paymentDetails2: string;
+        noOfImages: number;
+        agentName: string;
+        salesExecutive: string;
+        registrationNo: string;
+        status: 'PENDING' | 'APPROVED';
+    }
+
+    const [raPreApprovalSearchQuery, setRaPreApprovalSearchQuery] = useState('');
+    const [raPreApprovalPage, setRaPreApprovalPage] = useState(1);
+    const [raPreApprovalPerPage, setRaPreApprovalPerPage] = useState(10);
+
+    const [raPreApprovalRecords, setRaPreApprovalRecords] = useState<OnlineRAPreApprovalItem[]>([
+        {
+            id: '185783',
+            date: '16/10/2026 15:20:06',
+            premium: 82215,
+            insuranceCompany: 'UNIVERSAL SOMPO GENERAL INSURANCE CO. LTD',
+            productType: 'COMPREHENSIVE',
+            policyMode: 'NEW',
+            paymentMode: 'ONLINE TO RELIABLE',
+            cashStatus: 'NA',
+            raPaymentStatus: 'NA',
+            paymentDetails2: 'NA',
+            noOfImages: 1,
+            agentName: 'NITIN HANUMANT SHENDE',
+            salesExecutive: 'GAWADE ARVIND DNYANESHWAR',
+            registrationNo: 'MH12QW6022',
+            status: 'PENDING'
+        },
+        {
+            id: '185784',
+            date: '16/10/2026 14:10:22',
+            premium: 39525,
+            insuranceCompany: 'TATA AIG GENERAL INSURANCE CO. LTD',
+            productType: 'COMPREHENSIVE',
+            policyMode: 'RENEWAL',
+            paymentMode: 'ONLINE TO RELIABLE',
+            cashStatus: 'NA',
+            raPaymentStatus: 'NA',
+            paymentDetails2: 'NA',
+            noOfImages: 2,
+            agentName: 'SHIVANI PRADIP BHUYAR',
+            salesExecutive: 'MANGESH RAVINDRA KAMBLE',
+            registrationNo: 'MH28BW2137',
+            status: 'PENDING'
+        },
+        {
+            id: '185785',
+            date: '16/10/2026 11:45:10',
+            premium: 59354,
+            insuranceCompany: 'ROYAL SUNDARAM GENERAL INSURANCE CO. LIMITED',
+            productType: 'COMPREHENSIVE',
+            policyMode: 'ROLLOVER',
+            paymentMode: 'ONLINE TO RELIABLE',
+            cashStatus: 'NA',
+            raPaymentStatus: 'NA',
+            paymentDetails2: 'NA',
+            noOfImages: 1,
+            agentName: 'ANIKET KULKARNI',
+            salesExecutive: 'AVINASH BHARAT KORATKAR',
+            registrationNo: 'MH45MV4134',
+            status: 'PENDING'
+        }
+    ]);
+
+    const filteredRaPreApprovalRecords = raPreApprovalRecords.filter(item => {
+        if (!raPreApprovalSearchQuery.trim()) return true;
+        const q = raPreApprovalSearchQuery.toLowerCase().trim();
+        return (
+            item.id.toLowerCase().includes(q) ||
+            item.agentName.toLowerCase().includes(q) ||
+            item.salesExecutive.toLowerCase().includes(q) ||
+            item.registrationNo.toLowerCase().includes(q) ||
+            item.insuranceCompany.toLowerCase().includes(q) ||
+            item.productType.toLowerCase().includes(q) ||
+            item.date.toLowerCase().includes(q)
+        );
+    });
+
+    const totalRaPreApprovalCount = filteredRaPreApprovalRecords.length;
+    const totalRaPreApprovalAmount = filteredRaPreApprovalRecords.reduce((acc, curr) => acc + curr.premium, 0);
+    const totalRaPreApprovalPages = Math.ceil(filteredRaPreApprovalRecords.length / raPreApprovalPerPage) || 1;
+    const paginatedRaPreApprovalRecords = filteredRaPreApprovalRecords.slice(
+        (raPreApprovalPage - 1) * raPreApprovalPerPage,
+        raPreApprovalPage * raPreApprovalPerPage
+    );
+
+    const handleApproveRAPreApproval = (id: string) => {
+        setRaPreApprovalRecords(prev => prev.map(r => r.id === id ? { ...r, status: 'APPROVED' } : r));
+        showToast(`Transaction ${id} approved successfully!`);
+    };
+
+    const handleExportRAPreApproval = () => {
+        const headers = [
+            'ID', 'DATE', 'PREMIUM', 'INSURANCE COMPANY', 'PRODUCT TYPE',
+            'POLICY MODE', 'PAYMENT MODE', 'CASH STATUS', 'RAPAYMENTSTATUS',
+            'PAYMENTDETAILS2', 'NO. OF IMAGES', 'AGENT NAME', 'SALES EX. / LOC.HEAD',
+            'REGISTRATION NO', 'STATUS'
+        ];
+        const rows = filteredRaPreApprovalRecords.map(i => [
+            i.id, i.date, i.premium, i.insuranceCompany, i.productType,
+            i.policyMode, i.paymentMode, i.cashStatus, i.raPaymentStatus,
+            i.paymentDetails2, i.noOfImages, i.agentName, i.salesExecutive,
+            i.registrationNo, i.status
+        ]);
+        exportTableToCsv('Online_RA_Pre_Approval_Report', headers, rows);
+    };
+
+    /* =========================================================================
+       16. PENDING COMMISSION NEW (reliable-erp.com/Clerk/POSP_AgentPendingCommission.aspx)
+       ========================================================================= */
+    interface PendingCommissionNewItem {
+        id: string;
+        pospName: string;
+        branchName: string;
+        agentName: string;
+        premiumAmt: number;
+        tpComm: number;
+        odComm: number;
+        netComm: number;
+        totalComm: number;
+        advAmt: number;
+        totalOutstandingAmt: number;
+        balance: number;
+        accountNo: string;
+        ifscCode: string;
+        agentTds: number;
+        entityType: 'Agent POSP' | 'RA POSP';
+    }
+
+    const [pcnEntity, setPcnEntity] = useState<'ALL' | 'Agent POSP' | 'RA POSP'>('ALL');
+    const [pcnFromDate, setPcnFromDate] = useState('16/10/2026');
+    const [pcnToDate, setPcnToDate] = useState('16/10/2026');
+    const [pcnSearchQuery, setPcnSearchQuery] = useState('');
+    const [pcnPage, setPcnPage] = useState(1);
+    const [pcnPerPage, setPcnPerPage] = useState(10);
+    const [pcnSelectedIds, setPcnSelectedIds] = useState<string[]>([]);
+
+    // Payment Form States
+    const [pcnOutstandingRecover, setPcnOutstandingRecover] = useState('0.00');
+    const [pcnTotalOutstandingRecover, setPcnTotalOutstandingRecover] = useState('0.00');
+    const [pcnEwalletAmountUsed, setPcnEwalletAmountUsed] = useState('0.00');
+    const [pcnPaymentMode, setPcnPaymentMode] = useState('');
+    const [pcnLedger, setPcnLedger] = useState('');
+    const [pcnNeftNo, setPcnNeftNo] = useState('');
+    const [pcnPaymentDate, setPcnPaymentDate] = useState('16/10/2026');
+
+    const [pcnRecords, setPcnRecords] = useState<PendingCommissionNewItem[]>([
+        {
+            id: 'PCN-001',
+            pospName: 'SONALI NILKANTHA BORAKAR',
+            branchName: 'AHILYANAGAR',
+            agentName: 'SHEKHAR MARUTI ANDHULE',
+            premiumAmt: 68675.38,
+            tpComm: 18348.00,
+            odComm: 1896.00,
+            netComm: 18348.00,
+            totalComm: 20244.00,
+            advAmt: 0.00,
+            totalOutstandingAmt: 0.00,
+            balance: 20244.00,
+            accountNo: '50100213606577',
+            ifscCode: 'HDFC0002986',
+            agentTds: 2,
+            entityType: 'Agent POSP'
+        },
+        {
+            id: 'PCN-002',
+            pospName: 'AISHWARYA NAGNATH PISE',
+            branchName: 'AKLUJ',
+            agentName: 'NAVNATH SAWATA PISE',
+            premiumAmt: 18043.00,
+            tpComm: 7887.00,
+            odComm: 0.00,
+            netComm: 7887.00,
+            totalComm: 7887.00,
+            advAmt: 0.00,
+            totalOutstandingAmt: 0.00,
+            balance: 7887.00,
+            accountNo: '070710510002428',
+            ifscCode: 'BKID0000707',
+            agentTds: 2,
+            entityType: 'Agent POSP'
+        },
+        {
+            id: 'PCN-003',
+            pospName: 'RESHMA AMOL WAGHMARE',
+            branchName: 'AKLUJ',
+            agentName: 'RAJENDRA LAXMAN WAGHMARE',
+            premiumAmt: 9803.00,
+            tpComm: 4152.00,
+            odComm: 0.00,
+            netComm: 4152.00,
+            totalComm: 4152.00,
+            advAmt: 0.00,
+            totalOutstandingAmt: 0.00,
+            balance: 4152.00,
+            accountNo: '50100162030864',
+            ifscCode: 'HDFC0004476',
+            agentTds: 2,
+            entityType: 'Agent POSP'
+        },
+        {
+            id: 'PCN-004',
+            pospName: 'SNEHAL SACHIN GHODAKE',
+            branchName: 'AKLUJ',
+            agentName: 'SHIVAJI LAXMAN GHODAKE',
+            premiumAmt: 17971.00,
+            tpComm: 6996.00,
+            odComm: 0.00,
+            netComm: 6996.00,
+            totalComm: 6996.00,
+            advAmt: 0.00,
+            totalOutstandingAmt: 0.00,
+            balance: 6996.00,
+            accountNo: '20111533058',
+            ifscCode: 'SBIN0000305',
+            agentTds: 2,
+            entityType: 'RA POSP'
+        },
+        {
+            id: 'PCN-005',
+            pospName: 'ADITYA CHANDRASHEKHAR JOSHI',
+            branchName: 'AKOLA',
+            agentName: 'ASHWINI SHAILENDRA JOSHI',
+            premiumAmt: 19733.00,
+            tpComm: 7865.00,
+            odComm: 0.00,
+            netComm: 7865.00,
+            totalComm: 7865.00,
+            advAmt: 0.00,
+            totalOutstandingAmt: 0.00,
+            balance: 7865.00,
+            accountNo: '696805602087 / 1026005016579',
+            ifscCode: 'ICIC0006968 / YESB0AUB026',
+            agentTds: 2,
+            entityType: 'Agent POSP'
+        },
+        {
+            id: 'PCN-006',
+            pospName: 'SHIVANI PRADIP BHUYAR',
+            branchName: 'AKOLA',
+            agentName: 'SHIVANI PRADIP BHUYAR',
+            premiumAmt: 46086.00,
+            tpComm: 1460.00,
+            odComm: 8720.00,
+            netComm: 1460.00,
+            totalComm: 10180.00,
+            advAmt: 0.00,
+            totalOutstandingAmt: 0.00,
+            balance: 10180.00,
+            accountNo: '925010038096803',
+            ifscCode: 'UTIB0000749',
+            agentTds: 2,
+            entityType: 'Agent POSP'
+        },
+        {
+            id: 'PCN-007',
+            pospName: 'SOPAN RAMBHAU PATIL',
+            branchName: 'AKOLA',
+            agentName: 'SHRIKRUSHNA SOPAN PATIL',
+            premiumAmt: 76565.00,
+            tpComm: 25316.00,
+            odComm: 0.00,
+            netComm: 25316.00,
+            totalComm: 25316.00,
+            advAmt: 0.00,
+            totalOutstandingAmt: 0.00,
+            balance: 25316.00,
+            accountNo: '09641140000028',
+            ifscCode: 'HDFC0000964',
+            agentTds: 2,
+            entityType: 'Agent POSP'
+        },
+        {
+            id: 'PCN-008',
+            pospName: 'SUPRIYA DHAIRYASHIL JAYSING',
+            branchName: 'BARAMATI',
+            agentName: 'DHAIRYASHIL JAYSING',
+            premiumAmt: 7003.00,
+            tpComm: 0.00,
+            odComm: 416.00,
+            netComm: 0.00,
+            totalComm: 416.00,
+            advAmt: 0.00,
+            totalOutstandingAmt: 0.00,
+            balance: 416.00,
+            accountNo: '50200050498765',
+            ifscCode: 'HDFC0002089',
+            agentTds: 2,
+            entityType: 'RA POSP'
+        },
+        {
+            id: 'PCN-009',
+            pospName: 'ANURADHA RAMDAS KALE',
+            branchName: 'PUNE',
+            agentName: 'RAMDAS TUKARAM KALE',
+            premiumAmt: 34200.00,
+            tpComm: 6200.00,
+            odComm: 1200.00,
+            netComm: 6200.00,
+            totalComm: 7400.00,
+            advAmt: 0.00,
+            totalOutstandingAmt: 0.00,
+            balance: 7400.00,
+            accountNo: '4039101004523',
+            ifscCode: 'MAHB0000123',
+            agentTds: 2,
+            entityType: 'Agent POSP'
+        },
+        {
+            id: 'PCN-010',
+            pospName: 'SANDIP BABANRAO DESHMUKH',
+            branchName: 'CHHATRAPATI SAMBHAJINAGAR',
+            agentName: 'SANDIP BABANRAO DESHMUKH',
+            premiumAmt: 52180.00,
+            tpComm: 11400.00,
+            odComm: 3500.00,
+            netComm: 11400.00,
+            totalComm: 14900.00,
+            advAmt: 0.00,
+            totalOutstandingAmt: 0.00,
+            balance: 14900.00,
+            accountNo: '309812450098',
+            ifscCode: 'SBIN0001423',
+            agentTds: 2,
+            entityType: 'RA POSP'
+        }
+    ]);
+
+    const filteredPcnRecords = pcnRecords.filter(item => {
+        if (pcnEntity !== 'ALL' && item.entityType !== pcnEntity) return false;
+        if (!pcnSearchQuery.trim()) return true;
+        const q = pcnSearchQuery.toLowerCase().trim();
+        return (
+            item.pospName.toLowerCase().includes(q) ||
+            item.branchName.toLowerCase().includes(q) ||
+            item.agentName.toLowerCase().includes(q) ||
+            item.accountNo.toLowerCase().includes(q) ||
+            item.ifscCode.toLowerCase().includes(q) ||
+            item.balance.toString().includes(q) ||
+            item.premiumAmt.toString().includes(q)
+        );
+    });
+
+    const totalPcnCount = filteredPcnRecords.length;
+    const totalPcnPremium = filteredPcnRecords.reduce((acc, curr) => acc + curr.premiumAmt, 0);
+    const totalPcnComm = filteredPcnRecords.reduce((acc, curr) => acc + curr.totalComm, 0);
+    const totalPcnBalance = filteredPcnRecords.reduce((acc, curr) => acc + curr.balance, 0);
+
+    const totalPcnPages = Math.ceil(filteredPcnRecords.length / pcnPerPage) || 1;
+    const paginatedPcnRecords = filteredPcnRecords.slice(
+        (pcnPage - 1) * pcnPerPage,
+        pcnPage * pcnPerPage
+    );
+
+    const selectedPcnTotalBalance = filteredPcnRecords
+        .filter(item => pcnSelectedIds.includes(item.id))
+        .reduce((acc, curr) => acc + curr.balance, 0);
+
+    const handleToggleSelectPcn = (id: string) => {
+        setPcnSelectedIds(prev =>
+            prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id]
+        );
+    };
+
+    const handleSelectAllPcn = () => {
+        const paginatedIds = paginatedPcnRecords.map(item => item.id);
+        const allSelected = paginatedIds.length > 0 && paginatedIds.every(id => pcnSelectedIds.includes(id));
+        if (allSelected) {
+            setPcnSelectedIds(prev => prev.filter(id => !paginatedIds.includes(id)));
+        } else {
+            setPcnSelectedIds(prev => Array.from(new Set([...prev, ...paginatedIds])));
+        }
+    };
+
+    const handlePcnPay = () => {
+        if (pcnSelectedIds.length === 0) {
+            showToast('Please select at least one agent record using the checkboxes.');
+            return;
+        }
+        if (!pcnPaymentMode) {
+            showToast('Please select a Payment Mode.');
+            return;
+        }
+        if (!pcnLedger) {
+            showToast('Please select a Ledger / Cash Account.');
+            return;
+        }
+        const paidCount = pcnSelectedIds.length;
+        const paidAmt = selectedPcnTotalBalance.toLocaleString('en-IN', { minimumFractionDigits: 2 });
+        setPcnRecords(prev => prev.filter(r => !pcnSelectedIds.includes(r.id)));
+        setPcnSelectedIds([]);
+        showToast(`Payment of ₹ ${paidAmt} processed successfully for ${paidCount} agent(s)!`);
+    };
+
+    const handleExportPcnSummary = () => {
+        const headers = ['BRANCH NAME', 'NO. OF AGENTS', 'TOTAL PREMIUM', 'TOTAL COMM', 'TOTAL BALANCE'];
+        const branchMap = new Map<string, { count: number; premium: number; comm: number; balance: number }>();
+        filteredPcnRecords.forEach(r => {
+            const current = branchMap.get(r.branchName) || { count: 0, premium: 0, comm: 0, balance: 0 };
+            branchMap.set(r.branchName, {
+                count: current.count + 1,
+                premium: current.premium + r.premiumAmt,
+                comm: current.comm + r.totalComm,
+                balance: current.balance + r.balance
+            });
+        });
+        const rows: (string | number)[][] = [];
+        branchMap.forEach((val, branch) => {
+            rows.push([branch, val.count, val.premium.toFixed(2), val.comm.toFixed(2), val.balance.toFixed(2)]);
+        });
+        exportTableToCsv(`Pending_Commission_New_Summary_${pcnEntity.replace(/\s+/g, '_')}`, headers, rows);
+    };
+
+    const handleExportPcnDetails = () => {
+        const headers = [
+            'POSP NAME', 'BRANCH NAME', 'AGENT NAME', 'PREMIUM AMT', 'TP COMM.',
+            'OD COMM.', 'NET COMM.', 'TOTAL COMM.', 'ADV. AMT', 'TOTAL OUT STANDING AMOUNT',
+            'BALANCE', 'ACCOUNTNO', 'IFSC CODE', 'AGENTTDS'
+        ];
+        const rows = filteredPcnRecords.map(i => [
+            i.pospName, i.branchName, i.agentName, i.premiumAmt, i.tpComm,
+            i.odComm, i.netComm, i.totalComm, i.advAmt, i.totalOutstandingAmt,
+            i.balance, i.accountNo, i.ifscCode, i.agentTds
+        ]);
+        exportTableToCsv(`Pending_Commission_New_Details_${pcnEntity.replace(/\s+/g, '_')}`, headers, rows);
     };
 
     return (
@@ -1539,11 +4082,10 @@ const AccountModule: React.FC = () => {
                                                     <button
                                                         type="button"
                                                         onClick={() => handleApproveShortfall(item.id)}
-                                                        className={`p-1.5 rounded-[6px] transition-colors cursor-pointer inline-flex items-center justify-center border-none ${
-                                                            item.status === 'APPROVED'
+                                                        className={`p-1.5 rounded-[6px] transition-colors cursor-pointer inline-flex items-center justify-center border-none ${item.status === 'APPROVED'
                                                                 ? 'bg-emerald-100 text-emerald-700 cursor-default'
                                                                 : 'bg-emerald-50 text-emerald-600 hover:bg-emerald-100 hover:text-emerald-700'
-                                                        }`}
+                                                            }`}
                                                         title={item.status === 'APPROVED' ? 'Approved' : 'Approve Premium Shortfall'}
                                                         disabled={item.status === 'APPROVED'}
                                                     >
@@ -1714,88 +4256,101 @@ const AccountModule: React.FC = () => {
             {/* TAB CONTENT 5: PENDING COMMISSION (MATCHING ERP AgentCommisionPayment.aspx) */}
             {activeTab === 'pending-commission' && (
                 <div className="tab-transition-wrapper space-y-4">
-                    {/* Top Search & Filter Card matching screenshot */}
-                    <div className="bg-white rounded-xl border border-brand-border p-5 shadow-sm space-y-4">
-                        <div className="flex flex-wrap items-center justify-between gap-6">
-                            {/* Entity Type Radio: Agent, Self, Franchise */}
-                            <div className="flex items-center gap-4 text-xs font-semibold text-slate-700">
-                                {(['Agent', 'Self', 'Franchise'] as const).map((entity) => (
-                                    <label key={entity} className="flex items-center gap-1.5 cursor-pointer">
-                                        <input
-                                            type="radio"
-                                            name="commEntity"
-                                            checked={commEntity === entity}
-                                            onChange={() => setCommEntity(entity)}
-                                            className="text-brand-primary focus:ring-brand-primary cursor-pointer"
-                                        />
-                                        <span>{entity}</span>
-                                    </label>
-                                ))}
+                    {/* Top Search & Filter Bar (Full-Width Responsive Grid) */}
+                    <div className="bg-white rounded-xl border border-brand-border p-4 sm:p-5 shadow-sm">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-4 lg:gap-5 xl:gap-6 items-end w-full">
+                            {/* Entity Type Radio */}
+                            <div className="flex flex-col gap-1.5 sm:col-span-1 lg:col-span-3">
+                                <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Entity</span>
+                                <div className="flex items-center justify-start gap-4 sm:gap-5 h-[38px]">
+                                    {(['Agent', 'Self', 'Franchise'] as const).map((entity) => (
+                                        <label key={entity} className="flex items-center gap-1.5 cursor-pointer text-xs font-semibold text-brand-navy select-none hover:text-brand-primary transition-colors whitespace-nowrap">
+                                            <input
+                                                type="radio"
+                                                name="commEntity"
+                                                checked={commEntity === entity}
+                                                onChange={() => setCommEntity(entity)}
+                                                className="w-4 h-4 text-brand-primary accent-blue-600 cursor-pointer"
+                                            />
+                                            <span>{entity}</span>
+                                        </label>
+                                    ))}
+                                </div>
                             </div>
 
-                            {/* Date Type Radio: Trans Date, Risk Start Date */}
-                            <div className="flex items-center gap-4 text-xs font-semibold text-slate-700">
-                                {(['Trans Date', 'Risk Start Date'] as const).map((dType) => (
-                                    <label key={dType} className="flex items-center gap-1.5 cursor-pointer">
-                                        <input
-                                            type="radio"
-                                            name="commDateType"
-                                            checked={commDateType === dType}
-                                            onChange={() => setCommDateType(dType)}
-                                            className="text-brand-primary focus:ring-brand-primary cursor-pointer"
-                                        />
-                                        <span>{dType}</span>
-                                    </label>
-                                ))}
+                            {/* Date Type Radio */}
+                            <div className="flex flex-col gap-1.5 sm:col-span-1 lg:col-span-3">
+                                <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Date Criteria</span>
+                                <div className="flex items-center justify-start gap-4 sm:gap-5 h-[38px]">
+                                    {(['Trans Date', 'Risk Start Date'] as const).map((dType) => (
+                                        <label key={dType} className="flex items-center gap-1.5 cursor-pointer text-xs font-semibold text-brand-navy select-none hover:text-brand-primary transition-colors whitespace-nowrap">
+                                            <input
+                                                type="radio"
+                                                name="commDateType"
+                                                checked={commDateType === dType}
+                                                onChange={() => setCommDateType(dType)}
+                                                className="w-4 h-4 text-brand-primary accent-blue-600 cursor-pointer"
+                                            />
+                                            <span>{dType}</span>
+                                        </label>
+                                    ))}
+                                </div>
                             </div>
 
-                            {/* Date inputs: From Date & To Date */}
-                            <div className="flex items-center gap-4">
-                                <div className="flex flex-col">
-                                    <span className="text-[11px] font-semibold text-slate-600 mb-1">From Date</span>
+                            {/* From Date */}
+                            <div className="flex flex-col gap-1.5 sm:col-span-1 lg:col-span-2">
+                                <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">From Date</label>
+                                <div className="relative w-full">
                                     <input
                                         type="text"
                                         value={commFromDate}
                                         onChange={(e) => setCommFromDate(e.target.value)}
                                         placeholder="DD/MM/YYYY"
-                                        className="w-32 h-[34px] px-2.5 bg-white border border-slate-300 rounded text-xs text-slate-800 focus:outline-none focus:ring-1 focus:ring-brand-primary"
+                                        className="w-full h-[38px] pl-3 pr-8 bg-white border border-[#CBD5E1] rounded-lg text-xs font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all shadow-xs"
                                     />
+                                    <Calendar size={14} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
                                 </div>
-                                <div className="flex flex-col">
-                                    <span className="text-[11px] font-semibold text-slate-600 mb-1">To Date</span>
+                            </div>
+
+                            {/* To Date */}
+                            <div className="flex flex-col gap-1.5 sm:col-span-1 lg:col-span-2">
+                                <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">To Date</label>
+                                <div className="relative w-full">
                                     <input
                                         type="text"
                                         value={commToDate}
                                         onChange={(e) => setCommToDate(e.target.value)}
                                         placeholder="DD/MM/YYYY"
-                                        className="w-32 h-[34px] px-2.5 bg-white border border-slate-300 rounded text-xs text-slate-800 focus:outline-none focus:ring-1 focus:ring-brand-primary"
+                                        className="w-full h-[38px] pl-3 pr-8 bg-white border border-[#CBD5E1] rounded-lg text-xs font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all shadow-xs"
                                     />
+                                    <Calendar size={14} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
                                 </div>
                             </div>
-                        </div>
 
-                        {/* Top Filter Buttons: Show & Reset */}
-                        <div className="flex flex-wrap items-center gap-3 pt-2">
-                            <button
-                                type="button"
-                                onClick={() => showToast('Commission data filtered successfully!')}
-                                className="h-[36px] px-6 bg-[#0052CC] hover:bg-[#0047B3] text-white font-bold text-xs rounded transition-colors cursor-pointer border-none shadow-sm"
-                            >
-                                Show
-                            </button>
-                            {(commSearchQuery || selectedCommIds.length > 0) && (
+                            {/* Action Buttons */}
+                            <div className="flex items-center gap-2 sm:col-span-2 lg:col-span-2 w-full">
                                 <button
                                     type="button"
-                                    onClick={() => {
-                                        setCommSearchQuery('');
-                                        setCommPage(1);
-                                        setSelectedCommIds([]);
-                                    }}
-                                    className="text-xs font-semibold text-rose-600 hover:text-rose-700 underline cursor-pointer bg-transparent border-none ml-2"
+                                    onClick={() => showToast('Commission data filtered successfully!')}
+                                    className="w-full h-[38px] px-5 bg-brand-primary hover:bg-[#1D4ED8] text-white font-semibold text-xs rounded-lg shadow-sm transition-all cursor-pointer border-none flex items-center justify-center gap-1.5"
                                 >
-                                    Reset Filters
+                                    <span>Show</span>
                                 </button>
-                            )}
+
+                                {(commSearchQuery || selectedCommIds.length > 0) && (
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            setCommSearchQuery('');
+                                            setCommPage(1);
+                                            setSelectedCommIds([]);
+                                        }}
+                                        className="h-[38px] px-3.5 text-xs font-semibold text-rose-600 hover:text-rose-700 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer border border-rose-200 shrink-0"
+                                    >
+                                        Reset Filters
+                                    </button>
+                                )}
+                            </div>
                         </div>
                     </div>
 
@@ -1907,9 +4462,8 @@ const AccountModule: React.FC = () => {
                                                 <tr
                                                     key={item.id}
                                                     onClick={() => handleToggleCommission(item.id)}
-                                                    className={`h-[48px] cursor-pointer transition-colors ${
-                                                        isSelected ? 'bg-blue-50/70 font-medium' : 'hover:bg-brand-mainbg bg-white'
-                                                    }`}
+                                                    className={`h-[48px] cursor-pointer transition-colors ${isSelected ? 'bg-blue-50/70 font-medium' : 'hover:bg-brand-mainbg bg-white'
+                                                        }`}
                                                 >
                                                     <td className="py-2 px-3.5 text-slate-700 whitespace-nowrap">{item.pospName}</td>
                                                     <td className="py-2 px-3.5 font-semibold text-brand-navy">{item.locationName}</td>
@@ -2156,8 +4710,3172 @@ const AccountModule: React.FC = () => {
                 </div>
             )}
 
-            {/* TAB CONTENT 6 TO 16: MASTER REFERENCE TABLES */}
-            {activeTab !== 'cash-approval' && activeTab !== 'voucher-entry' && activeTab !== 'ledger-report' && activeTab !== 'premium-shortfall' && activeTab !== 'pending-commission' && (
+            {/* TAB CONTENT 6: PAID COMMISSION (MATCHING ERP AgentCommisionPaymentReport.aspx) */}
+            {activeTab === 'paid-commission' && (
+                <div className="tab-transition-wrapper space-y-4">
+                    {/* Top Search & Filter Bar (Matching Pending Commission style & full-width grid) */}
+                    <div className="bg-white rounded-xl border border-brand-border p-4 sm:p-5 shadow-sm">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-4 lg:gap-5 xl:gap-6 items-end w-full">
+                            {/* Branch Filter */}
+                            <div className="flex flex-col gap-1.5 sm:col-span-1 lg:col-span-3">
+                                <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Branch</span>
+                                <div className="relative w-full">
+                                    <select
+                                        value={paidBranch}
+                                        onChange={(e) => {
+                                            setPaidBranch(e.target.value);
+                                            setPaidPage(1);
+                                        }}
+                                        className="w-full h-[38px] px-3 pr-8 bg-white border border-[#CBD5E1] rounded-lg text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all shadow-xs cursor-pointer appearance-none"
+                                    >
+                                        <option value="">--All Branches--</option>
+                                        {['SOLAPUR', 'PUNE', 'GOA', 'BEED', 'BARAMATI', 'KOLHAPUR', 'SATARA', 'AHILYANAGAR', 'AKLUJ', 'NASHIK'].map(b => (
+                                            <option key={b} value={b}>{b}</option>
+                                        ))}
+                                    </select>
+                                    <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                                </div>
+                            </div>
+
+                            {/* From Date */}
+                            <div className="flex flex-col gap-1.5 sm:col-span-1 lg:col-span-3">
+                                <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">From Date</label>
+                                <div className="relative w-full">
+                                    <input
+                                        type="text"
+                                        value={paidFromDate}
+                                        onChange={(e) => setPaidFromDate(e.target.value)}
+                                        placeholder="DD/MM/YYYY"
+                                        className="w-full h-[38px] pl-3 pr-8 bg-white border border-[#CBD5E1] rounded-lg text-xs font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all shadow-xs"
+                                    />
+                                    <Calendar size={14} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                                </div>
+                            </div>
+
+                            {/* To Date */}
+                            <div className="flex flex-col gap-1.5 sm:col-span-1 lg:col-span-3">
+                                <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">To Date</label>
+                                <div className="relative w-full">
+                                    <input
+                                        type="text"
+                                        value={paidToDate}
+                                        onChange={(e) => setPaidToDate(e.target.value)}
+                                        placeholder="DD/MM/YYYY"
+                                        className="w-full h-[38px] pl-3 pr-8 bg-white border border-[#CBD5E1] rounded-lg text-xs font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all shadow-xs"
+                                    />
+                                    <Calendar size={14} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                                </div>
+                            </div>
+
+                            {/* Action Buttons: Show & Export */}
+                            <div className="flex items-center gap-2 sm:col-span-2 lg:col-span-3 w-full">
+                                <button
+                                    type="button"
+                                    onClick={() => showToast('Commission payment report loaded!')}
+                                    className="flex-1 h-[38px] px-4 bg-brand-primary hover:bg-[#1D4ED8] text-white font-semibold text-xs rounded-lg shadow-sm transition-all cursor-pointer border-none flex items-center justify-center gap-1.5"
+                                >
+                                    <span>Show</span>
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => showToast('Exporting Paid Commission Report...')}
+                                    className="flex-1 h-[38px] px-4 bg-[#EAA144] hover:bg-[#D99B35] text-white font-semibold text-xs rounded-lg shadow-sm transition-all cursor-pointer border-none flex items-center justify-center gap-1.5"
+                                >
+                                    <Download size={14} />
+                                    <span>Export</span>
+                                </button>
+                                {(paidSearchQuery || paidBranch) && (
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            setPaidSearchQuery('');
+                                            setPaidBranch('');
+                                            setPaidPage(1);
+                                        }}
+                                        className="h-[38px] px-3 text-xs font-semibold text-rose-600 hover:text-rose-700 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer border border-rose-200 shrink-0"
+                                        title="Reset Filters"
+                                    >
+                                        Reset
+                                    </button>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Paid Commission Table Card */}
+                    <div className="bg-white rounded-[12px] border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden flex flex-col w-full">
+                        {/* Table Top Toolbar */}
+                        <div className="p-3.5 sm:p-4 bg-white border-b border-brand-border flex flex-wrap items-center justify-between gap-4">
+                            <div className="flex items-center gap-3 flex-wrap">
+                                {/* Search Input */}
+                                <div className="relative w-72 sm:w-80 md:w-[380px] h-[38px]">
+                                    <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" size={15} />
+                                    <input
+                                        type="text"
+                                        value={paidSearchQuery}
+                                        onChange={(e) => {
+                                            setPaidSearchQuery(e.target.value);
+                                            setPaidPage(1);
+                                        }}
+                                        placeholder="Search Agent, Branch, Account No, Narration..."
+                                        className="w-full h-[38px] pl-10 pr-9 bg-white border border-[#CBD5E1] rounded-[6px] text-[13px] text-slate-800 placeholder-[#94A3B8] shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all"
+                                    />
+                                    {paidSearchQuery && (
+                                        <button
+                                            type="button"
+                                            onClick={() => {
+                                                setPaidSearchQuery('');
+                                                setPaidPage(1);
+                                            }}
+                                            className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1 cursor-pointer border-none bg-transparent"
+                                        >
+                                            <X size={14} />
+                                        </button>
+                                    )}
+                                </div>
+
+                                {/* Summary Badges */}
+                                <div className="flex items-center gap-4 text-xs font-semibold text-slate-600 bg-slate-50 border border-slate-200 px-3.5 py-2 rounded-[6px]">
+                                    <div className="flex items-center gap-1.5">
+                                        <span className="text-slate-500 font-bold">Total Paid Records :-</span>
+                                        <span className="text-brand-primary font-bold text-sm">{totalPaidCommCount}</span>
+                                    </div>
+                                    <div className="h-4 w-px bg-slate-300" />
+                                    <div className="flex items-center gap-1.5">
+                                        <span className="text-slate-500 font-bold">Total Net Paid :-</span>
+                                        <span className="text-emerald-600 font-bold text-sm">₹ {totalPaidCommAmount.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Data Table */}
+                        <div className="overflow-x-auto w-full custom-scrollbar min-h-[380px]">
+                            <table className="w-full text-left border-collapse min-w-[1200px]">
+                                <thead>
+                                    <tr className="bg-brand-lightbg text-brand-navy text-[12px] font-semibold uppercase border-b border-brand-border whitespace-nowrap">
+                                        <th className="py-3 px-3.5 text-center w-[50px]">SR</th>
+                                        <th className="py-3 px-3.5">TRANS DATE</th>
+                                        <th className="py-3 px-3.5">BRANCH NAME</th>
+                                        <th className="py-3 px-3.5">AGENT NAME</th>
+                                        <th className="py-3 px-3.5 text-right">TOTAL COMM (₹)</th>
+                                        <th className="py-3 px-3.5 text-right">ADV AMT (₹)</th>
+                                        <th className="py-3 px-3.5 text-right">NET AMOUNT (₹)</th>
+                                        <th className="py-3 px-3.5">NARRATION</th>
+                                        <th className="py-3 px-3.5">BANK BRANCH</th>
+                                        <th className="py-3 px-3.5">IFSC CODE</th>
+                                        <th className="py-3 px-3.5">ACCOUNT NO</th>
+                                        <th className="py-3 px-3.5 text-center">STATUS</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y divide-brand-border text-[12px]">
+                                    {paginatedPaidCommissions.length === 0 ? (
+                                        <tr>
+                                            <td colSpan={12} className="py-12 text-center text-slate-400 font-medium">
+                                                No paid commission records found.
+                                            </td>
+                                        </tr>
+                                    ) : (
+                                        paginatedPaidCommissions.map((row, idx) => (
+                                            <tr key={row.id} className="hover:bg-blue-50/40 transition-colors h-[48px] bg-white">
+                                                <td className="py-2.5 px-3.5 text-center text-slate-500 font-mono">
+                                                    {(paidPage - 1) * paidPerPage + idx + 1}
+                                                </td>
+                                                <td className="py-2.5 px-3.5 font-medium text-slate-800 whitespace-nowrap">{row.transDate}</td>
+                                                <td className="py-2.5 px-3.5 font-semibold text-brand-navy whitespace-nowrap">{row.branchName}</td>
+                                                <td className="py-2.5 px-3.5 font-bold text-slate-900 whitespace-nowrap">{row.agentName}</td>
+                                                <td className="py-2.5 px-3.5 text-right font-medium text-slate-700 whitespace-nowrap">
+                                                    ₹ {row.totalComm.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+                                                </td>
+                                                <td className="py-2.5 px-3.5 text-right font-medium text-slate-500 whitespace-nowrap">
+                                                    ₹ {row.advAmt.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+                                                </td>
+                                                <td className="py-2.5 px-3.5 text-right font-bold text-emerald-600 whitespace-nowrap">
+                                                    ₹ {row.netAmount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+                                                </td>
+                                                <td className="py-2.5 px-3.5 text-slate-600 max-w-[240px] truncate" title={row.narration}>
+                                                    {row.narration}
+                                                </td>
+                                                <td className="py-2.5 px-3.5 text-slate-700 whitespace-nowrap">{row.bankBranch}</td>
+                                                <td className="py-2.5 px-3.5 font-mono text-slate-600 whitespace-nowrap">{row.ifscCode}</td>
+                                                <td className="py-2.5 px-3.5 font-mono font-medium text-slate-800 whitespace-nowrap">{row.accountNo}</td>
+                                                <td className="py-2.5 px-3.5 text-center whitespace-nowrap">
+                                                    <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800">
+                                                        {row.status}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        ))
+                                    )}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        {/* Standard Pagination Controls */}
+                        <div className="p-3.5 sm:p-4 bg-white border-t border-brand-border flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-brand-muted">
+                            <div className="flex items-center gap-3">
+                                <span>
+                                    Showing {paginatedPaidCommissions.length === 0 ? 0 : (paidPage - 1) * paidPerPage + 1} to {Math.min(paidPage * paidPerPage, filteredPaidCommissions.length)} of {filteredPaidCommissions.length} records
+                                </span>
+                                <div className="flex items-center gap-1.5">
+                                    <span className="text-slate-500">Per page:</span>
+                                    <select
+                                        value={paidPerPage}
+                                        onChange={(e) => {
+                                            setPaidPerPage(Number(e.target.value));
+                                            setPaidPage(1);
+                                        }}
+                                        className="h-7 px-2 bg-white border border-slate-200 rounded text-xs text-slate-700 focus:outline-none"
+                                    >
+                                        <option value={10}>10</option>
+                                        <option value={25}>25</option>
+                                        <option value={50}>50</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div className="flex items-center gap-1">
+                                <button
+                                    onClick={() => setPaidPage(p => Math.max(1, p - 1))}
+                                    disabled={paidPage === 1}
+                                    className="w-8 h-8 flex items-center justify-center text-xs font-semibold text-brand-navy bg-white border border-brand-border rounded-md disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-50 cursor-pointer"
+                                >
+                                    &lt;
+                                </button>
+                                {Array.from({ length: totalPaidPages }, (_, i) => i + 1).map(p => (
+                                    <button
+                                        key={p}
+                                        onClick={() => setPaidPage(p)}
+                                        className={`w-8 h-8 flex items-center justify-center text-xs font-bold rounded-md transition-colors cursor-pointer ${p === paidPage ? 'bg-brand-primary text-white' : 'bg-white border border-brand-border text-brand-navy hover:bg-slate-50'
+                                            }`}
+                                    >
+                                        {p}
+                                    </button>
+                                ))}
+                                <button
+                                    onClick={() => setPaidPage(p => Math.min(totalPaidPages, p + 1))}
+                                    disabled={paidPage === totalPaidPages}
+                                    className="w-8 h-8 flex items-center justify-center text-xs font-semibold text-brand-navy bg-white border border-brand-border rounded-md disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-50 cursor-pointer"
+                                >
+                                    &gt;
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* TAB CONTENT 7: COMMISSION RECALCULATE (MATCHING ERP AgentCommissionRecalculation.aspx) */}
+            {activeTab === 'commission-recalculate' && (
+                <div className="tab-transition-wrapper space-y-4">
+                    {/* Top Search & Filter Bar (Matching Paid Commission full-width responsive grid) */}
+                    <div className="bg-white rounded-xl border border-brand-border p-4 sm:p-5 shadow-sm space-y-4">
+                        {/* Row 1: 4 columns across full width */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-5 items-end w-full">
+                            {/* From Date */}
+                            <div className="flex flex-col gap-1.5">
+                                <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">From Date</label>
+                                <div className="relative w-full">
+                                    <input
+                                        type="text"
+                                        value={recalcFromDate}
+                                        onChange={(e) => setRecalcFromDate(e.target.value)}
+                                        placeholder="DD/MM/YYYY"
+                                        className="w-full h-[38px] pl-3 pr-8 bg-white border border-[#CBD5E1] rounded-lg text-xs font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all shadow-xs"
+                                    />
+                                    <Calendar size={14} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                                </div>
+                            </div>
+
+                            {/* To Date */}
+                            <div className="flex flex-col gap-1.5">
+                                <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">To Date</label>
+                                <div className="relative w-full">
+                                    <input
+                                        type="text"
+                                        value={recalcToDate}
+                                        onChange={(e) => setRecalcToDate(e.target.value)}
+                                        placeholder="DD/MM/YYYY"
+                                        className="w-full h-[38px] pl-3 pr-8 bg-white border border-[#CBD5E1] rounded-lg text-xs font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all shadow-xs"
+                                    />
+                                    <Calendar size={14} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                                </div>
+                            </div>
+
+                            {/* Insurance Company */}
+                            <div className="flex flex-col gap-1.5">
+                                <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Insurance Company</span>
+                                <div className="relative w-full">
+                                    <select
+                                        value={recalcCompany}
+                                        onChange={(e) => {
+                                            setRecalcCompany(e.target.value);
+                                            setHasRecalcViewed(false);
+                                            setSelectedRecalcIds([]);
+                                            setRecalcPage(1);
+                                        }}
+                                        className="w-full h-[38px] px-3 pr-8 bg-white border border-[#CBD5E1] rounded-lg text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all shadow-xs cursor-pointer appearance-none truncate"
+                                    >
+                                        <option value="">--Select Company--</option>
+                                        {[
+                                            'TATA AIG GENERAL INSURANCE CO. LTD',
+                                            'LIBERTY GENERAL INSURANCE LIMITED',
+                                            'SBI GENERAL INSURANCE COMPANY LIMITED',
+                                            'UNIVERSAL SOMPO GENERAL INSURANCE CO. LTD',
+                                            'HDFC ERGO GENERAL INSURANCE CO. LTD',
+                                            'MAGMA HDI GENERAL INSURANCE COMPANY',
+                                            'ICICI LOMBARD GENERAL INSURANCE CO. LTD',
+                                            'BAJAJ ALLIANZ GENERAL INSURANCE CO. LTD'
+                                        ].map(c => (
+                                            <option key={c} value={c}>{c}</option>
+                                        ))}
+                                    </select>
+                                    <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                                </div>
+                            </div>
+
+                            {/* Branch */}
+                            <div className="flex flex-col gap-1.5">
+                                <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Branch</span>
+                                <div className="relative w-full">
+                                    <select
+                                        value={recalcBranch}
+                                        onChange={(e) => {
+                                            setRecalcBranch(e.target.value);
+                                            setHasRecalcViewed(false);
+                                            setSelectedRecalcIds([]);
+                                            setRecalcPage(1);
+                                        }}
+                                        className="w-full h-[38px] px-3 pr-8 bg-white border border-[#CBD5E1] rounded-lg text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all shadow-xs cursor-pointer appearance-none"
+                                    >
+                                        <option value="">--Select Branch--</option>
+                                        {['SANGLI', 'AKOLA', 'BARAMATI', 'PUNE', 'SATARA', 'SOLAPUR', 'KOLHAPUR', 'BEED', 'GOA'].map(b => (
+                                            <option key={b} value={b}>{b}</option>
+                                        ))}
+                                    </select>
+                                    <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Row 2: Agent, Policy Type, and Action Buttons spanning full width */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-4 lg:gap-5 items-end w-full">
+                            {/* Agent */}
+                            <div className="flex flex-col gap-1.5 sm:col-span-1 lg:col-span-5">
+                                <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Agent</span>
+                                <div className="relative w-full">
+                                    <select
+                                        value={recalcAgent}
+                                        onChange={(e) => {
+                                            setRecalcAgent(e.target.value);
+                                            setHasRecalcViewed(false);
+                                            setSelectedRecalcIds([]);
+                                            setRecalcPage(1);
+                                        }}
+                                        className="w-full h-[38px] px-3 pr-8 bg-white border border-[#CBD5E1] rounded-lg text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all shadow-xs cursor-pointer appearance-none truncate"
+                                    >
+                                        <option value="">--Select Agent--</option>
+                                        {[
+                                            'RUTURAJ PRAKASH JADHAV',
+                                            'SHRIKRUSHNA SOPAN PATIL',
+                                            'SHEKHAR MARUTI ANBHULE',
+                                            'AAYUSH UMESH TIJARE',
+                                            'SATARA STANDARD AGENT',
+                                            'AJITKUMAR PRABHAKAR KATULE'
+                                        ].map(a => (
+                                            <option key={a} value={a}>{a}</option>
+                                        ))}
+                                    </select>
+                                    <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                                </div>
+                            </div>
+
+                            {/* Policy Type */}
+                            <div className="flex flex-col gap-1.5 sm:col-span-1 lg:col-span-4">
+                                <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Policy Type</span>
+                                <div className="relative w-full">
+                                    <select
+                                        value={recalcPolicyType}
+                                        onChange={(e) => {
+                                            setRecalcPolicyType(e.target.value);
+                                            setHasRecalcViewed(false);
+                                            setSelectedRecalcIds([]);
+                                            setRecalcPage(1);
+                                        }}
+                                        className="w-full h-[38px] px-3 pr-8 bg-white border border-[#CBD5E1] rounded-lg text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all shadow-xs cursor-pointer appearance-none truncate"
+                                    >
+                                        <option value="">--Select Policy Type--</option>
+                                        {[
+                                            'PRIVATE CAR',
+                                            'GCV 3500 - 7000 GVW',
+                                            'MISC-D-TRACTOR',
+                                            'GCV > 40001 - 45000 GVW',
+                                            'GCV ABOVE 40001 GVW',
+                                            'TWO WHEELER'
+                                        ].map(pt => (
+                                            <option key={pt} value={pt}>{pt}</option>
+                                        ))}
+                                    </select>
+                                    <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                                </div>
+                            </div>
+
+                            {/* Action Buttons: View & Reset */}
+                            <div className="flex items-center gap-2 sm:col-span-2 lg:col-span-3 w-full">
+                                <button
+                                    type="button"
+                                    onClick={handleRecalcView}
+                                    className="flex-1 h-[38px] px-5 bg-brand-primary hover:bg-[#1D4ED8] text-white font-semibold text-xs rounded-lg shadow-sm transition-all cursor-pointer border-none flex items-center justify-center gap-1.5"
+                                >
+                                    <span>View</span>
+                                </button>
+                                {(recalcCompany || recalcBranch || recalcAgent || recalcPolicyType || recalcSearchQuery || hasRecalcViewed) && (
+                                    <button
+                                        type="button"
+                                        onClick={handleRecalcReset}
+                                        className="h-[38px] px-3.5 text-xs font-semibold text-rose-600 hover:text-rose-700 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer border border-rose-200 shrink-0"
+                                        title="Reset Filters"
+                                    >
+                                        Reset
+                                    </button>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Commission Recalculate Table Card */}
+                    <div className="bg-white rounded-[12px] border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden flex flex-col w-full">
+                        {/* Table Top Toolbar */}
+                        <div className="p-3.5 sm:p-4 bg-white border-b border-brand-border flex flex-wrap items-center justify-between gap-4">
+                            {/* Search Input on Left */}
+                            <div className="relative w-72 sm:w-80 md:w-[350px] h-[38px]">
+                                <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" size={15} />
+                                <input
+                                    type="text"
+                                    value={recalcSearchQuery}
+                                    onChange={(e) => {
+                                        setRecalcSearchQuery(e.target.value);
+                                        setRecalcPage(1);
+                                    }}
+                                    placeholder="Search Reg No, Agent, Company..."
+                                    className="w-full h-[38px] pl-10 pr-9 bg-white border border-[#CBD5E1] rounded-[6px] text-[13px] text-slate-800 placeholder-[#94A3B8] shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all"
+                                />
+                                {recalcSearchQuery && (
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            setRecalcSearchQuery('');
+                                            setRecalcPage(1);
+                                        }}
+                                        className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1 cursor-pointer border-none bg-transparent"
+                                    >
+                                        <X size={14} />
+                                    </button>
+                                )}
+                            </div>
+
+                            {/* Submit Action Button on Right (Moved to right side) */}
+                            <div className="flex items-center gap-2">
+                                <button
+                                    type="button"
+                                    onClick={handleSubmitRecalculate}
+                                    disabled={selectedRecalcIds.length === 0}
+                                    className="h-[38px] px-5 bg-[#16A34A] hover:bg-[#15803D] disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold text-xs rounded-lg shadow-sm transition-all cursor-pointer border-none flex items-center justify-center gap-1.5"
+                                >
+                                    <Check size={14} />
+                                    <span>Submit {selectedRecalcIds.length > 0 && `(${selectedRecalcIds.length})`}</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* Data Table with all 34 Columns from ERP (Screenshot Reference) */}
+                        <div className="overflow-x-auto w-full custom-scrollbar min-h-[420px]">
+                            <table className="w-full text-left border-collapse min-w-[3400px]">
+                                <thead>
+                                    <tr className="bg-brand-lightbg text-brand-navy text-[11px] font-bold uppercase border-b border-brand-border whitespace-nowrap tracking-wider">
+                                        <th className="py-3 px-3 text-center w-[45px] sticky left-0 bg-brand-lightbg z-10 border-r border-brand-border/60">
+                                            <input
+                                                type="checkbox"
+                                                checked={paginatedRecalcCommissions.length > 0 && paginatedRecalcCommissions.every(i => selectedRecalcIds.includes(i.id))}
+                                                onChange={handleToggleSelectAllRecalc}
+                                                className="w-4 h-4 rounded text-brand-primary focus:ring-brand-primary cursor-pointer accent-blue-600"
+                                            />
+                                        </th>
+                                        <th className="py-3 px-3.5 sticky left-[45px] bg-brand-lightbg z-10 border-r border-brand-border/60">REG. NO.</th>
+                                        <th className="py-3 px-3.5">BRANCH</th>
+                                        <th className="py-3 px-3.5">AGENT NAME</th>
+                                        <th className="py-3 px-3.5">PRODUCT TYPE</th>
+                                        <th className="py-3 px-3.5">POLICYTYPE</th>
+                                        <th className="py-3 px-3.5">INSURANCECOMPANY</th>
+                                        <th className="py-3 px-3.5 text-right">AMOUNT</th>
+                                        <th className="py-3 px-3.5">PAYMENT TYPE</th>
+                                        <th className="py-3 px-3.5">PAYMENTDETAILS</th>
+                                        <th className="py-3 px-3.5 text-right">PREMIUM AMOUNT</th>
+                                        <th className="py-3 px-3.5">CUSTOMER NAME</th>
+                                        <th className="py-3 px-3.5">REFERENCETYPE</th>
+                                        <th className="py-3 px-3.5 text-right">OD DISCOUNT(%)</th>
+                                        <th className="py-3 px-3.5 text-right">TP PERMIUM</th>
+                                        <th className="py-3 px-3.5 text-right">OD PERMIUM</th>
+                                        <th className="py-3 px-3.5 text-right">NET PERMIUM</th>
+                                        <th className="py-3 px-3.5 font-mono">POLICY NO</th>
+                                        <th className="py-3 px-3.5">DATE</th>
+                                        <th className="py-3 px-3.5 text-right">AGENT GRID TP(%)</th>
+                                        <th className="py-3 px-3.5 text-right">AGENT COMM AMT TP</th>
+                                        <th className="py-3 px-3.5 text-right">TDS AMT TP</th>
+                                        <th className="py-3 px-3.5 text-right">NET COMMISSION TP</th>
+                                        <th className="py-3 px-3.5 text-right">AGENT GRID OD(%)</th>
+                                        <th className="py-3 px-3.5 text-right">AGENT COMM AMT OD</th>
+                                        <th className="py-3 px-3.5 text-right">TDS AMT OD</th>
+                                        <th className="py-3 px-3.5 text-right">NET COMMISSION OD</th>
+                                        <th className="py-3 px-3.5 text-right">AGENT GRID NET(%)</th>
+                                        <th className="py-3 px-3.5 text-right">AGENT COMM AMT NET</th>
+                                        <th className="py-3 px-3.5 text-right">TDS AMT NET</th>
+                                        <th className="py-3 px-3.5">MANUFACTURING YEAR</th>
+                                        <th className="py-3 px-3.5 text-right">NET COMMISSION NET</th>
+                                        <th className="py-3 px-3.5">FUELTYPE</th>
+                                        <th className="py-3 px-3.5">BROKER NAME</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y divide-brand-border text-[12px]">
+                                    {!hasRecalcViewed || !isRecalcFormFilled ? (
+                                        <tr>
+                                            <td colSpan={34} className="py-16 text-center text-slate-400 font-medium">
+                                                Please select all required form fields above and click View to load recalculation entries.
+                                            </td>
+                                        </tr>
+                                    ) : paginatedRecalcCommissions.length === 0 ? (
+                                        <tr>
+                                            <td colSpan={34} className="py-12 text-center text-slate-400 font-medium">
+                                                No commission recalculation records found.
+                                            </td>
+                                        </tr>
+                                    ) : (
+                                        paginatedRecalcCommissions.map((row) => {
+                                            const isSelected = selectedRecalcIds.includes(row.id);
+                                            return (
+                                                <tr
+                                                    key={row.id}
+                                                    className={`transition-colors h-[48px] ${isSelected ? 'bg-blue-50/70 hover:bg-blue-100/60' : 'bg-white hover:bg-blue-50/40'
+                                                        }`}
+                                                >
+                                                    <td className={`py-2 px-3 text-center sticky left-0 z-10 border-r border-slate-100 ${isSelected ? 'bg-[#EEF6FF]' : 'bg-white'}`}>
+                                                        <input
+                                                            type="checkbox"
+                                                            checked={isSelected}
+                                                            onChange={() => handleToggleRecalc(row.id)}
+                                                            className="w-4 h-4 rounded text-brand-primary focus:ring-brand-primary cursor-pointer accent-blue-600"
+                                                        />
+                                                    </td>
+                                                    <td className={`py-2.5 px-3.5 font-mono font-bold text-brand-primary whitespace-nowrap sticky left-[45px] z-10 border-r border-slate-100 ${isSelected ? 'bg-[#EEF6FF]' : 'bg-white'}`}>
+                                                        {row.regNo}
+                                                    </td>
+                                                    <td className="py-2.5 px-3.5 font-semibold text-brand-navy whitespace-nowrap">
+                                                        {row.branch}
+                                                    </td>
+                                                    <td className="py-2.5 px-3.5 font-bold text-slate-900 whitespace-nowrap">
+                                                        {row.agentName}
+                                                    </td>
+                                                    <td className="py-2.5 px-3.5 whitespace-nowrap">
+                                                        <span className="px-2 py-0.5 rounded text-[11px] font-semibold bg-slate-100 text-slate-700">
+                                                            {row.productType}
+                                                        </span>
+                                                    </td>
+                                                    <td className="py-2.5 px-3.5 text-slate-700 whitespace-nowrap">
+                                                        {row.policyType}
+                                                    </td>
+                                                    <td className="py-2.5 px-3.5 font-medium text-slate-800 max-w-[220px] truncate" title={row.insuranceCompany}>
+                                                        {row.insuranceCompany}
+                                                    </td>
+                                                    <td className="py-2.5 px-3.5 text-right font-medium text-slate-600 whitespace-nowrap">
+                                                        {row.amount}
+                                                    </td>
+                                                    <td className="py-2.5 px-3.5 text-slate-600 text-xs whitespace-nowrap">
+                                                        {row.paymentType}
+                                                    </td>
+                                                    <td className="py-2.5 px-3.5 text-slate-500 whitespace-nowrap">
+                                                        {row.paymentDetails}
+                                                    </td>
+                                                    <td className="py-2.5 px-3.5 text-right font-bold text-slate-900 whitespace-nowrap">
+                                                        {row.premiumAmount.toLocaleString('en-IN')}
+                                                    </td>
+                                                    <td className="py-2.5 px-3.5 font-bold text-brand-navy whitespace-nowrap">
+                                                        {row.customerName}
+                                                    </td>
+                                                    <td className="py-2.5 px-3.5 text-slate-600 font-semibold text-xs whitespace-nowrap">
+                                                        {row.referenceType}
+                                                    </td>
+                                                    <td className="py-2.5 px-3.5 text-right font-mono text-slate-700 whitespace-nowrap">
+                                                        {row.odDiscount}
+                                                    </td>
+                                                    <td className="py-2.5 px-3.5 text-right font-mono text-slate-700 whitespace-nowrap">
+                                                        {row.tpPremium.toLocaleString('en-IN')}
+                                                    </td>
+                                                    <td className="py-2.5 px-3.5 text-right font-mono text-slate-700 whitespace-nowrap">
+                                                        {row.odPremium.toLocaleString('en-IN', { minimumFractionDigits: row.odPremium % 1 !== 0 ? 2 : 0 })}
+                                                    </td>
+                                                    <td className="py-2.5 px-3.5 text-right font-mono font-bold text-slate-900 whitespace-nowrap">
+                                                        {row.netPremium.toLocaleString('en-IN', { minimumFractionDigits: row.netPremium % 1 !== 0 ? 2 : 0 })}
+                                                    </td>
+                                                    <td className="py-2.5 px-3.5 font-mono text-xs text-brand-primary whitespace-nowrap" title={row.policyNo}>
+                                                        {row.policyNo}
+                                                    </td>
+                                                    <td className="py-2.5 px-3.5 text-slate-600 whitespace-nowrap">
+                                                        {row.date}
+                                                    </td>
+                                                    <td className="py-2.5 px-3.5 text-right font-mono text-slate-600 whitespace-nowrap">
+                                                        {row.agentGridTp}
+                                                    </td>
+                                                    <td className="py-2.5 px-3.5 text-right font-mono text-slate-600 whitespace-nowrap">
+                                                        {row.agentCommAmtTp}
+                                                    </td>
+                                                    <td className="py-2.5 px-3.5 text-right font-mono text-slate-600 whitespace-nowrap">
+                                                        {row.tdsAmtTp}
+                                                    </td>
+                                                    <td className="py-2.5 px-3.5 text-right font-mono text-slate-600 whitespace-nowrap">
+                                                        {row.netCommTp}
+                                                    </td>
+                                                    <td className="py-2.5 px-3.5 text-right font-mono text-slate-600 whitespace-nowrap">
+                                                        {row.agentGridOd}
+                                                    </td>
+                                                    <td className="py-2.5 px-3.5 text-right font-mono text-slate-600 whitespace-nowrap">
+                                                        {row.agentCommAmtOd}
+                                                    </td>
+                                                    <td className="py-2.5 px-3.5 text-right font-mono text-slate-600 whitespace-nowrap">
+                                                        {row.tdsAmtOd}
+                                                    </td>
+                                                    <td className="py-2.5 px-3.5 text-right font-mono text-slate-600 whitespace-nowrap">
+                                                        {row.netCommOd}
+                                                    </td>
+                                                    <td className="py-2.5 px-3.5 text-right font-mono font-semibold text-brand-primary whitespace-nowrap">
+                                                        {row.agentGridNet}
+                                                    </td>
+                                                    <td className="py-2.5 px-3.5 text-right font-mono font-bold text-slate-900 whitespace-nowrap">
+                                                        {row.agentCommAmtNet.toLocaleString('en-IN')}
+                                                    </td>
+                                                    <td className="py-2.5 px-3.5 text-right font-mono text-rose-600 whitespace-nowrap">
+                                                        {row.tdsAmtNet}
+                                                    </td>
+                                                    <td className="py-2.5 px-3.5 text-slate-600 text-xs whitespace-nowrap font-mono">
+                                                        {row.manufacturingYear}
+                                                    </td>
+                                                    <td className="py-2.5 px-3.5 text-right font-mono font-bold text-emerald-600 whitespace-nowrap">
+                                                        ₹ {row.netCommNet.toLocaleString('en-IN')}
+                                                    </td>
+                                                    <td className="py-2.5 px-3.5 whitespace-nowrap">
+                                                        <span className="px-2 py-0.5 rounded text-[11px] font-bold bg-amber-50 text-amber-800 border border-amber-200/60">
+                                                            {row.fuelType}
+                                                        </span>
+                                                    </td>
+                                                    <td className="py-2.5 px-3.5 text-slate-700 whitespace-nowrap font-medium">
+                                                        {row.brokerName}
+                                                    </td>
+                                                </tr>
+                                            );
+                                        })
+                                    )}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        {/* Standard Pagination Controls */}
+                        <div className="p-3.5 sm:p-4 bg-white border-t border-brand-border flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-brand-muted">
+                            <div className="flex items-center gap-3">
+                                <span>
+                                    Showing {paginatedRecalcCommissions.length === 0 ? 0 : (recalcPage - 1) * recalcPerPage + 1} to {Math.min(recalcPage * recalcPerPage, filteredRecalcCommissions.length)} of {filteredRecalcCommissions.length} records
+                                </span>
+                                <div className="flex items-center gap-1.5">
+                                    <span className="text-slate-500">Per page:</span>
+                                    <select
+                                        value={recalcPerPage}
+                                        onChange={(e) => {
+                                            setRecalcPerPage(Number(e.target.value));
+                                            setRecalcPage(1);
+                                        }}
+                                        className="h-7 px-2 bg-white border border-slate-200 rounded text-xs text-slate-700 focus:outline-none"
+                                    >
+                                        <option value={10}>10</option>
+                                        <option value={25}>25</option>
+                                        <option value={50}>50</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div className="flex items-center gap-1">
+                                <button
+                                    onClick={() => setRecalcPage(p => Math.max(1, p - 1))}
+                                    disabled={recalcPage === 1}
+                                    className="w-8 h-8 flex items-center justify-center text-xs font-semibold text-brand-navy bg-white border border-brand-border rounded-md disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-50 cursor-pointer"
+                                >
+                                    &lt;
+                                </button>
+                                {Array.from({ length: totalRecalcPages }, (_, i) => i + 1).map(p => (
+                                    <button
+                                        key={p}
+                                        onClick={() => setRecalcPage(p)}
+                                        className={`w-8 h-8 flex items-center justify-center text-xs font-bold rounded-md transition-colors cursor-pointer ${p === recalcPage ? 'bg-brand-primary text-white' : 'bg-white border border-brand-border text-brand-navy hover:bg-slate-50'
+                                            }`}
+                                    >
+                                        {p}
+                                    </button>
+                                ))}
+                                <button
+                                    onClick={() => setRecalcPage(p => Math.min(totalRecalcPages, p + 1))}
+                                    disabled={recalcPage === totalRecalcPages}
+                                    className="w-8 h-8 flex items-center justify-center text-xs font-semibold text-brand-navy bg-white border border-brand-border rounded-md disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-50 cursor-pointer"
+                                >
+                                    &gt;
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* TAB CONTENT 8: ACCOUNT REPORT (MATCHING ERP reliable-erp.com/Clerk/Rpt_AccountDetails.aspx) */}
+            {activeTab === 'account-report' && (
+                <div className="tab-transition-wrapper space-y-4">
+                    {/* Top Search & Filter Bar */}
+                    <div className="bg-white rounded-xl border border-brand-border p-4 sm:p-5 shadow-sm">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-4 lg:gap-5 items-end w-full">
+                            {/* From Date */}
+                            <div className="flex flex-col gap-1.5 sm:col-span-1 lg:col-span-3">
+                                <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">From Date</label>
+                                <div className="relative w-full">
+                                    <input
+                                        type="text"
+                                        value={rptFromDate}
+                                        onChange={(e) => setRptFromDate(e.target.value)}
+                                        placeholder="DD/MM/YYYY"
+                                        className="w-full h-[38px] pl-3 pr-8 bg-white border border-[#CBD5E1] rounded-lg text-xs font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all shadow-xs"
+                                    />
+                                    <Calendar size={14} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                                </div>
+                            </div>
+
+                            {/* To Date */}
+                            <div className="flex flex-col gap-1.5 sm:col-span-1 lg:col-span-3">
+                                <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">To Date</label>
+                                <div className="relative w-full">
+                                    <input
+                                        type="text"
+                                        value={rptToDate}
+                                        onChange={(e) => setRptToDate(e.target.value)}
+                                        placeholder="DD/MM/YYYY"
+                                        className="w-full h-[38px] pl-3 pr-8 bg-white border border-[#CBD5E1] rounded-lg text-xs font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all shadow-xs"
+                                    />
+                                    <Calendar size={14} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                                </div>
+                            </div>
+
+                            {/* Branch Filter */}
+                            <div className="flex flex-col gap-1.5 sm:col-span-1 lg:col-span-2">
+                                <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Branch</span>
+                                <div className="relative w-full">
+                                    <select
+                                        value={rptBranch}
+                                        onChange={(e) => {
+                                            setRptBranch(e.target.value);
+                                            setRptPage(1);
+                                        }}
+                                        className="w-full h-[38px] px-3 pr-8 bg-white border border-[#CBD5E1] rounded-lg text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all shadow-xs cursor-pointer appearance-none"
+                                    >
+                                        <option value="">--All Branches--</option>
+                                        {['BARAMATI', 'PUNE', 'SOLAPUR', 'AKOLA', 'SANGLI', 'SATARA', 'KOLHAPUR', 'BEED', 'GOA'].map(b => (
+                                            <option key={b} value={b}>{b}</option>
+                                        ))}
+                                    </select>
+                                    <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                                </div>
+                            </div>
+
+                            {/* Action Buttons: View, Export To Excel, Reset */}
+                            <div className="flex items-center gap-2 sm:col-span-2 lg:col-span-4 w-full">
+                                <button
+                                    type="button"
+                                    onClick={() => showToast('Account Report records refreshed!')}
+                                    className="flex-1 h-[38px] px-4 bg-brand-primary hover:bg-[#1D4ED8] text-white font-semibold text-xs rounded-lg shadow-sm transition-all cursor-pointer border-none flex items-center justify-center gap-1.5"
+                                >
+                                    <span>View</span>
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => showToast('Exporting Account Report to Excel...')}
+                                    className="flex-1 h-[38px] px-3.5 bg-[#EAA144] hover:bg-[#D99B35] text-white font-semibold text-xs rounded-lg shadow-sm transition-colors cursor-pointer border-none flex items-center justify-center gap-1.5 whitespace-nowrap"
+                                >
+                                    <Download size={14} />
+                                    <span>Export To Excel</span>
+                                </button>
+                                {(rptBranch || rptSearchQuery || rptTxnType) && (
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            setRptBranch('');
+                                            setRptTxnType('');
+                                            setRptSearchQuery('');
+                                            setRptPage(1);
+                                        }}
+                                        className="h-[38px] px-3 text-xs font-semibold text-rose-600 hover:text-rose-700 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer border border-rose-200 shrink-0"
+                                        title="Reset Filters"
+                                    >
+                                        Reset
+                                    </button>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Account Report Table Card */}
+                    <div className="bg-white rounded-[12px] border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden flex flex-col w-full">
+                        {/* Table Top Toolbar */}
+                        <div className="p-3.5 sm:p-4 bg-white border-b border-brand-border flex flex-wrap items-center justify-between gap-4">
+                            {/* Merged Single Search Bar */}
+                            <div className="relative w-72 sm:w-80 md:w-[380px] h-[38px]">
+                                <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" size={15} />
+                                <input
+                                    type="text"
+                                    value={rptSearchQuery}
+                                    onChange={(e) => {
+                                        setRptSearchQuery(e.target.value);
+                                        setRptPage(1);
+                                    }}
+                                    placeholder="Search Customer Name, Reg No, Doc No, Policy No..."
+                                    className="w-full h-[38px] pl-10 pr-9 bg-white border border-[#CBD5E1] rounded-[6px] text-[13px] text-slate-800 placeholder-[#94A3B8] shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all"
+                                />
+                                {rptSearchQuery && (
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            setRptSearchQuery('');
+                                            setRptPage(1);
+                                        }}
+                                        className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1 cursor-pointer border-none bg-transparent"
+                                    >
+                                        <X size={14} />
+                                    </button>
+                                )}
+                            </div>
+                        </div>
+
+                        {/* Data Table with all 14 Columns */}
+                        <div className="overflow-x-auto w-full custom-scrollbar min-h-[420px]">
+                            <table className="w-full text-left border-collapse min-w-[1900px]">
+                                <thead>
+                                    <tr className="bg-brand-lightbg text-brand-navy text-[11px] font-bold uppercase border-b border-brand-border whitespace-nowrap tracking-wider">
+                                        <th className="py-3 px-3.5 font-mono">DOC NO</th>
+                                        <th className="py-3 px-3.5">TRANSACTION TYPE</th>
+                                        <th className="py-3 px-3.5">ACCOUNT DATE</th>
+                                        <th className="py-3 px-3.5">LEDGER NAME</th>
+                                        <th className="py-3 px-3.5 text-right">AMOUNT</th>
+                                        <th className="py-3 px-3.5">NARRATION</th>
+                                        <th className="py-3 px-3.5">AGENT NAME</th>
+                                        <th className="py-3 px-3.5">BRANCH NAME</th>
+                                        <th className="py-3 px-3.5 font-mono">POLICY NO</th>
+                                        <th className="py-3 px-3.5">CUSTOMER NAME</th>
+                                        <th className="py-3 px-3.5">REGISTRATION NO.</th>
+                                        <th className="py-3 px-3.5">PAYMENT TYPE</th>
+                                        <th className="py-3 px-3.5">NARRATION2</th>
+                                        <th className="py-3 px-3.5">LEDGER TYPE</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y divide-brand-border text-[12px]">
+                                    {paginatedAccountReports.length === 0 ? (
+                                        <tr>
+                                            <td colSpan={14} className="py-12 text-center text-slate-400 font-medium">
+                                                No account report records found.
+                                            </td>
+                                        </tr>
+                                    ) : (
+                                        paginatedAccountReports.map((row) => (
+                                            <tr key={row.id} className="transition-colors h-[48px] bg-white hover:bg-blue-50/40">
+                                                <td className="py-2.5 px-3.5 font-mono font-bold text-brand-primary whitespace-nowrap">
+                                                    {row.docNo}
+                                                </td>
+                                                <td className="py-2.5 px-3.5 whitespace-nowrap">
+                                                    <span className={`px-2 py-0.5 rounded text-[11px] font-bold ${row.transactionType === 'PAYMENT'
+                                                            ? 'bg-rose-50 text-rose-700 border border-rose-200'
+                                                            : row.transactionType === 'RECEIPT'
+                                                                ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                                                                : 'bg-blue-50 text-blue-700 border border-blue-200'
+                                                        }`}>
+                                                        {row.transactionType}
+                                                    </span>
+                                                </td>
+                                                <td className="py-2.5 px-3.5 text-slate-600 whitespace-nowrap">
+                                                    {row.accountDate}
+                                                </td>
+                                                <td className="py-2.5 px-3.5 font-semibold text-brand-navy whitespace-nowrap">
+                                                    {row.ledgerName}
+                                                </td>
+                                                <td className="py-2.5 px-3.5 text-right font-mono font-bold text-slate-900 whitespace-nowrap">
+                                                    {row.amount.toLocaleString('en-IN', { minimumFractionDigits: row.amount % 1 !== 0 ? 2 : 0 })}
+                                                </td>
+                                                <td className="py-2.5 px-3.5 text-slate-600 text-xs max-w-[280px] truncate whitespace-nowrap" title={row.narration}>
+                                                    {row.narration}
+                                                </td>
+                                                <td className="py-2.5 px-3.5 font-bold text-slate-900 whitespace-nowrap">
+                                                    {row.agentName}
+                                                </td>
+                                                <td className="py-2.5 px-3.5 font-semibold text-slate-700 whitespace-nowrap">
+                                                    {row.branchName}
+                                                </td>
+                                                <td className="py-2.5 px-3.5 font-mono text-xs text-brand-primary whitespace-nowrap" title={row.policyNo}>
+                                                    {row.policyNo}
+                                                </td>
+                                                <td className="py-2.5 px-3.5 font-bold text-brand-navy whitespace-nowrap">
+                                                    {row.customerName}
+                                                </td>
+                                                <td className="py-2.5 px-3.5 whitespace-nowrap font-mono">
+                                                    <span className="px-2 py-0.5 rounded text-[11px] font-semibold bg-slate-100 text-slate-700">
+                                                        {row.registrationNo}
+                                                    </span>
+                                                </td>
+                                                <td className="py-2.5 px-3.5 text-slate-700 whitespace-nowrap font-medium">
+                                                    {row.paymentType}
+                                                </td>
+                                                <td className="py-2.5 px-3.5 text-slate-500 text-xs max-w-[240px] truncate whitespace-nowrap" title={row.narration2}>
+                                                    {row.narration2}
+                                                </td>
+                                                <td className="py-2.5 px-3.5 whitespace-nowrap">
+                                                    <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-purple-50 text-purple-700 border border-purple-200">
+                                                        {row.ledgerType}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        ))
+                                    )}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        {/* Pagination Controls */}
+                        <div className="p-3.5 sm:p-4 bg-white border-t border-brand-border flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-brand-muted">
+                            <div className="flex items-center gap-3">
+                                <span>
+                                    Showing {paginatedAccountReports.length === 0 ? 0 : (rptPage - 1) * rptPerPage + 1} to {Math.min(rptPage * rptPerPage, filteredAccountReports.length)} of {filteredAccountReports.length} records
+                                </span>
+                                <div className="flex items-center gap-1.5 ml-2">
+                                    <span className="text-slate-500 font-medium">Per page:</span>
+                                    <select
+                                        value={rptPerPage}
+                                        onChange={(e) => {
+                                            setRptPerPage(Number(e.target.value));
+                                            setRptPage(1);
+                                        }}
+                                        className="h-7 px-2 bg-white border border-slate-200 rounded text-xs text-slate-700 focus:outline-none"
+                                    >
+                                        <option value={10}>10</option>
+                                        <option value={25}>25</option>
+                                        <option value={50}>50</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div className="flex items-center gap-1">
+                                <button
+                                    onClick={() => setRptPage(p => Math.max(1, p - 1))}
+                                    disabled={rptPage === 1}
+                                    className="w-8 h-8 flex items-center justify-center text-xs font-semibold text-brand-navy bg-white border border-brand-border rounded-md disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-50 cursor-pointer"
+                                >
+                                    &lt;
+                                </button>
+                                {Array.from({ length: totalRptPages }, (_, i) => i + 1).map(p => (
+                                    <button
+                                        key={p}
+                                        onClick={() => setRptPage(p)}
+                                        className={`w-8 h-8 flex items-center justify-center text-xs font-bold rounded-md transition-colors cursor-pointer ${p === rptPage ? 'bg-brand-primary text-white' : 'bg-white border border-brand-border text-brand-navy hover:bg-slate-50'
+                                            }`}
+                                    >
+                                        {p}
+                                    </button>
+                                ))}
+                                <button
+                                    onClick={() => setRptPage(p => Math.min(totalRptPages, p + 1))}
+                                    disabled={rptPage === totalRptPages}
+                                    className="w-8 h-8 flex items-center justify-center text-xs font-semibold text-brand-navy bg-white border border-brand-border rounded-md disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-50 cursor-pointer"
+                                >
+                                    &gt;
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* TAB CONTENT 10: PAID ENTRY RECALCULATION (reliable-erp.com/Clerk/Adm_CutNPayRecalculation.aspx) */}
+            {activeTab === 'paid-entry-recalc' && (
+                <div className="tab-transition-wrapper space-y-4">
+                    {/* Top Search & Filter Bar */}
+                    <div className="bg-white rounded-xl border border-brand-border p-4 sm:p-5 shadow-sm space-y-4">
+                        {/* Row 1: From Date, To Date, Insurance Company, Branch, Agent */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 lg:gap-5 items-end w-full">
+                            {/* From Date */}
+                            <div className="flex flex-col gap-1.5">
+                                <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">From Date *</label>
+                                <div className="relative w-full">
+                                    <input
+                                        type="text"
+                                        value={paidRecalcFromDate}
+                                        onChange={(e) => {
+                                            setPaidRecalcFromDate(e.target.value);
+                                            setHasPaidRecalcViewed(false);
+                                            setSelectedPaidRecalcIds([]);
+                                        }}
+                                        placeholder="DD/MM/YYYY"
+                                        className="w-full h-[38px] pl-3 pr-8 bg-white border border-[#CBD5E1] rounded-lg text-xs font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all shadow-xs"
+                                    />
+                                    <Calendar size={14} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                                </div>
+                            </div>
+
+                            {/* To Date */}
+                            <div className="flex flex-col gap-1.5">
+                                <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">To Date *</label>
+                                <div className="relative w-full">
+                                    <input
+                                        type="text"
+                                        value={paidRecalcToDate}
+                                        onChange={(e) => {
+                                            setPaidRecalcToDate(e.target.value);
+                                            setHasPaidRecalcViewed(false);
+                                            setSelectedPaidRecalcIds([]);
+                                        }}
+                                        placeholder="DD/MM/YYYY"
+                                        className="w-full h-[38px] pl-3 pr-8 bg-white border border-[#CBD5E1] rounded-lg text-xs font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all shadow-xs"
+                                    />
+                                    <Calendar size={14} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                                </div>
+                            </div>
+
+                            {/* Insurance Company */}
+                            <div className="flex flex-col gap-1.5">
+                                <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Insurance Company *</span>
+                                <div className="relative w-full">
+                                    <select
+                                        value={paidRecalcCompany}
+                                        onChange={(e) => {
+                                            setPaidRecalcCompany(e.target.value);
+                                            setHasPaidRecalcViewed(false);
+                                            setSelectedPaidRecalcIds([]);
+                                            setPaidRecalcPage(1);
+                                        }}
+                                        className="w-full h-[38px] px-3 pr-8 bg-white border border-[#CBD5E1] rounded-lg text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all shadow-xs cursor-pointer appearance-none truncate"
+                                    >
+                                        <option value="">--Select Company--</option>
+                                        {[
+                                            'ROYAL SUNDARAM GENERAL INSURANCE CO. LTD',
+                                            'MAGMA HDI GENERAL INSURANCE COMPANY LIMITED',
+                                            'TATA AIG GENERAL INSURANCE CO. LTD',
+                                            'INDUSIND GENERAL INSURANCE CO. LTD',
+                                            'BAJAJ ALLIANZ GENERAL INSURANCE CO. LTD',
+                                            'HDFC ERGO GENERAL INSURANCE CO. LTD',
+                                            'ICICI LOMBARD GENERAL INSURANCE CO. LTD',
+                                            'SBI GENERAL INSURANCE COMPANY LIMITED',
+                                            'LIBERTY GENERAL INSURANCE LIMITED',
+                                            'UNIVERSAL SOMPO GENERAL INSURANCE CO. LTD'
+                                        ].map(c => (
+                                            <option key={c} value={c}>{c}</option>
+                                        ))}
+                                    </select>
+                                    <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                                </div>
+                            </div>
+
+                            {/* Branch */}
+                            <div className="flex flex-col gap-1.5">
+                                <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Branch *</span>
+                                <div className="relative w-full">
+                                    <select
+                                        value={paidRecalcBranch}
+                                        onChange={(e) => {
+                                            setPaidRecalcBranch(e.target.value);
+                                            setHasPaidRecalcViewed(false);
+                                            setSelectedPaidRecalcIds([]);
+                                            setPaidRecalcPage(1);
+                                        }}
+                                        className="w-full h-[38px] px-3 pr-8 bg-white border border-[#CBD5E1] rounded-lg text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all shadow-xs cursor-pointer appearance-none"
+                                    >
+                                        <option value="">--Select Branch--</option>
+                                        {['PUNE', 'SANGLI', 'AKOLA', 'BARAMATI', 'SATARA', 'SOLAPUR', 'KOLHAPUR', 'BEED', 'GOA'].map(b => (
+                                            <option key={b} value={b}>{b}</option>
+                                        ))}
+                                    </select>
+                                    <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                                </div>
+                            </div>
+
+                            {/* Agent */}
+                            <div className="flex flex-col gap-1.5">
+                                <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Agent *</span>
+                                <div className="relative w-full">
+                                    <select
+                                        value={paidRecalcAgent}
+                                        onChange={(e) => {
+                                            setPaidRecalcAgent(e.target.value);
+                                            setHasPaidRecalcViewed(false);
+                                            setSelectedPaidRecalcIds([]);
+                                            setPaidRecalcPage(1);
+                                        }}
+                                        className="w-full h-[38px] px-3 pr-8 bg-white border border-[#CBD5E1] rounded-lg text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all shadow-xs cursor-pointer appearance-none truncate"
+                                    >
+                                        <option value="">--Select Agent--</option>
+                                        {[
+                                            'PARMESHWAR VENKATRAO BIRADAR',
+                                            'RUTURAJ PRAKASH JADHAV',
+                                            'SHRIKRUSHNA SOPAN PATIL',
+                                            'SHEKHAR MARUTI ANBHULE',
+                                            'AAYUSH UMESH TIJARE',
+                                            'SATARA STANDARD AGENT',
+                                            'AJITKUMAR PRABHAKAR KATULE'
+                                        ].map(a => (
+                                            <option key={a} value={a}>{a}</option>
+                                        ))}
+                                    </select>
+                                    <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Row 2: Policy Type, View button, Reset button */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-4 lg:gap-5 items-end w-full">
+                            {/* Policy Type */}
+                            <div className="flex flex-col gap-1.5 sm:col-span-1 lg:col-span-4">
+                                <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Policy Type *</span>
+                                <div className="relative w-full">
+                                    <select
+                                        value={paidRecalcPolicyType}
+                                        onChange={(e) => {
+                                            setPaidRecalcPolicyType(e.target.value);
+                                            setHasPaidRecalcViewed(false);
+                                            setSelectedPaidRecalcIds([]);
+                                            setPaidRecalcPage(1);
+                                        }}
+                                        className="w-full h-[38px] px-3 pr-8 bg-white border border-[#CBD5E1] rounded-lg text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all shadow-xs cursor-pointer appearance-none truncate"
+                                    >
+                                        <option value="">--Select Policy Type--</option>
+                                        {[
+                                            'GCV 0-2300 GVW',
+                                            'PRIVATE CAR',
+                                            'GCV 7501 - 12000 GVW',
+                                            'PCV - TAXI 4 + 1',
+                                            'EMPLOYEE BUS ABOVE 12 SEATERS',
+                                            'GCV 12001 - 20000 GVW',
+                                            'GCV 3500 - 7000 GVW',
+                                            'MISC-D-TRACTOR',
+                                            'GCV > 40001 - 45000 GVW',
+                                            'GCV ABOVE 40001 GVW',
+                                            'TWO WHEELER'
+                                        ].map(pt => (
+                                            <option key={pt} value={pt}>{pt}</option>
+                                        ))}
+                                    </select>
+                                    <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                                </div>
+                            </div>
+
+                            {/* Action Buttons: View & Reset */}
+                            <div className="flex items-center gap-2 sm:col-span-2 lg:col-span-3 w-full">
+                                <button
+                                    type="button"
+                                    onClick={handlePaidRecalcView}
+                                    className="flex-1 h-[38px] px-5 bg-brand-primary hover:bg-[#1D4ED8] text-white font-semibold text-xs rounded-lg shadow-sm transition-all cursor-pointer border-none flex items-center justify-center gap-1.5"
+                                >
+                                    <span>View</span>
+                                </button>
+                                {(paidRecalcCompany || paidRecalcBranch || paidRecalcAgent || paidRecalcPolicyType || paidRecalcSearchQuery || hasPaidRecalcViewed) && (
+                                    <button
+                                        type="button"
+                                        onClick={handlePaidRecalcReset}
+                                        className="h-[38px] px-3.5 text-xs font-semibold text-rose-600 hover:text-rose-700 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer border border-rose-200 shrink-0"
+                                        title="Reset Filters"
+                                    >
+                                        Reset
+                                    </button>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Paid Entry Recalculation Table Card */}
+                    <div className="bg-white rounded-[12px] border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden flex flex-col w-full">
+                        {/* Table Top Toolbar */}
+                        <div className="p-3.5 sm:p-4 bg-white border-b border-brand-border flex flex-wrap items-center justify-between gap-4">
+                            {/* Search Input on Left */}
+                            <div className="relative w-72 sm:w-80 md:w-[350px] h-[38px]">
+                                <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" size={15} />
+                                <input
+                                    type="text"
+                                    value={paidRecalcSearchQuery}
+                                    onChange={(e) => {
+                                        setPaidRecalcSearchQuery(e.target.value);
+                                        setPaidRecalcPage(1);
+                                    }}
+                                    placeholder="Search Reg No, Agent, Company, Policy..."
+                                    className="w-full h-[38px] pl-10 pr-9 bg-white border border-[#CBD5E1] rounded-[6px] text-[13px] text-slate-800 placeholder-[#94A3B8] shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all"
+                                />
+                                {paidRecalcSearchQuery && (
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            setPaidRecalcSearchQuery('');
+                                            setPaidRecalcPage(1);
+                                        }}
+                                        className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1 cursor-pointer border-none bg-transparent"
+                                    >
+                                        <X size={14} />
+                                    </button>
+                                )}
+                            </div>
+
+                            {/* Submit Action Button on Right */}
+                            <div className="flex items-center gap-2">
+                                <button
+                                    type="button"
+                                    onClick={handleSubmitPaidRecalc}
+                                    disabled={selectedPaidRecalcIds.length === 0}
+                                    className="h-[38px] px-5 bg-[#16A34A] hover:bg-[#15803D] disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold text-xs rounded-lg shadow-sm transition-all cursor-pointer border-none flex items-center justify-center gap-1.5"
+                                >
+                                    <Check size={14} />
+                                    <span>Submit {selectedPaidRecalcIds.length > 0 && `(${selectedPaidRecalcIds.length})`}</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* Data Table with all 34 Columns from ERP Adm_CutNPayRecalculation.aspx */}
+                        <div className="overflow-x-auto w-full custom-scrollbar min-h-[380px]">
+                            <table className="w-full text-left border-collapse min-w-[3400px]">
+                                <thead>
+                                    <tr className="bg-brand-lightbg text-brand-navy text-[12px] font-semibold uppercase border-b border-brand-border whitespace-nowrap">
+                                        <th className="py-3 px-3 text-center w-[45px] sticky left-0 z-20 bg-brand-lightbg text-brand-navy border-r border-brand-border">
+                                            <input
+                                                type="checkbox"
+                                                checked={paginatedPaidRecalcRecords.length > 0 && paginatedPaidRecalcRecords.every(i => selectedPaidRecalcIds.includes(i.id))}
+                                                onChange={handleToggleSelectAllPaidRecalc}
+                                                className="w-4 h-4 rounded text-brand-primary focus:ring-brand-primary cursor-pointer accent-blue-600"
+                                            />
+                                        </th>
+                                        <th className="py-3 px-3.5 sticky left-[45px] z-20 bg-brand-lightbg text-brand-navy border-r border-brand-border">REG. NO.</th>
+                                        <th className="py-3 px-3.5">BRANCH</th>
+                                        <th className="py-3 px-3.5">AGENT NAME</th>
+                                        <th className="py-3 px-3.5">PRODUCT TYPE</th>
+                                        <th className="py-3 px-3.5">POLICYTYPE</th>
+                                        <th className="py-3 px-3.5">INSURANCECOMPANY</th>
+                                        <th className="py-3 px-3.5 text-right">AMOUNT (₹)</th>
+                                        <th className="py-3 px-3.5">PAYMENT TYPE</th>
+                                        <th className="py-3 px-3.5">PAYMENTDETAILS</th>
+                                        <th className="py-3 px-3.5 text-right">PREMIUM AMOUNT (₹)</th>
+                                        <th className="py-3 px-3.5">CUSTOMER NAME</th>
+                                        <th className="py-3 px-3.5">REFERENCETYPE</th>
+                                        <th className="py-3 px-3.5 text-right">OD DISCOUNT(%)</th>
+                                        <th className="py-3 px-3.5 text-right">TP PERMIUM (₹)</th>
+                                        <th className="py-3 px-3.5 text-right">OD PERMIUM (₹)</th>
+                                        <th className="py-3 px-3.5 text-right">NET PERMIUM (₹)</th>
+                                        <th className="py-3 px-3.5">POLICY NO</th>
+                                        <th className="py-3 px-3.5">DATE</th>
+                                        <th className="py-3 px-3.5 text-right">AGENT GRID TP(%)</th>
+                                        <th className="py-3 px-3.5 text-right">AGENT COMM AMT TP (₹)</th>
+                                        <th className="py-3 px-3.5 text-right">TDS AMT TP (₹)</th>
+                                        <th className="py-3 px-3.5 text-right">NET COMMISSION TP (₹)</th>
+                                        <th className="py-3 px-3.5 text-right">AGENT GRID OD(%)</th>
+                                        <th className="py-3 px-3.5 text-right">AGENT COMM AMT OD (₹)</th>
+                                        <th className="py-3 px-3.5 text-right">TDS AMT OD (₹)</th>
+                                        <th className="py-3 px-3.5 text-right">NET COMMISSION OD (₹)</th>
+                                        <th className="py-3 px-3.5 text-right">AGENT GRID NET(%)</th>
+                                        <th className="py-3 px-3.5 text-right">AGENT COMM AMT NET (₹)</th>
+                                        <th className="py-3 px-3.5 text-right">TDS AMT NET (₹)</th>
+                                        <th className="py-3 px-3.5">MANUFACTURING YEAR</th>
+                                        <th className="py-3 px-3.5 text-right">NET COMMISSION NET (₹)</th>
+                                        <th className="py-3 px-3.5">FUELTYPE</th>
+                                        <th className="py-3 px-3.5">BROKER NAME</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y divide-brand-border text-[12px]">
+                                    {!hasPaidRecalcViewed || !isPaidRecalcFormFilled ? (
+                                        <tr>
+                                            <td colSpan={34} className="py-16 text-center text-slate-400 font-medium">
+                                                Please select all required form fields above and click View to load recalculation entries.
+                                            </td>
+                                        </tr>
+                                    ) : paginatedPaidRecalcRecords.length === 0 ? (
+                                        <tr>
+                                            <td colSpan={34} className="py-12 text-center text-slate-400 font-medium">
+                                                No paid entry recalculation records found.
+                                            </td>
+                                        </tr>
+                                    ) : (
+                                        paginatedPaidRecalcRecords.map((row) => {
+                                            const isSelected = selectedPaidRecalcIds.includes(row.id);
+                                            return (
+                                                <tr
+                                                    key={row.id}
+                                                    className={`hover:bg-blue-50/40 transition-colors h-[48px] ${isSelected ? 'bg-[#EEF6FF]' : 'bg-white'
+                                                        }`}
+                                                >
+                                                    <td className={`py-2 px-3 text-center sticky left-0 z-10 border-r border-slate-100 ${isSelected ? 'bg-[#EEF6FF]' : 'bg-white'}`}>
+                                                        <input
+                                                            type="checkbox"
+                                                            checked={isSelected}
+                                                            onChange={() => handleTogglePaidRecalc(row.id)}
+                                                            className="w-4 h-4 rounded text-brand-primary focus:ring-brand-primary cursor-pointer accent-blue-600"
+                                                        />
+                                                    </td>
+                                                    <td className={`py-2.5 px-3.5 font-mono font-bold text-brand-primary whitespace-nowrap sticky left-[45px] z-10 border-r border-slate-100 ${isSelected ? 'bg-[#EEF6FF]' : 'bg-white'}`}>
+                                                        {row.regNo}
+                                                    </td>
+                                                    <td className="py-2.5 px-3.5 font-semibold text-brand-navy whitespace-nowrap">
+                                                        {row.branch}
+                                                    </td>
+                                                    <td className="py-2.5 px-3.5 font-bold text-slate-900 whitespace-nowrap">
+                                                        {row.agentName}
+                                                    </td>
+                                                    <td className="py-2.5 px-3.5 whitespace-nowrap text-slate-700">
+                                                        {row.productType}
+                                                    </td>
+                                                    <td className="py-2.5 px-3.5 whitespace-nowrap text-slate-700 font-medium">
+                                                        {row.policyType}
+                                                    </td>
+                                                    <td className="py-2.5 px-3.5 whitespace-nowrap text-slate-800 font-medium">
+                                                        {row.insuranceCompany}
+                                                    </td>
+                                                    <td className="py-2.5 px-3.5 text-right font-medium text-slate-700 whitespace-nowrap">
+                                                        ₹ {row.amount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+                                                    </td>
+                                                    <td className="py-2.5 px-3.5 whitespace-nowrap text-slate-700 font-medium">
+                                                        {row.paymentType}
+                                                    </td>
+                                                    <td className="py-2.5 px-3.5 text-slate-600 font-mono text-xs whitespace-nowrap">
+                                                        {row.paymentDetails}
+                                                    </td>
+                                                    <td className="py-2.5 px-3.5 text-right font-bold text-slate-900 whitespace-nowrap">
+                                                        ₹ {row.premiumAmount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+                                                    </td>
+                                                    <td className="py-2.5 px-3.5 font-bold text-slate-900 whitespace-nowrap">
+                                                        {row.customerName}
+                                                    </td>
+                                                    <td className="py-2.5 px-3.5 whitespace-nowrap text-slate-700 font-medium">
+                                                        {row.referenceType}
+                                                    </td>
+                                                    <td className="py-2.5 px-3.5 text-right font-mono text-slate-600 whitespace-nowrap">
+                                                        {row.odDiscount}
+                                                    </td>
+                                                    <td className="py-2.5 px-3.5 text-right font-medium text-slate-700 whitespace-nowrap">
+                                                        ₹ {row.tpPremium.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+                                                    </td>
+                                                    <td className="py-2.5 px-3.5 text-right font-medium text-slate-700 whitespace-nowrap">
+                                                        ₹ {row.odPremium.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+                                                    </td>
+                                                    <td className="py-2.5 px-3.5 text-right font-bold text-slate-900 whitespace-nowrap">
+                                                        ₹ {row.netPremium.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+                                                    </td>
+                                                    <td className="py-2.5 px-3.5 font-mono text-xs text-brand-primary whitespace-nowrap">
+                                                        {row.policyNo}
+                                                    </td>
+                                                    <td className="py-2.5 px-3.5 text-slate-600 whitespace-nowrap">
+                                                        {row.date}
+                                                    </td>
+                                                    <td className="py-2.5 px-3.5 text-right font-mono text-slate-600 whitespace-nowrap">
+                                                        {row.agentGridTp}
+                                                    </td>
+                                                    <td className="py-2.5 px-3.5 text-right font-medium text-slate-700 whitespace-nowrap">
+                                                        ₹ {row.agentCommAmtTp.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+                                                    </td>
+                                                    <td className="py-2.5 px-3.5 text-right font-medium text-slate-500 whitespace-nowrap">
+                                                        ₹ {row.tdsAmtTp.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+                                                    </td>
+                                                    <td className="py-2.5 px-3.5 text-right font-bold text-emerald-600 whitespace-nowrap">
+                                                        ₹ {row.netCommTp.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+                                                    </td>
+                                                    <td className="py-2.5 px-3.5 text-right font-mono text-slate-600 whitespace-nowrap">
+                                                        {row.agentGridOd}
+                                                    </td>
+                                                    <td className="py-2.5 px-3.5 text-right font-medium text-slate-700 whitespace-nowrap">
+                                                        ₹ {row.agentCommAmtOd.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+                                                    </td>
+                                                    <td className="py-2.5 px-3.5 text-right font-medium text-slate-500 whitespace-nowrap">
+                                                        ₹ {row.tdsAmtOd.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+                                                    </td>
+                                                    <td className="py-2.5 px-3.5 text-right font-bold text-emerald-600 whitespace-nowrap">
+                                                        ₹ {row.netCommOd.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+                                                    </td>
+                                                    <td className="py-2.5 px-3.5 text-right font-mono font-bold text-emerald-600 whitespace-nowrap">
+                                                        {row.agentGridNet}
+                                                    </td>
+                                                    <td className="py-2.5 px-3.5 text-right font-medium text-slate-700 whitespace-nowrap">
+                                                        ₹ {row.agentCommAmtNet.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+                                                    </td>
+                                                    <td className="py-2.5 px-3.5 text-right font-medium text-slate-500 whitespace-nowrap">
+                                                        ₹ {row.tdsAmtNet.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+                                                    </td>
+                                                    <td className="py-2.5 px-3.5 text-slate-600 text-xs whitespace-nowrap">
+                                                        {row.manufacturingYear}
+                                                    </td>
+                                                    <td className="py-2.5 px-3.5 text-right font-bold text-emerald-600 whitespace-nowrap">
+                                                        ₹ {row.netCommNet.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+                                                    </td>
+                                                    <td className="py-2.5 px-3.5 whitespace-nowrap text-slate-700">
+                                                        {row.fuelType}
+                                                    </td>
+                                                    <td className="py-2.5 px-3.5 text-slate-700 font-semibold whitespace-nowrap">
+                                                        {row.brokerName}
+                                                    </td>
+                                                </tr>
+                                            );
+                                        })
+                                    )}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        {/* Standard Pagination Controls */}
+                        <div className="p-3.5 sm:p-4 bg-white border-t border-brand-border flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-brand-muted">
+                            <div className="flex items-center gap-3">
+                                <span>
+                                    Showing {paginatedPaidRecalcRecords.length === 0 ? 0 : (paidRecalcPage - 1) * paidRecalcPerPage + 1} to {Math.min(paidRecalcPage * paidRecalcPerPage, filteredPaidRecalcRecords.length)} of {filteredPaidRecalcRecords.length} records
+                                </span>
+                                <div className="flex items-center gap-1.5">
+                                    <span className="text-slate-500">Per page:</span>
+                                    <select
+                                        value={paidRecalcPerPage}
+                                        onChange={(e) => {
+                                            setPaidRecalcPerPage(Number(e.target.value));
+                                            setPaidRecalcPage(1);
+                                        }}
+                                        className="h-7 px-2 bg-white border border-slate-200 rounded text-xs text-slate-700 focus:outline-none"
+                                    >
+                                        <option value={10}>10</option>
+                                        <option value={25}>25</option>
+                                        <option value={50}>50</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div className="flex items-center gap-1">
+                                <button
+                                    onClick={() => setPaidRecalcPage(p => Math.max(1, p - 1))}
+                                    disabled={paidRecalcPage === 1}
+                                    className="w-8 h-8 flex items-center justify-center text-xs font-semibold text-brand-navy bg-white border border-brand-border rounded-md disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-50 cursor-pointer"
+                                >
+                                    &lt;
+                                </button>
+                                {Array.from({ length: totalPaidRecalcPages }, (_, i) => i + 1).map(p => (
+                                    <button
+                                        key={p}
+                                        onClick={() => setPaidRecalcPage(p)}
+                                        className={`w-8 h-8 flex items-center justify-center text-xs font-bold rounded-md transition-colors cursor-pointer ${p === paidRecalcPage ? 'bg-brand-primary text-white' : 'bg-white border border-brand-border text-brand-navy hover:bg-slate-50'
+                                            }`}
+                                    >
+                                        {p}
+                                    </button>
+                                ))}
+                                <button
+                                    onClick={() => setPaidRecalcPage(p => Math.min(totalPaidRecalcPages, p + 1))}
+                                    disabled={paidRecalcPage === totalPaidRecalcPages}
+                                    className="w-8 h-8 flex items-center justify-center text-xs font-semibold text-brand-navy bg-white border border-brand-border rounded-md disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-50 cursor-pointer"
+                                >
+                                    &gt;
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* TAB CONTENT: RETURN TO CASH APPROVAL (reliable-erp.com/Clerk/adm_returnToCashApproval.aspx) */}
+            {activeTab === 'return-cash-approval' && (
+                <div className="tab-transition-wrapper space-y-4">
+                    {/* Search Card matching Registration.tsx standard layout */}
+                    <div className="bg-white rounded-xl p-5 sm:p-6 shadow-sm border border-slate-200/80">
+                        {/* Blue Banner Header matching Registration page */}
+                        <div className="bg-brand-primary text-white px-5 py-2 rounded-lg font-semibold text-sm flex items-center shadow-xs mb-5">
+                            <span className="mr-1 text-base font-serif">&raquo;</span>Return To Cash Approval
+                        </div>
+
+                        <div className="flex flex-wrap items-end gap-3 sm:gap-4 max-w-lg">
+                            <div className="flex flex-col gap-1.5 flex-1 min-w-[240px]">
+                                <label className="text-[13px] text-slate-700 font-normal">
+                                    Registration No
+                                </label>
+                                <div className="relative">
+                                    <input
+                                        type="text"
+                                        value={returnCashRegNo}
+                                        onChange={(e) => setReturnCashRegNo(e.target.value)}
+                                        placeholder="Enter Registration No (e.g. 1237)..."
+                                        className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all shadow-inner"
+                                        onKeyDown={(e) => {
+                                            if (e.key === 'Enter') handleReturnCashView();
+                                        }}
+                                    />
+                                    {returnCashRegNo && (
+                                        <button
+                                            type="button"
+                                            onClick={() => {
+                                                setReturnCashRegNo('');
+                                                setHasReturnCashSearched(false);
+                                            }}
+                                            className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1 cursor-pointer border-none bg-transparent"
+                                        >
+                                            <X size={14} />
+                                        </button>
+                                    )}
+                                </div>
+                            </div>
+                            <button
+                                type="button"
+                                onClick={handleReturnCashView}
+                                className="h-[38px] px-6 bg-brand-primary hover:bg-[#1D4ED8] text-white font-semibold text-xs rounded-lg shadow-sm transition-all cursor-pointer border-none flex items-center justify-center gap-1.5 shrink-0"
+                            >
+                                <span>View</span>
+                            </button>
+                            {returnCashRegNo && (
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        setReturnCashRegNo('');
+                                        setHasReturnCashSearched(false);
+                                    }}
+                                    className="h-[38px] px-3.5 text-xs font-semibold text-rose-600 hover:text-rose-700 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer border border-rose-200 shrink-0"
+                                >
+                                    Reset
+                                </button>
+                            )}
+                        </div>
+                    </div>
+
+                    {/* Data Table Card matching our design system */}
+                    <div className="bg-white rounded-[12px] border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden flex flex-col w-full">
+                        <div className="overflow-x-auto w-full custom-scrollbar min-h-[220px]">
+                            <table className="w-full text-left border-collapse min-w-[1200px]">
+                                <thead>
+                                    <tr className="bg-brand-lightbg text-brand-navy text-[12px] font-semibold uppercase border-b border-brand-border whitespace-nowrap">
+                                        <th className="py-3 px-3.5 text-center w-[60px]">SR.NO.</th>
+                                        <th className="py-3 px-3.5">DATE</th>
+                                        <th className="py-3 px-3.5">CUSTOMER NAME</th>
+                                        <th className="py-3 px-3.5">POLICY NO</th>
+                                        <th className="py-3 px-3.5">REG. NO.</th>
+                                        <th className="py-3 px-3.5">PAYMENT MODE</th>
+                                        <th className="py-3 px-3.5 text-right">AGENT COMM AMT (₹)</th>
+                                        <th className="py-3 px-3.5 text-right">AMOUNT (₹)</th>
+                                        <th className="py-3 px-3.5">AGENT NAME</th>
+                                        <th className="py-3 px-3.5">EMP NAME</th>
+                                        <th className="py-3 px-3.5">REFERENCE TYPE</th>
+                                        <th className="py-3 px-3.5 text-center">STATUS</th>
+                                        <th className="py-3 px-3.5 text-center w-[130px]">ACTION</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y divide-brand-border text-[12px]">
+                                    {!hasReturnCashSearched || filteredReturnCashRecords.length === 0 ? (
+                                        <tr>
+                                            <td colSpan={13} className="py-12 text-center text-slate-500 font-bold uppercase tracking-wider text-xs bg-slate-50/50">
+                                                NO DATA FOUND
+                                            </td>
+                                        </tr>
+                                    ) : (
+                                        filteredReturnCashRecords.map((item, idx) => (
+                                            <tr key={item.id} className="hover:bg-blue-50/40 h-[48px] transition-colors bg-white">
+                                                <td className="py-2.5 px-3.5 text-center text-slate-500 font-mono">
+                                                    {idx + 1}
+                                                </td>
+                                                <td className="py-2.5 px-3.5 text-slate-700 whitespace-nowrap">
+                                                    {item.date}
+                                                </td>
+                                                <td className="py-2.5 px-3.5 font-bold text-slate-900 whitespace-nowrap">
+                                                    {item.customerName}
+                                                </td>
+                                                <td className="py-2.5 px-3.5 font-mono text-xs text-brand-primary whitespace-nowrap">
+                                                    {item.policyNo}
+                                                </td>
+                                                <td className="py-2.5 px-3.5 font-mono font-bold text-brand-navy whitespace-nowrap">
+                                                    {item.regNo}
+                                                </td>
+                                                <td className="py-2.5 px-3.5 font-semibold text-slate-700 text-xs whitespace-nowrap">
+                                                    <span className="px-2 py-0.5 rounded bg-slate-100 text-slate-700">
+                                                        {item.paymentMode}
+                                                    </span>
+                                                </td>
+                                                <td className="py-2.5 px-3.5 text-right font-medium text-slate-700 whitespace-nowrap">
+                                                    ₹ {item.agentCommAmt.toLocaleString('en-IN')}
+                                                </td>
+                                                <td className="py-2.5 px-3.5 text-right font-bold text-slate-900 whitespace-nowrap">
+                                                    ₹ {item.amount.toLocaleString('en-IN')}
+                                                </td>
+                                                <td className="py-2.5 px-3.5 text-slate-800 whitespace-nowrap">
+                                                    {item.agentName}
+                                                </td>
+                                                <td className="py-2.5 px-3.5 text-slate-700 whitespace-nowrap">
+                                                    {item.empName}
+                                                </td>
+                                                <td className="py-2.5 px-3.5 font-semibold text-brand-navy text-xs whitespace-nowrap">
+                                                    {item.referenceType}
+                                                </td>
+                                                <td className="py-2.5 px-3.5 text-center whitespace-nowrap">
+                                                    <span className={`px-2.5 py-0.5 rounded-full text-[11px] font-bold ${item.status === 'RETURNED TO CASH APPROVAL'
+                                                            ? 'bg-amber-100 text-amber-800'
+                                                            : 'bg-emerald-100 text-emerald-800'
+                                                        }`}>
+                                                        {item.status}
+                                                    </span>
+                                                </td>
+                                                <td className="py-2.5 px-3.5 text-center whitespace-nowrap">
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => handleReturnToCashApproval(item.id, item.regNo)}
+                                                        disabled={item.status === 'RETURNED TO CASH APPROVAL'}
+                                                        className="px-3 py-1.5 bg-[#00897B] hover:bg-[#00796B] disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold text-xs rounded-lg shadow-xs transition-all cursor-pointer border-none flex items-center justify-center gap-1 mx-auto"
+                                                        title="Return this entry to Cash Approval"
+                                                    >
+                                                        <RotateCcw size={12} />
+                                                        <span>Return</span>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        ))
+                                    )}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* TAB CONTENT: CASH BACK APPROVAL (reliable-erp.com/Clerk/CashBackAmtApproval.aspx) */}
+            {activeTab === 'cashback-approval' && (
+                <div className="tab-transition-wrapper space-y-4">
+                    {/* Cash Back Approval Table Card (Matching Paid Commission style with merged top searchbar) */}
+                    <div className="bg-white rounded-[12px] border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden flex flex-col w-full">
+                        {/* Table Top Toolbar with Merged Searchbar & Summary Badges */}
+                        <div className="p-3.5 sm:p-4 bg-white border-b border-brand-border flex flex-wrap items-center justify-between gap-4">
+                            <div className="flex items-center gap-3 flex-wrap">
+                                {/* Merged Search Input */}
+                                <div className="relative w-72 sm:w-80 md:w-[380px] h-[38px]">
+                                    <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" size={15} />
+                                    <input
+                                        type="text"
+                                        value={cashbackSearchQuery}
+                                        onChange={(e) => {
+                                            setCashbackSearchQuery(e.target.value);
+                                            setCashbackPage(1);
+                                        }}
+                                        placeholder="Search Registration No, Executive, Customer..."
+                                        className="w-full h-[38px] pl-10 pr-9 bg-white border border-[#CBD5E1] rounded-[6px] text-[13px] text-slate-800 placeholder-[#94A3B8] shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all"
+                                    />
+                                    {cashbackSearchQuery && (
+                                        <button
+                                            type="button"
+                                            onClick={() => {
+                                                setCashbackSearchQuery('');
+                                                setCashbackPage(1);
+                                            }}
+                                            className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1 cursor-pointer border-none bg-transparent"
+                                        >
+                                            <X size={14} />
+                                        </button>
+                                    )}
+                                </div>
+
+                                {/* Summary Badges */}
+                                <div className="flex items-center gap-4 text-xs font-semibold text-slate-600 bg-slate-50 border border-slate-200 px-3.5 py-2 rounded-[6px]">
+                                    <div className="flex items-center gap-1.5">
+                                        <span className="text-slate-500 font-bold">Total Count :-</span>
+                                        <span className="text-brand-primary font-bold text-sm">{totalCashbackCount}</span>
+                                    </div>
+                                    <div className="h-4 w-px bg-slate-300" />
+                                    <div className="flex items-center gap-1.5">
+                                        <span className="text-slate-500 font-bold">Total Amount :-</span>
+                                        <span className="text-emerald-600 font-bold text-sm">₹ {totalCashbackAmount.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Right: Export & Reset Buttons */}
+                            <div className="flex items-center gap-2">
+                                <button
+                                    type="button"
+                                    onClick={handleExportCashback}
+                                    className="h-[38px] px-5 bg-[#EAA144] hover:bg-[#D99B35] text-white font-semibold text-xs rounded-lg shadow-sm transition-all cursor-pointer border-none flex items-center justify-center gap-1.5"
+                                >
+                                    <Download size={14} />
+                                    <span>Export</span>
+                                </button>
+                                {cashbackSearchQuery && (
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            setCashbackSearchQuery('');
+                                            setCashbackPage(1);
+                                        }}
+                                        className="h-[38px] px-3.5 text-xs font-semibold text-rose-600 hover:text-rose-700 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer border border-rose-200 shrink-0"
+                                    >
+                                        Reset
+                                    </button>
+                                )}
+                            </div>
+                        </div>
+
+                        {/* Data Table */}
+                        <div className="overflow-x-auto w-full custom-scrollbar min-h-[380px]">
+                            <table className="w-full text-left border-collapse min-w-[1500px]">
+                                <thead>
+                                    <tr className="bg-brand-lightbg text-brand-navy text-[12px] font-semibold uppercase border-b border-brand-border whitespace-nowrap">
+                                        <th className="py-3 px-3.5 text-center w-[50px]">SR</th>
+                                        <th className="py-3 px-3.5">TRANSDATE</th>
+                                        <th className="py-3 px-3.5">CASHBACKDATE</th>
+                                        <th className="py-3 px-3.5">REGISTRATIONNO</th>
+                                        <th className="py-3 px-3.5">CUSTOMER NAME</th>
+                                        <th className="py-3 px-3.5">SALES EXECUTIVE</th>
+                                        <th className="py-3 px-3.5">POLICYNO</th>
+                                        <th className="py-3 px-3.5">INSURANCECOMPANY</th>
+                                        <th className="py-3 px-3.5">PRODUCTTYPE</th>
+                                        <th className="py-3 px-3.5">POLICYTYPE</th>
+                                        <th className="py-3 px-3.5 text-right">NETPERMIUM (₹)</th>
+                                        <th className="py-3 px-3.5">PAYMENTTYPE</th>
+                                        <th className="py-3 px-3.5 text-right">CASHBACKAMT (₹)</th>
+                                        <th className="py-3 px-3.5 text-center w-[110px]">ACTION</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y divide-brand-border text-[12px]">
+                                    {paginatedCashbackRecords.length === 0 ? (
+                                        <tr>
+                                            <td colSpan={14} className="py-12 text-center text-slate-400 font-medium">
+                                                No cash back approval records found.
+                                            </td>
+                                        </tr>
+                                    ) : (
+                                        paginatedCashbackRecords.map((item, idx) => (
+                                            <tr key={item.id} className="hover:bg-blue-50/40 transition-colors h-[48px] bg-white">
+                                                <td className="py-2.5 px-3.5 text-center text-slate-500 font-mono">
+                                                    {(cashbackPage - 1) * cashbackPerPage + idx + 1}
+                                                </td>
+                                                <td className="py-2.5 px-3.5 text-slate-700 whitespace-nowrap">{item.transDate}</td>
+                                                <td className="py-2.5 px-3.5 text-slate-600 whitespace-nowrap">{item.cashbackDate}</td>
+                                                <td className="py-2.5 px-3.5 font-mono font-bold text-brand-primary whitespace-nowrap">{item.registrationNo}</td>
+                                                <td className="py-2.5 px-3.5 font-bold text-slate-900 whitespace-nowrap">{item.customerName}</td>
+                                                <td className="py-2.5 px-3.5 text-slate-800 font-semibold whitespace-nowrap">{item.salesExecutive}</td>
+                                                <td className="py-2.5 px-3.5 font-mono text-xs text-brand-navy whitespace-nowrap">{item.policyNo}</td>
+                                                <td className="py-2.5 px-3.5 text-slate-700 font-medium whitespace-nowrap">{item.insuranceCompany}</td>
+                                                <td className="py-2.5 px-3.5 whitespace-nowrap">
+                                                    <span className="px-2 py-0.5 rounded text-[11px] font-semibold bg-slate-100 text-slate-700">
+                                                        {item.productType}
+                                                    </span>
+                                                </td>
+                                                <td className="py-2.5 px-3.5 text-slate-700 whitespace-nowrap">{item.policyType}</td>
+                                                <td className="py-2.5 px-3.5 text-right font-bold text-slate-900 whitespace-nowrap">
+                                                    ₹ {item.netPremium.toLocaleString('en-IN')}
+                                                </td>
+                                                <td className="py-2.5 px-3.5 whitespace-nowrap">
+                                                    <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200">
+                                                        {item.paymentType}
+                                                    </span>
+                                                </td>
+                                                <td className="py-2.5 px-3.5 text-right font-bold text-emerald-600 whitespace-nowrap">
+                                                    ₹ {item.cashbackAmt.toLocaleString('en-IN')}
+                                                </td>
+                                                <td className="py-2.5 px-3.5 text-center whitespace-nowrap">
+                                                    {item.status === 'APPROVED' ? (
+                                                        <span className="px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800">
+                                                            APPROVED
+                                                        </span>
+                                                    ) : (
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => handleApproveCashback(item.id, item.registrationNo)}
+                                                            className="px-3 py-1 bg-brand-primary hover:bg-[#1D4ED8] text-white font-bold text-[11px] rounded shadow-xs transition-all cursor-pointer border-none flex items-center justify-center gap-1 mx-auto"
+                                                        >
+                                                            <span>APPROVE</span>
+                                                        </button>
+                                                    )}
+                                                </td>
+                                            </tr>
+                                        ))
+                                    )}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        {/* Standard Pagination Controls (Matching paid-commission) */}
+                        <div className="p-3.5 sm:p-4 bg-white border-t border-brand-border flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-brand-muted">
+                            <div className="flex items-center gap-3">
+                                <span>
+                                    Showing {paginatedCashbackRecords.length === 0 ? 0 : (cashbackPage - 1) * cashbackPerPage + 1} to {Math.min(cashbackPage * cashbackPerPage, filteredCashbackRecords.length)} of {filteredCashbackRecords.length} records
+                                </span>
+                                <div className="flex items-center gap-1.5">
+                                    <span className="text-slate-500">Per page:</span>
+                                    <select
+                                        value={cashbackPerPage}
+                                        onChange={(e) => {
+                                            setCashbackPerPage(Number(e.target.value));
+                                            setCashbackPage(1);
+                                        }}
+                                        className="h-7 px-2 bg-white border border-slate-200 rounded text-xs text-slate-700 focus:outline-none"
+                                    >
+                                        <option value={10}>10</option>
+                                        <option value={25}>25</option>
+                                        <option value={50}>50</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div className="flex items-center gap-1">
+                                <button
+                                    onClick={() => setCashbackPage(p => Math.max(1, p - 1))}
+                                    disabled={cashbackPage === 1}
+                                    className="w-8 h-8 flex items-center justify-center text-xs font-semibold text-brand-navy bg-white border border-brand-border rounded-md disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-50 cursor-pointer"
+                                >
+                                    &lt;
+                                </button>
+                                {Array.from({ length: totalCashbackPages }, (_, i) => i + 1).map(p => (
+                                    <button
+                                        key={p}
+                                        onClick={() => setCashbackPage(p)}
+                                        className={`w-8 h-8 flex items-center justify-center text-xs font-bold rounded-md transition-colors cursor-pointer ${p === cashbackPage ? 'bg-brand-primary text-white' : 'bg-white border border-brand-border text-brand-navy hover:bg-slate-50'
+                                            }`}
+                                    >
+                                        {p}
+                                    </button>
+                                ))}
+                                <button
+                                    onClick={() => setCashbackPage(p => Math.min(totalCashbackPages, p + 1))}
+                                    disabled={cashbackPage === totalCashbackPages}
+                                    className="w-8 h-8 flex items-center justify-center text-xs font-semibold text-brand-navy bg-white border border-brand-border rounded-md disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-50 cursor-pointer"
+                                >
+                                    &gt;
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* TAB CONTENT: CHEQUE RECON (reliable-erp.com/Clerk/rptchequeDepositeStatusforbank.aspx) */}
+            {activeTab === 'cheque-recon' && (
+                <div className="tab-transition-wrapper space-y-5">
+                    {/* Sub-tab Navigation (RA Premium Cheque vs Customer Cheque) */}
+                    <div className="flex items-center justify-center w-full">
+                        <div className="inline-flex p-1.5 bg-slate-100 rounded-xl border border-brand-border shadow-xs w-full sm:w-auto">
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    setChequeReconType('RA');
+                                    setSelectedChequeReconIds([]);
+                                    setChequeReconSearchQuery('');
+                                    setChequeReconPage(1);
+                                }}
+                                className={`px-8 sm:px-14 py-2.5 text-xs font-bold rounded-lg transition-all cursor-pointer border-none text-center flex-1 sm:flex-initial ${chequeReconType === 'RA'
+                                        ? 'bg-brand-primary text-white shadow-sm'
+                                        : 'text-slate-600 hover:text-slate-900 bg-transparent'
+                                    }`}
+                            >
+                                RA Premium Cheque
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    setChequeReconType('CUSTOMER');
+                                    setSelectedChequeReconIds([]);
+                                    setChequeReconSearchQuery('');
+                                    setChequeReconPage(1);
+                                }}
+                                className={`px-8 sm:px-14 py-2.5 text-xs font-bold rounded-lg transition-all cursor-pointer border-none text-center flex-1 sm:flex-initial ${chequeReconType === 'CUSTOMER'
+                                        ? 'bg-brand-primary text-white shadow-sm'
+                                        : 'text-slate-600 hover:text-slate-900 bg-transparent'
+                                    }`}
+                            >
+                                Customer Cheque
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* Filter Card (Full Width Matching ERP »Customer cheque / »RA Premium Cheque Card) */}
+                    <div className="bg-white rounded-xl border border-brand-border shadow-sm w-full overflow-hidden">
+                        <div className="bg-brand-primary px-5 py-2.5 text-white font-bold text-xs uppercase tracking-wider flex items-center gap-1.5">
+                            <span>»</span>
+                            <span>{chequeReconType === 'CUSTOMER' ? 'Customer cheque' : 'RA Premium Cheque'}</span>
+                        </div>
+                        <div className="p-4 sm:p-5 flex flex-wrap items-end gap-4 w-full">
+                            <div className="flex flex-col gap-1.5 w-full sm:w-72">
+                                <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">From Date</label>
+                                <div className="relative w-full">
+                                    <input
+                                        type="text"
+                                        value={chequeReconFromDate}
+                                        onChange={(e) => {
+                                            setChequeReconFromDate(e.target.value);
+                                        }}
+                                        placeholder="DD/MM/YYYY"
+                                        className="w-full h-[38px] pl-3 pr-8 bg-white border border-[#CBD5E1] rounded-lg text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all shadow-xs"
+                                    />
+                                    <Calendar size={14} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                                </div>
+                            </div>
+                            <button
+                                type="button"
+                                onClick={handleChequeReconSubmit}
+                                className="h-[38px] px-8 bg-brand-primary hover:bg-[#1D4ED8] text-white font-bold text-xs rounded-lg shadow-sm transition-all cursor-pointer border-none flex items-center justify-center gap-1.5 shrink-0"
+                            >
+                                Submit
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* Data Table Card (Matching Paid Commission styling) */}
+                    <div className="bg-white rounded-[12px] border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden flex flex-col w-full animate-in fade-in duration-200">
+                        {/* Table Top Toolbar with Merged Searchbar & Summary Badges */}
+                        <div className="p-3.5 sm:p-4 bg-white border-b border-brand-border flex flex-wrap items-center justify-between gap-4">
+                            <div className="flex items-center gap-3 flex-wrap">
+                                {/* Merged Search Input */}
+                                <div className="relative w-72 sm:w-80 md:w-[380px] h-[38px]">
+                                    <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" size={15} />
+                                    <input
+                                        type="text"
+                                        value={chequeReconSearchQuery}
+                                        onChange={(e) => {
+                                            setChequeReconSearchQuery(e.target.value);
+                                            setChequeReconPage(1);
+                                        }}
+                                        placeholder="Search Customer, Reg No, Cheque No, Policy No..."
+                                        className="w-full h-[38px] pl-10 pr-9 bg-white border border-[#CBD5E1] rounded-[6px] text-[13px] text-slate-800 placeholder-[#94A3B8] shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all"
+                                    />
+                                    {chequeReconSearchQuery && (
+                                        <button
+                                            type="button"
+                                            onClick={() => {
+                                                setChequeReconSearchQuery('');
+                                                setChequeReconPage(1);
+                                            }}
+                                            className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1 cursor-pointer border-none bg-transparent"
+                                        >
+                                            <X size={14} />
+                                        </button>
+                                    )}
+                                </div>
+
+                                {/* Summary Badges */}
+                                <div className="flex items-center gap-3 text-xs font-semibold text-slate-600 bg-slate-50 border border-slate-200 px-3.5 py-2 rounded-[6px] flex-wrap">
+                                    <div className="flex items-center gap-1.5">
+                                        <span className="text-slate-500 font-bold">Total Count :-</span>
+                                        <span className="text-brand-primary font-bold text-sm">{totalChequeCount}</span>
+                                    </div>
+                                    <div className="h-4 w-px bg-slate-300 hidden sm:block" />
+                                    <div className="flex items-center gap-1.5">
+                                        <span className="text-slate-500 font-bold">Total Amount :-</span>
+                                        <span className="text-emerald-600 font-bold text-sm">₹ {totalChequeAmount.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                                    </div>
+                                    {selectedChequeReconIds.length > 0 && (
+                                        <>
+                                            <div className="h-4 w-px bg-slate-300 hidden sm:block" />
+                                            <div className="flex items-center gap-1.5 text-blue-700 bg-blue-100/60 px-2 py-0.5 rounded">
+                                                <span className="font-bold">Selected:</span>
+                                                <span className="font-extrabold">{selectedChequeReconIds.length}</span>
+                                            </div>
+                                        </>
+                                    )}
+                                </div>
+                            </div>
+
+                            {/* Right Actions: Deposit Selected, Export & Reset */}
+                            <div className="flex items-center gap-2">
+                                {selectedChequeReconIds.length > 0 && (
+                                    <button
+                                        type="button"
+                                        onClick={handleDepositSelectedCheques}
+                                        className="h-[38px] px-4 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs rounded-lg shadow-sm transition-all cursor-pointer border-none flex items-center justify-center gap-1.5"
+                                    >
+                                        <CheckCircle2 size={14} />
+                                        <span>Deposit ({selectedChequeReconIds.length})</span>
+                                    </button>
+                                )}
+                                <button
+                                    type="button"
+                                    onClick={handleExportCheques}
+                                    className="h-[38px] px-5 bg-[#EAA144] hover:bg-[#D99B35] text-white font-semibold text-xs rounded-lg shadow-sm transition-all cursor-pointer border-none flex items-center justify-center gap-1.5"
+                                >
+                                    <Download size={14} />
+                                    <span>Export</span>
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={handleChequeReconReset}
+                                    className="h-[38px] px-3.5 text-xs font-semibold text-rose-600 hover:text-rose-700 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer border border-rose-200 shrink-0"
+                                >
+                                    Reset
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* Data Table */}
+                        <div className="overflow-x-auto w-full custom-scrollbar min-h-[380px]">
+                            <table className="w-full text-left border-collapse min-w-[1800px]">
+                                <thead>
+                                    <tr className="bg-brand-lightbg text-brand-navy text-[12px] font-semibold uppercase border-b border-brand-border whitespace-nowrap">
+                                        <th className="py-3 px-3.5 text-center w-[45px]">
+                                            <input
+                                                type="checkbox"
+                                                checked={paginatedChequeRecords.length > 0 && paginatedChequeRecords.every(r => selectedChequeReconIds.includes(r.id))}
+                                                onChange={handleToggleSelectAllCheques}
+                                                className="w-4 h-4 rounded text-brand-primary border-slate-300 focus:ring-brand-primary cursor-pointer"
+                                            />
+                                        </th>
+                                        <th className="py-3 px-3.5 text-center w-[50px]">SR</th>
+                                        <th className="py-3 px-3.5">COMPANY NAME</th>
+                                        <th className="py-3 px-3.5">BRANCH NAME</th>
+                                        <th className="py-3 px-3.5">POLICY TYPE</th>
+                                        <th className="py-3 px-3.5">POLICY NO</th>
+                                        <th className="py-3 px-3.5">TRANS DATE</th>
+                                        <th className="py-3 px-3.5">CUSTOMER NAME</th>
+                                        <th className="py-3 px-3.5">REGISTRATION NO</th>
+                                        <th className="py-3 px-3.5">AGENT NAME</th>
+                                        <th className="py-3 px-3.5">EMPLOYEE NAME</th>
+                                        <th className="py-3 px-3.5 text-right">PROPOSAL AMT (₹)</th>
+                                        <th className="py-3 px-3.5">PAYMENTTYPE</th>
+                                        <th className="py-3 px-3.5 font-mono">CHEQUE NO.</th>
+                                        <th className="py-3 px-3.5">REMARK</th>
+                                        <th className="py-3 px-3.5">CREATE USER</th>
+                                        <th className="py-3 px-3.5">CREATE DATE</th>
+                                        <th className="py-3 px-3.5">REFERENCE TYPE</th>
+                                        <th className="py-3 px-3.5 text-center">STATUS</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y divide-brand-border text-[12px]">
+                                    {paginatedChequeRecords.length === 0 ? (
+                                        <tr>
+                                            <td colSpan={19} className="py-12 text-center text-slate-400 font-medium">
+                                                No cheque records found for the selected criteria.
+                                            </td>
+                                        </tr>
+                                    ) : (
+                                        paginatedChequeRecords.map((item, idx) => {
+                                            const isSelected = selectedChequeReconIds.includes(item.id);
+                                            return (
+                                                <tr
+                                                    key={item.id}
+                                                    className={`transition-colors h-[48px] ${isSelected ? 'bg-blue-50/60' : 'hover:bg-blue-50/30 bg-white'
+                                                        }`}
+                                                >
+                                                    <td className="py-2.5 px-3.5 text-center">
+                                                        <input
+                                                            type="checkbox"
+                                                            checked={isSelected}
+                                                            onChange={() => handleToggleCheque(item.id)}
+                                                            className="w-4 h-4 rounded text-brand-primary border-slate-300 focus:ring-brand-primary cursor-pointer"
+                                                        />
+                                                    </td>
+                                                    <td className="py-2.5 px-3.5 text-center text-slate-500 font-mono">
+                                                        {(chequeReconPage - 1) * chequeReconPerPage + idx + 1}
+                                                    </td>
+                                                    <td className="py-2.5 px-3.5 text-slate-800 font-medium whitespace-nowrap">{item.companyName}</td>
+                                                    <td className="py-2.5 px-3.5 text-slate-700 whitespace-nowrap">{item.branchName}</td>
+                                                    <td className="py-2.5 px-3.5 whitespace-nowrap">
+                                                        <span className="px-2 py-0.5 rounded text-[11px] font-semibold bg-slate-100 text-slate-700">
+                                                            {item.policyType}
+                                                        </span>
+                                                    </td>
+                                                    <td className="py-2.5 px-3.5 font-mono text-xs text-brand-navy whitespace-nowrap">{item.policyNo}</td>
+                                                    <td className="py-2.5 px-3.5 text-slate-700 whitespace-nowrap">{item.transDate}</td>
+                                                    <td className="py-2.5 px-3.5 font-bold text-slate-900 whitespace-nowrap">{item.customerName}</td>
+                                                    <td className="py-2.5 px-3.5 font-mono font-bold text-brand-primary whitespace-nowrap">{item.registrationNo}</td>
+                                                    <td className="py-2.5 px-3.5 text-slate-700 whitespace-nowrap">{item.agentName}</td>
+                                                    <td className="py-2.5 px-3.5 text-slate-800 font-semibold whitespace-nowrap">{item.employeeName}</td>
+                                                    <td className="py-2.5 px-3.5 text-right font-bold text-slate-900 whitespace-nowrap">
+                                                        ₹ {item.proposalAmt.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                                    </td>
+                                                    <td className="py-2.5 px-3.5 whitespace-nowrap">
+                                                        <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200">
+                                                            {item.paymentType}
+                                                        </span>
+                                                    </td>
+                                                    <td className="py-2.5 px-3.5 font-mono font-bold text-blue-700 whitespace-nowrap">{item.chequeNo}</td>
+                                                    <td className="py-2.5 px-3.5 text-slate-600 whitespace-nowrap">{item.remark}</td>
+                                                    <td className="py-2.5 px-3.5 text-slate-700 font-medium whitespace-nowrap">{item.createUser}</td>
+                                                    <td className="py-2.5 px-3.5 text-slate-500 whitespace-nowrap font-mono text-[11px]">{item.createDate}</td>
+                                                    <td className="py-2.5 px-3.5 whitespace-nowrap">
+                                                        <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-100 text-slate-700">
+                                                            {item.referenceType}
+                                                        </span>
+                                                    </td>
+                                                    <td className="py-2.5 px-3.5 text-center whitespace-nowrap">
+                                                        {item.status === 'DEPOSITED' ? (
+                                                            <span className="px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800">
+                                                                DEPOSITED
+                                                            </span>
+                                                        ) : (
+                                                            <span className="px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-100 text-amber-800">
+                                                                PENDING
+                                                            </span>
+                                                        )}
+                                                    </td>
+                                                </tr>
+                                            );
+                                        })
+                                    )}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        {/* Standard Pagination Controls (Matching Paid Commission) */}
+                        <div className="p-3.5 sm:p-4 bg-white border-t border-brand-border flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-brand-muted">
+                            <div className="flex items-center gap-3">
+                                <span>
+                                    Showing {paginatedChequeRecords.length === 0 ? 0 : (chequeReconPage - 1) * chequeReconPerPage + 1} to {Math.min(chequeReconPage * chequeReconPerPage, filteredChequeReconRecords.length)} of {filteredChequeReconRecords.length} records
+                                </span>
+                                <div className="flex items-center gap-1.5">
+                                    <span className="text-slate-500">Per page:</span>
+                                    <select
+                                        value={chequeReconPerPage}
+                                        onChange={(e) => {
+                                            setChequeReconPerPage(Number(e.target.value));
+                                            setChequeReconPage(1);
+                                        }}
+                                        className="h-7 px-2 bg-white border border-slate-200 rounded text-xs text-slate-700 focus:outline-none"
+                                    >
+                                        <option value={10}>10</option>
+                                        <option value={25}>25</option>
+                                        <option value={50}>50</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div className="flex items-center gap-1">
+                                <button
+                                    onClick={() => setChequeReconPage(p => Math.max(1, p - 1))}
+                                    disabled={chequeReconPage === 1}
+                                    className="w-8 h-8 flex items-center justify-center text-xs font-semibold text-brand-navy bg-white border border-brand-border rounded-md disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-50 cursor-pointer"
+                                >
+                                    &lt;
+                                </button>
+                                {Array.from({ length: totalChequePages }, (_, i) => i + 1).map(p => (
+                                    <button
+                                        key={p}
+                                        onClick={() => setChequeReconPage(p)}
+                                        className={`w-8 h-8 flex items-center justify-center text-xs font-bold rounded-md transition-colors cursor-pointer ${p === chequeReconPage ? 'bg-brand-primary text-white' : 'bg-white border border-brand-border text-brand-navy hover:bg-slate-50'
+                                            }`}
+                                    >
+                                        {p}
+                                    </button>
+                                ))}
+                                <button
+                                    onClick={() => setChequeReconPage(p => Math.min(totalChequePages, p + 1))}
+                                    disabled={chequeReconPage === totalChequePages}
+                                    className="w-8 h-8 flex items-center justify-center text-xs font-semibold text-brand-navy bg-white border border-brand-border rounded-md disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-50 cursor-pointer"
+                                >
+                                    &gt;
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* TAB CONTENT: RECEIVING AMOUNT (reliable-erp.com/Clerk/viewReceivingAmountt.aspx) */}
+            {activeTab === 'receiving-amt' && (
+                <div className="tab-transition-wrapper space-y-4">
+                    {/* Top Workflow Queue Pills with Notification Counts */}
+                    <div className="bg-white rounded-xl border border-brand-border p-3 sm:p-4 shadow-sm w-full">
+                        <div className="flex items-center gap-2.5 overflow-x-auto pb-1 custom-scrollbar">
+                            {receivingCategories.map(cat => {
+                                const isActive = receivingActiveCategory === cat.id;
+                                return (
+                                    <button
+                                        key={cat.id}
+                                        type="button"
+                                        onClick={() => {
+                                            setReceivingActiveCategory(cat.id);
+                                            setReceivingPage(1);
+                                        }}
+                                        className={`px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer border flex items-center gap-2.5 whitespace-nowrap shrink-0 ${isActive
+                                                ? 'bg-brand-primary text-white border-brand-primary shadow-sm'
+                                                : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100 hover:text-slate-900'
+                                            }`}
+                                    >
+                                        <span>{cat.label}</span>
+                                        {cat.count > 0 && (
+                                            <span className="w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-extrabold bg-rose-500 text-white shadow-xs">
+                                                {cat.count}
+                                            </span>
+                                        )}
+                                    </button>
+                                );
+                            })}
+                        </div>
+                    </div>
+
+                    {receivingActiveCategory === 'Online RA Pre Approval' ? (
+                        <div className="space-y-4">
+                            {/* Centered Title & Action Buttons */}
+                            <div className="bg-white rounded-xl border border-brand-border p-4 shadow-sm flex flex-col items-center justify-center gap-3">
+                                <h2 className="text-lg font-bold text-slate-800">Online RA Pre Approval</h2>
+                                <div className="flex items-center justify-center gap-3">
+                                    <button
+                                        type="button"
+                                        onClick={() => setReceivingActiveCategory('Cash Received Premium')}
+                                        className="h-9 px-6 bg-[#1E40AF] hover:bg-[#1D4ED8] text-white font-bold text-xs rounded-lg shadow-sm transition-all cursor-pointer border-none flex items-center gap-1.5"
+                                    >
+                                        <span>Back</span>
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={handleExportRAPreApproval}
+                                        className="h-9 px-6 bg-[#EAA144] hover:bg-[#D99B35] text-white font-bold text-xs rounded-lg shadow-sm transition-all cursor-pointer border-none flex items-center gap-1.5"
+                                    >
+                                        <Download size={14} />
+                                        <span>Export</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            {/* Table Card */}
+                            <div className="bg-white rounded-[12px] border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden flex flex-col w-full">
+                                {/* Merged Searchbar & Summary Badges */}
+                                <div className="p-3.5 sm:p-4 bg-white border-b border-brand-border flex flex-wrap items-center justify-between gap-4">
+                                    <div className="flex items-center gap-3 flex-wrap">
+                                        <div className="relative w-72 sm:w-80 md:w-[380px] h-[38px]">
+                                            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" size={15} />
+                                            <input
+                                                type="text"
+                                                value={raPreApprovalSearchQuery}
+                                                onChange={(e) => {
+                                                    setRaPreApprovalSearchQuery(e.target.value);
+                                                    setRaPreApprovalPage(1);
+                                                }}
+                                                placeholder="Search Agent Name, Vehicle No, ID, Company..."
+                                                className="w-full h-[38px] pl-10 pr-9 bg-white border border-[#CBD5E1] rounded-[6px] text-[13px] text-slate-800 placeholder-[#94A3B8] shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all"
+                                            />
+                                            {raPreApprovalSearchQuery && (
+                                                <button
+                                                    type="button"
+                                                    onClick={() => {
+                                                        setRaPreApprovalSearchQuery('');
+                                                        setRaPreApprovalPage(1);
+                                                    }}
+                                                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1 cursor-pointer border-none bg-transparent"
+                                                >
+                                                    <X size={14} />
+                                                </button>
+                                            )}
+                                        </div>
+                                        <div className="flex items-center gap-3 text-xs font-semibold text-slate-600 bg-slate-50 border border-slate-200 px-3.5 py-2 rounded-[6px] flex-wrap">
+                                            <div className="flex items-center gap-1.5">
+                                                <span className="text-slate-500 font-bold">Total Count :-</span>
+                                                <span className="text-brand-primary font-bold text-sm">{totalRaPreApprovalCount}</span>
+                                            </div>
+                                            <div className="h-4 w-px bg-slate-300 hidden sm:block" />
+                                            <div className="flex items-center gap-1.5">
+                                                <span className="text-slate-500 font-bold">Total Amount :-</span>
+                                                <span className="text-emerald-700 font-bold text-sm">₹ {totalRaPreApprovalAmount.toLocaleString('en-IN')}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {raPreApprovalSearchQuery && (
+                                        <button
+                                            type="button"
+                                            onClick={() => {
+                                                setRaPreApprovalSearchQuery('');
+                                                setRaPreApprovalPage(1);
+                                            }}
+                                            className="h-[38px] px-3.5 text-xs font-semibold text-rose-600 hover:text-rose-700 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer border border-rose-200 shrink-0"
+                                        >
+                                            Reset
+                                        </button>
+                                    )}
+                                </div>
+
+                                {/* Table */}
+                                <div className="overflow-x-auto w-full custom-scrollbar min-h-[400px]">
+                                    <table className="w-full text-left border-collapse min-w-[1700px]">
+                                        <thead>
+                                            <tr className="bg-brand-lightbg text-brand-navy text-[12px] font-semibold uppercase border-b border-brand-border whitespace-nowrap">
+                                                <th className="py-3 px-3.5 text-center w-[90px]">ACTION</th>
+                                                <th className="py-3 px-3.5 font-mono">ID</th>
+                                                <th className="py-3 px-3.5">DATE</th>
+                                                <th className="py-3 px-3.5 text-right">PREMIUM (₹)</th>
+                                                <th className="py-3 px-3.5 min-w-[220px]">INSURANCE COMPANY</th>
+                                                <th className="py-3 px-3.5">PRODUCT TYPE</th>
+                                                <th className="py-3 px-3.5">POLICY MODE</th>
+                                                <th className="py-3 px-3.5">PAYMENT MODE</th>
+                                                <th className="py-3 px-3.5 text-center">CASH STATUS</th>
+                                                <th className="py-3 px-3.5 text-center">RAPAYMENTSTATUS</th>
+                                                <th className="py-3 px-3.5 text-center">PAYMENTDETAILS2</th>
+                                                <th className="py-3 px-3.5 text-center">NO. OF IMAGES</th>
+                                                <th className="py-3 px-3.5 min-w-[180px]">AGENT NAME</th>
+                                                <th className="py-3 px-3.5 min-w-[200px]">SALES EX. / LOC.HEAD</th>
+                                                <th className="py-3 px-3.5">REGISTRATION NO</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody className="divide-y divide-brand-border text-[12px]">
+                                            {paginatedRaPreApprovalRecords.length === 0 ? (
+                                                <tr>
+                                                    <td colSpan={15} className="py-12 text-center text-slate-400 font-medium">
+                                                        No Online RA Pre Approval records found.
+                                                    </td>
+                                                </tr>
+                                            ) : (
+                                                paginatedRaPreApprovalRecords.map((item) => (
+                                                    <tr key={item.id} className="hover:bg-blue-50/30 transition-colors bg-white">
+                                                        <td className="py-3 px-3.5 text-center whitespace-nowrap">
+                                                            {item.status === 'APPROVED' ? (
+                                                                <span className="px-2 py-0.5 rounded text-[11px] font-bold bg-emerald-100 text-emerald-800">
+                                                                    APPROVED
+                                                                </span>
+                                                            ) : (
+                                                                <button
+                                                                    type="button"
+                                                                    onClick={() => handleApproveRAPreApproval(item.id)}
+                                                                    className="text-cyan-600 hover:text-cyan-800 font-bold underline cursor-pointer border-none bg-transparent"
+                                                                >
+                                                                    APPROVE
+                                                                </button>
+                                                            )}
+                                                        </td>
+                                                        <td className="py-3 px-3.5 font-mono font-bold text-slate-900 whitespace-nowrap">{item.id}</td>
+                                                        <td className="py-3 px-3.5 font-mono text-slate-700 whitespace-nowrap">{item.date}</td>
+                                                        <td className="py-3 px-3.5 text-right font-bold text-slate-900 whitespace-nowrap">
+                                                            {item.premium.toLocaleString('en-IN')}
+                                                        </td>
+                                                        <td className="py-3 px-3.5 font-medium text-slate-800">{item.insuranceCompany}</td>
+                                                        <td className="py-3 px-3.5 font-semibold text-slate-700 whitespace-nowrap">{item.productType}</td>
+                                                        <td className="py-3 px-3.5 whitespace-nowrap">{item.policyMode}</td>
+                                                        <td className="py-3 px-3.5 whitespace-nowrap">
+                                                            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-200">
+                                                                {item.paymentMode}
+                                                            </span>
+                                                        </td>
+                                                        <td className="py-3 px-3.5 text-center text-slate-500 whitespace-nowrap">{item.cashStatus}</td>
+                                                        <td className="py-3 px-3.5 text-center text-slate-500 whitespace-nowrap">{item.raPaymentStatus}</td>
+                                                        <td className="py-3 px-3.5 text-center text-slate-500 whitespace-nowrap">{item.paymentDetails2}</td>
+                                                        <td className="py-3 px-3.5 text-center font-bold text-slate-800 whitespace-nowrap">{item.noOfImages}</td>
+                                                        <td className="py-3 px-3.5 font-bold text-slate-900 whitespace-nowrap">{item.agentName}</td>
+                                                        <td className="py-3 px-3.5 text-slate-700 whitespace-nowrap">{item.salesExecutive}</td>
+                                                        <td className="py-3 px-3.5 font-mono font-bold text-brand-primary whitespace-nowrap">{item.registrationNo}</td>
+                                                    </tr>
+                                                ))
+                                            )}
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                {/* Pagination */}
+                                <div className="p-3.5 sm:p-4 bg-white border-t border-brand-border flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-brand-muted">
+                                    <div className="flex items-center gap-3">
+                                        <span>
+                                            Showing {paginatedRaPreApprovalRecords.length === 0 ? 0 : (raPreApprovalPage - 1) * raPreApprovalPerPage + 1} to {Math.min(raPreApprovalPage * raPreApprovalPerPage, filteredRaPreApprovalRecords.length)} of {filteredRaPreApprovalRecords.length} records
+                                        </span>
+                                        <div className="flex items-center gap-1.5">
+                                            <span className="text-slate-500">Per page:</span>
+                                            <select
+                                                value={raPreApprovalPerPage}
+                                                onChange={(e) => {
+                                                    setRaPreApprovalPerPage(Number(e.target.value));
+                                                    setRaPreApprovalPage(1);
+                                                }}
+                                                className="h-7 px-2 bg-white border border-slate-200 rounded text-xs text-slate-700 focus:outline-none"
+                                            >
+                                                <option value={10}>10</option>
+                                                <option value={25}>25</option>
+                                                <option value={50}>50</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center gap-1">
+                                        <button
+                                            onClick={() => setRaPreApprovalPage(p => Math.max(1, p - 1))}
+                                            disabled={raPreApprovalPage === 1}
+                                            className="w-8 h-8 flex items-center justify-center text-xs font-semibold text-brand-navy bg-white border border-brand-border rounded-md disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-50 cursor-pointer"
+                                        >
+                                            &lt;
+                                        </button>
+                                        {Array.from({ length: totalRaPreApprovalPages }, (_, i) => i + 1).map(p => (
+                                            <button
+                                                key={p}
+                                                onClick={() => setRaPreApprovalPage(p)}
+                                                className={`w-8 h-8 flex items-center justify-center text-xs font-bold rounded-md transition-colors cursor-pointer ${p === raPreApprovalPage ? 'bg-brand-primary text-white' : 'bg-white border border-brand-border text-brand-navy hover:bg-slate-50'
+                                                    }`}
+                                            >
+                                                {p}
+                                            </button>
+                                        ))}
+                                        <button
+                                            onClick={() => setRaPreApprovalPage(p => Math.min(totalRaPreApprovalPages, p + 1))}
+                                            disabled={raPreApprovalPage === totalRaPreApprovalPages}
+                                            className="w-8 h-8 flex items-center justify-center text-xs font-semibold text-brand-navy bg-white border border-brand-border rounded-md disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-50 cursor-pointer"
+                                        >
+                                            &gt;
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    ) : (
+                        /* Receiving Amount Data Table Card (Matching Paid Commission style) */
+                        <div className="bg-white rounded-[12px] border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden flex flex-col w-full">
+                        {/* Table Top Toolbar with Merged Searchbar & Summary Badges */}
+                        <div className="p-3.5 sm:p-4 bg-white border-b border-brand-border flex flex-wrap items-center justify-between gap-4">
+                            <div className="flex items-center gap-3 flex-wrap">
+                                {/* Merged Search Input */}
+                                <div className="relative w-72 sm:w-80 md:w-[380px] h-[38px]">
+                                    <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" size={15} />
+                                    <input
+                                        type="text"
+                                        value={receivingSearchQuery}
+                                        onChange={(e) => {
+                                            setReceivingSearchQuery(e.target.value);
+                                            setReceivingPage(1);
+                                        }}
+                                        placeholder="Search Customer, Reg No, Executive..."
+                                        className="w-full h-[38px] pl-10 pr-9 bg-white border border-[#CBD5E1] rounded-[6px] text-[13px] text-slate-800 placeholder-[#94A3B8] shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all"
+                                    />
+                                    {receivingSearchQuery && (
+                                        <button
+                                            type="button"
+                                            onClick={() => {
+                                                setReceivingSearchQuery('');
+                                                setReceivingPage(1);
+                                            }}
+                                            className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1 cursor-pointer border-none bg-transparent"
+                                        >
+                                            <X size={14} />
+                                        </button>
+                                    )}
+                                </div>
+
+                                {/* Summary Badges */}
+                                <div className="flex items-center gap-3 text-xs font-semibold text-slate-600 bg-slate-50 border border-slate-200 px-3.5 py-2 rounded-[6px] flex-wrap">
+                                    <div className="flex items-center gap-1.5">
+                                        <span className="text-slate-500 font-bold">Total Records :-</span>
+                                        <span className="text-brand-primary font-bold text-sm">{totalReceivingCount}</span>
+                                    </div>
+                                    <div className="h-4 w-px bg-slate-300 hidden sm:block" />
+                                    <div className="flex items-center gap-1.5">
+                                        <span className="text-slate-500 font-bold">Total Premium :-</span>
+                                        <span className="text-slate-800 font-bold text-sm">₹ {totalReceivingPremium.toLocaleString('en-IN')}</span>
+                                    </div>
+                                    <div className="h-4 w-px bg-slate-300 hidden sm:block" />
+                                    <div className="flex items-center gap-1.5">
+                                        <span className="text-slate-500 font-bold">Deposit :-</span>
+                                        <span className="text-emerald-600 font-bold text-sm">₹ {totalReceivingDeposit.toLocaleString('en-IN')}</span>
+                                    </div>
+                                    <div className="h-4 w-px bg-slate-300 hidden sm:block" />
+                                    <div className="flex items-center gap-1.5">
+                                        <span className="text-slate-500 font-bold">Shortfall :-</span>
+                                        <span className="text-rose-600 font-bold text-sm">₹ {totalReceivingShortfall.toLocaleString('en-IN')}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Right Actions: Export & Reset */}
+                            <div className="flex items-center gap-2">
+                                <button
+                                    type="button"
+                                    onClick={handleExportReceiving}
+                                    className="h-[38px] px-5 bg-[#EAA144] hover:bg-[#D99B35] text-white font-semibold text-xs rounded-lg shadow-sm transition-all cursor-pointer border-none flex items-center justify-center gap-1.5"
+                                >
+                                    <Download size={14} />
+                                    <span>Export</span>
+                                </button>
+                                {receivingSearchQuery && (
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            setReceivingSearchQuery('');
+                                            setReceivingPage(1);
+                                        }}
+                                        className="h-[38px] px-3.5 text-xs font-semibold text-rose-600 hover:text-rose-700 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer border border-rose-200 shrink-0"
+                                    >
+                                        Reset
+                                    </button>
+                                )}
+                            </div>
+                        </div>
+
+                        {/* Centered Category Heading Banner (as in ERP) */}
+                        <div className="bg-slate-100/70 border-b border-brand-border py-2 text-center">
+                            <span className="text-xs font-bold uppercase tracking-wider text-slate-700">
+                                {receivingActiveCategory}
+                            </span>
+                        </div>
+
+                        {/* Data Table */}
+                        <div className="overflow-x-auto w-full custom-scrollbar min-h-[400px]">
+                            <table className="w-full text-left border-collapse min-w-[1550px]">
+                                <thead>
+                                    <tr className="bg-brand-lightbg text-brand-navy text-[12px] font-semibold uppercase border-b border-brand-border whitespace-nowrap">
+                                        <th className="py-3 px-3.5 text-center w-[90px]">ACTIONS</th>
+                                        <th className="py-3 px-3.5 text-right">TOTAL PREMIUM</th>
+                                        <th className="py-3 px-3.5 text-right">TOTAL PENDING PREMIUM</th>
+                                        <th className="py-3 px-3.5 text-right">DEPOSIT PREMIUM</th>
+                                        <th className="py-3 px-3.5 text-right">CUT N PAY</th>
+                                        <th className="py-3 px-3.5 text-right">SHORT FALL</th>
+                                        <th className="py-3 px-3.5 text-center">STATUS</th>
+                                        <th className="py-3 px-3.5">CREATED DATE</th>
+                                        <th className="py-3 px-3.5">NAME</th>
+                                        <th className="py-3 px-3.5 min-w-[480px]">POLICY DETAILS</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y divide-brand-border text-[12px]">
+                                    {paginatedReceivingRecords.length === 0 ? (
+                                        <tr>
+                                            <td colSpan={10} className="py-12 text-center text-slate-400 font-medium">
+                                                No records found for {receivingActiveCategory}.
+                                            </td>
+                                        </tr>
+                                    ) : (
+                                        paginatedReceivingRecords.map((item) => (
+                                            <tr key={item.id} className="hover:bg-blue-50/30 transition-colors bg-white">
+                                                <td className="py-3 px-3.5 text-center whitespace-nowrap">
+                                                    <div className="flex items-center justify-center gap-1.5">
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => setViewingReceivingRecord(item)}
+                                                            className="w-8 h-8 rounded-lg flex items-center justify-center text-brand-primary hover:text-white hover:bg-brand-primary bg-blue-50 border border-blue-200 transition-all cursor-pointer shadow-2xs"
+                                                            title="View Details"
+                                                        >
+                                                            <Eye size={15} />
+                                                        </button>
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => handleDeleteReceivingRecord(item.id)}
+                                                            className="w-8 h-8 rounded-lg flex items-center justify-center text-rose-600 hover:text-white hover:bg-rose-600 bg-rose-50 border border-rose-200 transition-all cursor-pointer shadow-2xs"
+                                                            title="Delete Record"
+                                                        >
+                                                            <Trash2 size={15} />
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                                <td className="py-3 px-3.5 text-right font-bold text-slate-900 whitespace-nowrap">
+                                                    {item.totalPremium.toLocaleString('en-IN')}
+                                                </td>
+                                                <td className="py-3 px-3.5 text-right font-semibold text-slate-800 whitespace-nowrap">
+                                                    {item.pendingPremium.toLocaleString('en-IN')}
+                                                </td>
+                                                <td className="py-3 px-3.5 text-right font-bold text-emerald-700 whitespace-nowrap">
+                                                    {item.depositPremium.toLocaleString('en-IN')}
+                                                </td>
+                                                <td className="py-3 px-3.5 text-right text-slate-700 whitespace-nowrap">
+                                                    {item.cutNPay.toLocaleString('en-IN')}
+                                                </td>
+                                                <td className="py-3 px-3.5 text-right font-bold text-rose-600 whitespace-nowrap">
+                                                    {item.shortfall.toLocaleString('en-IN')}
+                                                </td>
+                                                <td className="py-3 px-3.5 text-center whitespace-nowrap">
+                                                    <span className={`px-2.5 py-0.5 rounded text-[10px] font-bold ${item.status === 'SHORT FALL'
+                                                            ? 'bg-rose-50 text-rose-700 border border-rose-200'
+                                                            : 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                                                        }`}>
+                                                        {item.status}
+                                                    </span>
+                                                </td>
+                                                <td className="py-3 px-3.5 text-slate-700 whitespace-nowrap font-mono text-[11px]">
+                                                    {item.createdDate}
+                                                </td>
+                                                <td className="py-3 px-3.5 font-bold text-slate-900 whitespace-nowrap">
+                                                    {item.executiveName}
+                                                </td>
+                                                <td className="py-3 px-3.5">
+                                                    {/* Nested Policy Details Table Matching ERP */}
+                                                    <div className="border border-slate-300 rounded overflow-hidden shadow-2xs bg-white">
+                                                        <table className="w-full text-[11px] border-collapse">
+                                                            <thead>
+                                                                <tr className="bg-slate-100 text-slate-700 font-bold border-b border-slate-200">
+                                                                    <th className="py-1 px-2.5 text-left border-r border-slate-200">CUSTOMER NAME</th>
+                                                                    <th className="py-1 px-2.5 text-left border-r border-slate-200">REGISTRATION NO.</th>
+                                                                    <th className="py-1 px-2.5 text-right">ACTUAL PREMIUM AMT</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody className="divide-y divide-slate-100">
+                                                                {item.policyDetails.map((pd, pidx) => (
+                                                                    <tr key={pidx} className="hover:bg-slate-50/80">
+                                                                        <td className="py-1 px-2.5 font-semibold text-slate-800 border-r border-slate-200">
+                                                                            {pd.customerName}
+                                                                        </td>
+                                                                        <td className="py-1 px-2.5 font-mono text-brand-primary font-bold border-r border-slate-200">
+                                                                            {pd.registrationNo}
+                                                                        </td>
+                                                                        <td className="py-1 px-2.5 text-right font-bold text-slate-900">
+                                                                            {pd.actualPremiumAmt.toLocaleString('en-IN')}
+                                                                        </td>
+                                                                    </tr>
+                                                                ))}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        ))
+                                    )}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        {/* Standard Pagination Controls (Matching Paid Commission) */}
+                        <div className="p-3.5 sm:p-4 bg-white border-t border-brand-border flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-brand-muted">
+                            <div className="flex items-center gap-3">
+                                <span>
+                                    Showing {paginatedReceivingRecords.length === 0 ? 0 : (receivingPage - 1) * receivingPerPage + 1} to {Math.min(receivingPage * receivingPerPage, filteredReceivingRecords.length)} of {filteredReceivingRecords.length} records
+                                </span>
+                                <div className="flex items-center gap-1.5">
+                                    <span className="text-slate-500">Per page:</span>
+                                    <select
+                                        value={receivingPerPage}
+                                        onChange={(e) => {
+                                            setReceivingPerPage(Number(e.target.value));
+                                            setReceivingPage(1);
+                                        }}
+                                        className="h-7 px-2 bg-white border border-slate-200 rounded text-xs text-slate-700 focus:outline-none"
+                                    >
+                                        <option value={10}>10</option>
+                                        <option value={25}>25</option>
+                                        <option value={50}>50</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div className="flex items-center gap-1">
+                                <button
+                                    onClick={() => setReceivingPage(p => Math.max(1, p - 1))}
+                                    disabled={receivingPage === 1}
+                                    className="w-8 h-8 flex items-center justify-center text-xs font-semibold text-brand-navy bg-white border border-brand-border rounded-md disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-50 cursor-pointer"
+                                >
+                                    &lt;
+                                </button>
+                                {Array.from({ length: totalReceivingPages }, (_, i) => i + 1).map(p => (
+                                    <button
+                                        key={p}
+                                        onClick={() => setReceivingPage(p)}
+                                        className={`w-8 h-8 flex items-center justify-center text-xs font-bold rounded-md transition-colors cursor-pointer ${p === receivingPage ? 'bg-brand-primary text-white' : 'bg-white border border-brand-border text-brand-navy hover:bg-slate-50'
+                                            }`}
+                                    >
+                                        {p}
+                                    </button>
+                                ))}
+                                <button
+                                    onClick={() => setReceivingPage(p => Math.min(totalReceivingPages, p + 1))}
+                                    disabled={receivingPage === totalReceivingPages}
+                                    className="w-8 h-8 flex items-center justify-center text-xs font-semibold text-brand-navy bg-white border border-brand-border rounded-md disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-50 cursor-pointer"
+                                >
+                                    &gt;
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    )}
+
+                    {/* View Details Modal */}
+                    {viewingReceivingRecord && (
+                        <div className="fixed inset-0 z-[150] bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4">
+                            <div className="bg-white rounded-xl shadow-2xl border border-brand-border max-w-2xl w-full overflow-hidden animate-in zoom-in-95 duration-150">
+                                <div className="px-5 py-4 bg-brand-navy text-white flex items-center justify-between">
+                                    <div className="flex items-center gap-2">
+                                        <FileText size={18} className="text-brand-primary" />
+                                        <h3 className="font-bold text-sm">Receiving Transaction Details</h3>
+                                    </div>
+                                    <button
+                                        type="button"
+                                        onClick={() => setViewingReceivingRecord(null)}
+                                        className="text-slate-300 hover:text-white p-1 rounded-md transition-colors border-none bg-transparent cursor-pointer"
+                                    >
+                                        <X size={18} />
+                                    </button>
+                                </div>
+                                <div className="p-5 space-y-4">
+                                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3.5 bg-slate-50 p-4 rounded-lg border border-slate-200 text-xs">
+                                        <div>
+                                            <span className="text-slate-500 block font-medium">Category</span>
+                                            <span className="font-bold text-slate-800">{viewingReceivingRecord.category}</span>
+                                        </div>
+                                        <div>
+                                            <span className="text-slate-500 block font-medium">Created Date</span>
+                                            <span className="font-bold text-slate-800">{viewingReceivingRecord.createdDate}</span>
+                                        </div>
+                                        <div>
+                                            <span className="text-slate-500 block font-medium">Status</span>
+                                            <span className={`inline-block px-2 py-0.5 rounded text-[10px] font-bold ${viewingReceivingRecord.status === 'SHORT FALL' ? 'bg-rose-100 text-rose-800' : 'bg-emerald-100 text-emerald-800'
+                                                }`}>
+                                                {viewingReceivingRecord.status}
+                                            </span>
+                                        </div>
+                                        <div>
+                                            <span className="text-slate-500 block font-medium">Executive Name</span>
+                                            <span className="font-bold text-slate-800">{viewingReceivingRecord.executiveName}</span>
+                                        </div>
+                                        <div>
+                                            <span className="text-slate-500 block font-medium">Total Premium</span>
+                                            <span className="font-bold text-slate-900">₹ {viewingReceivingRecord.totalPremium.toLocaleString('en-IN')}</span>
+                                        </div>
+                                        <div>
+                                            <span className="text-slate-500 block font-medium">Pending Premium</span>
+                                            <span className="font-bold text-amber-700">₹ {viewingReceivingRecord.pendingPremium.toLocaleString('en-IN')}</span>
+                                        </div>
+                                        <div>
+                                            <span className="text-slate-500 block font-medium">Deposit Premium</span>
+                                            <span className="font-bold text-emerald-700">₹ {viewingReceivingRecord.depositPremium.toLocaleString('en-IN')}</span>
+                                        </div>
+                                        <div>
+                                            <span className="text-slate-500 block font-medium">Cut N Pay</span>
+                                            <span className="font-bold text-slate-800">₹ {viewingReceivingRecord.cutNPay.toLocaleString('en-IN')}</span>
+                                        </div>
+                                        <div>
+                                            <span className="text-slate-500 block font-medium">Short Fall</span>
+                                            <span className="font-bold text-rose-600">₹ {viewingReceivingRecord.shortfall.toLocaleString('en-IN')}</span>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Policy Details</h4>
+                                        <div className="border border-slate-200 rounded-lg overflow-hidden">
+                                            <table className="w-full text-xs">
+                                                <thead className="bg-slate-100 text-slate-600 font-bold border-b border-slate-200">
+                                                    <tr>
+                                                        <th className="py-2 px-3 text-left">CUSTOMER NAME</th>
+                                                        <th className="py-2 px-3 text-left">REGISTRATION NO.</th>
+                                                        <th className="py-2 px-3 text-right">ACTUAL PREMIUM</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody className="divide-y divide-slate-100">
+                                                    {viewingReceivingRecord.policyDetails.map((pd, idx) => (
+                                                        <tr key={idx} className="hover:bg-slate-50">
+                                                            <td className="py-2 px-3 font-semibold text-slate-800">{pd.customerName}</td>
+                                                            <td className="py-2 px-3 font-mono text-brand-primary font-bold">{pd.registrationNo}</td>
+                                                            <td className="py-2 px-3 text-right font-bold text-slate-900">₹ {pd.actualPremiumAmt.toLocaleString('en-IN')}</td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="px-5 py-3 bg-slate-50 border-t border-slate-200 flex justify-end">
+                                    <button
+                                        type="button"
+                                        onClick={() => setViewingReceivingRecord(null)}
+                                        className="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold text-xs rounded-lg transition-colors cursor-pointer border-none"
+                                    >
+                                        Close
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            )}
+
+            {/* TAB CONTENT: PENDING COMMISSION NEW (reliable-erp.com/Clerk/POSP_AgentPendingCommission.aspx) */}
+            {activeTab === 'pending-commission-new' && (
+                <div className="tab-transition-wrapper space-y-4">
+                    {/* Top Filter Card */}
+                    <div className="bg-white rounded-xl border border-brand-border p-4 sm:p-5 shadow-sm">
+                        <div className="flex flex-wrap items-center justify-between gap-4">
+                            <div className="flex items-center gap-6 sm:gap-8 flex-wrap">
+                                {/* Entity Radio */}
+                                <div className="flex items-center gap-4">
+                                    {(['ALL', 'Agent POSP', 'RA POSP'] as const).map((entity) => (
+                                        <label key={entity} className="flex items-center gap-2 cursor-pointer text-xs font-bold text-slate-800 hover:text-brand-primary transition-colors select-none">
+                                            <input
+                                                type="radio"
+                                                name="pcnEntity"
+                                                checked={pcnEntity === entity}
+                                                onChange={() => {
+                                                    setPcnEntity(entity);
+                                                    setPcnPage(1);
+                                                }}
+                                                className="w-4 h-4 text-brand-primary accent-blue-600 cursor-pointer"
+                                            />
+                                            <span>{entity}</span>
+                                        </label>
+                                    ))}
+                                </div>
+
+                                {/* From Date */}
+                                <div className="flex items-center gap-2">
+                                    <label className="text-xs font-bold text-slate-600 whitespace-nowrap">From Date</label>
+                                    <div className="relative w-36">
+                                        <input
+                                            type="text"
+                                            value={pcnFromDate}
+                                            onChange={(e) => setPcnFromDate(e.target.value)}
+                                            placeholder="DD/MM/YYYY"
+                                            className="w-full h-9 pl-3 pr-8 bg-white border border-[#CBD5E1] rounded-lg text-xs font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-brand-primary shadow-2xs"
+                                        />
+                                        <Calendar size={14} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                                    </div>
+                                </div>
+
+                                {/* To Date */}
+                                <div className="flex items-center gap-2">
+                                    <label className="text-xs font-bold text-slate-600 whitespace-nowrap">To Date</label>
+                                    <div className="relative w-36">
+                                        <input
+                                            type="text"
+                                            value={pcnToDate}
+                                            onChange={(e) => setPcnToDate(e.target.value)}
+                                            placeholder="DD/MM/YYYY"
+                                            className="w-full h-9 pl-3 pr-8 bg-white border border-[#CBD5E1] rounded-lg text-xs font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-brand-primary shadow-2xs"
+                                        />
+                                        <Calendar size={14} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Action Buttons: Show, Export Summary, Export Details */}
+                            <div className="flex items-center gap-2 flex-wrap">
+                                <button
+                                    type="button"
+                                    onClick={() => showToast(`Filtered ${filteredPcnRecords.length} pending commission records.`)}
+                                    className="h-9 px-5 bg-brand-primary hover:bg-[#1D4ED8] text-white font-bold text-xs rounded-lg shadow-sm transition-all cursor-pointer border-none flex items-center justify-center gap-1.5"
+                                >
+                                    <span>Show</span>
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={handleExportPcnSummary}
+                                    className="h-9 px-4 bg-[#EAA144] hover:bg-[#D99B35] text-white font-bold text-xs rounded-lg shadow-sm transition-all cursor-pointer border-none flex items-center justify-center gap-1.5"
+                                >
+                                    <Download size={13} />
+                                    <span>Export Summary</span>
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={handleExportPcnDetails}
+                                    className="h-9 px-4 bg-[#EAA144] hover:bg-[#D99B35] text-white font-bold text-xs rounded-lg shadow-sm transition-all cursor-pointer border-none flex items-center justify-center gap-1.5"
+                                >
+                                    <Download size={13} />
+                                    <span>Export Details</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Main Content Layout: Table (Left/Center) + Payment Side Panel (Right) */}
+                    <div className="grid grid-cols-1 xl:grid-cols-12 gap-4 items-start">
+                        {/* Left / Center Table Card */}
+                        <div className="xl:col-span-9 bg-white rounded-[12px] border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden flex flex-col w-full">
+                            {/* Toolbar: Merged Searchbar & Summary Badges */}
+                            <div className="p-3.5 sm:p-4 bg-white border-b border-brand-border flex flex-wrap items-center justify-between gap-4">
+                                <div className="flex items-center gap-3 flex-wrap">
+                                    <div className="relative w-72 sm:w-80 md:w-[360px] h-[38px]">
+                                        <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" size={15} />
+                                        <input
+                                            type="text"
+                                            value={pcnSearchQuery}
+                                            onChange={(e) => {
+                                                setPcnSearchQuery(e.target.value);
+                                                setPcnPage(1);
+                                            }}
+                                            placeholder="Search Branch, Agent, POSP, Account No, IFSC..."
+                                            className="w-full h-[38px] pl-10 pr-9 bg-white border border-[#CBD5E1] rounded-[6px] text-[13px] text-slate-800 placeholder-[#94A3B8] shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all"
+                                        />
+                                        {pcnSearchQuery && (
+                                            <button
+                                                type="button"
+                                                onClick={() => {
+                                                    setPcnSearchQuery('');
+                                                    setPcnPage(1);
+                                                }}
+                                                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1 cursor-pointer border-none bg-transparent"
+                                            >
+                                                <X size={14} />
+                                            </button>
+                                        )}
+                                    </div>
+
+                                    {pcnSelectedIds.length > 0 && (
+                                        <div className="flex items-center gap-1.5 text-xs font-semibold text-blue-700 bg-blue-50 border border-blue-200 px-3 py-1.5 rounded-[6px]">
+                                            <span className="font-bold">Selected :-</span>
+                                            <span className="font-extrabold">{pcnSelectedIds.length} items (₹ {selectedPcnTotalBalance.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })})</span>
+                                        </div>
+                                    )}
+                                </div>
+
+                                {(pcnSearchQuery || pcnSelectedIds.length > 0) && (
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            setPcnSearchQuery('');
+                                            setPcnSelectedIds([]);
+                                            setPcnPage(1);
+                                        }}
+                                        className="h-[38px] px-3.5 text-xs font-semibold text-rose-600 hover:text-rose-700 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer border border-rose-200 shrink-0"
+                                    >
+                                        Reset
+                                    </button>
+                                )}
+                            </div>
+
+                            {/* Table */}
+                            <div className="overflow-x-auto w-full custom-scrollbar min-h-[460px]">
+                                <table className="w-full text-left border-collapse min-w-[1700px]">
+                                    <thead>
+                                        <tr className="bg-brand-lightbg text-brand-navy text-[12px] font-semibold uppercase border-b border-brand-border whitespace-nowrap">
+                                            <th className="py-3 px-3.5">POSP NAME</th>
+                                            <th className="py-3 px-3.5">BRANCH NAME</th>
+                                            <th className="py-3 px-3.5">AGENT NAME</th>
+                                            <th className="py-3 px-3.5 text-right">PREMIUM AMT</th>
+                                            <th className="py-3 px-3.5 text-right">TP COMM.</th>
+                                            <th className="py-3 px-3.5 text-right">OD COMM.</th>
+                                            <th className="py-3 px-3.5 text-right">NET COMM.</th>
+                                            <th className="py-3 px-3.5 text-right">TOTAL COMM.</th>
+                                            <th className="py-3 px-3.5 text-right">ADV. AMT</th>
+                                            <th className="py-3 px-3.5 text-right">TOTAL OUT STANDING AMOUNT</th>
+                                            <th className="py-3 px-3.5 text-right">BALANCE</th>
+                                            <th className="py-3 px-3.5 text-center w-[60px]">
+                                                <input
+                                                    type="checkbox"
+                                                    checked={paginatedPcnRecords.length > 0 && paginatedPcnRecords.every(r => pcnSelectedIds.includes(r.id))}
+                                                    onChange={handleSelectAllPcn}
+                                                    className="w-4 h-4 rounded text-brand-primary accent-blue-600 cursor-pointer"
+                                                    title="Select All"
+                                                />
+                                            </th>
+                                            <th className="py-3 px-3.5">ACCOUNTNO</th>
+                                            <th className="py-3 px-3.5">IFSC CODE</th>
+                                            <th className="py-3 px-3.5 text-center">AGENTTDS</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="divide-y divide-brand-border text-[12px]">
+                                        {paginatedPcnRecords.length === 0 ? (
+                                            <tr>
+                                                <td colSpan={15} className="py-12 text-center text-slate-400 font-medium">
+                                                    No pending commission records found.
+                                                </td>
+                                            </tr>
+                                        ) : (
+                                            paginatedPcnRecords.map((item) => {
+                                                const isSelected = pcnSelectedIds.includes(item.id);
+                                                return (
+                                                    <tr key={item.id} className={`transition-colors ${isSelected ? 'bg-blue-50/60' : 'hover:bg-slate-50/80 bg-white'}`}>
+                                                        <td className="py-3 px-3.5 font-semibold text-slate-800 whitespace-nowrap">{item.pospName}</td>
+                                                        <td className="py-3 px-3.5 text-slate-700 whitespace-nowrap font-medium">{item.branchName}</td>
+                                                        <td className="py-3 px-3.5 font-bold text-blue-700 whitespace-nowrap hover:underline cursor-pointer">{item.agentName}</td>
+                                                        <td className="py-3 px-3.5 text-right font-bold text-slate-900 whitespace-nowrap">
+                                                            {item.premiumAmt.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                                        </td>
+                                                        <td className="py-3 px-3.5 text-right text-slate-700 whitespace-nowrap">
+                                                            {item.tpComm.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                                        </td>
+                                                        <td className="py-3 px-3.5 text-right text-slate-700 whitespace-nowrap">
+                                                            {item.odComm.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                                        </td>
+                                                        <td className="py-3 px-3.5 text-right text-slate-700 whitespace-nowrap">
+                                                            {item.netComm.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                                        </td>
+                                                        <td className="py-3 px-3.5 text-right font-semibold text-slate-800 whitespace-nowrap">
+                                                            {item.totalComm.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                                        </td>
+                                                        <td className="py-3 px-3.5 text-right text-slate-500 whitespace-nowrap">
+                                                            {item.advAmt.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                                        </td>
+                                                        <td className="py-3 px-3.5 text-right text-slate-500 whitespace-nowrap">
+                                                            {item.totalOutstandingAmt.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                                        </td>
+                                                        <td className="py-3 px-3.5 text-right font-bold text-slate-900 whitespace-nowrap">
+                                                            {item.balance.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                                        </td>
+                                                        <td className="py-3 px-3.5 text-center whitespace-nowrap">
+                                                            <input
+                                                                type="checkbox"
+                                                                checked={isSelected}
+                                                                onChange={() => handleToggleSelectPcn(item.id)}
+                                                                className="w-4 h-4 rounded text-brand-primary accent-blue-600 cursor-pointer"
+                                                            />
+                                                        </td>
+                                                        <td className="py-3 px-3.5 font-mono text-xs text-slate-700 whitespace-nowrap">{item.accountNo}</td>
+                                                        <td className="py-3 px-3.5 font-mono text-xs text-slate-700 whitespace-nowrap">{item.ifscCode}</td>
+                                                        <td className="py-3 px-3.5 text-center font-bold text-slate-700 whitespace-nowrap">{item.agentTds}</td>
+                                                    </tr>
+                                                );
+                                            })
+                                        )}
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            {/* Standard Pagination Controls */}
+                            <div className="p-3.5 sm:p-4 bg-white border-t border-brand-border flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-brand-muted">
+                                <div className="flex items-center gap-3">
+                                    <span>
+                                        Showing {paginatedPcnRecords.length === 0 ? 0 : (pcnPage - 1) * pcnPerPage + 1} to {Math.min(pcnPage * pcnPerPage, filteredPcnRecords.length)} of {filteredPcnRecords.length} records
+                                    </span>
+                                    <div className="flex items-center gap-1.5">
+                                        <span className="text-slate-500">Per page:</span>
+                                        <select
+                                            value={pcnPerPage}
+                                            onChange={(e) => {
+                                                setPcnPerPage(Number(e.target.value));
+                                                setPcnPage(1);
+                                            }}
+                                            className="h-7 px-2 bg-white border border-slate-200 rounded text-xs text-slate-700 focus:outline-none"
+                                        >
+                                            <option value={10}>10</option>
+                                            <option value={25}>25</option>
+                                            <option value={50}>50</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div className="flex items-center gap-1">
+                                    <button
+                                        onClick={() => setPcnPage(p => Math.max(1, p - 1))}
+                                        disabled={pcnPage === 1}
+                                        className="w-8 h-8 flex items-center justify-center text-xs font-semibold text-brand-navy bg-white border border-brand-border rounded-md disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-50 cursor-pointer"
+                                    >
+                                        &lt;
+                                    </button>
+                                    {Array.from({ length: totalPcnPages }, (_, i) => i + 1).map(p => (
+                                        <button
+                                            key={p}
+                                            onClick={() => setPcnPage(p)}
+                                            className={`w-8 h-8 flex items-center justify-center text-xs font-bold rounded-md transition-colors cursor-pointer ${p === pcnPage ? 'bg-brand-primary text-white' : 'bg-white border border-brand-border text-brand-navy hover:bg-slate-50'
+                                                }`}
+                                        >
+                                            {p}
+                                        </button>
+                                    ))}
+                                    <button
+                                        onClick={() => setPcnPage(p => Math.min(totalPcnPages, p + 1))}
+                                        disabled={pcnPage === totalPcnPages}
+                                        className="w-8 h-8 flex items-center justify-center text-xs font-semibold text-brand-navy bg-white border border-brand-border rounded-md disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-50 cursor-pointer"
+                                    >
+                                        &gt;
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Right / Payment Side Panel Card */}
+                        <div className="xl:col-span-3 bg-white rounded-[12px] border border-brand-border shadow-sm p-4 sm:p-5 space-y-3.5 xl:sticky xl:top-4">
+                            <h3 className="text-sm font-bold text-slate-800 pb-2 border-b border-slate-200 flex items-center justify-between">
+                                <span>Payment Details</span>
+                                {pcnSelectedIds.length > 0 && (
+                                    <span className="text-[11px] font-semibold text-blue-600 bg-blue-50 px-2 py-0.5 rounded">
+                                        {pcnSelectedIds.length} Selected
+                                    </span>
+                                )}
+                            </h3>
+
+                            <div className="space-y-3 text-xs">
+                                {/* Total */}
+                                <div className="space-y-1">
+                                    <label className="text-[11px] font-bold text-slate-600 uppercase">Total</label>
+                                    <input
+                                        type="text"
+                                        readOnly
+                                        value={selectedPcnTotalBalance.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                        className="w-full h-9 px-3 bg-slate-50 border border-slate-200 rounded-lg font-bold text-slate-800 shadow-2xs focus:outline-none"
+                                    />
+                                </div>
+
+                                {/* Outstanding Recover */}
+                                <div className="space-y-1">
+                                    <label className="text-[11px] font-bold text-slate-600 uppercase">Outstanding Recover</label>
+                                    <input
+                                        type="text"
+                                        value={pcnOutstandingRecover}
+                                        onChange={(e) => setPcnOutstandingRecover(e.target.value)}
+                                        className="w-full h-9 px-3 bg-white border border-[#CBD5E1] rounded-lg font-medium text-slate-800 shadow-2xs focus:outline-none focus:ring-1 focus:ring-brand-primary"
+                                    />
+                                </div>
+
+                                {/* Total Outstanding Recover */}
+                                <div className="space-y-1">
+                                    <label className="text-[11px] font-bold text-slate-600 uppercase">Total Outstanding Recover</label>
+                                    <input
+                                        type="text"
+                                        readOnly
+                                        value={pcnTotalOutstandingRecover}
+                                        className="w-full h-9 px-3 bg-slate-50 border border-slate-200 rounded-lg font-medium text-slate-700 shadow-2xs focus:outline-none"
+                                    />
+                                </div>
+
+                                {/* Total E-wallet Amount Used */}
+                                <div className="space-y-1">
+                                    <label className="text-[11px] font-bold text-slate-600 uppercase">Total E-wallet Amount Used</label>
+                                    <input
+                                        type="text"
+                                        value={pcnEwalletAmountUsed}
+                                        onChange={(e) => setPcnEwalletAmountUsed(e.target.value)}
+                                        className="w-full h-9 px-3 bg-white border border-[#CBD5E1] rounded-lg font-medium text-slate-800 shadow-2xs focus:outline-none focus:ring-1 focus:ring-brand-primary"
+                                    />
+                                </div>
+
+                                {/* Pay */}
+                                <div className="space-y-1">
+                                    <label className="text-[11px] font-bold text-slate-600 uppercase">Pay</label>
+                                    <input
+                                        type="text"
+                                        readOnly
+                                        value={selectedPcnTotalBalance.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                        className="w-full h-9 px-3 bg-emerald-50 border border-emerald-200 rounded-lg font-bold text-emerald-800 text-sm shadow-2xs focus:outline-none"
+                                    />
+                                </div>
+
+                                {/* Select Payment Mode */}
+                                <div className="space-y-1">
+                                    <label className="text-[11px] font-bold text-slate-600 uppercase">Select Payment Mode</label>
+                                    <select
+                                        value={pcnPaymentMode}
+                                        onChange={(e) => setPcnPaymentMode(e.target.value)}
+                                        className="w-full h-9 px-2.5 bg-white border border-[#CBD5E1] rounded-lg text-xs font-medium text-slate-800 focus:outline-none focus:ring-1 focus:ring-brand-primary shadow-2xs cursor-pointer"
+                                    >
+                                        <option value="">--Select Payment Mode--</option>
+                                        <option value="NEFT">NEFT</option>
+                                        <option value="RTGS">RTGS</option>
+                                        <option value="Cheque">Cheque</option>
+                                        <option value="Cash">Cash</option>
+                                        <option value="Bank Transfer">Bank Transfer</option>
+                                        <option value="E-Wallet">E-Wallet</option>
+                                    </select>
+                                </div>
+
+                                {/* Cash / Ledger */}
+                                <div className="space-y-1">
+                                    <label className="text-[11px] font-bold text-slate-600 uppercase">Cash / Ledger</label>
+                                    <select
+                                        value={pcnLedger}
+                                        onChange={(e) => setPcnLedger(e.target.value)}
+                                        className="w-full h-9 px-2.5 bg-white border border-[#CBD5E1] rounded-lg text-xs font-medium text-slate-800 focus:outline-none focus:ring-1 focus:ring-brand-primary shadow-2xs cursor-pointer"
+                                    >
+                                        <option value="">--Select Ledger--</option>
+                                        <option value="HDFC Bank Current A/c - 501002">HDFC Bank Current A/c - 501002</option>
+                                        <option value="SBI Main Operations A/c - 201115">SBI Main Operations A/c - 201115</option>
+                                        <option value="ICICI Payout Ledger - 696805">ICICI Payout Ledger - 696805</option>
+                                        <option value="Bank of India A/c - 070710">Bank of India A/c - 070710</option>
+                                        <option value="Cash in Hand - Baramati Branch">Cash in Hand - Baramati Branch</option>
+                                    </select>
+                                </div>
+
+                                {/* NEFT No. */}
+                                <div className="space-y-1">
+                                    <label className="text-[11px] font-bold text-slate-600 uppercase">NEFT No.</label>
+                                    <input
+                                        type="text"
+                                        value={pcnNeftNo}
+                                        onChange={(e) => setPcnNeftNo(e.target.value)}
+                                        placeholder="Enter NEFT / UTR reference"
+                                        className="w-full h-9 px-3 bg-white border border-[#CBD5E1] rounded-lg font-medium text-slate-800 shadow-2xs focus:outline-none focus:ring-1 focus:ring-brand-primary"
+                                    />
+                                </div>
+
+                                {/* Payment Date */}
+                                <div className="space-y-1">
+                                    <label className="text-[11px] font-bold text-slate-600 uppercase">Payment Date</label>
+                                    <div className="relative w-full">
+                                        <input
+                                            type="text"
+                                            value={pcnPaymentDate}
+                                            onChange={(e) => setPcnPaymentDate(e.target.value)}
+                                            placeholder="DD/MM/YYYY"
+                                            className="w-full h-9 pl-3 pr-8 bg-white border border-[#CBD5E1] rounded-lg font-medium text-slate-800 shadow-2xs focus:outline-none focus:ring-1 focus:ring-brand-primary"
+                                        />
+                                        <Calendar size={14} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                                    </div>
+                                </div>
+
+                                {/* Pay Button */}
+                                <div className="pt-2">
+                                    <button
+                                        type="button"
+                                        onClick={handlePcnPay}
+                                        className="w-full h-10 bg-[#EAA144] hover:bg-[#D99B35] text-white font-bold text-xs uppercase tracking-wider rounded-lg shadow-sm transition-all cursor-pointer border-none flex items-center justify-center gap-1.5"
+                                    >
+                                        <span>Pay</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* TAB CONTENT 9 TO 16: MASTER REFERENCE TABLES */}
+            {activeTab !== 'cash-approval' && activeTab !== 'voucher-entry' && activeTab !== 'ledger-report' && activeTab !== 'premium-shortfall' && activeTab !== 'pending-commission' && activeTab !== 'paid-commission' && activeTab !== 'commission-recalculate' && activeTab !== 'account-report' && activeTab !== 'paid-entry-recalc' && activeTab !== 'return-cash-approval' && activeTab !== 'cashback-approval' && activeTab !== 'cheque-recon' && activeTab !== 'receiving-amt' && activeTab !== 'pending-commission-new' && (
                 <div className="tab-transition-wrapper space-y-4">
                     <div className="bg-white rounded-[12px] border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden flex flex-col w-full">
                         {/* Master Table Toolbar */}

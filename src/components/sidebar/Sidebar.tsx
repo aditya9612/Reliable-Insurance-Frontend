@@ -125,6 +125,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
             icon: Layers,
             children: [
                 { name: 'App', path: '/other/app' },
+                { name: 'Others Outstanding', path: '/other/outstanding', matchPaths: ['/other/outstanding', '/others/outstanding', '/others'] },
                 { name: 'Non Motor', path: '/other/non-motor' },
                 { name: 'My Page', path: '/other/my-page' },
                 { name: 'Download App', path: '/other/download' },
