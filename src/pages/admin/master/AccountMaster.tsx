@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { createPortal } from 'react-dom';
 import PageHeader from '../../../components/page-header/PageHeader';
 import UnderlineTabs from '../../../components/tabs/UnderlineTabs';
 import { Edit2, Trash2, Search, X } from 'lucide-react';
@@ -388,8 +389,8 @@ const AccountMaster: React.FC = () => {
 
       {/* Clean Modal Form */}
       {
-        showModal && (
-          <div className="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+        showModal && createPortal(
+          <div className="fixed inset-0 z-[9999] bg-slate-900/60 flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
             <div className="bg-white rounded-xl border border-slate-200 shadow-xl w-full max-w-lg max-h-[90vh] flex flex-col my-auto overflow-hidden animate-in fade-in zoom-in duration-150">
               <div className="bg-brand-navy text-white px-5 sm:px-6 py-4 flex items-center justify-between shrink-0">
                 <h2 className="text-base sm:text-lg font-bold">
@@ -537,7 +538,8 @@ const AccountMaster: React.FC = () => {
                 </form>
               )}
             </div>
-          </div>
+          </div>,
+          document.body
         )
       }
     </div >

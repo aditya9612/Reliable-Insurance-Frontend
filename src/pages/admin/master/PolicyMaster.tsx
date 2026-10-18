@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { createPortal } from 'react-dom';
 import PageHeader from '../../../components/page-header/PageHeader';
 import UnderlineTabs from '../../../components/tabs/UnderlineTabs';
 import { Edit2, Trash2, Search, X } from 'lucide-react';
@@ -1326,8 +1327,8 @@ const PolicyMaster: React.FC = () => {
       </div>
 
       {/* Form Modal (Create / Edit) */}
-      {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-3 sm:p-4 overflow-y-auto">
+      {showModal && createPortal(
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-slate-900/60 p-3 sm:p-4 overflow-y-auto">
           <div className="bg-white rounded-2xl border border-slate-200 shadow-2xl w-full max-w-md my-auto max-h-[90vh] flex flex-col overflow-hidden transform transition-all animate-in fade-in zoom-in-95 duration-200">
             {/* Modal Header */}
             <div className="bg-brand-navy text-white px-6 py-4 flex items-center justify-between">
@@ -1582,7 +1583,8 @@ const PolicyMaster: React.FC = () => {
               </form>
             )}
           </div>
-        </div>
+        </div>,
+        document.body
       )}
       {/* Toast Notification */}
       {toastMessage && (
