@@ -127,7 +127,7 @@ const HeaderNavbar: React.FC = () => {
           <li><a href="#user">User</a></li>
           <li><a href="#registration">Registration</a></li>
           <li><a href="#account-master">Account Master</a></li>
-          <li><a href="#transaction">Transaction</a></li>
+          <li><a href="/transactions/all-transaction-report">Transaction</a></li>
           <li><a href="#account">Account</a></li>
           <li><a href="#report">Report</a></li>
           <li><a href="#dashboard">DashBoard</a></li>
@@ -156,7 +156,7 @@ const HeaderNavbar: React.FC = () => {
             </ul>
           </li>
           <li><a href="#sales">Sales</a></li>
-          <li><a href="#others">Others</a></li>
+          <li><a href="/other/outstanding">Others</a></li>
           <li><a href="#business-master">Business Master</a></li>
           <li><a href="#support">Support</a></li>
           <li><a href="#posp">POSP</a></li>

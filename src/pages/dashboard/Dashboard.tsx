@@ -20,29 +20,29 @@ import DirectBusinessTab from './tabs/DirectBusinessTab';
 import AgentPendingCommissionTab from './tabs/AgentPendingCommissionTab';
 
 const dashboardTabs = [
-    { id: 'view-dashboard',        label: 'View Dashboard' },
-    { id: 'commission-summary',    label: 'Commission Summary' },
-    { id: 'agent-payment',         label: 'Agent Payment' },
-    { id: 'analytic-agent',        label: 'Analytic Dashboard Agent' },
-    { id: 'analytic-executive',    label: 'Analytic Dashboard Executive' },
-    { id: 'analytic-location',     label: 'Analytic Dashboard Location' },
-    { id: 'agent-business',        label: 'Agent Business' },
-    { id: 'executive-business',    label: 'Executive Business' },
+    { id: 'view-dashboard', label: 'View Dashboard' },
+    { id: 'commission-summary', label: 'Commission Summary' },
+    { id: 'agent-payment', label: 'Agent Payment' },
+    { id: 'analytic-agent', label: 'Analytic Dashboard Agent' },
+    { id: 'analytic-executive', label: 'Analytic Dashboard Executive' },
+    { id: 'analytic-location', label: 'Analytic Dashboard Location' },
+    { id: 'agent-business', label: 'Agent Business' },
+    { id: 'executive-business', label: 'Executive Business' },
     { id: 'insurance-outstanding', label: 'Insurance Company Outstanding' },
-    { id: 'broker-report',         label: 'Broker Report' },
-    { id: 'direct-business',       label: 'Direct Business' },
-    { id: 'agent-pending-comm',    label: 'Agent Pending Comm Report' },
+    { id: 'broker-report', label: 'Broker Report' },
+    { id: 'direct-business', label: 'Direct Business' },
+    { id: 'agent-pending-comm', label: 'Agent Pending Comm Report' },
 ];
 
 const quickActions = [
-    { id: 'view-policy',       label: 'View Policy',                  desc: 'Search & view policy documents',          icon: FileText,    to: '/transactions/view-policy-document' },
-    { id: 'commission-grid',   label: 'Current Grid / System Grid',   desc: 'Broker & agent commission grids',          icon: Percent,     to: '/commission-grid' },
-    { id: 'search-posp',       label: 'Search POSP by Agent',         desc: 'Find POSP registration & agents',          icon: Search,      to: '/registration/agent' },
-    { id: 'reports',           label: 'Reports',                      desc: 'Cut N Pay, TDS, Endorsement & more',       icon: BarChart2,   to: '/reports' },
-    { id: 'agent-commission',  label: 'View All Agent Commissioners',  desc: 'Commission summary by agent',              icon: Users,       to: '/reports?tab=viewAllAgentCommission' },
-    { id: 'agent-payment-qa',  label: 'Agent Payment',                desc: 'View & process agent payments',            icon: DollarSign,  to: '/dashboard?tab=agent-payment' },
-    { id: 'mis-reports',       label: 'MIS Reports',                  desc: 'Management information system reports',    icon: TrendingUp,  to: '/reports/mis' },
-    { id: 'hr-module',         label: 'HR Module',                    desc: 'Attendance, salary & employee data',       icon: Building2,   to: '/hr' },
+    { id: 'view-policy', label: 'View Policy', desc: 'Search & view policy documents', icon: FileText, to: '/transactions/view-policy-document' },
+    { id: 'commission-grid', label: 'Current Grid / System Grid', desc: 'Broker & agent commission grids', icon: Percent, to: '/commission-grid' },
+    { id: 'search-posp', label: 'Search POSP by Agent', desc: 'Find POSP registration & agents', icon: Search, to: '/registration/agent' },
+    { id: 'reports', label: 'Reports', desc: 'Cut N Pay, TDS, Endorsement & more', icon: BarChart2, to: '/reports' },
+    { id: 'agent-commission', label: 'View All Agent Commissioners', desc: 'Commission summary by agent', icon: Users, to: '/reports?tab=viewAllAgentCommission' },
+    { id: 'agent-payment-qa', label: 'Agent Payment', desc: 'View & process agent payments', icon: DollarSign, to: '/dashboard?tab=agent-payment' },
+    { id: 'mis-reports', label: 'MIS Reports', desc: 'Management information system reports', icon: TrendingUp, to: '/reports/mis' },
+    { id: 'hr-module', label: 'HR Module', desc: 'Attendance, salary & employee data', icon: Building2, to: '/hr' },
 ];
 
 // Placeholder panel for tabs that don't have a dedicated page yet
@@ -118,7 +118,7 @@ const Dashboard = () => {
                                 className={`w-full py-2.5 px-2 rounded-xl text-[11px] xl:text-[12px] transition-all cursor-pointer border-none text-center font-bold flex items-center justify-center ${isActive
                                     ? 'bg-brand-primary text-white shadow-sm'
                                     : 'bg-[#F1F5F9] hover:bg-slate-200 text-[#0F172A]'
-                                }`}
+                                    }`}
                                 title={tab.label}
                             >
                                 <span className="truncate">{tab.label}</span>
@@ -138,7 +138,7 @@ const Dashboard = () => {
                                 className={`w-full py-2.5 px-2 rounded-xl text-[11px] xl:text-[12px] transition-all cursor-pointer border-none text-center font-bold flex items-center justify-center ${isActive
                                     ? 'bg-brand-primary text-white shadow-sm'
                                     : 'bg-[#F1F5F9] hover:bg-slate-200 text-[#0F172A]'
-                                }`}
+                                    }`}
                                 title={tab.label}
                             >
                                 <span className="truncate">{tab.label}</span>

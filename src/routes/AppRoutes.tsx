@@ -50,6 +50,8 @@ import ViewAppEntry from '../pages/admin/operations/transactions/ViewAppEntry'
 import PolicyNoUpdate from '../pages/admin/operations/transactions/PolicyNoUpdate'
 import PremiumChequeBounce from '../pages/admin/operations/transactions/PremiumChequeBounce'
 import ViewPolicyDocument from '../pages/admin/operations/transactions/ViewPolicyDocument'
+import UpdateCustomer from '../pages/admin/operations/transactions/UpdateCustomer'
+import UpdateVehicle from '../pages/admin/operations/transactions/UpdateVehicle'
 import AllTransactionReport from '../pages/admin/operations/transactions/AllTransactionReport'
 import RemoveWrongEntries from '../pages/admin/operations/transactions/RemoveWrongEntries'
 import NonMotorTransaction from '../pages/admin/operations/transactions/NonMotorTransaction'
@@ -67,6 +69,7 @@ import OnlineAppRequest from '../pages/admin/operations/transactions/OnlineAppRe
 
 // Reports & Other Modules
 import MyPage from '../pages/admin/my_page/MyPage'
+import OthersOutstanding from '../pages/admin/other_modules/OthersOutstanding'
 import MisReports from '../pages/admin/reports_analysis/MisReports'
 import GeneralReports from '../pages/admin/reports_analysis/GeneralReports'
 import Recon from '../pages/admin/reports_analysis/Recon'
@@ -172,11 +175,19 @@ const AppRoutes = () => {
             <Route path="/clerk/pe_uploadpolicy.aspx" element={<CaliberPolicyPage />} />
 
             {/* Transactions */}
+            <Route path="/transactions" element={<Navigate to="/transactions/all-transaction-report" replace />} />
+            <Route path="/transactions/transaction-report" element={<Navigate to="/transactions/all-transaction-report" replace />} />
+            <Route path="/transactions/report" element={<Navigate to="/transactions/all-transaction-report" replace />} />
+            <Route path="/transaction-report" element={<Navigate to="/transactions/all-transaction-report" replace />} />
             <Route path="/transactions/policy-endorsement" element={<PolicyEndorsement />} />
             <Route path="/transactions/corporate-client" element={<CorporateClient />} />
             <Route path="/transactions/view-app-entry" element={<ViewAppEntry />} />
             <Route path="/transactions/policy-no-update" element={<PolicyNoUpdate />} />
             <Route path="/transactions/premium-cheque-bounce" element={<PremiumChequeBounce />} />
+            <Route path="/transactions/update-customer" element={<UpdateCustomer />} />
+            <Route path="/update-customer" element={<Navigate to="/transactions/update-customer" replace />} />
+            <Route path="/transactions/update-vehicle" element={<UpdateVehicle />} />
+            <Route path="/update-vehicle" element={<Navigate to="/transactions/update-vehicle" replace />} />
             <Route path="/transactions/all-transaction-report" element={<AllTransactionReport />} />
             <Route path="/transactions/remove-wrong-entries" element={<RemoveWrongEntries />} />
             <Route path="/transactions/non-motor" element={<NonMotorTransaction />} />
@@ -208,6 +219,11 @@ const AppRoutes = () => {
             {/* My Page Module */}
             <Route path="/my-page" element={<MyPage />} />
             <Route path="/other/my-page" element={<Navigate to="/my-page" replace />} />
+            {/* Other Modules */}
+            {/* <Route path="/other/my-page" element={<MyPage />} /> */}
+            <Route path="/other/outstanding" element={<OthersOutstanding />} />
+            <Route path="/others/outstanding" element={<Navigate to="/other/outstanding" replace />} />
+            <Route path="/others" element={<Navigate to="/other/outstanding" replace />} />
           </Route>
         </Route>
       </Routes>

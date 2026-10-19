@@ -107,7 +107,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
                 { name: 'View App Entry', path: '/transactions/view-app-entry' },
                 { name: 'Policy No Update', path: '/transactions/policy-no-update' },
                 { name: 'Permium Cheque Bouns', path: '/transactions/premium-cheque-bounce' },
-                { name: 'Transaction Report', path: '/transactions/transaction-report' },
+                { name: 'Transaction Report', path: '/transactions/all-transaction-report' },
                 { name: 'Update Customer', path: '/transactions/update-customer' },
                 { name: 'Update Vehicle Details', path: '/transactions/update-vehicle' },
                 { name: 'All Transaction Report', path: '/transactions/all-transaction-report' },
@@ -121,7 +121,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
                 { name: 'All User Trans Entry', path: '/transactions/all-user-trans' },
                 { name: 'Policy Cancel', path: '/transactions/policy-cancel' },
                 { name: 'Quality Check', path: '/transactions/quality-check' },
-                { name: 'Quality Report', path: '/transactions/quality-report' },
+                // { name: 'Quality Report', path: '/transactions/quality-report' },
                 { name: 'Self Quotation', path: '/transactions/self-quotation' },
                 { name: 'Ncb Recovery', path: '/transactions/ncb-recovery' },
                 { name: 'Ncb Recovery Report', path: '/transactions/ncb-recovery-report' },
@@ -137,6 +137,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
             title: 'OPERATIONS',
             icon: Briefcase,
             children: [
+                { name: 'Caliber Policy', path: '/operations/caliber-policy' },
                 { name: 'Sales', path: '/operations/sales' },
                 { name: 'POSP', path: '/operations/posp' },
             ]
@@ -209,10 +210,11 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
             title: 'OTHER MODULES',
             icon: Layers,
             children: [
-                { name: 'Download App', path: '/other/download' },
-                { name: 'Chat Board', path: '/other/chat' },
-                { name: 'Old Data', path: '/other/old-data' },
-                { name: 'Calling', path: '/other/calling' },
+                { name: 'Others Outstanding', path: '/other/outstanding', matchPaths: ['/other/outstanding', '/others/outstanding', '/others'] },
+                // { name: 'Download App', path: '/other/download' },
+                // { name: 'Chat Board', path: '/other/chat' },
+                // { name: 'Old Data', path: '/other/old-data' },
+                // { name: 'Calling', path: '/other/calling' },
             ]
         }
     ] : [
@@ -223,24 +225,35 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
         }
     ];
 
-    const isPathActive = (path: string) => location.pathname === path || (path !== '/' && location.pathname.startsWith(path));
+    const isPathActive = (path: string) => {
+        if (location.pathname === path) return true;
+        if (path === '/' || path === '/reports') return false;
+        return location.pathname.startsWith(`${path}/`);
+    };
 
     const isGroupPathActive = (group: NavGroup) => {
         if (!group.path) return false;
+        if (group.path === '/reports') {
+            return location.pathname === '/reports';
+        }
         if (isPathActive(group.path)) return true;
         if (group.matchPaths && group.matchPaths.some(p => isPathActive(p))) return true;
         return false;
     };
 
     const isChildActive = (child: NavItem) => {
-        if (location.pathname === child.path) return true;
-        if (child.matchPaths && child.matchPaths.some(p => location.pathname === p || location.pathname.startsWith(p))) {
+        const currentUrl = location.pathname + location.search;
+        if (currentUrl === child.path || location.pathname === child.path) return true;
+        if (child.matchPaths && child.matchPaths.some(p => currentUrl === p || location.pathname === p || location.pathname.startsWith(`${p}/`))) {
             return true;
         }
         if (child.path === '/reports') {
             return location.pathname === '/reports';
         }
-        return location.pathname.startsWith(child.path);
+        if (child.path.includes('?')) {
+            return currentUrl === child.path;
+        }
+        return location.pathname === child.path || location.pathname.startsWith(`${child.path}/`);
     };
 
     const isGroupActive = (children?: NavItem[]) => children?.some(c => isChildActive(c));

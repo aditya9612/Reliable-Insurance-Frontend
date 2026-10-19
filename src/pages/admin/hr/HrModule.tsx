@@ -644,7 +644,7 @@ const HrModule: React.FC = () => {
             {/* MODALS */}
             {/* Modal: Add Holiday */}
             {modalType === 'HOLIDAY' && (
-                <div className="fixed inset-0 z-[9999] bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+                <div className="fixed inset-0 z-[9999] bg-slate-900/60 flex items-center justify-center p-4">
                     <div className="bg-white rounded-[12px] max-w-md w-full shadow-2xl border border-brand-border overflow-hidden">
                         <div className="flex items-center justify-between px-6 py-4 border-b border-brand-border">
                             <h3 className="font-bold text-brand-navy text-base">Add Calendar Holiday</h3>
@@ -714,7 +714,7 @@ const HrModule: React.FC = () => {
 
             {/* Modal: Apply Leave */}
             {modalType === 'APPLY_LEAVE' && (
-                <div className="fixed inset-0 z-[9999] bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+                <div className="fixed inset-0 z-[9999] bg-slate-900/60 flex items-center justify-center p-4">
                     <div className="bg-white rounded-[12px] max-w-md w-full shadow-2xl border border-brand-border overflow-hidden">
                         <div className="flex items-center justify-between px-6 py-4 border-b border-brand-border">
                             <h3 className="font-bold text-brand-navy text-base">Submit Leave Request</h3>
@@ -798,7 +798,7 @@ const HrModule: React.FC = () => {
 
             {/* Modal: Request Advance */}
             {modalType === 'ADVANCE' && (
-                <div className="fixed inset-0 z-[9999] bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+                <div className="fixed inset-0 z-[9999] bg-slate-900/60 flex items-center justify-center p-4">
                     <div className="bg-white rounded-[12px] max-w-md w-full shadow-2xl border border-brand-border overflow-hidden">
                         <div className="flex items-center justify-between px-6 py-4 border-b border-brand-border">
                             <h3 className="font-bold text-brand-navy text-base">New Salary Advance Request</h3>

@@ -1775,7 +1775,7 @@ const UserMaster: React.FC = () => {
             {/* MODALS RENDERED IN PORTAL TO COVER FULL VIEWPORT */}
             {modalType && createPortal(
                 <div
-                    className="fixed inset-0 z-[9999] flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4 overflow-y-auto animate-in fade-in duration-150"
+                    className="fixed inset-0 z-[9999] flex items-center justify-center bg-slate-900/60 p-4 overflow-y-auto animate-in fade-in duration-150"
                     onClick={(e) => {
                         if (e.target === e.currentTarget) setModalType(null);
                     }}

@@ -4856,17 +4856,6 @@ const Registration: React.FC = () => {
                                         </button>
                                     </div>
 
-                                    {/* Show/Hide Passwords Toggle */}
-                                    <button
-                                        type="button"
-                                        onClick={() => setShowEmpPasswords(prev => !prev)}
-                                        className="h-[38px] flex items-center gap-1.5 px-3.5 bg-white hover:bg-blue-50/50 text-slate-700 border border-brand-border rounded-[6px] text-[13px] font-semibold shadow-sm transition-colors cursor-pointer"
-                                        title="Toggle password masking in table"
-                                    >
-                                        {showEmpPasswords ? <EyeOff size={15} className="text-amber-600" /> : <Eye size={15} className="text-brand-primary" />}
-                                        <span>{showEmpPasswords ? 'Hide Passwords' : 'Show Passwords'}</span>
-                                    </button>
-
                                     {/* Add New Employee */}
                                     <button
                                         type="button"
@@ -5392,13 +5381,10 @@ const Registration: React.FC = () => {
                     {/* Top Selector Card: » Bank Beneficiary Details (Matches Agent tab) */}
                     <div className="bg-white rounded-xl p-6 sm:p-7 shadow-sm border border-slate-200/80">
                         {/* Blue Banner Header */}
-                        <div className="bg-brand-primary text-white px-5 py-1.5 rounded-lg font-semibold text-sm flex items-center justify-between shadow-xs mb-6">
+                        <div className="bg-brand-primary text-white px-5 py-1.5 rounded-lg font-semibold text-sm flex items-center shadow-xs mb-6">
                             <div className="flex items-center">
                                 <span className="mr-0.5 text-base font-serif">&raquo;</span>Bank Beneficiary Details
                             </div>
-                            <span className="text-xs bg-white/20 px-2.5 py-0.5 rounded-full font-semibold">
-                                {beneficiaryTypeFilter === 'FRANCHISE' ? 'Franchise View' : beneficiaryTypeFilter === 'AGENT' ? 'Agent View' : 'Franchise Agent View'}
-                            </span>
                         </div>
                         <div className="flex flex-wrap items-center gap-8">
                             <label className="flex items-center gap-2.5 cursor-pointer text-sm font-semibold text-brand-navy select-none hover:text-brand-primary transition-colors">
@@ -5681,84 +5667,6 @@ const Registration: React.FC = () => {
                                         </button>
                                     )}
                                 </div>
-
-                                {/* Actions on right: Horizontal Scroll + Export + Add Beneficiary */}
-                                <div className="flex items-center gap-3 flex-wrap">
-                                    {/* Horizontal Quick Scroll Navigation Controls */}
-                                    <div className="inline-flex items-center h-[38px] bg-white border border-brand-border rounded-[6px] p-0.5 shadow-sm">
-                                        <button
-                                            type="button"
-                                            onClick={() => scrollBeneficiaryTableToEdge('start')}
-                                            className="h-full px-2 text-slate-600 hover:text-brand-primary hover:bg-blue-50 rounded cursor-pointer border-none transition-colors flex items-center justify-center"
-                                            title="Scroll to beginning"
-                                        >
-                                            <ChevronsLeft size={15} />
-                                        </button>
-                                        <button
-                                            type="button"
-                                            onClick={() => scrollBeneficiaryTable(-400)}
-                                            className="h-full px-2.5 text-[13px] font-medium text-slate-600 hover:text-brand-primary hover:bg-blue-50 rounded flex items-center gap-1 cursor-pointer border-none transition-colors"
-                                            title="Scroll left"
-                                        >
-                                            <ChevronLeft size={14} />
-                                            <span>Left</span>
-                                        </button>
-                                        <span className="h-4 w-px bg-slate-200 mx-0.5"></span>
-                                        <button
-                                            type="button"
-                                            onClick={() => scrollBeneficiaryTable(400)}
-                                            className="h-full px-2.5 text-[13px] font-medium text-slate-600 hover:text-brand-primary hover:bg-blue-50 rounded flex items-center gap-1 cursor-pointer border-none transition-colors"
-                                            title="Scroll right"
-                                        >
-                                            <span>Right</span>
-                                            <ChevronRight size={14} />
-                                        </button>
-                                        <button
-                                            type="button"
-                                            onClick={() => scrollBeneficiaryTableToEdge('end')}
-                                            className="h-full px-2 text-slate-600 hover:text-brand-primary hover:bg-blue-50 rounded cursor-pointer border-none transition-colors flex items-center justify-center"
-                                            title="Scroll to end"
-                                        >
-                                            <ChevronsRight size={15} />
-                                        </button>
-                                    </div>
-
-                                    {/* CSV Export Button */}
-                                    <button
-                                        type="button"
-                                        onClick={handleExportBeneficiaries}
-                                        className="h-[38px] flex items-center gap-1.5 px-4 bg-brand-primary hover:bg-[#1D4ED8] text-white font-semibold text-[13px] rounded-[6px] shadow-sm transition-colors cursor-pointer border-none"
-                                        title="Export records to CSV"
-                                    >
-                                        <Download size={15} />
-                                        <span>Export CSV</span>
-                                    </button>
-
-                                    {/* Add Beneficiary Button */}
-                                    <button
-                                        type="button"
-                                        onClick={() => {
-                                            setBeneficiaryForm({
-                                                beneficiaryName: '',
-                                                entityType: beneficiaryTypeFilter,
-                                                entityCode: beneficiaryTypeFilter === 'FRANCHISE' ? `FA${1035 + beneficiaries.length}` : `AGT${1100 + beneficiaries.length}`,
-                                                bankName: 'HDFC BANK',
-                                                accountNumber: '',
-                                                ifscCode: '',
-                                                accountType: 'SAVINGS',
-                                                branch: 'PUNE',
-                                                branchName: beneficiaryTypeFilter === 'FRANCHISE' ? 'FRANCHISES' : 'BARAMATI',
-                                                address: '',
-                                                mobile: ''
-                                            });
-                                            setModalType('BENEFICIARY');
-                                        }}
-                                        className="h-[38px] flex items-center gap-1.5 px-4 bg-brand-primary hover:bg-[#1D4ED8] text-white font-semibold text-[13px] rounded-[6px] shadow-sm transition-colors cursor-pointer border-none"
-                                    >
-                                        <Plus size={15} />
-                                        <span>Add Beneficiary</span>
-                                    </button>
-                                </div>
                             </div>
 
                             {/* Full ERP Beneficiary Table with Horizontal Scroll */}
@@ -5772,7 +5680,7 @@ const Registration: React.FC = () => {
                                             <th className="py-3.5 px-4 text-center w-[80px]">ACTION</th>
                                             <th className="py-3.5 px-4 w-[110px]">CODE</th>
                                             <th className="py-3.5 px-4 w-[280px]">
-                                                {beneficiaryTypeFilter === 'FRANCHISE' ? 'FRANCHISE' : 'AGENT NAME'}
+                                                AGENT NAME
                                             </th>
                                             <th className="py-3.5 px-4 w-[160px]">BRANCH NAME</th>
                                             <th className="py-3.5 px-4 min-w-[420px]">ADDRESS</th>
