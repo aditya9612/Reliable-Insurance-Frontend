@@ -157,3 +157,50 @@
   text-decoration: underline;
   color: #e0f2fe;
 }
+
+/* Calliber Policy Dropdown matching screenshot */
+.nav-row li.nav-dropdown-item {
+  position: relative;
+}
+
+.nav-row li.nav-dropdown-item > a.active-caliber,
+.nav-row li.nav-dropdown-item:hover > a {
+  background-color: #00a896;
+  color: #ffffff;
+  padding: 4px 10px;
+  border-radius: 4px 4px 0 0;
+  text-decoration: none;
+}
+
+.nav-row li.nav-dropdown-item .dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #5fc0be;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border-radius: 0 0 6px 6px;
+  padding: 4px 0;
+  min-width: 165px;
+  list-style: none;
+  z-index: 100;
+  display: none;
+}
+
+.nav-row li.nav-dropdown-item:hover .dropdown-menu {
+  display: block;
+}
+
+.nav-row li.nav-dropdown-item .dropdown-menu li a {
+  display: block;
+  padding: 6px 14px;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: background-color 0.15s ease;
+}
+
+.nav-row li.nav-dropdown-item .dropdown-menu li a:hover {
+  background-color: #48b5b0;
+  text-decoration: none;
+}

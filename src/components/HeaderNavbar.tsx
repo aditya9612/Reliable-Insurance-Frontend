@@ -145,13 +145,27 @@ const HeaderNavbar: React.FC = () => {
           <li><a href="#claim">Claim</a></li>
           <li><a href="#renewal">Renewal</a></li>
           <li><a href="#commission">Commission Grid</a></li>
-          <li><a href="#new-grid">New Grid Style</a></li>
+          <li className="nav-dropdown-item">
+            <a href="/new-grid-style/cluster-master" className="dropdown-trigger">New Grid Style ▾</a>
+            <ul className="dropdown-menu">
+              <li><a href="/new-grid-style/cluster-master">Cluster Master</a></li>
+              <li><a href="/new-grid-style/broker-grid-master">Broker Grid Master</a></li>
+              <li><a href="/new-grid-style/view-broker-grid">View Broker Grid</a></li>
+              <li><a href="/new-grid-style/agent-grid-master">Agent Grid Master</a></li>
+              <li><a href="/new-grid-style/view-agent-grid">View Agent Grid</a></li>
+            </ul>
+          </li>
           <li><a href="#sales">Sales</a></li>
           <li><a href="#others">Others</a></li>
           <li><a href="#business-master">Business Master</a></li>
           <li><a href="#support">Support</a></li>
           <li><a href="#posp">POSP</a></li>
-          <li><a href="#calliber">Calliber Policy</a></li>
+          <li className="nav-dropdown-item">
+            <a href="/calliber-policy" className="dropdown-trigger">Calliber Policy ▾</a>
+            <ul className="dropdown-menu">
+              <li><a href="/calliber-policy">Upload Policy</a></li>
+            </ul>
+          </li>
         </ul>
       </nav>
     </header>

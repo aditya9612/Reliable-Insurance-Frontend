@@ -24,6 +24,7 @@ import Registration from '../pages/admin/registration/Registration'
 // HR Module & Commission Grid
 import HrModule from '../pages/admin/hr/HrModule'
 import CommissionGrid from '../pages/admin/commission/CommissionGrid'
+import NewGridStylePage from '../pages/admin/new_grid_style/NewGridStylePage'
 
 // Franchise
 import FranchisePage from '../pages/admin/franchise/FranchisePage'
@@ -122,6 +123,20 @@ const AppRoutes = () => {
             <Route path="/commission-grid" element={<Navigate to="/commission-grid/agent-commission" replace />} />
             <Route path="/commission-grid/:tab" element={<CommissionGrid />} />
 
+            {/* New Grid Style */}
+            <Route path="/new-grid-style" element={<Navigate to="/new-grid-style/cluster-master" replace />} />
+            <Route path="/new-grid-style/:tab" element={<NewGridStylePage />} />
+            <Route path="/clerk/adm_clustermaster" element={<Navigate to="/new-grid-style/cluster-master" replace />} />
+            <Route path="/clerk/adm_clustermaster.aspx" element={<Navigate to="/new-grid-style/cluster-master" replace />} />
+            <Route path="/clerk/adm_clusterwisebrokergrid" element={<Navigate to="/new-grid-style/broker-grid-master" replace />} />
+            <Route path="/clerk/adm_clusterwisebrokergrid.aspx" element={<Navigate to="/new-grid-style/broker-grid-master" replace />} />
+            <Route path="/clerk/adm_viewclusterwisebrokergrid" element={<Navigate to="/new-grid-style/view-broker-grid" replace />} />
+            <Route path="/clerk/adm_viewclusterwisebrokergrid.aspx" element={<Navigate to="/new-grid-style/view-broker-grid" replace />} />
+            <Route path="/clerk/adm_clusterwiseagentgrid" element={<Navigate to="/new-grid-style/agent-grid-master" replace />} />
+            <Route path="/clerk/adm_clusterwiseagentgrid.aspx" element={<Navigate to="/new-grid-style/agent-grid-master" replace />} />
+            <Route path="/clerk/adm_viewclusterwiseagentgrid" element={<Navigate to="/new-grid-style/view-agent-grid" replace />} />
+            <Route path="/clerk/adm_viewclusterwiseagentgrid.aspx" element={<Navigate to="/new-grid-style/view-agent-grid" replace />} />
+
             {/* Franchise */}
             <Route path="/franchise" element={<Navigate to="/franchise/franchise-master" replace />} />
             <Route path="/franchise/:tab" element={<FranchisePage />} />
@@ -149,7 +164,12 @@ const AppRoutes = () => {
             <Route path="/operations/support" element={<SupportPage />} />
             <Route path="/support" element={<SupportPage />} />
             <Route path="/operations/caliber-policy" element={<CaliberPolicyPage />} />
+            <Route path="/operations/calliber-policy" element={<CaliberPolicyPage />} />
             <Route path="/caliber-policy" element={<CaliberPolicyPage />} />
+            <Route path="/calliber-policy" element={<CaliberPolicyPage />} />
+            <Route path="/calliber-policy/:tab" element={<CaliberPolicyPage />} />
+            <Route path="/clerk/pe_uploadpolicy" element={<CaliberPolicyPage />} />
+            <Route path="/clerk/pe_uploadpolicy.aspx" element={<CaliberPolicyPage />} />
 
             {/* Transactions */}
             <Route path="/transactions/policy-endorsement" element={<PolicyEndorsement />} />

@@ -4,7 +4,7 @@ import {
     LayoutDashboard, Database, Users, Briefcase, FileText, Settings,
     ChevronDown, ChevronRight, UserPlus, FileSpreadsheet, Building2,
     Shield, Map, MessageSquare, Download, Layers, UserCheck, Percent, BarChart2,
-    Smartphone, ShieldCheck, Landmark, User, FileCheck, RefreshCw, Headphones
+    Smartphone, ShieldCheck, Landmark, User, FileCheck, RefreshCw, Headphones, FileUp, Grid
 } from 'lucide-react';
 import { useAuthContext } from '../../context/AuthContext';
 
@@ -67,6 +67,18 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
             path: '/commission-grid'
         },
         {
+            title: 'NEW GRID STYLE',
+            icon: Grid,
+            children: [
+                { name: 'Cluster Master', path: '/new-grid-style/cluster-master' },
+                { name: 'Broker Grid Master', path: '/new-grid-style/broker-grid-master' },
+                { name: 'View Broker Grid', path: '/new-grid-style/view-broker-grid' },
+                { name: 'Agent Grid Master', path: '/new-grid-style/agent-grid-master' },
+                { name: 'View Agent Grid', path: '/new-grid-style/view-agent-grid' },
+            ],
+            matchPaths: ['/new-grid-style']
+        },
+        {
             title: 'FRANCHISE',
             icon: Building2,
             children: [
@@ -125,10 +137,15 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
             title: 'OPERATIONS',
             icon: Briefcase,
             children: [
-                { name: 'Caliber Policy', path: '/operations/caliber-policy' },
                 { name: 'Sales', path: '/operations/sales' },
                 { name: 'POSP', path: '/operations/posp' },
             ]
+        },
+        {
+            title: 'CALLIBER POLICY',
+            icon: FileUp,
+            path: '/calliber-policy',
+            matchPaths: ['/calliber-policy', '/caliber-policy', '/operations/caliber-policy', '/operations/calliber-policy', '/clerk/pe_uploadpolicy']
         },
         {
             title: 'BUSINESS MASTER',

@@ -287,30 +287,30 @@ export const ViewDashboardTab: React.FC<ViewDashboardTabProps> = ({ onNavigateTa
             </span>
           </div>
 
-          <div className="p-4 flex-1 flex flex-col justify-between space-y-3">
-            {/* Month Navigator */}
-            <div className="flex items-center justify-between text-xs font-bold text-slate-700 px-3">
-              <button
-                type="button"
-                onClick={() => setCalendarMonth('Sep')}
-                className="text-brand-primary hover:text-[#1D4ED8] font-semibold cursor-pointer hover:underline flex items-center"
-              >
-                &lt; Sep
-              </button>
-              <span className="text-[14px] font-bold text-brand-navy tracking-wide">
-                October
-              </span>
-              <button
-                type="button"
-                onClick={() => setCalendarMonth('Nov')}
-                className="text-brand-primary hover:text-[#1D4ED8] font-semibold cursor-pointer hover:underline flex items-center"
-              >
-                Nov &gt;
-              </button>
-            </div>
+          <div className="p-3.5 flex-1 flex flex-col">
+            {/* Calendar Container with Integrated Month Navigator Header */}
+            <div className="flex-1 flex flex-col border border-brand-border rounded-lg overflow-hidden bg-white shadow-2xs">
+              {/* Month Navigator Bar */}
+              <div className="flex items-center justify-between bg-slate-50 border-b border-brand-border px-4 py-2.5 text-xs font-bold text-slate-700">
+                <button
+                  type="button"
+                  onClick={() => setCalendarMonth('Sep')}
+                  className="text-brand-primary hover:text-[#1D4ED8] font-semibold text-xs cursor-pointer hover:underline flex items-center border-none bg-transparent"
+                >
+                  &lt; Sep
+                </button>
+                <span className="text-[14px] font-bold text-brand-navy tracking-wide">
+                  October 2026
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setCalendarMonth('Nov')}
+                  className="text-brand-primary hover:text-[#1D4ED8] font-semibold text-xs cursor-pointer hover:underline flex items-center border-none bg-transparent"
+                >
+                  Nov &gt;
+                </button>
+              </div>
 
-            {/* Calendar Grid matching Photo Header (bg-brand-lightbg #EAF2FF, text-brand-navy) */}
-            <div className="border border-brand-border rounded-lg overflow-hidden bg-white">
               {/* Day of Week Headers */}
               <div className="grid grid-cols-7 bg-brand-lightbg border-b border-brand-border text-center text-[12px] font-semibold uppercase text-brand-navy py-2">
                 <div>Su</div>
@@ -322,12 +322,12 @@ export const ViewDashboardTab: React.FC<ViewDashboardTabProps> = ({ onNavigateTa
                 <div>Sa</div>
               </div>
 
-              {/* 5 Rows of Days */}
-              <div className="grid grid-cols-7 divide-x divide-y divide-brand-border/60 text-[11px]">
+              {/* 5 Rows of Days - flex-1 with grid-rows-5 so cells expand evenly to fill height without blank space */}
+              <div className="flex-1 grid grid-cols-7 grid-rows-5 divide-x divide-y divide-brand-border/60 text-[11px]">
                 {calendarDays.map((cell, idx) => (
                   <div
                     key={idx}
-                    className={`min-h-[58px] p-1 flex flex-col justify-between transition-colors ${
+                    className={`min-h-[58px] p-1.5 flex flex-col justify-between transition-colors ${
                       cell.isHighlighted
                         ? 'bg-amber-50/90 border border-amber-300'
                         : cell.inMonth
@@ -359,7 +359,7 @@ export const ViewDashboardTab: React.FC<ViewDashboardTabProps> = ({ onNavigateTa
         </div>
 
         {/* RIGHT COLUMN: Filters + Summary Cards + Category Wise Business (NO EXTRA SPACE!) */}
-        <div className="lg:col-span-6 flex flex-col justify-between space-y-4">
+        <div className="lg:col-span-6 flex flex-col space-y-3.5">
 
           {/* 1. FILTER CARD */}
           <div className="bg-white rounded-[12px] border border-brand-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] p-3.5">

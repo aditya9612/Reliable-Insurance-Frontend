@@ -23,6 +23,8 @@ interface DetailedClaimRow {
   garageContactNo: string;
   empName: string;
   agentName: string;
+  franchiseName?: string;
+  fileColse?: string;
   status: 'Open' | 'Closed';
 }
 
@@ -58,6 +60,7 @@ export const ClaimPage: React.FC = () => {
   const [formGarageContact, setFormGarageContact] = useState('');
   const [formReferenceType, setFormReferenceType] = useState('DIRECT');
   const [formSalesEmp, setFormSalesEmp] = useState('');
+  const [formFranchiseName, setFormFranchiseName] = useState('RELIABLE - ASSOCIATES');
   const [claimSettle, setClaimSettle] = useState<'Yes' | 'No'>('No');
   const [spotSettle, setSpotSettle] = useState<'Yes' | 'No'>('No');
   const [fileClose, setFileClose] = useState<'Yes' | 'No'>('No');
@@ -82,6 +85,8 @@ export const ClaimPage: React.FC = () => {
       garageContactNo: 'na',
       empName: 'ABHISHEK VILAS GAIKWAD',
       agentName: '-',
+      franchiseName: 'RELIABLE - ASSOCIATES',
+      fileColse: 'Pending',
       status: 'Open'
     },
     {
@@ -100,7 +105,9 @@ export const ClaimPage: React.FC = () => {
       garageAddress: 'Satara',
       garageContactNo: 'na',
       empName: 'VAIBHAV RAMCHANDRA SONMALE',
-      agentName: 'RAEE',
+      agentName: 'RAEES KHAN',
+      franchiseName: 'RELIABLE - ASSOCIATES',
+      fileColse: 'Pending',
       status: 'Open'
     },
     {
@@ -120,6 +127,8 @@ export const ClaimPage: React.FC = () => {
       garageContactNo: 'na',
       empName: 'SHEKHAR DAGADU KADAM',
       agentName: '-',
+      franchiseName: 'RELIABLE - ASSOCIATES',
+      fileColse: 'Pending',
       status: 'Closed'
     },
     {
@@ -139,6 +148,8 @@ export const ClaimPage: React.FC = () => {
       garageContactNo: '788020776',
       empName: 'NILESH BHAGWANRAO RAUT',
       agentName: '-',
+      franchiseName: 'RELIABLE - ASSOCIATES',
+      fileColse: 'Pending',
       status: 'Closed'
     },
     {
@@ -158,6 +169,8 @@ export const ClaimPage: React.FC = () => {
       garageContactNo: 'na',
       empName: 'VAIBHAV RAMCHANDRA SONMALE',
       agentName: '-',
+      franchiseName: 'RELIABLE - ASSOCIATES',
+      fileColse: 'Pending',
       status: 'Open'
     }
   ]);
@@ -183,6 +196,7 @@ export const ClaimPage: React.FC = () => {
     setFormGarageContact('');
     setFormReferenceType('DIRECT');
     setFormSalesEmp('');
+    setFormFranchiseName('RELIABLE - ASSOCIATES');
     setClaimSettle('No');
     setSpotSettle('No');
     setFileClose('No');
@@ -192,27 +206,51 @@ export const ClaimPage: React.FC = () => {
 
   const handleSaveClaimDetails = (e: React.FormEvent) => {
     e.preventDefault();
-    const newEntry: DetailedClaimRow = {
-      id: claimsData.length > 0 ? Math.max(...claimsData.map(c => c.id)) + 1 : 202,
-      claimNumber: '',
-      insuranceCompany: formCompany.toUpperCase() || 'TATA AIG GENERAL INSURANCE CO. LTD',
-      claimsDate: formDate || '07/10/2026',
-      registrationNo: formRegNo.toUpperCase() || 'MH12AB1234',
-      dateOfAccident: formAccidentDate || '01/10/2026',
-      dateOfTime: formAccidentTime || '12.00',
-      claimSpot: formClaimSpot || 'Baramati',
-      driverName: formDriverName || 'na',
-      driverLicense: formDriverLicense || 'na',
-      reason: formReason || 'Dashed',
-      garageName: formGarageName || 'Local Garage',
-      garageAddress: formGarageAddress || 'Baramati',
-      garageContactNo: formGarageContact || 'na',
-      empName: formCustName.toUpperCase() || 'ADMIN USER',
-      agentName: '-',
-      status: fileClose === 'Yes' ? 'Closed' : 'Open'
-    };
+    if (editingRow) {
+      setClaimsData(claimsData.map(item => item.id === editingRow.id ? {
+        ...item,
+        insuranceCompany: formCompany.toUpperCase() || item.insuranceCompany,
+        registrationNo: formRegNo.toUpperCase() || item.registrationNo,
+        claimsDate: formDate || item.claimsDate,
+        dateOfAccident: formAccidentDate || item.dateOfAccident,
+        dateOfTime: formAccidentTime || item.dateOfTime,
+        claimSpot: formClaimSpot || item.claimSpot,
+        driverName: formDriverName || item.driverName,
+        driverLicense: formDriverLicense || item.driverLicense,
+        reason: formReason || item.reason,
+        garageName: formGarageName || item.garageName,
+        garageAddress: formGarageAddress || item.garageAddress,
+        garageContactNo: formGarageContact || item.garageContactNo,
+        empName: formCustName.toUpperCase() || item.empName,
+        franchiseName: formFranchiseName || item.franchiseName || 'RELIABLE - ASSOCIATES',
+        fileColse: fileClose === 'Yes' ? 'Closed' : 'Pending',
+        status: fileClose === 'Yes' ? 'Closed' : item.status
+      } : item));
+    } else {
+      const newEntry: DetailedClaimRow = {
+        id: claimsData.length > 0 ? Math.max(...claimsData.map(c => c.id)) + 1 : 202,
+        claimNumber: '',
+        insuranceCompany: formCompany.toUpperCase() || 'TATA AIG GENERAL INSURANCE CO. LTD',
+        claimsDate: formDate || '07/10/2026',
+        registrationNo: formRegNo.toUpperCase() || 'MH12AB1234',
+        dateOfAccident: formAccidentDate || '01/10/2026',
+        dateOfTime: formAccidentTime || '12.00',
+        claimSpot: formClaimSpot || 'Baramati',
+        driverName: formDriverName || 'na',
+        driverLicense: formDriverLicense || 'na',
+        reason: formReason || 'Dashed',
+        garageName: formGarageName || 'Local Garage',
+        garageAddress: formGarageAddress || 'Baramati',
+        garageContactNo: formGarageContact || 'na',
+        empName: formCustName.toUpperCase() || 'ADMIN USER',
+        agentName: '-',
+        franchiseName: formFranchiseName || 'RELIABLE - ASSOCIATES',
+        fileColse: fileClose === 'Yes' ? 'Closed' : 'Pending',
+        status: fileClose === 'Yes' ? 'Closed' : 'Open'
+      };
 
-    setClaimsData([newEntry, ...claimsData]);
+      setClaimsData([newEntry, ...claimsData]);
+    }
     setShowModal(false);
     resetForm();
     alert('Claim Details saved successfully!');
@@ -226,7 +264,9 @@ export const ClaimPage: React.FC = () => {
         item.claimNumber.toLowerCase().includes(searchQuery.toLowerCase()) ||
         item.insuranceCompany.toLowerCase().includes(searchQuery.toLowerCase()) ||
         item.registrationNo.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.empName.toLowerCase().includes(searchQuery.toLowerCase());
+        item.empName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (item.franchiseName && item.franchiseName.toLowerCase().includes(searchQuery.toLowerCase())) ||
+        (item.agentName && item.agentName.toLowerCase().includes(searchQuery.toLowerCase()));
 
       if (currentStatus === 'closed') {
         return matchesSearch && item.status === 'Closed';
@@ -365,7 +405,7 @@ export const ClaimPage: React.FC = () => {
 
           {/* GRID TABLE VIEW (MyPage light blue header bg-brand-lightbg & navy text-brand-navy) */}
           <div className="overflow-x-auto w-full custom-scrollbar">
-            <table className="w-full text-left border-collapse min-w-[1600px]">
+            <table className="w-full text-left border-collapse min-w-[1800px]">
               <thead>
                 <tr className="bg-brand-lightbg text-brand-navy text-[13px] font-semibold uppercase border-b border-brand-border">
                   <th className="py-3 px-3 text-center w-10">#</th>
@@ -386,6 +426,8 @@ export const ClaimPage: React.FC = () => {
                   <th className="py-3 px-3">Garage contact No</th>
                   <th className="py-3 px-3">EmpName</th>
                   <th className="py-3 px-3">AgentName</th>
+                  <th className="py-3 px-3">FranchiseName</th>
+                  <th className="py-3 px-3">FileColse</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-brand-border text-[13px] text-slate-700">
@@ -398,6 +440,19 @@ export const ClaimPage: React.FC = () => {
                             setEditingRow(row);
                             setFormCompany(row.insuranceCompany);
                             setFormRegNo(row.registrationNo);
+                            setFormDate(row.claimsDate);
+                            setFormAccidentDate(row.dateOfAccident);
+                            setFormAccidentTime(row.dateOfTime);
+                            setFormClaimSpot(row.claimSpot);
+                            setFormDriverName(row.driverName);
+                            setFormDriverLicense(row.driverLicense);
+                            setFormReason(row.reason);
+                            setFormGarageName(row.garageName);
+                            setFormGarageAddress(row.garageAddress);
+                            setFormGarageContact(row.garageContactNo);
+                            setFormCustName(row.empName);
+                            setFormFranchiseName(row.franchiseName || 'RELIABLE - ASSOCIATES');
+                            setFileClose(row.fileColse === 'Closed' || row.status === 'Closed' ? 'Yes' : 'No');
                             setShowModal(true);
                           }}
                           className="p-1.5 bg-brand-lightbg text-brand-primary hover:bg-[#E2E8F0] rounded-[6px] transition-colors cursor-pointer inline-flex items-center justify-center border-none"
@@ -429,11 +484,13 @@ export const ClaimPage: React.FC = () => {
                       <td className="py-2.5 px-3 text-slate-700 font-mono">{row.garageContactNo}</td>
                       <td className="py-2.5 px-3 font-bold text-slate-800 uppercase">{row.empName}</td>
                       <td className="py-2.5 px-3 text-slate-700">{row.agentName}</td>
+                      <td className="py-2.5 px-3 text-slate-700 uppercase">{row.franchiseName || 'RELIABLE - ASSOCIATES'}</td>
+                      <td className="py-2.5 px-3 text-slate-700">{row.fileColse || 'Pending'}</td>
                     </tr>
                   ))
                 ) : (
                   <tr>
-                    <td colSpan={18} className="py-8 text-center text-brand-muted font-semibold uppercase bg-brand-mainbg">
+                    <td colSpan={20} className="py-8 text-center text-brand-muted font-semibold uppercase bg-brand-mainbg">
                       NO DATA FOUND
                     </td>
                   </tr>
@@ -667,6 +724,17 @@ export const ClaimPage: React.FC = () => {
                     <option value="ABHISHEK VILAS GAIKWAD">ABHISHEK VILAS GAIKWAD</option>
                     <option value="VAIBHAV RAMCHANDRA SONMALE">VAIBHAV RAMCHANDRA SONMALE</option>
                   </select>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-medium text-slate-700 mb-1.5">Franchise Name</label>
+                  <input
+                    type="text"
+                    placeholder="Enter Franchise Name"
+                    value={formFranchiseName}
+                    onChange={(e) => setFormFranchiseName(e.target.value)}
+                    className="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#0869D8] focus:border-transparent transition-all"
+                  />
                 </div>
 
                 <div className="flex flex-col gap-1 justify-center">
